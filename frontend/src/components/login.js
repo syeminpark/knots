@@ -13,21 +13,27 @@ const Login = (props) => {
   // Log in a user using email and password
   const logIn = async () => {
     console.log(userName, password)
-    const response = await apiRequest('/loginUser', 'POST', { userName: userName, password });
-    if (response.success) {
-      localStorage.setItem('user', JSON.stringify({ userName: userName, token: response.token }))
-      props.setLoggedIn(true)
-      props.setUserName(userName)
-      if (response.auth_type == 'participant') navigate('/home')
-      else {
-        navigate('/admin')
+    try {
+      const response = await apiRequest('/loginUser', 'POST', { userName: userName, password: password });
+      if (response.success) {
+        localStorage.setItem('user', JSON.stringify({ userName: userName, token: response.token }))
+        props.setLoggedIn(true)
+        props.setUserName(userName)
+        if (response.auth_type == 'participant') navigate('/home')
+        else {
+          navigate('/admin')
+        }
+      } else {
+        window.alert('Wrong userName or password')
       }
-    } else {
-      window.alert('Wrong userName or password')
     }
-    // })
-
+    catch (error) {
+      window.alert(error);
+    }
   }
+  // })
+
+
 
   const onButtonClick = () => {
     //clear any error messages before performing any further logic

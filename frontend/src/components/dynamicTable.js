@@ -11,7 +11,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
     // State to track new row values
     const [newRowValues, setNewRowValues] = useState({});
 
-    // Synchronize tableData with data prop
+    // This hook ensures tableData is updated whenever the data prop changes.
     useEffect(() => {
         setTableData(data);
     }, [data]);
@@ -48,7 +48,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
             console.error('Failed to save changes:', error);
             // Revert to original state on error
             setTableData(data);
-            alert('Failed to save changes. Please try again.');
+            alert(error);
         }
     };
 
@@ -68,7 +68,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
             console.error('Failed to delete row:', error);
             // Revert to original state on error
             setTableData(originalData);
-            alert('Failed to delete row. Please try again.');
+            alert(error);
         }
     };
 
@@ -87,7 +87,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
             console.error('Failed to add new row:', error);
             // Revert to original state on error
             setTableData(originalData);
-            alert('Failed to add new row. Please try again.');
+            alert(error);
         }
 
         // Reset the new row values regardless of success/failure

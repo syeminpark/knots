@@ -35,6 +35,7 @@ const Admin = (props) => {
             console.log('User updated successfully:', response);
         } catch (error) {
             console.error('Error updating user:', error);
+            throw error;
         }
     };
 
@@ -44,10 +45,13 @@ const Admin = (props) => {
             const response = await apiRequest('/createUser', 'POST', newRow);
             // Update state with the new row added
             console.log(response, 'r,')
+
+            //이걸 주석 처리해버리면 ID값을 local애들이 전달받지 못함. 
             setData([...data, response.user]);
             console.log('User added successfully:', response);
         } catch (error) {
             console.error('Error adding user:', error);
+            throw error;
         }
     };
 
@@ -61,6 +65,7 @@ const Admin = (props) => {
             console.log('User deleted successfully:', response);
         } catch (error) {
             console.error('Error deleting user:', error);
+            throw error;
         }
     };
 

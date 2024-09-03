@@ -14,10 +14,11 @@ export default {
                 return res.status(200).json({ success: true, user });
             }
             else {
-                return res.status(200).json({ success: false, error: "user already exists" });
+                return res.status(500).json({ success: false, error: "user already exists" });
             }
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            console.log(error)
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -26,7 +27,7 @@ export default {
 
         }
         catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -36,7 +37,7 @@ export default {
             const user = await UserModel.getUserByID(ID);
             return res.status(200).json({ success: true, user });
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -45,16 +46,16 @@ export default {
         try {
             const user = await UserModel.getUserByUserName(userName);
             if (!user) {
-                return res.status(400).json({
+                return res.status(500).json({
                     success: false,
-                    message: "No User with this ID"
+                    error: "No User with this ID"
                 });
             }
             else {
                 // bcrypt.compare(password, user.password, function (_err, result) {
                 // if (!result) {
                 if (password != user.password) {
-                    return res.status(401).json({ success: false, message: 'Invalid password' })
+                    return res.status(500).json({ success: false, error: 'Invalid password' })
                 }
                 else {
                     console.log(user.userName, user.auth_type, process.env.JWT_SECRET)
@@ -64,7 +65,7 @@ export default {
 
             }
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -72,14 +73,14 @@ export default {
         try {
             const users = await UserModel.getAllUsers();
             if (users.length == 0) {
-                return res.status(400).json({
+                return res.status(500).json({
                     success: false,
-                    message: "No Users"
+                    error: "No Users"
                 });
             }
             return res.status(200).json({ success: true, users });
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -89,7 +90,7 @@ export default {
             console.log('req', req.body, ID)
             const user = await UserModel.deleteUserByID(ID);
             if (!user) {
-                return res.status(400).json({ success: false, error: "no User Found" });
+                return res.status(500).json({ success: false, error: "no User Found" });
             }
 
             return res.status(200).json({
@@ -97,7 +98,7 @@ export default {
                 message: `Deleted ${user.name}`
             });
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
 
@@ -109,11 +110,11 @@ export default {
                 return res.status(200).json({ success: true, users });
             }
 
-            return res.status(400).json({
+            return res.status(500).json({
                 success: false,
             });
         } catch (error) {
-            return res.status(500).json({ success: false, error: error })
+            return res.status(500).json({ success: false, error: error.message })
         }
     },
     onAuthOnly: async (req, res) => {

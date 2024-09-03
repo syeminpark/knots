@@ -21,11 +21,16 @@ function App() {
       return
     }
     const verifyToken = async () => {
-      const result = await apiRequest('/verify', 'POST',)
-      console.log('Verification result:', result);
-      setLoggedIn(result.success);
-      setUserName(user.userName || '');
-    };
+      try {
+        const result = await apiRequest('/verify', 'POST',)
+        console.log('Verification result:', result);
+        setLoggedIn(result.success);
+        setUserName(user.userName || '');
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
     verifyToken();
   }, []);
 
