@@ -4,21 +4,14 @@ import { useNavigate } from 'react-router-dom'
 
 const Home = (props) => {
   //
-  const { loggedIn, ID } = props
+  const { loggedIn, email } = props
   //This hook returns a function called navigate, which can be used to programmatically navigate to 
   //different routes within the application. This function will be useful for redirecting the user to 
   //different pages, such as the login page or the home page, based on their interaction.
   const navigate = useNavigate()
 
   const onButtonClick = () => {
-    if (loggedIn) {
-      localStorage.removeItem('user')
-      props.setLoggedIn(false)
-    } else {
-      navigate('/login')
-    } 
   }
-  
 
   return (
     <div className="mainContainer">
@@ -33,7 +26,7 @@ const Home = (props) => {
           onClick={onButtonClick}
           value={loggedIn ? 'Log out' : 'Log in'}
         />
-        {loggedIn ? <div>Your ID is {ID}</div> : <div />}
+        {loggedIn ? <div>Your email address is {email}</div> : <div />}
       </div>
     </div>
   )

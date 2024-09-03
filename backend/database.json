@@ -1,12 +1,12 @@
 {
     "users": [
         {
-            "ID": "test",
-            "password": "test"
+            "ID": "user1@example.com",
+            "password": "$2b$10$JQxr57/FblV.gZtEtBVXeOp6mlrP7v3GfzlpEODmgQecro98Z9sm2"
         },
         {
-            "ID": "test",
-            "password": "test"
+            "ID": "user2@example.com",
+            "password": "$2b$10$V4v0s.VDgLkI2yGZkZL5LOF0hBzLsB5a1.fwb5tpe7lbQJg3yoj2O"
         }
     ]
 }
