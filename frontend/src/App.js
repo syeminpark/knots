@@ -25,7 +25,6 @@ function App() {
       setLoggedIn(false)
       return
     }
-  
     // If the token exists, verify it with the auth server to see if it is valid
     fetch('/verify', {
       method: 'POST',
