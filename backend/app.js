@@ -3,17 +3,13 @@ import express from 'express';
 import "./mongo.js"
 
 import userRouter from "./routers/user.js"
-import bodyParser from 'body-parser';
 
-const PORT = 3080;
+const PORT = 3000;
 const app = express();
-
-app.use(cors())
-app.use(bodyParser.json());
-
-app.use(express.json());
+app.use(cors());
+app.use(express.json()); // Parses JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parses URL-encoded bodies
 app.use(userRouter);
-app.use(express.urlencoded({ extended: true }))
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

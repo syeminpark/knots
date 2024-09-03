@@ -1,7 +1,15 @@
 import { USER_AUTH_TYPES } from "../constants.js";
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';
 
-const adminAuth = (req, res, next) => {
-    if (req.user.auth_type != USER_AUTH_TYPES.ADMINISTRATOR) {
+const adminAuth = async (req, res, next) => {
+
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use secret from environment variables
+
+    const user = await User.findOne({ ID: decoded.ID, auth_type: decoded.auth_type });
+
+    if (user.auth_type != USER_AUTH_TYPES.ADMINISTRATOR) {
         return res.status(403).send({ error: 'Access denied' });
     }
     next();

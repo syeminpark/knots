@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken';
 import { USER_AUTH_TYPES } from "../constants.js";
 
 
-import pkg from 'uuid';
-const { v4: uuidv4 } = pkg;
-
+import { v4 as uuidv4 } from 'uuid';
 const userSchema = new mongoose.Schema({
     ID: {
         type: String,
@@ -13,7 +11,13 @@ const userSchema = new mongoose.Schema({
         unique: true,
         default: () => uuidv4().replace(/\-/g, ""),
     },
-    password: { type: String, required: true},
+    userName: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+
+    password: { type: String, required: true },
     auth_type: {
         type: String,
         enum: [USER_AUTH_TYPES.ADMINISTRATOR, USER_AUTH_TYPES.PARTICIPANT],
@@ -31,17 +35,18 @@ userSchema.methods.generateAuthToken = function () {
     return token;
 };
 
+
 //static method
 //this ensures performing operations on the userSchema object
 userSchema.statics.createUser = async function (
-    ID,
+    userName,
     password,
     auth_type
 ) {
 
     try {
         const user = await this.create({
-            ID,
+            userName,
             password,
             auth_type
         });
@@ -52,10 +57,20 @@ userSchema.statics.createUser = async function (
     }
 }
 
-userSchema.statics.getUserById = async function (_ID) {
+
+userSchema.statics.getUserByID = async function (_ID) {
     try {
         const user = await this.findOne({ ID: _ID });
-        console.log('user',user)
+        console.log('user', user)
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+userSchema.statics.getUserByUserName = async function (_userName) {
+    try {
+        const user = await this.findOne({ userName: _userName });
+        console.log('user', user)
         return user;
     } catch (error) {
         throw error;
@@ -65,17 +80,17 @@ userSchema.statics.getUserById = async function (_ID) {
 userSchema.statics.getAllUsers = async function () {
     try {
         const users = await this.find();
-        console.log('users',users)
+        console.log('users', users)
         return users;
     } catch (error) {
         throw error;
     }
 }
 
-userSchema.statics.deleteUserById = async function (ID) {
+userSchema.statics.deleteUserByID = async function (_ID) {
     try {
-        const user = await this.findOne({ ID: ID });
-        const result = await this.deleteOne({ ID: ID });
+        const user = await this.findOne({ ID: _ID });
+        const result = await this.deleteOne({ ID: _ID });
         return user
     } catch (error) {
         throw error;

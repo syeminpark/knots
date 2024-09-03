@@ -1,0 +1,23 @@
+const apiRequest = async (url, method, data = null) => {
+    const { token } = JSON.parse(localStorage.getItem('user')) || {};
+    console.log('token', token)
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }), // Include Authorization header if token is provided
+        },
+        ...(data && { body: JSON.stringify(data) }), // Include body if data is provided
+    };
+
+    try {
+        console.log('Making API request to:', url, 'with options:', options); // Debugging log
+        const response = await fetch(url, options);
+        return await response.json();
+
+    } catch (error) {
+        console.error('Error making API request:', error);
+        throw error; // Re-throw the error so it can be handled by the calling function
+    }
+};
+export default apiRequest;
