@@ -18,6 +18,7 @@ export default {
             }
         } catch (error) {
             console.log(error)
+            //the error is an object so just throw the string message
             return res.status(500).json({ success: false, error: error.message })
         }
     },
