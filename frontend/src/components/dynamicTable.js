@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 // Dynamic Table Component
 function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
-    // State to manage table data
     const [tableData, setTableData] = useState(data);
-    // State to track which cell is being edited
     const [editingCell, setEditingCell] = useState({ rowIndex: null, colIndex: null });
-    // State to track edited values
     const [editedValues, setEditedValues] = useState({});
-    // State to track new row values
+    const [originalValues, setOriginalValues] = useState({});
     const [newRowValues, setNewRowValues] = useState({});
 
-    // This hook ensures tableData is updated whenever the data prop changes.
     useEffect(() => {
         setTableData(data);
     }, [data]);
@@ -19,14 +15,15 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
     // Function to handle cell click to enter edit mode
     const handleCellClick = (rowIndex, colIndex) => {
         setEditingCell({ rowIndex, colIndex });
-        setEditedValues(tableData[rowIndex]); // Set initial edited values
+        setEditedValues(tableData[rowIndex]);
+        setOriginalValues(tableData[rowIndex]); // Store the original values when the cell is clicked
     };
 
     // Function to handle change in input fields
     const handleInputChange = (e, column) => {
         setEditedValues({
             ...editedValues,
-            [column]: e.target.value
+            [column]: e.target.value,
         });
     };
 
@@ -35,20 +32,29 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
         const { rowIndex, colIndex } = editingCell;
         const column = columns[colIndex].accessor;
         const updatedData = [...tableData];
-        updatedData[rowIndex][column] = editedValues[column];
+        const originalValue = originalValues[column];
+        const newValue = editedValues[column];
 
-        // Optimistically update the UI
-        setTableData(updatedData);
-        setEditingCell({ rowIndex: null, colIndex: null });
+        // Only update if the value has changed
+        if (newValue !== originalValue) {
+            updatedData[rowIndex][column] = newValue;
 
-        try {
-            // Attempt to update the backend
-            await onEdit(updatedData[rowIndex]);
-        } catch (error) {
-            console.error('Failed to save changes:', error);
-            // Revert to original state on error
-            setTableData(data);
-            alert(error);
+            // Optimistically update the UI
+            setTableData(updatedData);
+            setEditingCell({ rowIndex: null, colIndex: null });
+
+            try {
+                // Attempt to update the backend
+                await onEdit(updatedData[rowIndex]);
+            } catch (error) {
+                console.error('Failed to save changes:', error);
+                // Revert to original state on error
+                setTableData(data);
+                alert(error);
+            }
+        } else {
+            // If no changes were made, exit edit mode without sending data
+            setEditingCell({ rowIndex: null, colIndex: null });
         }
     };
 
@@ -58,15 +64,12 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
         const originalData = [...tableData];
         const updatedData = tableData.filter((_, index) => index !== rowIndex);
 
-        // Optimistically update the UI
         setTableData(updatedData);
 
         try {
-            // Attempt to delete from backend
             await onDelete(rowToDelete.ID);
         } catch (error) {
             console.error('Failed to delete row:', error);
-            // Revert to original state on error
             setTableData(originalData);
             alert(error);
         }
@@ -77,20 +80,16 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
         const originalData = [...tableData];
         const updatedData = [...tableData, newRowValues];
 
-        // Optimistically update the UI
         setTableData(updatedData);
 
         try {
-            // Attempt to update the backend
             await onAdd(newRowValues);
         } catch (error) {
             console.error('Failed to add new row:', error);
-            // Revert to original state on error
             setTableData(originalData);
             alert(error);
         }
 
-        // Reset the new row values regardless of success/failure
         setNewRowValues({});
     };
 
@@ -98,7 +97,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
     const handleNewRowChange = (e, column) => {
         setNewRowValues({
             ...newRowValues,
-            [column]: e.target.value
+            [column]: e.target.value,
         });
     };
 
@@ -109,7 +108,7 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
                 <thead>
                     <tr>
                         {columns.map((column, index) => (
-                            (column.accessor !== 'ID' && column.accessor !== '_id') && ( // Only render columns if accessor is not 'ID'
+                            (column.accessor !== 'ID' && column.accessor !== '_id') && (
                                 <th key={index}>{column.header}</th>
                             )
                         ))}
@@ -148,15 +147,16 @@ function DynamicTable({ columns, data, onEdit, onAdd, onDelete }) {
                     {/* Row for adding new entries */}
                     <tr>
                         {columns.map((column, index) => (
-                            (column.accessor !== 'ID' && column.accessor !== '_id') &&
-                            <td key={index}>
-                                <input
-                                    type="text"
-                                    placeholder={`Enter ${column.header}`}
-                                    value={newRowValues[column.accessor] || ''}
-                                    onChange={(e) => handleNewRowChange(e, column.accessor)}
-                                />
-                            </td>
+                            (column.accessor !== 'ID' && column.accessor !== '_id') && (
+                                <td key={index}>
+                                    <input
+                                        type="text"
+                                        placeholder={`Enter ${column.header}`}
+                                        value={newRowValues[column.accessor] || ''}
+                                        onChange={(e) => handleNewRowChange(e, column.accessor)}
+                                    />
+                                </td>
+                            )
                         ))}
                         <td>
                             <button onClick={handleAddNewRow}>Add</button>

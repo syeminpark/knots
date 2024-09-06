@@ -57,6 +57,16 @@ userSchema.statics.createUser = async function (
     }
 }
 
+userSchema.statics.updateUser = async function (_ID, update) {
+    try {
+        const user = this.findOneAndUpdate({ ID: _ID }, update,
+            { new: true, upsert: true });
+        return user
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 userSchema.statics.getUserByID = async function (_ID) {
     try {

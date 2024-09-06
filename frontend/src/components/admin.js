@@ -7,8 +7,12 @@ const Admin = (props) => {
     const [data, setData] = useState([]);
     const [columns, setColumns] = useState([]);
 
+    //No Dependency Array: If you call useEffect without a dependency array, it will run after every render of the component
+    //Empty Dependency Array: If you provide an empty array as the dependency array, useEffect will only run once, after the initial render.
+    //With Dependencies: If you provide a dependency array with specific values, useEffect will run after the initial render and only re-run when one or more of the dependencies change.
     useEffect(() => {
         const fetchData = async () => {
+
             try {
                 const { users } = await apiRequest('getAllUsers', 'GET')
                 setData(users);

@@ -19,8 +19,13 @@ const Login = (props) => {
         localStorage.setItem('user', JSON.stringify({ userName: userName, token: response.token }))
         props.setLoggedIn(true)
         props.setUserName(userName)
-        if (response.auth_type == 'participant') navigate('/home')
+        console.log('auth', response.auth_type)
+        if (response.auth_type == 'participant') {
+          props.setIsAdmin(false)
+          navigate('/')
+        }
         else {
+          props.setIsAdmin(true)
           navigate('/admin')
         }
       } else {
