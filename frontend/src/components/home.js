@@ -4,17 +4,16 @@ import React, { useState } from 'react';
 import { DndContext, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
 import { useNavigate } from 'react-router-dom'
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
-import Panel from './Panel.js';
+import Panel from './panel/CharacterPanel.js';
+import SidebarRight from './SideBarRight.js';
+import SidebarLeft from './SideBarLeft.js';
 
 // Container to hold panels
 const Home = (props) => {
-  const [panels, setPanels] = useState([
-    { id: 'panel-1', content: 'Panel 1' },
-    { id: 'panel-2', content: 'Panel 2' },
-    { id: 'panel-3', content: 'Panel 3' },
-
-  ]);
+  const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
+  const [createdCharacters, setCreatedCharacters] = useState(['Harry', 'Snape'])
+
 
   const navigate = useNavigate()
 
@@ -36,42 +35,34 @@ const Home = (props) => {
   return (
     <div className="homeContainer">
       <div className="logoContainer">
-        <text className="logoText">
+        <span className="logoText">
           Knots
-        </text>
+        </span>
       </div>
-      <div class="sidebarRight">
-        <h2 class="sidebarRight-title">Characters</h2>
-        <div class="character-list">
-          <button class="character-item">
-            <div class="character-icon"></div>
-            <span class="character-name">Harry</span>
-          </button>
+      <SidebarRight panels={panels} setPanels={setPanels} createdCharacters={createdCharacters}></SidebarRight>
+      <SidebarLeft panels={panels} setPanels={setPanels}></SidebarLeft>
+      <div className="thread-wrapper">
+        <div className="thread-container">
+          <div className="thread-left"></div>
+          <div className="thread-right"></div>
+          <h1>Connect To Create, Create To Connect</h1>
         </div>
-        <div class="button-container">
-          <button class="create-button">
-            <i class="icon">+</i> Create
-          </button>
 
-        </div>
       </div>
-      <button class="sidebarLeft">
-        <i class="sidebarLeft-title">Journal</i>
-      </button>
       <div className="panelContainer">
         <div><DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
             <div style={{ display: 'flex', gap: '20px' }}>
               {panels.map(panel => (
-                <Panel key={panel.id} id={panel.id} content={panel.content} />
+
+                <Panel key={panel.id} id={panel.id} type={panel.type} panels={panels} setPanels={setPanels} />
               ))}
             </div>
+
           </SortableContext>
         </DndContext>
         </div>
       </div>
-
-
 
       <div className={'HomeButtonContainer'}>
         <input

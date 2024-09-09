@@ -29,7 +29,7 @@ function App() {
     const verifyToken = async () => {
       try {
         const result = await apiRequest('/verify', 'POST',)
-        console.log('Verification result:', result);
+
         setLoggedIn(result.success);
         setUserName(user.userName || '');
       }
@@ -39,7 +39,7 @@ function App() {
       }
       try {
         const result = await apiRequest('/verifyAdmin', 'POST',)
-        console.log('Verification result:', result);
+
         setIsAdmin(result.isAdmin)
       }
       catch (error) {

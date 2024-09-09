@@ -5,11 +5,14 @@
   width: 100vw;
   overflow-y: hidden;
   font-family: Arial, sans-serif;
-  align-items: center
+  background-color: gr;
+
+
 }
 
 .mainContainer {
   flex-direction: column;
+  display: flex;
   height: 100vh;
   width: 100vw;
   position: relative;
@@ -24,9 +27,12 @@
 }
 
 .logoContainer {
+  position: fixed;
   width: 100%;
   height: 70px;
+  top: 0;
   background-color: black;
+  /* border: solid 2px #305077; */
   /* Ensure padding and border are included in the width */
   display: flex;
   align-items: center;
@@ -36,10 +42,12 @@
 
 .panelContainer {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-around;
-  margin-right: 100px;
+  padding-right: 250px;
+  padding-left: 150px;
   padding-top: 100px;
+  width: 100%;
   /* border: solid 2px #305077; */
 }
 
@@ -75,8 +83,7 @@
   width: 200px;
   right: 20px;
   height: 1100px;
-  background-color: rgb(255, 255, 255);
-
+  background-color: rgba(255, 255, 255, 1);
   box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
   z-index: 1000;
 }
@@ -217,4 +224,280 @@
   border-radius: 8px;
   border: 1px solid grey;
   padding-left: 8px;
+}
+
+
+/*Character Creation      */
+.panel {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 20px;
+  width: 700px;
+  /* Adjusted for panel width */
+  min-height: 1100px;
+  max-height: 1100px;
+  /* Limit the maximum height of the panel */
+
+  margin-bottom: 10px;
+  overflow: hidden;
+  /* Prevent content from overflowing outside the panel */
+  background-color: white;
+  /* Important for absolutely positioned children */
+  position: relative;
+  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
+  overflow-y: auto;
+}
+
+.panel-content {
+  overflow-y: auto;
+}
+
+.panel-header {
+  background-color: transparent;
+  padding: 10px;
+  padding-bottom: 50px;
+  cursor: grab;
+  color: #2c2cff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* For centering the title */
+}
+
+.filepond-wrapper {
+  width: 40%;
+  /* Adjust the width of the FilePond area */
+}
+
+.header-title {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+}
+
+.x-more-button-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+
+.close-btn,
+.more-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.more-btn {
+  font-size: 30px;
+}
+
+.close-btn {
+  font-size: 18px;
+}
+
+.profile-image-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.profile-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-image-placeholder {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #d3d3d3;
+  color: #888;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+}
+
+.image-upload-input {
+  display: none;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 100px;
+  background-color: #b8b8f3;
+  border-radius: 50%;
+  margin-right: 15px;
+  cursor: pointer;
+  border: none;
+  /* Remove border */
+}
+
+.name-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-left: 20px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.tab.active {
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+
+
+.add-attributes-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #6b6bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.save-btn {
+  width: 100px;
+  padding: 10px;
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  float: right;
+}
+
+
+.save-btn-container {
+
+  display: flex;
+  /* Aligns the button to the right */
+  justify-content: flex-end;
+  /* Pushes the button container to the bottom */
+  margin-top: auto;
+
+}
+
+.thread-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 70px);
+  /* Adjust height to account for the logo */
+  width: 100vw;
+  position: fixed;
+  /* Keep it fixed in the viewport */
+  top: 50%;
+  /* Center vertically */
+  left: 50%;
+  /* Center horizontally */
+  transform: translate(-50%, -50%);
+  /* Move to the center */
+}
+
+.thread-container {
+  position: relative;
+  width: 600px;
+  height: 150px;
+  text-align: center;
+
+}
+
+/* Left thread */
+.thread-left {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 250px;
+  /* Ensure full width to meet at the center */
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.434);
+  border-radius: 50px;
+  transform-origin: right center;
+  animation: move-left 60s ease-in-out infinite alternate;
+  mix-blend-mode: multiply;
+  /* Apply blend mode to allow colors to mix */
+}
+
+/* Right thread */
+.thread-right {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 250px;
+  /* Ensure full width to meet at the center */
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.434);
+  border-radius: 50px;
+  transform-origin: left center;
+  animation: move-right 60s ease-in-out infinite alternate;
+  mix-blend-mode: multiply;
+  /* Apply blend mode to allow colors to mix */
+}
+
+/* Animation for left thread to move towards the center */
+@keyframes move-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(300px);
+    /* Move towards the center fully */
+  }
+}
+
+/* Animation for right thread to move towards the center */
+@keyframes move-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-300px);
+    /* Move towards the center fully */
+  }
 }

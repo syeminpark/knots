@@ -1,6 +1,6 @@
 const apiRequest = async (url, method, data = null) => {
     const { token } = JSON.parse(localStorage.getItem('user')) || {};
-    console.log('token', token)
+
     const options = {
         method,
         headers: {
@@ -11,7 +11,7 @@ const apiRequest = async (url, method, data = null) => {
     };
 
     try {
-        console.log('Making API request to:', url, 'with options:', options); // Debugging log
+        //console.log('Making API request to:', url, 'with options:', options); // Debugging log
         const response = await fetch(url, options);
         if (!response.ok) {
             const errorResponse = await response.json();
