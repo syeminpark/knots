@@ -47,6 +47,7 @@ const CharacterProfilePanel = (props) => {
             title="Character Profile"
             saveFunction={saveFunction}
         >
+            <div style={styles.stickyHeader}>
             {<ProfileSection
                 id={id}
                 imageSrc={imageSrc}
@@ -55,6 +56,7 @@ const CharacterProfilePanel = (props) => {
                 setName={setName}
             ></ProfileSection>}
             <TabNavigation tabs={['About', 'Connections', 'Journals', 'Comments']} activeTab={activeTab} setActiveTab={setActiveTab} />
+            </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
             {activeTab === 'About' ? (
                 <AboutTab
@@ -75,5 +77,14 @@ const CharacterProfilePanel = (props) => {
         </BasePanel>
     )
 }
+const styles = {
+    stickyHeader: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        backgroundColor: 'white',
+        paddingBottom: '10px',
+    },
+};
 
 export default CharacterProfilePanel

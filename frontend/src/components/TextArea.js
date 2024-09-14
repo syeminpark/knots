@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 const TextArea = (props) => {
 
-    const { attribute, placeholder, onChange } = props
+    const { attribute, placeholder, onChange,styles} = props
     const textareaRef = useRef(null); // Create a ref for the text area
     // Function to adjust the height of the text area
     const autoGrow = () => {
@@ -29,19 +29,7 @@ const TextArea = (props) => {
         />
     )
 }
-const styles = {
-    description: {
-        width: '100%',
-        minHeight: '10px', // Start with a base height
-        padding: '10px',
-        borderRadius: '5px',
-        border: 'none',
-        backgroundColor: 'white',
-        fontSize: '14px',
-        resize: 'vertical', // Allows the user to manually resize vertically
-        overflow: 'hidden', // Hides overflow to prevent the scroll bar
-    },
-}
+
 export default TextArea
 
 

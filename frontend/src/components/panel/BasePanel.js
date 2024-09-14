@@ -32,7 +32,7 @@ const BasePanel = (props) => {
             <div className="panel-content">
                 {children}
             </div>
-        </div >
+        </div>
     );
 };
 

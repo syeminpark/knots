@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import ModalOverlay from "../../ModalOverlay";
 import ModeSelection from "./ModeSelection";
 import SelectBox from "../../SelectBox";
+import PostTextArea from "../../panel/Journal/PostTextArea";
 
 const CreateJournalModal = (props) => {
-    const { setShowModal, createdCharacters } = props;
+    const {setShowModal, createdCharacters, finishJournalEntry} = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([])
+    const [journalEntry, setJournalEntry] = useState(null)
 
     const nextButtonClick = () => {
         if (selectedMode) {
@@ -21,6 +23,21 @@ const CreateJournalModal = (props) => {
     const backArrowClick = () => {
         setStage(0)
     }
+    const onChange = (value) => {
+        setJournalEntry(...journalEntry+value)
+    };
+    const onAnyPostButtonClick=()=>{
+    if (selectedCharacters.length === 0) {
+        alert('select a character')
+    }
+    else if(journalEntry === null){ 
+        alert('write something')
+    }
+    else{
+        finishJournalEntry(selectedMode,journalEntry,selectedCharacters)
+        setShowModal(false)
+    }
+}
 
     return (
         stage === 0 ? (
@@ -48,20 +65,26 @@ const CreateJournalModal = (props) => {
                         showBackArrow={true}
                         onBackArrowClick={backArrowClick}
                         footerButtonLabel="Post"
-                        onFooterButtonClick={nextButtonClick}
-
+                        onFooterButtonClick={onAnyPostButtonClick}
                     >
-
                         <h3 style={styles.subtitle}>✍️ {selectedMode} Mode</h3>
-
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
                             allCharacters={createdCharacters.map(character => character.name)}
-                        ></SelectBox>
+                        >
+                        </SelectBox>
+                        <br></br>
+                        <PostTextArea
+                        key={'journal'}
+                        title={""}
+                        placeholder={"What is on the character's mind?"}
+                        attribute={journalEntry}
+                        onChange={(event)=>{onChange(event.target.value)}}
+                        ></PostTextArea>
                     </ModalOverlay>
 
-                </div >
+                </div>
             ) : (
                 <div>
                     <ModalOverlay
@@ -70,7 +93,7 @@ const CreateJournalModal = (props) => {
                         footerButtonLabel="Generate"
                         showBackArrow={true}
                         onBackArrowClick={backArrowClick}
-                        onFooterButtonClick={nextButtonClick}
+                        onFooterButtonClick={onAnyPostButtonClick}
                     >
                         <h3 style={styles.subtitle}>🔧 {selectedMode} Mode</h3>
                         <SelectBox
@@ -78,8 +101,14 @@ const CreateJournalModal = (props) => {
                             setSelectedCharacters={setSelectedCharacters}
                             allCharacters={createdCharacters.map(character => character.name)}
                         ></SelectBox>
-
-
+                          <br></br>
+                           <PostTextArea
+                        key={'journal'}
+                        title={""}
+                        placeholder={"What should the character write about?"}
+                        attribute={journalEntry}
+                        onChange={(event)=>{onChange(event.target.value)}}
+                        ></PostTextArea>
                     </ModalOverlay>
 
                 </div>

@@ -1,30 +1,23 @@
-import React, { useEffect, useRef } from 'react';
 import TextArea from '../TextArea'
 const Attribute = (props) => {
     const { title, placeholder, deleteFunction, list, setter, onChange } = props;
     const attribute = list.find(attr => attr.name === title);
-    const textareaRef = useRef(null); // Create a ref for the text area
-
-    // Function to adjust the height of the text area
-    const autoGrow = () => {
-        const textarea = textareaRef.current;
-        if (textarea) {
-            textarea.style.height = 'auto'; // Reset the height
-            textarea.style.height = textarea.scrollHeight + 'px'; // Set the height based on scrollHeight
-        }
-    };
-
-    useEffect(() => {
-        autoGrow(); // Adjust height on component mount
-    }, [attribute]);
-
+   
     return (
         <div style={styles.attributeContainer}>
             <div style={styles.sectionHeader}>
                 <label style={styles.sectionHeaderLabel}>{title}</label>
-                <button style={styles.closeSectionBtn}
+                {deleteFunction &&(
+                    <button style={styles.closeSectionBtn}
                     onClick={() => { deleteFunction(title, list, setter) }}>✖</button>
+                )}
             </div>
+            <TextArea
+            attribute={attribute}
+            placeholder={placeholder}
+            onChange={onChange}
+                styles={styles}>
+            </TextArea>
 
         </div>
     );
@@ -56,6 +49,18 @@ const styles = {
         cursor: 'pointer',
         color: 'gray',
     },
+        description: {
+            width: '100%',
+            minHeight: '10px', // Start with a base height
+            padding: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            backgroundColor: 'white',
+            fontSize: '14px',
+            resize: 'vertical', // Allows the user to manually resize vertically
+            overflow: 'hidden', // Hides overflow to prevent the scroll bar
+        }
+    
 
 };
 

@@ -95,7 +95,7 @@ const Home = (props) => {
       <div className="panelContainer">
         <div><DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
-            <div style={{ display: 'flex', gap: '20px' }}>
+            <div style={{ display: 'flex', gap: '20px', flexDirection: 'row-reverse' }}>
               {panels.map(panel => (renderPanel((panel))
 
               ))}

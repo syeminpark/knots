@@ -61,7 +61,7 @@ const SelectBox = (props) => {
 }
 const styles = {
     modalBody: {
-        padding: '10px',
+        padding: '0px',
     },
     dropdownContainer: {
         position: 'relative',
