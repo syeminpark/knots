@@ -4,15 +4,17 @@ import React, { useState } from 'react';
 import { DndContext, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
 import { useNavigate } from 'react-router-dom'
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
-import Panel from './panel/CharacterPanel.js';
+import CharacterCreationPanel from './panel/Character/CharacterCreationPanel.js';
+import CharacterProfilePanel from './panel/Character/CharacterProfilePanel.js';
 import SidebarRight from './SideBarRight.js';
 import SidebarLeft from './SideBarLeft.js';
+import JournalPanel from './panel/Journal/JournalPanel.js';
 
 // Container to hold panels
 const Home = (props) => {
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
-  const [createdCharacters, setCreatedCharacters] = useState(['Harry', 'Snape'])
+  const [createdCharacters, setCreatedCharacters] = useState([])
 
 
   const navigate = useNavigate()
@@ -31,6 +33,47 @@ const Home = (props) => {
       setPanels(arrayMove(panels, oldIndex, newIndex));
     }
   };
+  const renderPanel = (panel) => {
+
+    switch (panel.type) {
+      case 'character-creation':
+        return (
+          <CharacterCreationPanel
+            key={panel.id}
+            id={panel.id}
+            panels={panels}
+            setPanels={setPanels}
+            createdCharacters={createdCharacters}
+            setCreatedCharacters={setCreatedCharacters}
+          />
+        );
+      case 'character-profile':
+        return (
+          <CharacterProfilePanel
+            key={panel.id}
+            id={panel.id}
+            panels={panels}
+            setPanels={setPanels}
+            caller={panel.caller}
+            createdCharacters={createdCharacters}
+            setCreatedCharacters={setCreatedCharacters}
+          />
+        );
+      case 'journal':
+        return (
+          <JournalPanel
+            key={panel.id}
+            id={panel.id}
+            panels={panels}
+            setPanels={setPanels}
+            createdCharacters={createdCharacters}
+          />
+        )
+      default:
+        return null; // Handle unknown panel types
+    }
+  };
+
 
   return (
     <div className="homeContainer">
@@ -53,9 +96,8 @@ const Home = (props) => {
         <div><DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
             <div style={{ display: 'flex', gap: '20px' }}>
-              {panels.map(panel => (
+              {panels.map(panel => (renderPanel((panel))
 
-                <Panel key={panel.id} id={panel.id} type={panel.type} panels={panels} setPanels={setPanels} />
               ))}
             </div>
 

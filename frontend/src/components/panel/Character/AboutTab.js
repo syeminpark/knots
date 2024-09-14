@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Attribute from './Attribute';
-import AddAttributeModal from './AddAttributeModal';
+import Attribute from '../Attribute';
+import AddAttributeModal from '../AddAttributeModal';
 
-const AboutSection = (props) => {
+const AboutTab = (props) => {
     const { personaAttributes, setPersonaAttributes } = props
     const [showModal, setShowModal] = useState(false);
 
@@ -43,4 +43,4 @@ const AboutSection = (props) => {
     );
 };
 
-export default AboutSection
+export default AboutTab

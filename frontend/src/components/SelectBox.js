@@ -68,14 +68,14 @@ const styles = {
         width: '100%',
     },
     dropdownHeader: {
-        border: '1px solid #6C63FF',
+        border: '1px solid black',
         borderRadius: '5px',
         padding: '10px',
         display: 'flex',
         justifyContent: 'space-between',
         cursor: 'pointer',
         fontSize: '16px',
-        color: '#6C63FF',
+        color: 'black',
     },
     dropdownList: {
         position: 'absolute',

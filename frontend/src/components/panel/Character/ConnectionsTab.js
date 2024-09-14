@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Attribute from './Attribute';
-import AddConnectionModal from './AddConnectionModal';
+import Attribute from '../Attribute';
+import AddConnectionModal from '../AddConnectionModal';
 
-const ConnectionsSection = (props) => {
+const ConnectionsTab = (props) => {
     const { connectedCharacters, setConnectedCharacters } = props
     const [showModal, setShowModal] = useState(false);
 
@@ -46,6 +46,6 @@ const ConnectionsSection = (props) => {
     );
 };
 
-export default ConnectionsSection;
+export default ConnectionsTab
 
 

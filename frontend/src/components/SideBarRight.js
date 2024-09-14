@@ -1,23 +1,27 @@
+import { v4 as uuidv4 } from 'uuid';
 
 const SidebarRight = (props) => {
     const { panels, setPanels, createdCharacters } = props
 
-    const onButtonClick = (type) => {
-        const id = panels.length
+    const onButtonClick = (type, caller = null, uuid = uuidv4()) => {
         setPanels([...panels, {
-            type: type, id: id,
+            type: type, id: uuid, caller: caller
         }])
     }
     return (
         <div className="sidebarRight">
             <h2 className="sidebarRight-title">Characters</h2>
+            <span className="sidebarRight-subtitle"> Online - {createdCharacters.length}</span>
             <div className="character-list">
                 {/* Render all Attribute components for each selected character */}
                 {createdCharacters.length > 0 && (
+
                     createdCharacters.map((character) => (
-                        <button key={character} className="character-item" onClick={() => { onButtonClick('character-profile') }}>
-                            <div className="character-icon"></div>
-                            <span className="character-name">{character}</span>
+                        <button key={character.uuid} className="character-item" onClick={() => { onButtonClick('character-profile', character) }}>
+                            <div className="character-icon">
+                                <img src={character.imageSrc} className="profile-image-preview" />
+                            </div>
+                            <span className="character-name">{character.name}</span>
                         </button>
                     ))
                 )}

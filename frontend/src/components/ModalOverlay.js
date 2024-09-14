@@ -1,13 +1,27 @@
 
-const ModalOverlay = ({ title, children, setShowModal, footerButtonLabel, onFooterButtonClick }) => {
+const ModalOverlay = (props) => {
+    const { title,
+        children,
+        setShowModal,
+        footerButtonLabel,
+        showBackArrow,
+        onFooterButtonClick,
+        onBackArrowClick } = props
+
     return (
         <div style={styles.modalOverlay}>
             <div style={styles.modalBox}>
                 {/* Modal Header */}
                 <div style={styles.modalHeader}>
+                    {showBackArrow && (
+                        <button style={styles.backArrowBtn} onClick={onBackArrowClick}>
+                            &lt;
+                        </button>
+                    )}
                     <h2 className='header-title'>{title}</h2>
                 </div>
                 <div className="x-more-button-container">
+
                     <button className='close-btn'
                         onClick={() => { setShowModal(false) }}>
                         ✖
@@ -58,6 +72,16 @@ const styles = {
         alignItems: 'center',
         position: 'relative',
         marginBottom: '20px',
+    },
+    backArrowBtn: {
+        position: 'absolute',
+        left: '0px',
+        top: '-30%',
+        fontSize: '24px',
+        backgroundColor: 'transparent',
+        border: 'none',
+        cursor: 'pointer',
+        color: '#000',
     },
     modalContent: {
         marginBottom: '20px',

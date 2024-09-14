@@ -1,7 +1,23 @@
+import React, { useEffect, useRef } from 'react';
+import TextArea from '../TextArea'
 const Attribute = (props) => {
-    const { title, content, placeholder, deleteFunction, list, setter, onChange } = props;
-
+    const { title, placeholder, deleteFunction, list, setter, onChange } = props;
     const attribute = list.find(attr => attr.name === title);
+    const textareaRef = useRef(null); // Create a ref for the text area
+
+    // Function to adjust the height of the text area
+    const autoGrow = () => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = 'auto'; // Reset the height
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set the height based on scrollHeight
+        }
+    };
+
+    useEffect(() => {
+        autoGrow(); // Adjust height on component mount
+    }, [attribute]);
+
     return (
         <div style={styles.attributeContainer}>
             <div style={styles.sectionHeader}>
@@ -9,16 +25,11 @@ const Attribute = (props) => {
                 <button style={styles.closeSectionBtn}
                     onClick={() => { deleteFunction(title, list, setter) }}>✖</button>
             </div>
-            <textarea
-                style={styles.description}
-                placeholder={placeholder || "Add description"}
-                onChange={onChange}
-                value={attribute ? attribute.description : ""}  // Set the textarea value
-            >
-            </textarea>
+
         </div>
     );
 };
+
 
 const styles = {
     attributeContainer: {
@@ -36,6 +47,7 @@ const styles = {
     sectionHeaderLabel: {
         color: '#6d6dff',
         fontSize: '16px',
+        fontWeight: 'bold'
     },
     closeSectionBtn: {
         backgroundColor: 'transparent',
@@ -44,15 +56,7 @@ const styles = {
         cursor: 'pointer',
         color: 'gray',
     },
-    description: {
-        width: '100%',
-        height: '80px',
-        padding: '10px',
-        borderRadius: '5px',
-        border: 'none',
-        backgroundColor: 'white',
-        fontSize: '14px',
-    },
+
 };
 
 export default Attribute;
