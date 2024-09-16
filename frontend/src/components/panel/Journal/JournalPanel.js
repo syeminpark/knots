@@ -1,13 +1,13 @@
 import BasePanel from '../BasePanel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
+import JournalGroup from './JournalGroup';
 
 const JournalPanel = (props) => {
     const { id, panels, setPanels, createdCharacters, setCreatedCharacters, createdJournalBooks, setCreatedJournalBooks } = props;
     const [showModal, setShowModal] = useState(false);
     const [selectedJournal, setSelectedJournal] = useState(null)
-
     const onCreateNewJournalBook = () => {
         setShowModal(true);
     };
@@ -30,9 +30,10 @@ const JournalPanel = (props) => {
             {showModal && (
                 <CreateJournalModal
                     setShowModal={setShowModal}
-                    createdCharacters={createdCharacters}
                     createdJournalBooks={createdJournalBooks}
                     setCreatedJournalBooks={setCreatedJournalBooks}
+                    createdCharacters={createdCharacters}
+                    setCreatedCharacters={setCreatedCharacters}
                 />
             )}
 
@@ -47,6 +48,9 @@ const JournalPanel = (props) => {
             ) : (
                 <div>
 
+                    <JournalGroup
+
+                    ></JournalGroup>
 
                 </div>
             )}
@@ -58,7 +62,7 @@ const JournalPanel = (props) => {
 /*
 let newJournalBook = {
 id: uuidv4(),
-journalPrompt: journalPrompt,
+journalBookPrompt: journalBookPrompt,
 selectedMode: selectedMode,
 createdAt: Date.now(),
 selectedCharacters: selectedCharacters,
@@ -90,10 +94,6 @@ journalEntries: selectedCharacters.map(characterName => (
 
 ``
 */
-
-
-
-
 
 
 

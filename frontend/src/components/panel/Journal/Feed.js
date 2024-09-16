@@ -15,7 +15,7 @@ const Feed = (props) => {
                 <JournalGroup
                     key={index}
                     selectedMode={journalBook.selectedMode}
-                    journalPrompt={journalBook.journalPrompt}
+                    journalBookPrompt={journalBook.journalBookPrompt}
                     createdAt={journalBook.createdAt}
                 >
                     {journalBook.journalEntries.map((journalEntry, id) => (

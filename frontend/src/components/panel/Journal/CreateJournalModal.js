@@ -6,11 +6,11 @@ import PostTextArea from "../../panel/Journal/PostTextArea";
 import { v4 as uuidv4 } from 'uuid';
 
 const CreateJournalModal = (props) => {
-    const { setShowModal, createdCharacters, createdJournalBooks, setCreatedJournalBooks } = props;
+    const { setShowModal, createdJournalBooks, setCreatedJournalBooks, createdCharacters, setCreatedCharacters } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([])
-    const [journalPrompt, setJournalPrompt] = useState(null)
+    const [journalBookPrompt, setJournalBookPrompt] = useState(null)
 
     const nextButtonClick = () => {
         if (selectedMode) {
@@ -25,7 +25,7 @@ const CreateJournalModal = (props) => {
         setStage(0)
     }
     const onChange = (value) => {
-        setJournalPrompt(value)
+        setJournalBookPrompt(value)
     };
     const onAnyPostButtonClick = () => {
         if (createdCharacters.length == 0) {
@@ -34,27 +34,47 @@ const CreateJournalModal = (props) => {
         else if (selectedCharacters.length === 0) {
             alert('select a character')
         }
-        else if (journalPrompt === null) {
+        else if (journalBookPrompt === null) {
             alert('write something')
         }
         else {
             let newJournalBook = {
                 id: uuidv4(),
-                journalPrompt: journalPrompt,
+                journalBookPrompt: journalBookPrompt,
                 selectedMode: selectedMode,
                 createdAt: Date.now(),
                 selectedCharacters: selectedCharacters,
                 journalEntries: selectedCharacters.map(characterName => ({
                     id: uuidv4(),
                     ownerName: characterName,
-                    content: journalPrompt,
+                    content: journalBookPrompt,
                 }))
             };
             console.log('new Journal', newJournalBook);
             if (selectedMode === "System Generate") {
                 // 나중에 LLM Generate으로 변경 
             }
+            let updatedCharacters = [...createdCharacters];
             setCreatedJournalBooks([...createdJournalBooks, newJournalBook]);
+            selectedCharacters.forEach(selectedCharacterName => {
+                let character = updatedCharacters.find(createdCharacter => createdCharacter.name === selectedCharacterName);
+                if (character) {
+                    let journalEntry = newJournalBook.journalEntries.find(entry => entry.ownerName === selectedCharacterName);
+                    if (!character.createdJournals) {
+                        character.createdJournals = [];  // Initialize as an empty array if it doesn't exist
+                    }
+                    character.createdJournals.push({
+                        journalBookID: newJournalBook.id,
+                        journalBookPrompt: newJournalBook.journalBookPrompt,
+                        selectedMode: newJournalBook.selectedMode,
+                        createdAt: newJournalBook.createdAt,
+                        journalEntryID: journalEntry.id,
+                        journalEntryContent: journalEntry.content
+                    });
+                }
+            });
+            setCreatedCharacters(updatedCharacters);
+            console.log('createdCharacters', createdCharacters)
             setShowModal(false)
         }
     }
@@ -87,25 +107,26 @@ const CreateJournalModal = (props) => {
                         footerButtonLabel="Post"
                         onFooterButtonClick={onAnyPostButtonClick}
                     >
+
+                        <h3 style={styles.subtitle}>✍️ {selectedMode} Mode</h3>
+                        <SelectBox
+                            selectedCharacters={selectedCharacters}
+                            setSelectedCharacters={setSelectedCharacters}
+                            allCharacters={createdCharacters.map(character => character.name)}
+                        >
+                        </SelectBox>
+                        <br></br>
                         <div style={styles.scrollableContent}>
-                            <h3 style={styles.subtitle}>✍️ {selectedMode} Mode</h3>
-                            <SelectBox
-                                selectedCharacters={selectedCharacters}
-                                setSelectedCharacters={setSelectedCharacters}
-                                allCharacters={createdCharacters.map(character => character.name)}
-                            >
-                            </SelectBox>
-                            <br></br>
                             <PostTextArea
                                 key={'journal'}
                                 title={""}
                                 placeholder={"What is on the character's mind?"}
-                                attribute={journalPrompt}
+                                attribute={journalBookPrompt}
                                 onChange={(event) => { onChange(event.target.value) }}
                             ></PostTextArea>
                         </div>
-                    </ModalOverlay>
-                </div>
+                    </ModalOverlay >
+                </div >
             ) : (
                 <div>
                     <ModalOverlay
@@ -129,7 +150,7 @@ const CreateJournalModal = (props) => {
                                 key={'journal'}
                                 title={""}
                                 placeholder={"What should the characters write about?"}
-                                attribute={journalPrompt}
+                                attribute={journalBookPrompt}
                                 onChange={(event) => { onChange(event.target.value) }}
                             ></PostTextArea>
                         </div>
