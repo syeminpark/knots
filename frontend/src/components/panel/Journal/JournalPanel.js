@@ -15,8 +15,6 @@ const JournalPanel = (props) => {
     const finishJournalEntry = (selectedMode, _journalEntry, selectedCharacters) => {
         console.log('hey', _journalEntry)
         console.log(selectedCharacters, _journalEntry, selectedMode);
-
-
         let newJournal = {
             journalEntry: _journalEntry,
             selectedMode: selectedMode,
@@ -27,11 +25,8 @@ const JournalPanel = (props) => {
         console.log('new Journal', newJournal)
         if (selectedMode === "System Generate") {
             //나중에 LLM Generate으로 변경 
-
         }
-
         setCreatedJournals([...createdJournals, newJournal]);
-
     };
 
     return (
@@ -118,6 +113,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '15px',
+
     },
 };
 
