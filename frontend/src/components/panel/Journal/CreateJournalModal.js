@@ -27,7 +27,10 @@ const CreateJournalModal = (props) => {
         setJournalEntry(value)
     };
     const onAnyPostButtonClick = () => {
-        if (selectedCharacters.length === 0) {
+        if (createdCharacters.length == 0) {
+            alert('create a character first')
+        }
+        else if (selectedCharacters.length === 0) {
             alert('select a character')
         }
         else if (journalEntry === null) {

@@ -21,10 +21,11 @@ const JournalPanel = (props) => {
             selectedMode: selectedMode,
             createdAt: Date.now(),
             selectedCharacters: selectedCharacters,
-            generatedJournal: selectedCharacters.map(character => ({ name: character.name, generatedJournal: `Example of a generated Journal for ${character.name}` }))
+            generatedJournal: selectedCharacters.map(characterName => ({ name: characterName, generatedJournal: `Example of a generated Journal for ${characterName}` }))
 
         };
         setCreatedJournals([...createdJournals, newJournal]);
+        console.log('setCreatedJournals', createdJournals)
     };
 
     return (
@@ -62,11 +63,11 @@ const JournalPanel = (props) => {
                         journalEntry={journal.journalEntry}
                         createdAt={journal.createdAt}
                     >
-                        {journal.selectedCharacters.map((character, index) => (
+                        {journal.selectedCharacters.map((characterName, index) => (
                             <JournalContent
                                 key={index}
-                                characterName={character.name}
-                                content={`Example of a generated Journal for ${character.name}`}
+                                characterName={characterName}
+                                content={`Example of a generated Journal for ${characterName}`}
                             />
                         ))}
                     </JournalGroup>

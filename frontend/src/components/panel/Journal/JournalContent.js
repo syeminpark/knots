@@ -14,7 +14,7 @@ const JournalContent = (props) => {
             </div>
             <p style={styles.journalText}>
                 {content}
-                <span style={styles.moreLink}>more</span>
+                <span style={styles.moreLink}> ...more</span>
             </p>
         </div>
     )
