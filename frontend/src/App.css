@@ -30,7 +30,7 @@
   height: 70px;
   z-index: 100;
   top: 0;
-  background-color: black;
+  background-color: rgb(70, 66, 66);
   /* border: solid 2px #305077; */
   /* Ensure padding and border are included in the width */
   display: flex;
