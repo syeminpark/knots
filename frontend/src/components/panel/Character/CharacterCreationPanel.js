@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BasePanel from '../BasePanel';
 import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
-import TabNavigation from '../TabNavigation';
+import TabNavigation from './TabNavigation';
 import { v4 as uuidv4 } from 'uuid';
 import ProfileSection from './ProfileSection';
 
@@ -46,7 +46,7 @@ const CharacterCreationPanel = (props) => {
                 {/* Tabs */}
                 <TabNavigation tabs={['About', 'Connections']} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
-            
+
             {/* Conditionally render the appropriate panel based on activeTab */}
             <div className="panel-content">
                 {activeTab === 'About' ? (

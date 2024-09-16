@@ -1,8 +1,8 @@
-import React, { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import BasePanel from '../BasePanel';
 import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
-import TabNavigation from '../TabNavigation';
+import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
 
 const CharacterProfilePanel = (props) => {
@@ -14,8 +14,8 @@ const CharacterProfilePanel = (props) => {
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
     const [name, setName] = useState(caller.name);
 
-      // Effect to update local state when `createdCharacters` is updated
-      useEffect(() => {
+    // Effect to update local state when `createdCharacters` is updated
+    useEffect(() => {
         const updatedCharacter = createdCharacters.find(character => character.uuid === caller.uuid);
         if (updatedCharacter) {
             setName(updatedCharacter.name);
@@ -60,14 +60,14 @@ const CharacterProfilePanel = (props) => {
             saveFunction={saveFunction}
         >
             <div style={styles.stickyHeader}>
-            {<ProfileSection
-                id={id}
-                imageSrc={imageSrc}
-                setImageSrc={setImageSrc}
-                name={name}
-                setName={setName}
-            ></ProfileSection>}
-            <TabNavigation tabs={['About', 'Connections', 'Journals', 'Comments']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                {<ProfileSection
+                    id={id}
+                    imageSrc={imageSrc}
+                    setImageSrc={setImageSrc}
+                    name={name}
+                    setName={setName}
+                ></ProfileSection>}
+                <TabNavigation tabs={['About', 'Connections', 'Journals', 'Comments']} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
             {activeTab === 'About' ? (

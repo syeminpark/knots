@@ -4,8 +4,8 @@
 //Route define specific routes
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Home from './components/home'
-import Login from './components/login'
-import Admin from './components/admin'
+import Login from './components/login/login'
+import Admin from './components/login/admin'
 import './App.css'
 import { useEffect, useState } from 'react'
 import apiRequest from './utility/apiRequest'

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'; // Import necessary hooks from React
 import { useNavigate } from 'react-router-dom';
 import DynamicTable from './dynamicTable';
-import apiRequest from '../utility/apiRequest';
+import apiRequest from '../../utility/apiRequest';
 
 const Admin = (props) => {
     const [data, setData] = useState([]);

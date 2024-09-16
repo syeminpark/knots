@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import apiRequest from '../utility/apiRequest';
+import apiRequest from '../../utility/apiRequest';
 
 const Login = (props) => {
   const [userName, setUserName] = useState('')
