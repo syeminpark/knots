@@ -1,13 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
+
+import CharacterButton from './CharacterButton';
+import openNewPanel from './openNewPanel';
 
 const SidebarRight = (props) => {
     const { panels, setPanels, createdCharacters } = props
-
-    const onButtonClick = (type, caller = null, uuid = uuidv4()) => {
-        setPanels([...panels, {
-            type: type, id: uuid, caller: caller
-        }])
-    }
     return (
         <div className="sidebarRight">
             <h3 className="sidebarRight-title">Characters</h3>
@@ -18,17 +14,18 @@ const SidebarRight = (props) => {
                 {createdCharacters.length > 0 && (
 
                     createdCharacters.map((character) => (
-                        <button key={character.uuid} className="character-item" onClick={() => { onButtonClick('character-profile', character) }}>
-                            <div className="character-icon">
-                                <img src={character.imageSrc} className="profile-image-preview" />
-                            </div>
-                            <span className="character-name">{character.name}</span>
+                        <button key={character.uuid} className="character-item" onClick={() => { openNewPanel(panels, setPanels, 'character-profile', character) }}>
+                            <CharacterButton
+                                panels={panels}
+                                setPanels={setPanels}
+                                createdCharacter={character}
+                            ></CharacterButton>
                         </button>
                     ))
                 )}
             </div>
             <div className="button-container">
-                <button className="create-button" onClick={() => { onButtonClick("character-creation") }}>
+                <button className="create-button" onClick={() => { openNewPanel(panels, setPanels, "character-creation") }}>
                     <i className="icon">+</i> Create
                 </button>
             </div>

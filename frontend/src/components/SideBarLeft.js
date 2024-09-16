@@ -1,16 +1,11 @@
-import { v4 as uuidv4 } from 'uuid';
+
+import openNewPanel from './openNewPanel';
 
 const SidebarLeft = (props) => {
     const { panels, setPanels } = props;
 
-    const onButtonClick = (type, uuid = uuidv4()) => {
-        setPanels([...panels, {
-            type: type, id: uuid,
-        }])
-    }
-
     return (
-        <button className="sidebarLeft" onClick={() => { onButtonClick('journal') }}>
+        <button className="sidebarLeft" onClick={() => { openNewPanel(panels, setPanels, 'journal') }}>
             <span className="journal-icon"></span>
             <i className="sidebarLeft-title">Journal</i>
         </button>

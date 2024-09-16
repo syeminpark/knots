@@ -12,20 +12,26 @@ const JournalPanel = (props) => {
         setShowModal(true);
     };
 
-    const finishJournalEntry = (selectedMode, journalEntry, selectedCharacters) => {
-        console.log(selectedCharacters, journalEntry, selectedMode);
+    const finishJournalEntry = (selectedMode, _journalEntry, selectedCharacters) => {
+        console.log('hey', _journalEntry)
+        console.log(selectedCharacters, _journalEntry, selectedMode);
 
 
-        const newJournal = {
-            journalEntry: journalEntry,
+        let newJournal = {
+            journalEntry: _journalEntry,
             selectedMode: selectedMode,
             createdAt: Date.now(),
             selectedCharacters: selectedCharacters,
-            generatedJournal: selectedCharacters.map(characterName => ({ name: characterName, generatedJournal: `Example of a generated Journal for ${characterName}` }))
-
+            generatedJournal: selectedCharacters.map(characterName => ({ characterName: characterName, content: _journalEntry }))
         };
+        console.log('new Journal', newJournal)
+        if (selectedMode === "System Generate") {
+            //나중에 LLM Generate으로 변경 
+
+        }
+
         setCreatedJournals([...createdJournals, newJournal]);
-        console.log('setCreatedJournals', createdJournals)
+
     };
 
     return (
@@ -55,19 +61,23 @@ const JournalPanel = (props) => {
             <div style={styles.journalFeed}>
                 {/* Feed Section */}
                 <h2 style={styles.feedHeader}>Feed</h2>
-
-                {createdJournals.map((journal, index) => (
+                {createdJournals.length === 0 && (
+                    'No Journals yet...'
+                )}
+                {createdJournals.slice().reverse().map((journal, index) => (  // Reverse the order of journals
                     <JournalGroup
                         key={index}
                         selectedMode={journal.selectedMode}
                         journalEntry={journal.journalEntry}
                         createdAt={journal.createdAt}
                     >
-                        {journal.selectedCharacters.map((characterName, index) => (
+                        {journal.generatedJournal.map((generatedJournal, index) => (
                             <JournalContent
                                 key={index}
-                                characterName={characterName}
-                                content={`Example of a generated Journal for ${characterName}`}
+                                panels={panels}
+                                setPanels={setPanels}
+                                createdCharacter={createdCharacters.find(character => character.name === generatedJournal.characterName)}
+                                content={generatedJournal.content}
                             />
                         ))}
                     </JournalGroup>
