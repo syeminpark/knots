@@ -1,3 +1,7 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
 .homeContainer {
   display: flex;
   flex-direction: column;
@@ -19,8 +23,11 @@
   font-family: 'Roboto', sans-serif;
 }
 
+/*---------------------------- Main Screen Styles*/
+/***** Logo area *****/
 .logoText {
   font-size: 30px;
+  font-family: "Roboto Mono", monospace;
   color: aliceblue;
 }
 
@@ -57,7 +64,7 @@
   /* border: solid 2px #305077; */
 }
 
-/* Sidebar button styling */
+/***** Sidebar button *****/
 .sidebarLeft {
   border-radius: 20px;
   position: fixed;
@@ -90,6 +97,7 @@
 .sidebarLeft-title {
   font-size: 18px;
   font-weight: bold;
+  font-family: "Roboto Mono", monospace; 
   color: black;
 
 }
@@ -112,8 +120,6 @@
   display: inline-block;
 }
 
-
-
 .sidebarRight {
   border-radius: 20px;
   position: fixed;
@@ -129,11 +135,11 @@
   flex-direction: column;
 }
 
-
 /* Sidebar title */
 .sidebarRight-title {
   font-size: 20px;
   font-weight: bold;
+  font-family: "Roboto Mono", monospace;
   color: rgb(0, 0, 0);
   margin-bottom: 20px;
   text-align: center;
@@ -146,12 +152,11 @@
   color: rgb(0, 0, 0);
 }
 
-
 /* Character list */
 .character-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   /* Space between each character item */
   height: 100%;
   overflow-y: auto;
@@ -170,7 +175,9 @@
   /* 5% margin based on the sidebar's width */
   margin-right: 5%;
   /* 5% margin based on the sidebar's width */
-
+  font-family: "Roboto Mono", monospace;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 /* Character icon (circle) */
@@ -311,7 +318,7 @@
   top: 0;
   z-index: 10;
   background-color: white;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 
   /* Optional shadow for visual separation */
 }
@@ -319,7 +326,7 @@
 .panel-header {
   background-color: transparent;
   padding: 10px;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   cursor: grab;
   color: #000000;
   display: flex;
@@ -337,19 +344,18 @@
 .header-title {
   flex-grow: 1;
   text-align: center;
+  font-family: "Roboto Mono", monospace;
   margin: 0;
 }
-
-
 
 .x-more-button-container {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 12px;
   display: flex;
-  gap: 10px;
+  transform: translateY(-10%);
+  gap: 3px;
 }
-
 
 .close-btn,
 .more-btn {
@@ -360,6 +366,7 @@
 
 .more-btn {
   font-size: 30px;
+  transform: translateY(-20%);
 }
 
 .close-btn {
@@ -430,30 +437,33 @@
 .tabs {
   display: flex;
   justify-content: space-between;
+  background: #F2F2F5;
   margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  /* border: 1px solid #ddd; */
+  border-radius: 6px;
   padding: 3px;
 }
 
 .tab {
   flex: 1;
   padding: 10px;
-  background-color: white;
+  background: #F2F2F5;
   border: none;
   cursor: pointer;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 6px;
   color: #a7a7a7;
+  transition: box-shadow 0.3s ease; /* Smooth shadow transition */
 }
 
 .tab.active {
-  background-color: #b8b8f3;
+  background-color: #ffffff;
   /* border: 1px solid #6e6e6e; */
   font-weight: bold;
   color: #000;
-}
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 
+}
 
 
 .add-attributes-btn {
@@ -461,9 +471,10 @@
   padding: 10px;
   background-color: #7575ff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   color: white;
   font-size: 16px;
+  margin-top: 6px;
   margin-bottom: 40px;
   cursor: pointer;
 }
@@ -495,6 +506,7 @@
 
 }
 
+/*--------------------------------*/
 .thread-wrapper {
   display: flex;
   align-items: center;
