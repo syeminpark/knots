@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { DndContext, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
 import { useNavigate } from 'react-router-dom'
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
@@ -7,13 +7,14 @@ import CharacterProfilePanel from './panel/Character/CharacterProfilePanel.js';
 import SidebarRight from './SideBarRight.js';
 import SidebarLeft from './SideBarLeft.js';
 import JournalPanel from './panel/Journal/JournalPanel.js';
+import journalBookReducer from './panel/Journal/journalBookReducer.js';
 
 // Container to hold panels
 const Home = (props) => {
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
   const [createdCharacters, setCreatedCharacters] = useState([])
-  const [createdJournalBooks, setCreatedJournalBooks] = useState([])
+  const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, { journalBooks: [] })
 
   const navigate = useNavigate()
 
@@ -68,7 +69,7 @@ const Home = (props) => {
             createdCharacters={createdCharacters}
             setCreatedCharacters={setCreatedCharacters}
             createdJournalBooks={createdJournalBooks}
-            setCreatedJournalBooks={setCreatedJournalBooks}
+            dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
           />
         );
       default:
