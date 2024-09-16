@@ -62,7 +62,7 @@ const styles = {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        width: "120px",
+        width: "140px",
         height: "120px",
         backgroundColor: "#f7f7ff",
         borderRadius: "10px",

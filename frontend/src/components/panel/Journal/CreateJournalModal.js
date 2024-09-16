@@ -105,7 +105,7 @@ const CreateJournalModal = (props) => {
                            <PostTextArea
                         key={'journal'}
                         title={""}
-                        placeholder={"What should the character write about?"}
+                        placeholder={"What should the characters write about?"}
                         attribute={journalEntry}
                         onChange={(event)=>{onChange(event.target.value)}}
                         ></PostTextArea>

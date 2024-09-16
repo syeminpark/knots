@@ -8,8 +8,6 @@ import { useState } from 'react';
                 [entryId]: !prev[entryId] 
             }));
         };
-
-
         return(
 
       <div style={styles.journalEntry}>

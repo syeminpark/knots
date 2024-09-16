@@ -21,6 +21,7 @@ const JournalPanel = (props) => {
             panels={panels}
             setPanels={setPanels}
             title="Journal"
+            iconStyles="journal-icon"
         >
             {/* Create New Journal Button */}
             <div style={styles.stickyButtonContainer}>
@@ -45,7 +46,6 @@ const JournalPanel = (props) => {
                     type={'System Generated'}
                     journalEntry={'What was your dream yesterday?'} 
                 />
-
                 <JournalGroup
                     type={'Manual Post'}
                     journalEntry={'Today I went to the shopping mall and?'} 

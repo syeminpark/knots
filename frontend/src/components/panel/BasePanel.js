@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 
 const BasePanel = (props) => {
-    const { id, panels, setPanels, children, title, saveFunction, } = props;
+    const { id, panels, setPanels, children, title,iconStyle=''} = props;
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
 
     const panelStyle = {
@@ -18,10 +18,13 @@ const BasePanel = (props) => {
     };
 
     return (
-        <div ref={setNodeRef} className="panel" style={panelStyle}>
+        <div ref={setNodeRef} className="panel " style={panelStyle}>
             {/* Panel Header */}
             <div className="panel-header" {...listeners} {...attributes}>
-                <h2 className="header-title">{title}</h2>
+                <div className="header-icon-title">
+                    <span className={iconStyle}></span>
+                    <h2 className="header-title">{title}</h2>
+                </div>
             </div>
             <div className="x-more-button-container">
                 <button className="more-btn">...</button>

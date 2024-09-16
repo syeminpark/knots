@@ -10,7 +10,8 @@ const SidebarRight = (props) => {
     }
     return (
         <div className="sidebarRight">
-            <h2 className="sidebarRight-title">Characters</h2>
+            <h3 className="sidebarRight-title">Characters</h3>
+
             <span className="sidebarRight-subtitle"> Online - {createdCharacters.length}</span>
             <div className="character-list">
                 {/* Render all Attribute components for each selected character */}

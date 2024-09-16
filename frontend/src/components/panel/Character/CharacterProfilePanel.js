@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import BasePanel from '../BasePanel';
 import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
@@ -13,6 +13,18 @@ const CharacterProfilePanel = (props) => {
     const [personaAttributes, setPersonaAttributes] = useState(caller.personaAttributes);
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
     const [name, setName] = useState(caller.name);
+
+      // Effect to update local state when `createdCharacters` is updated
+      useEffect(() => {
+        const updatedCharacter = createdCharacters.find(character => character.uuid === caller.uuid);
+        if (updatedCharacter) {
+            setName(updatedCharacter.name);
+            setPersonaAttributes(updatedCharacter.personaAttributes);
+            setConnectedCharacters(updatedCharacter.connectedCharacters);
+            setImageSrc(updatedCharacter.imageSrc);
+        }
+    }, [createdCharacters, caller.uuid]);
+
 
     const saveFunction = () => {
         if (!name.trim()) {
