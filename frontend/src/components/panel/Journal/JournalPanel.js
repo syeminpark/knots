@@ -5,7 +5,7 @@ import Feed from './Feed';
 import JournalGroup from './JournalGroup';
 
 const JournalPanel = (props) => {
-    const { id, panels, setPanels, createdCharacters, setCreatedCharacters, createdJournalBooks, setCreatedJournalBooks } = props;
+    const { id, panels, setPanels, createdCharacters, setCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
     const [showModal, setShowModal] = useState(false);
     const [selectedJournal, setSelectedJournal] = useState(null)
     const onCreateNewJournalBook = () => {
@@ -31,7 +31,7 @@ const JournalPanel = (props) => {
                 <CreateJournalModal
                     setShowModal={setShowModal}
                     createdJournalBooks={createdJournalBooks}
-                    setCreatedJournalBooks={setCreatedJournalBooks}
+                    dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     createdCharacters={createdCharacters}
                     setCreatedCharacters={setCreatedCharacters}
                 />

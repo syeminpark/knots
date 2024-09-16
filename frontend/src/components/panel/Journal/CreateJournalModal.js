@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ModalOverlay from "../../ModalOverlay";
 import ModeSelection from "./ModeSelection";
 import SelectBox from "../../SelectBox";
 import PostTextArea from "../../panel/Journal/PostTextArea";
-import { v4 as uuidv4 } from 'uuid';
 
 const CreateJournalModal = (props) => {
-    const { setShowModal, createdJournalBooks, setCreatedJournalBooks, createdCharacters, setCreatedCharacters } = props;
+    const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, setCreatedCharacters } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([])
     const [journalBookPrompt, setJournalBookPrompt] = useState(null)
+
+    useEffect(() => {
+        console.log('new Journal (updated state):', createdJournalBooks);
+    }, [createdJournalBooks]);
 
     const nextButtonClick = () => {
         if (selectedMode) {
@@ -38,42 +41,38 @@ const CreateJournalModal = (props) => {
             alert('write something')
         }
         else {
-            let newJournalBook = {
-                id: uuidv4(),
-                journalBookPrompt: journalBookPrompt,
-                selectedMode: selectedMode,
-                createdAt: Date.now(),
-                selectedCharacters: selectedCharacters,
-                journalEntries: selectedCharacters.map(characterName => ({
-                    id: uuidv4(),
-                    ownerName: characterName,
-                    content: journalBookPrompt,
-                }))
-            };
-            console.log('new Journal', newJournalBook);
+            dispatchCreatedJournalBooks({
+                type: 'CREATE_JOURNAL_BOOK',
+                payload: {
+                    journalBookPrompt,
+                    selectedMode,
+                    selectedCharacters,
+                }
+            })
+
             if (selectedMode === "System Generate") {
                 // 나중에 LLM Generate으로 변경 
             }
-            let updatedCharacters = [...createdCharacters];
-            setCreatedJournalBooks([...createdJournalBooks, newJournalBook]);
-            selectedCharacters.forEach(selectedCharacterName => {
-                let character = updatedCharacters.find(createdCharacter => createdCharacter.name === selectedCharacterName);
-                if (character) {
-                    let journalEntry = newJournalBook.journalEntries.find(entry => entry.ownerName === selectedCharacterName);
-                    if (!character.createdJournals) {
-                        character.createdJournals = [];  // Initialize as an empty array if it doesn't exist
-                    }
-                    character.createdJournals.push({
-                        journalBookID: newJournalBook.id,
-                        journalBookPrompt: newJournalBook.journalBookPrompt,
-                        selectedMode: newJournalBook.selectedMode,
-                        createdAt: newJournalBook.createdAt,
-                        journalEntryID: journalEntry.id,
-                        journalEntryContent: journalEntry.content
-                    });
-                }
-            });
-            setCreatedCharacters(updatedCharacters);
+            // let updatedCharacters = [...createdCharacters];
+            // dispatchCreatedJournalBooks([...createdJournalBooks, newJournalBook]);
+            // selectedCharacters.forEach(selectedCharacterName => {
+            //     let character = updatedCharacters.find(createdCharacter => createdCharacter.name === selectedCharacterName);
+            //     if (character) {
+            //         let journalEntry = newJournalBook.journalEntries.find(entry => entry.ownerName === selectedCharacterName);
+            //         if (!character.createdJournals) {
+            //             character.createdJournals = [];  // Initialize as an empty array if it doesn't exist
+            //         }
+            //         character.createdJournals.push({
+            //             journalBookID: newJournalBook.id,
+            //             journalBookPrompt: newJournalBook.journalBookPrompt,
+            //             selectedMode: newJournalBook.selectedMode,
+            //             createdAt: newJournalBook.createdAt,
+            //             journalEntryID: journalEntry.id,
+            //             journalEntryContent: journalEntry.content
+            //         });
+            //     }
+            // });
+            // setCreatedCharacters(updatedCharacters);
             console.log('createdCharacters', createdCharacters)
             setShowModal(false)
         }

@@ -8,10 +8,10 @@ const Feed = (props) => {
         <div style={styles.journalFeed}>
             {/* Feed Section */}
             <h2 style={styles.feedHeader}>Feed</h2>
-            {createdJournalBooks.length === 0 && (
+            {createdJournalBooks.journalBooks.length === 0 && (
                 'No Journals yet...'
             )}
-            {createdJournalBooks.slice().reverse().map((journalBook, index) => (  // Reverse the order of journals
+            {createdJournalBooks.journalBooks.slice().reverse().map((journalBook, index) => (  // Reverse the order of journals
                 <JournalGroup
                     key={index}
                     selectedMode={journalBook.selectedMode}
