@@ -50,4 +50,5 @@ input[type='button'] {
   font-size: 24px;
   border-radius: 8px;
   cursor: pointer;
+  z-index: 1000000;
 }

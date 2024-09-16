@@ -13,6 +13,7 @@ const Home = (props) => {
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
   const [createdCharacters, setCreatedCharacters] = useState([])
+  const [createdJournals, setCreatedJournals] = useState([])
 
   const navigate = useNavigate()
 
@@ -65,6 +66,9 @@ const Home = (props) => {
             panels={panels}
             setPanels={setPanels}
             createdCharacters={createdCharacters}
+            setCreatedCharacters={setCreatedCharacters}
+            createdJournals={createdJournals}
+            setCreatedJournals={setCreatedJournals}
           />
         );
       default:
@@ -81,7 +85,10 @@ const Home = (props) => {
       </div>
 
       {/* Integrating Sidebar Right */}
-      <SidebarRight panels={panels} setPanels={setPanels} createdCharacters={createdCharacters}></SidebarRight>
+      <SidebarRight panels={panels}
+        setPanels={setPanels}
+        createdCharacters={createdCharacters}
+      ></SidebarRight>
 
       {/* Integrating Sidebar Left */}
       <SidebarLeft panels={panels} setPanels={setPanels}></SidebarLeft>

@@ -2,9 +2,10 @@ import BasePanel from '../BasePanel';
 import { useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import JournalGroup from './JournalGroup';
+import JournalContent from './JournalContent';
 
 const JournalPanel = (props) => {
-    const { id, panels, setPanels, createdCharacters } = props;
+    const { id, panels, setPanels, createdCharacters, setCreatedCharacters, createdJournals, setCreatedJournals } = props;
     const [showModal, setShowModal] = useState(false);
 
     const onCreateNewJournal = () => {
@@ -13,6 +14,17 @@ const JournalPanel = (props) => {
 
     const finishJournalEntry = (selectedMode, journalEntry, selectedCharacters) => {
         console.log(selectedCharacters, journalEntry, selectedMode);
+
+
+        const newJournal = {
+            journalEntry: journalEntry,
+            selectedMode: selectedMode,
+            createdAt: Date.now(),
+            selectedCharacters: selectedCharacters,
+            generatedJournal: selectedCharacters.map(character => ({ name: character.name, generatedJournal: `Example of a generated Journal for ${character.name}` }))
+
+        };
+        setCreatedJournals([...createdJournals, newJournal]);
     };
 
     return (
@@ -42,25 +54,33 @@ const JournalPanel = (props) => {
             <div style={styles.journalFeed}>
                 {/* Feed Section */}
                 <h2 style={styles.feedHeader}>Feed</h2>
-                <JournalGroup
-                    type={'System Generated'}
-                    journalEntry={'What was your dream yesterday?'} 
-                />
-                <JournalGroup
-                    type={'Manual Post'}
-                    journalEntry={'Today I went to the shopping mall and?'} 
-                />
-        
+
+                {createdJournals.map((journal, index) => (
+                    <JournalGroup
+                        key={index}
+                        selectedMode={journal.selectedMode}
+                        journalEntry={journal.journalEntry}
+                        createdAt={journal.createdAt}
+                    >
+                        {journal.selectedCharacters.map((character, index) => (
+                            <JournalContent
+                                key={index}
+                                characterName={character.name}
+                                content={`Example of a generated Journal for ${character.name}`}
+                            />
+                        ))}
+                    </JournalGroup>
+                ))}
             </div>
-        </BasePanel>
+        </BasePanel >
     );
 };
 
 const styles = {
     stickyButtonContainer: {
         position: 'sticky',
-        zIndex: 10, 
-        backgroundColor: 'white', 
+        zIndex: 10,
+        backgroundColor: 'white',
 
     },
     createJournalBtn: {

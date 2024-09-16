@@ -1,50 +1,50 @@
-import { useState } from 'react';
-      const JournalGroup= (props) => {
-        const {type,journalEntry}=props
-        const [expandedGroup, setExpandedGroup] = useState({}); 
-        const toggleEntry = (entryId) => {
-            setExpandedGroup(prev => ({
-                ...prev,
-                [entryId]: !prev[entryId] 
-            }));
-        };
-        return(
+import { useState, useEffect } from 'react';
+import calculateTimeAgo from './CaluclateTimeAgo';
 
-      <div style={styles.journalEntry}>
-      <div style={styles.entryHeader}>
-          <strong style={styles.entryTitle}>{journalEntry}</strong>
-          <span style={styles.entryTime}>1h</span>
-      </div>
-      <div>
-          <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{type}</span>
-      </div>
-      {/* Toggle Button */}
-      <button style={styles.entryToggle} onClick={() => toggleEntry('entry1')}> 
-          {expandedGroup['entry1'] ? 'ʌ' : 'v'} {/* Toggle icon based on state */}
-      </button>
+const JournalGroup = (props) => {
+    const { selectedMode, journalEntry, createdAt, children } = props
+    const [timeAgo, setTimeAgo] = useState('');
+    const [expandedGroup, setExpandedGroup] = useState({});
 
-      {/* Conditionally render expanded view */}
-      {expandedGroup['entry1'] && (
-          <div style={styles.expandedContent}>
-              {/* Expanded content UI based on your image */}
-              <div style={styles.expandedHeader}>
-                  <div style={styles.avatar}></div>
-                  <div>
-                      <strong>Ron</strong> | <span style={styles.systemGenerated}>System Generated</span>
-                  </div>
-              </div>
-              <p style={styles.journalText}>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut..."
-                  <span style={styles.moreLink}>more</span>
-              </p>
-          </div>
-      )}
-  </div>
-)}
-    
+    useEffect(() => {
+        const updateAgo = () => setTimeAgo(calculateTimeAgo(createdAt));
+        updateAgo(); // Initial calculation
+        const interval = setInterval(updateAgo, 60000); // Recalculate every minute
+        return () => clearInterval(interval); // Cleanup interval on unmount
+    }, [createdAt]);
+
+    const toggleEntry = (entryId) => {
+        setExpandedGroup(prev => ({
+            ...prev,
+            [entryId]: !prev[entryId]
+        }));
+    }
+
+    return (
+
+        <div style={styles.journalEntry}>
+            <div style={styles.entryHeader}>
+                <strong style={styles.entryTitle}>{journalEntry}</strong>
+                <span style={styles.entryTime}>{timeAgo}</span>
+            </div>
+            <div>
+                <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
+            </div>
+            {/* Toggle Button */}
+            <button style={styles.entryToggle} onClick={() => toggleEntry('entry1')}>
+                {expandedGroup['entry1'] ? 'ʌ' : 'v'} {/* Toggle icon based on state */}
+            </button>
+
+            {/* Conditionally render expanded view */}
+            {expandedGroup['entry1'] && (
+                children
+            )}
+        </div>
+    )
+}
+
 
 const styles = {
-
     journalEntry: {
         backgroundColor: '#f7f7ff',
         padding: '15px',
@@ -55,23 +55,36 @@ const styles = {
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
         textAlign: 'center',
         position: 'relative',
-
     },
     entryHeader: {
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        justifyContent: 'center',  // Center content horizontally
+        alignItems: 'center',      // Center content vertically
+        position: 'relative',      // Allow absolute positioning of the time element
         marginBottom: '10px',
+        paddingLeft: '30px',
+        paddingRight: '30px'
     },
     entryTitle: {
         fontWeight: 'bold',
         fontSize: '16px',
-        flexGrow: 1,
+        whiteSpace: 'normal',      // Allow text to wrap to multiple lines
+        overflow: 'hidden',        // Hide overflowed content
+        display: '-webkit-box',    // Display as a webkit box to enable line clamping
+        WebkitLineClamp: 3,        // Limit to 3 lines
+        WebkitBoxOrient: 'vertical', // Set box orientation to vertical for clamping
+        textOverflow: 'ellipsis',  // Add ellipsis for long text
+        textAlign: 'center',       // Ensure the text is centered
+        maxWidth: '100%',          // Allow the title to take up available space
     },
     entryTime: {
         color: '#9b9b9b',
         fontSize: '12px',
-        marginLeft: '10px',
+        position: 'absolute',      // Absolute positioning to the right
+        right: '0',                // Stick to the right edge of the container
+        top: '50%',                // Vertically center the time
+        transform: 'translateY(-50%)',  // Adjust for vertical centering
+        whiteSpace: 'nowrap',      // Prevent wrapping of the time
     },
     entryTag: {
         padding: '5px 10px',
@@ -95,39 +108,8 @@ const styles = {
         color: 'gray',
         cursor: 'pointer',
         marginTop: '10px',
-        alignSelf: 'center', 
+        alignSelf: 'center',
     },
-    expandedContent: {
-        marginTop: '15px',
-        backgroundColor: '#ffffff',
-        padding: '10px',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        textAlign: 'left',
-    },
-    expandedHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '10px',
-    },
-    journalText: {
-        color: '#333',
-        fontSize: '14px',
-        marginTop: '10px',
-        backgroundColor: '#f0f0f0',
-        padding: '10px',
-        borderRadius: '5px',
-    },
-    moreLink: {
-        color: '#9b9b9b',
-        cursor: 'pointer',
-    },
-    avatar: {
-        width: '40px',
-        height: '40px',
-        borderRadius: '50%',
-        backgroundColor: '#b3b3ff',
-        marginRight: '10px',
-    },
-    
-};export default JournalGroup
+
+
+}; export default JournalGroup
