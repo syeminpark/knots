@@ -13,7 +13,7 @@ const Home = (props) => {
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
   const [createdCharacters, setCreatedCharacters] = useState([])
-  const [createdJournals, setCreatedJournals] = useState([])
+  const [createdJournalBooks, setCreatedJournalBooks] = useState([])
 
   const navigate = useNavigate()
 
@@ -67,8 +67,8 @@ const Home = (props) => {
             setPanels={setPanels}
             createdCharacters={createdCharacters}
             setCreatedCharacters={setCreatedCharacters}
-            createdJournals={createdJournals}
-            setCreatedJournals={setCreatedJournals}
+            createdJournalBooks={createdJournalBooks}
+            setCreatedJournalBooks={setCreatedJournalBooks}
           />
         );
       default:

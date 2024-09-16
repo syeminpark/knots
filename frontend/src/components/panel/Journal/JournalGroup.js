@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import calculateTimeAgo from './CaluclateTimeAgo';
 
 const JournalGroup = (props) => {
-    const { selectedMode, journalEntry, createdAt, children } = props
+    const { selectedMode, journalPrompt, createdAt, children } = props
     const [timeAgo, setTimeAgo] = useState('');
     const [expandedGroup, setExpandedGroup] = useState({});
 
@@ -21,10 +21,9 @@ const JournalGroup = (props) => {
     }
 
     return (
-
         <div style={styles.journalEntry}>
             <div style={styles.entryHeader}>
-                <strong style={styles.entryTitle}>{journalEntry}</strong>
+                <strong style={styles.entryTitle}>{journalPrompt}</strong>
                 <span style={styles.entryTime}>{timeAgo}</span>
             </div>
             <div>

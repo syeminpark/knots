@@ -3,13 +3,14 @@ import ModalOverlay from "../../ModalOverlay";
 import ModeSelection from "./ModeSelection";
 import SelectBox from "../../SelectBox";
 import PostTextArea from "../../panel/Journal/PostTextArea";
+import { v4 as uuidv4 } from 'uuid';
 
 const CreateJournalModal = (props) => {
-    const { setShowModal, createdCharacters, finishJournalEntry } = props;
+    const { setShowModal, createdCharacters, createdJournalBooks, setCreatedJournalBooks } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([])
-    const [journalEntry, setJournalEntry] = useState(null)
+    const [journalPrompt, setJournalPrompt] = useState(null)
 
     const nextButtonClick = () => {
         if (selectedMode) {
@@ -24,7 +25,7 @@ const CreateJournalModal = (props) => {
         setStage(0)
     }
     const onChange = (value) => {
-        setJournalEntry(value)
+        setJournalPrompt(value)
     };
     const onAnyPostButtonClick = () => {
         if (createdCharacters.length == 0) {
@@ -33,11 +34,27 @@ const CreateJournalModal = (props) => {
         else if (selectedCharacters.length === 0) {
             alert('select a character')
         }
-        else if (journalEntry === null) {
+        else if (journalPrompt === null) {
             alert('write something')
         }
         else {
-            finishJournalEntry(selectedMode, journalEntry, selectedCharacters)
+            let newJournalBook = {
+                id: uuidv4(),
+                journalPrompt: journalPrompt,
+                selectedMode: selectedMode,
+                createdAt: Date.now(),
+                selectedCharacters: selectedCharacters,
+                journalEntries: selectedCharacters.map(characterName => ({
+                    id: uuidv4(),
+                    ownerName: characterName,
+                    content: journalPrompt,
+                }))
+            };
+            console.log('new Journal', newJournalBook);
+            if (selectedMode === "System Generate") {
+                // 나중에 LLM Generate으로 변경 
+            }
+            setCreatedJournalBooks([...createdJournalBooks, newJournalBook]);
             setShowModal(false)
         }
     }
@@ -83,7 +100,7 @@ const CreateJournalModal = (props) => {
                                 key={'journal'}
                                 title={""}
                                 placeholder={"What is on the character's mind?"}
-                                attribute={journalEntry}
+                                attribute={journalPrompt}
                                 onChange={(event) => { onChange(event.target.value) }}
                             ></PostTextArea>
                         </div>
@@ -112,7 +129,7 @@ const CreateJournalModal = (props) => {
                                 key={'journal'}
                                 title={""}
                                 placeholder={"What should the characters write about?"}
-                                attribute={journalEntry}
+                                attribute={journalPrompt}
                                 onChange={(event) => { onChange(event.target.value) }}
                             ></PostTextArea>
                         </div>
