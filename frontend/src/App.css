@@ -4,7 +4,7 @@
   height: 100vh;
   width: 100vw;
   overflow-y: hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: gr;
 }
 
@@ -16,7 +16,7 @@
   position: relative;
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .logoText {
@@ -30,7 +30,7 @@
   height: 70px;
   z-index: 100;
   top: 0;
-  background-color: rgb(70, 66, 66);
+  background-color: black;
   /* border: solid 2px #305077; */
   /* Ensure padding and border are included in the width */
   display: flex;
@@ -279,7 +279,7 @@
 }
 
 
-/*Character Creation      */
+/*----------------------------Character Creation*/
 .panel {
   display: flex;
   flex-direction: column;
