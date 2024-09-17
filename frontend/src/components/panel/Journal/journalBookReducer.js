@@ -4,10 +4,12 @@ const journalBookReducer = (state, action) => {
     switch (action.type) {
         case 'CREATE_JOURNAL_BOOK':
             const newJournalBook = {
-                uuid: uuidv4(),
-                journalBookPrompt: action.payload.journalBookPrompt,
-                selectedMode: action.payload.selectedMode,
-                createdAt: Date.now(),
+                bookInfo: {
+                    uuid: uuidv4(),
+                    prompt: action.payload.journalBookPrompt,
+                    selectedMode: action.payload.selectedMode,
+                    createdAt: Date.now(),
+                },
                 journalEntries: action.payload.selectedCharacters.map(character => ({
                     uuid: uuidv4(),
                     ownerUUID: character.uuid,
@@ -25,7 +27,7 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.uuid === action.payload.journalBookUUID) {
+                    if (book.bookinfo.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
                             journalEntries: book.journalEntries.map(entry => {
@@ -47,7 +49,7 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.uuid === action.payload.journalBookUUID) {
+                    if (book.bookinfo.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
                             journalEntries: book.journalEntries.filter(entry => entry.uuid !== action.payload.journalEntryUUID)
@@ -63,32 +65,32 @@ const journalBookReducer = (state, action) => {
 
 // Selectors
 export const getJournalBookById = (state, journalBookUUID) =>
-    state.journalBooks.find((book) => book.uuid === journalBookUUID) || null;
+    state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID) || null;
 
 export const getJournalEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
-    const journalBook = state.journalBooks.find((book) => book.uuid === journalBookUUID);
+    const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
     if (journalBook) {
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
         return journalEntry || null;
     }
     return null;
 };
+export const getJournalBookInfoAndEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
+    const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
 
-export const getJournalEntryFullData = (state, journalBookUUID, journalEntryUUID) => {
-    const journalBook = state.journalBooks.find((book) => book.uuid === journalBookUUID);
     if (journalBook) {
+
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
+
         if (journalEntry) {
-            // Return the full data
             return {
-                journalBookPrompt: journalBook.journalBookPrompt,
-                selectedMode: journalBook.selectedMode,
-                createdAt: journalBook.createdAt,
-                journalEntryContent: journalEntry.content,
+                bookInfo: journalBook.bookInfo,
+                journalEntry: journalEntry
             };
         }
     }
-    return null; // Return null if not found
+    return null;
 };
+
 
 export default journalBookReducer;

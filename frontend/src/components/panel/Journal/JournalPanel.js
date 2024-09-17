@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
 import JournalGroup from './JournalGroup';
+import JournalSpecificContent from './JournalSpecificContent';
 
 const JournalPanel = (props) => {
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
     const [showModal, setShowModal] = useState(false);
-    const [selectedJournal, setSelectedJournal] = useState(null)
+    const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)
     const onCreateNewJournalBook = () => {
         setShowModal(true);
     };
@@ -17,15 +18,10 @@ const JournalPanel = (props) => {
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="Journal"
+            title="📑 Journal"
             iconStyles="journal-icon"
         >
-            {/* Create New Journal Book Button */}
-            <div style={styles.stickyButtonContainer}>
-                <button style={styles.createJournalBtn} onClick={onCreateNewJournalBook}>
-                    <i className="icon">+</i> Create New Journal
-                </button>
-            </div>
+
 
             {showModal && (
                 <CreateJournalModal
@@ -37,67 +33,53 @@ const JournalPanel = (props) => {
                 />
             )}
 
-            {selectedJournal === null ? (
-                <Feed
-                    createdJournalBooks={createdJournalBooks}
-                    createdCharacters={createdCharacters}
-                    panels={panels}
-                    setPanels={setPanels}
-                    setSelectedJournal={setSelectedJournal}
-                ></Feed>
+            {selectedBookAndJournalEntry === null ? (
+                <>
+                    {/* Create New Journal Book Button */}
+                    <div style={styles.stickyButtonContainer}>
+                        <button style={styles.createJournalBtn} onClick={onCreateNewJournalBook}>
+                            <i className="icon">+</i> Create New Journal
+                        </button>
+                    </div>
+
+                    <Feed
+                        createdJournalBooks={createdJournalBooks}
+                        createdCharacters={createdCharacters}
+                        panels={panels}
+                        setPanels={setPanels}
+                        setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                    ></Feed>
+                </>
             ) : (
                 <div>
-                    {console.log(selectedJournal)}
-                    <JournalGroup
+                    {console.log(selectedBookAndJournalEntry)}
+                    {/* <JournalGroup
                         key={0}
-                        id={0}
+                        id='specific'
+                        selectedMode={selectedBookAndJournalEntry.bookInfo.selectedMode}
+                        journalBookPrompt={selectedBookAndJournalEntry.bookInfo.prompt}
+                        createdAt={selectedBookAndJournalEntry.bookInfo.createdAt}
 
+                    > */}
+                    <JournalSpecificContent
+                        key={0}
+                        panels={panels}
+                        setPanels={setPanels}
+                        jouranlBookInfo={selectedBookAndJournalEntry.bookInfo}
+                        journalEntry={selectedBookAndJournalEntry.journalEntry}
+                        createdCharacter={createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID)}
+                        createdCharacters={createdCharacters}
+                    >
 
-                    ></JournalGroup>
+                    </JournalSpecificContent>
+                    {/* </JournalGroup> */}
 
                 </div>
-            )}
-        </BasePanel>
+            )
+            }
+        </BasePanel >
     );
 };
-
-//new JournalHistory
-/*
-let newJournalBook = {
-id: uuidv4(),
-journalBookPrompt: journalBookPrompt,
-selectedMode: selectedMode,
-createdAt: Date.now(),
-selectedCharacters: selectedCharacters,
-journalEntries: selectedCharacters.map(characterName => (
-    {id: uuidv4(), 
-     ownerName:
-     content: journalEntry,
-     commentThreads:[{
-        index: 
-        createdAt: Date.now(),
-        conversationHistory:[{ 
-            index:
-            characterName:
-            text:
-            type:
-            createdAt: Date.now(),
-            },
-            { 
-            index:
-            text:
-            type:
-            characterName:
-            createdAt: Date.now(),
-            },
-            ]
-        }]
-    }))
-};
-
-``
-*/
-
 
 
 const styles = {

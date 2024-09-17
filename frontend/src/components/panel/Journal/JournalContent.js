@@ -1,16 +1,17 @@
 import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
-
+import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 
 const JournalContent = (props) => {
-    const { panels, setPanels, createdCharacter, content, journalBookID, journalEntryID, setSelectedJournal } = props;
+    const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks } = props;
     const onMoreButtonClick = () => {
-        setSelectedJournal({ journalBookID, journalEntryID })
+        const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
+        setSelectedBookAndJournalEntry(journalBookInfoandJournalEntry)
+        console.log(journalBookInfoandJournalEntry, journalBookUUID, journalEntryUUID)
 
     }
     return (
         <div style={styles.expandedContent}>
-            {/* Expanded content UI based on your image */}
             <div style={styles.expandedHeader}>
                 <button
                     style={styles.profileButtonContainer}
@@ -47,19 +48,19 @@ const styles = {
     expandedHeader: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between", // To push the arrow to the right
+        justifyContent: "space-between",
         marginBottom: "10px",
     },
     journalText: {
-        color: "black",
-        fontSize: "16px",
+        color: '#333',
+        fontSize: '14px',
         marginTop: "10px",
-        backgroundColor: "#f0f0f0",
-        padding: "20px",
+        backgroundColor: '#f0f0f0',
+        padding: "15px",
         borderRadius: "5px",
-        whiteSpace: "pre-line", // Preserves paragraph and line breaks
-        overflowWrap: 'break-word', // Break long words if necessary
-        cursor: "pointer", // Make the text area clickable
+        whiteSpace: "pre-line",
+        overflowWrap: 'break-word',
+        cursor: "pointer",
     },
     profileButtonContainer: {
         display: "flex",
@@ -73,9 +74,9 @@ const styles = {
         cursor: "pointer",
         backgroundColor: "transparent",
         border: "none",
-        fontSize: "20px", // Adjust the size of the arrow
+        fontSize: "20px",
         fontWeight: 'bold',
-        color: "#9b9b9b", // Adjust the color of the arrow
+        color: "#9b9b9b"
     }
 };
 

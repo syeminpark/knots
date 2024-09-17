@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import CharacterButton from './CharacterButton';
 
 const SelectBox = (props) => {
-    const { selectedCharacters, setSelectedCharacters, availableCharacters = [] } = props;
+    const { selectedCharacters, setSelectedCharacters, availableCharacters = [], multipleSelect = true } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
-    // Handle multiple character selection
     const handleSelectCharacter = (character) => {
         const isSelected = selectedCharacters.some((c) => c.uuid === character.uuid);
+
         if (isSelected) {
-            // If already selected, remove it from the array
             setSelectedCharacters(selectedCharacters.filter((c) => c.uuid !== character.uuid));
         } else {
-            // Otherwise, add it to the array
-            setSelectedCharacters([...selectedCharacters, character]);
+            if (multipleSelect) {
+                setSelectedCharacters([...selectedCharacters, character]);
+            } else {
+                setSelectedCharacters([character]);
+            }
         }
     };
 
@@ -97,7 +99,6 @@ const styles = {
     dropdownContainer: {
         position: 'relative',
         width: '100%',
-        marginBottom: '20px',
     },
     dropdownHeader: {
         border: '1px solid black',
@@ -111,7 +112,7 @@ const styles = {
     },
     dropdownList: {
         position: 'relative',
-        top: '100%',
+        top: '0%',
         left: 0,
         right: 0,
         border: '1px solid #E0E0E0',

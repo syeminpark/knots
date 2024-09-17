@@ -20,6 +20,12 @@ const JournalGroup = (props) => {
         }));
     }
 
+    useEffect(() => {
+        if (id === 'specific') {
+            setExpandedGroup({ [id]: true });
+        }
+    }, [id])
+
     return (
         <div style={styles.journalEntry}>
             <div style={styles.entryHeader}>
@@ -29,9 +35,11 @@ const JournalGroup = (props) => {
             <div>
                 <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
             </div>
-            <button style={styles.entryToggle} onClick={() => toggleEntry(id)}>
-                {expandedGroup[id] ? 'ʌ' : 'v'}
-            </button>
+            {id !== 'specific' && (
+                <button style={styles.entryToggle} onClick={() => toggleEntry(id)}>
+                    {expandedGroup[id] ? 'ʌ' : 'v'}
+                </button>
+            )}
             {expandedGroup[id] && (
                 children
             )}
@@ -48,7 +56,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
         textAlign: 'center',
         position: 'relative',
         marginBottom: '20px',

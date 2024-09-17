@@ -56,10 +56,10 @@ const CreateJournalModal = (props) => {
                         dispatchCreatedCharacters({
                             type: 'CREATE_NEW_JOURNAL',
                             payload: {
-                                journalBookUUID: lastCreatedJournalBook.uuid,
+                                journalBookUUID: lastCreatedJournalBook.bookInfo.uuid,
                                 journalBookPrompt,
                                 selectedMode,
-                                createdAt: lastCreatedJournalBook.createdAt,
+                                createdAt: lastCreatedJournalBook.bookInfo.createdAt,
                                 journalEntryUUID: journalEntry.uuid,  // The specific journal entry for this character
                                 characterUUID: selectedCharacter.uuid  // The character UUID
                             }
@@ -105,11 +105,12 @@ const CreateJournalModal = (props) => {
                         onFooterButtonClick={onAnyPostButtonClick}
                     >
 
-                        <h3 style={styles.subtitle}>✍️ {selectedMode} Mode</h3>
+                        <h3 style={styles.subtitle}>📝 {selectedMode} Mode</h3>
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
                             availableCharacters={createdCharacters.characters}
+                            multipleSelect={false}
                         >
                         </SelectBox>
                         <br></br>
@@ -135,7 +136,7 @@ const CreateJournalModal = (props) => {
                         onFooterButtonClick={onAnyPostButtonClick}
                     >
 
-                        <h3 style={styles.subtitle}>🔧 {selectedMode} Mode</h3>
+                        <h3 style={styles.subtitle}>🌟 {selectedMode} Mode</h3>
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}

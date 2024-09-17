@@ -8,7 +8,7 @@ const calculateTimeAgo = (createdAt) => {
     const days = Math.floor(hours / 24);
 
     if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
-    if (hours > 0) return `${hours}h$`;
+    if (hours > 0) return `${hours}h`;
     if (minutes > 0) return `${minutes}m`;
     return `now`;
 };

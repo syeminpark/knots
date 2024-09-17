@@ -2,7 +2,7 @@ import JournalGroup from './JournalGroup';
 import JournalContent from './JournalContent';
 
 const Feed = (props) => {
-    const { createdJournalBooks, createdCharacters, panels, setPanels, setSelectedJournal } = props
+    const { createdJournalBooks, createdCharacters, panels, setPanels, setSelectedBookAndJournalEntry } = props
 
     return (
         <div style={styles.journalFeed}>
@@ -15,9 +15,9 @@ const Feed = (props) => {
                 <JournalGroup
                     key={index}
                     id={index}
-                    selectedMode={journalBook.selectedMode}
-                    journalBookPrompt={journalBook.journalBookPrompt}
-                    createdAt={journalBook.createdAt}
+                    selectedMode={journalBook.bookInfo.selectedMode}
+                    journalBookPrompt={journalBook.bookInfo.prompt}
+                    createdAt={journalBook.bookInfo.createdAt}
                 >
                     {journalBook.journalEntries.map((journalEntry, id) => (
                         <JournalContent
@@ -26,9 +26,10 @@ const Feed = (props) => {
                             setPanels={setPanels}
                             createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
                             content={journalEntry.content}
-                            journalBookID={journalBook.uuid}
-                            journalEntryID={journalEntry.uuid}
-                            setSelectedJournal={setSelectedJournal}
+                            journalBookUUID={journalBook.bookInfo.uuid}
+                            journalEntryUUID={journalEntry.uuid}
+                            setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                            createdJournalBooks={createdJournalBooks}
                         />
                     ))}
                 </JournalGroup>
