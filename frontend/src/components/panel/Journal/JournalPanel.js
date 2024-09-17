@@ -22,9 +22,13 @@ const JournalPanel = (props) => {
         >
             {/* Create New Journal Book Button */}
             <div style={styles.stickyButtonContainer}>
-                <button style={styles.createJournalBtn} onClick={onCreateNewJournalBook}>
-                    <i className="icon">+</i> Create New Journal
+                <button className="create-journal-btn" onClick={() => setShowModal(true)}>
+                    + Create New Journal
                 </button>
+
+                {/* <button style={styles.createJournalBtn} onClick={onCreateNewJournalBook}>
+                    <i className="icon">+</i> Create New Journal
+                </button> */}
             </div>
 
             {showModal && (
