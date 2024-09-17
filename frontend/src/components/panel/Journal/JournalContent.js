@@ -4,8 +4,6 @@ import openNewPanel from "../../openNewPanel";
 
 const JournalContent = (props) => {
     const { panels, setPanels, createdCharacter, content, journalBookID, journalEntryID, setSelectedJournal } = props;
-
-    console.log(createdCharacter)
     const onMoreButtonClick = () => {
         setSelectedJournal({ journalBookID, journalEntryID })
 

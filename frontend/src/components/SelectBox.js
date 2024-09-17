@@ -4,7 +4,7 @@ import CharacterButton from './CharacterButton';
 const SelectBox = (props) => {
     const { selectedCharacters, setSelectedCharacters, availableCharacters = [] } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    console.log(availableCharacters)
+
 
     // Handle multiple character selection
     const handleSelectCharacter = (character) => {

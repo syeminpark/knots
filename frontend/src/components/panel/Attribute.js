@@ -2,8 +2,6 @@ import TextArea from '../TextArea'
 const Attribute = (props) => {
     const { title, placeholder, deleteFunction, list, setter, onChange } = props;
     const attribute = list.find(attr => attr.name === title);
-    console.log(title)
-
     return (
         <div style={styles.attributeContainer}>
             <div style={styles.sectionHeader}>

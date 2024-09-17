@@ -9,8 +9,8 @@ const characterReducer = (state, action) => {
                 personaAttributes: action.payload.personaAttributes,
                 connectedCharacters: action.payload.connectedCharacters,
                 imageSrc: action.payload.imageSrc,
-                createdJournals: {},
-                createdComments: {},
+                createdJournals: [],
+                createdComments: [],
             }
             return {
                 ...state,
@@ -38,12 +38,12 @@ const characterReducer = (state, action) => {
                 characters: state.characters.map((character) => {
                     if (character.uuid === action.payload.characterUUID) {
                         const newJournal = {
-                            journalBookUUID: action.payload.newJournalBook.uuid,
-                            journalBookPrompt: action.payload.newJournalBook.journalBookPrompt,
-                            selectedMode: action.payload.newJournalBook.selectedMode,
-                            createdAt: action.payload.newJournalBook.createdAt,
-                            journalEntryUUID: action.payload.journalEntry.uuid,
-                            journalEntryContent: action.payload.newJournalBook.journalBookPrompt,
+                            journalBookUUID: action.payload.ournalBookUUID,
+                            journalBookPrompt: action.payload.journalBookPrompt,
+                            selectedMode: action.payload.selectedMode,
+                            createdAt: action.payload.createdAt,
+                            journalEntryUUID: action.payload.journalEntryUUID,
+                            journalEntryContent: action.payload.journalBookPrompt,
                         };
 
                         // Add the new journal to the character's createdJournals array

@@ -33,9 +33,6 @@ const CharacterCreationPanel = (props) => {
         })
     };
 
-    useEffect(() => {
-        console.log("createdCharacters has been updated:", createdCharacters);
-    }, [createdCharacters]);
 
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {

@@ -22,8 +22,6 @@ const CreateJournalModal = (props) => {
     }
     const backArrowClick = () => {
         setStage(0)
-        setSelectedCharacters([])
-
     }
     const onChange = (value) => {
         setJournalBookPrompt(value)
@@ -47,6 +45,7 @@ const CreateJournalModal = (props) => {
                     selectedCharacters,
                 }
             })
+            console.log('selectedCharacters', selectedCharacters)
             const lastCreatedJournalBook = createdJournalBooks.lastCreatedJournalBook;
             if (lastCreatedJournalBook) {
                 selectedCharacters.forEach((selectedCharacter) => {
@@ -68,11 +67,12 @@ const CreateJournalModal = (props) => {
                     }
                 });
 
-                if (selectedMode === "System Generate") {
-                    // 나중에 LLM Generate으로 변경 
-                }
-                setShowModal(false)
+
             }
+            if (selectedMode === "System Generate") {
+                // 나중에 LLM Generate으로 변경 
+            }
+            setShowModal(false)
         }
     }
 

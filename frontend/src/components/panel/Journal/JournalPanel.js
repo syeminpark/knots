@@ -47,8 +47,11 @@ const JournalPanel = (props) => {
                 ></Feed>
             ) : (
                 <div>
-
+                    {console.log(selectedJournal)}
                     <JournalGroup
+                        key={0}
+                        id={0}
+                        selectedMode={selectedJournal}
 
                     ></JournalGroup>
 
