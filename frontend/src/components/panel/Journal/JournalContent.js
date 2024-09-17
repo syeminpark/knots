@@ -60,6 +60,7 @@ const styles = {
         padding: "20px",
         borderRadius: "5px",
         whiteSpace: "pre-line", // Preserves paragraph and line breaks
+        overflowWrap: 'break-word', // Break long words if necessary
         cursor: "pointer", // Make the text area clickable
     },
     profileButtonContainer: {

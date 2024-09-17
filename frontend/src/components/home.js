@@ -8,12 +8,13 @@ import SidebarRight from './SideBarRight.js';
 import SidebarLeft from './SideBarLeft.js';
 import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
+import characterReducer from './panel/Character/characterReducer.js';
 
 // Container to hold panels
 const Home = (props) => {
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
-  const [createdCharacters, setCreatedCharacters] = useState([])
+  const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: [] })
   const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, { journalBooks: [] })
 
   const navigate = useNavigate()
@@ -44,7 +45,7 @@ const Home = (props) => {
             panels={panels}
             setPanels={setPanels}
             createdCharacters={createdCharacters}
-            setCreatedCharacters={setCreatedCharacters}
+            dispatchCreatedCharacters={dispatchCreatedCharacters}
           />
         );
       case 'character-profile':
@@ -56,7 +57,7 @@ const Home = (props) => {
             setPanels={setPanels}
             caller={panel.caller}
             createdCharacters={createdCharacters}
-            setCreatedCharacters={setCreatedCharacters}
+            dispatchCreatedCharacters={dispatchCreatedCharacters}
           />
         );
       case 'journal':
@@ -67,7 +68,7 @@ const Home = (props) => {
             panels={panels}
             setPanels={setPanels}
             createdCharacters={createdCharacters}
-            setCreatedCharacters={setCreatedCharacters}
+            dispatchCreatedCharacters={dispatchCreatedCharacters}
             createdJournalBooks={createdJournalBooks}
             dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
           />

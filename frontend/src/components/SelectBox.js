@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import CharacterButton from './CharacterButton';
 
 const SelectBox = (props) => {
-    const { selectedCharacters, setSelectedCharacters, createdCharacters = [] } = props;
+    const { selectedCharacters, setSelectedCharacters, availableCharacters = [] } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    console.log(availableCharacters)
 
     // Handle multiple character selection
     const handleSelectCharacter = (character) => {
@@ -23,7 +24,7 @@ const SelectBox = (props) => {
 
     useEffect(() => {
         const updatedSelectedCharacters = selectedCharacters.map((selectedCharacter) => {
-            const foundCharacter = createdCharacters.find(
+            const foundCharacter = availableCharacters.find(
                 (createdCharacter) => createdCharacter.uuid === selectedCharacter.uuid
             );
             return foundCharacter ? foundCharacter : selectedCharacter;
@@ -34,7 +35,7 @@ const SelectBox = (props) => {
         if (hasChanges) {
             setSelectedCharacters(updatedSelectedCharacters);
         }
-    }, [createdCharacters]);
+    }, [availableCharacters]);
 
     return (
         <div style={styles.modalBody}>
@@ -51,8 +52,8 @@ const SelectBox = (props) => {
 
                 {dropdownOpen && (
                     <div style={styles.dropdownList}>
-                        {createdCharacters.length > 0 ? (
-                            createdCharacters.map((character) => (
+                        {availableCharacters.length > 0 ? (
+                            availableCharacters.map((character) => (
                                 <div
                                     key={character.uuid}
                                     style={{

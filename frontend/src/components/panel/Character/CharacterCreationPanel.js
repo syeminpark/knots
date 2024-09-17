@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ProfileSection from './ProfileSection';
 
 const CharacterCreationPanel = (props) => {
-    const { id, type, panels, setPanels, createdCharacters, setCreatedCharacters } = props;
+    const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
     const [activeTab, setActiveTab] = useState('About');
     const [connectedCharacters, setConnectedCharacters] = useState([]);
     const [personaAttributes, setPersonaAttributes] = useState([{ name: 'Backstory', description: '' }]);
@@ -21,14 +21,25 @@ const CharacterCreationPanel = (props) => {
         }
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
-        const uuid = uuidv4();
-        const newCharacter = { uuid, name, personaAttributes, connectedCharacters, imageSrc };
-        setCreatedCharacters((prevCharacters) => [...prevCharacters, newCharacter]);
+
+        dispatchCreatedCharacters({
+            type: 'CREATE_CHARACTER',
+            payload: {
+                name,
+                personaAttributes,
+                connectedCharacters,
+                imageSrc
+            }
+        })
     };
 
     useEffect(() => {
+        console.log("createdCharacters has been updated:", createdCharacters);
+    }, [createdCharacters]);
+
+    useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
-            const foundCharacter = createdCharacters.find(
+            const foundCharacter = createdCharacters.characters.find(
                 (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
             );
             if (foundCharacter) {

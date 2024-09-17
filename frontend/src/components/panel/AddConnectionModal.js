@@ -32,7 +32,7 @@ const AddConnectionModal = (props) => {
                 <SelectBox
                     selectedCharacters={selectedCharacters}
                     setSelectedCharacters={setSelectedCharacters}
-                    createdCharacters={createdCharacters.filter(createdCharacter =>
+                    availableCharacters={createdCharacters.characters.filter(createdCharacter =>
                         !connectedCharacters.some(connectedCharacter =>
                             connectedCharacter.uuid === createdCharacter.uuid
                         ) && (caller?.uuid ? createdCharacter.uuid !== caller.uuid : true))}

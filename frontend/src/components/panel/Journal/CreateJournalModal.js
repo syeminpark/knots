@@ -5,7 +5,7 @@ import SelectBox from "../../SelectBox";
 import PostTextArea from "../../panel/Journal/PostTextArea";
 
 const CreateJournalModal = (props) => {
-    const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, setCreatedCharacters } = props;
+    const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, dispatchCreatedCharacters } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([])
@@ -22,12 +22,14 @@ const CreateJournalModal = (props) => {
     }
     const backArrowClick = () => {
         setStage(0)
+        setSelectedCharacters([])
+
     }
     const onChange = (value) => {
         setJournalBookPrompt(value)
     };
     const onAnyPostButtonClick = () => {
-        if (createdCharacters.length == 0) {
+        if (createdCharacters.characters.length == 0) {
             alert('create a character first')
         }
         else if (selectedCharacters.length === 0) {
@@ -37,7 +39,6 @@ const CreateJournalModal = (props) => {
             alert('write something')
         }
         else {
-
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
                 payload: {
@@ -46,32 +47,32 @@ const CreateJournalModal = (props) => {
                     selectedCharacters,
                 }
             })
+            const lastCreatedJournalBook = createdJournalBooks.lastCreatedJournalBook;
+            if (lastCreatedJournalBook) {
+                selectedCharacters.forEach((selectedCharacter) => {
+                    const journalEntry = lastCreatedJournalBook.journalEntries.find(
+                        (entry) => entry.ownerUUID === selectedCharacter.uuid
+                    );
+                    if (journalEntry) {
+                        dispatchCreatedCharacters({
+                            type: 'CREATE_NEW_JOURNAL',
+                            payload: {
+                                journalBookUUID: lastCreatedJournalBook.uuid,
+                                journalBookPrompt,
+                                selectedMode,
+                                createdAt: lastCreatedJournalBook.createdAt,
+                                journalEntryUUID: journalEntry.uuid,  // The specific journal entry for this character
+                                characterUUID: selectedCharacter.uuid  // The character UUID
+                            }
+                        });
+                    }
+                });
 
-            if (selectedMode === "System Generate") {
-                // 나중에 LLM Generate으로 변경 
+                if (selectedMode === "System Generate") {
+                    // 나중에 LLM Generate으로 변경 
+                }
+                setShowModal(false)
             }
-            // let updatedCharacters = [...createdCharacters];
-            // dispatchCreatedJournalBooks([...createdJournalBooks, newJournalBook]);
-            // selectedCharacters.forEach(selectedCharacterName => {
-            //     let character = updatedCharacters.find(createdCharacter => createdCharacter.name === selectedCharacterName);
-            //     if (character) {
-            //         let journalEntry = newJournalBook.journalEntries.find(entry => entry.ownerName === selectedCharacterName);
-            //         if (!character.createdJournals) {
-            //             character.createdJournals = [];  // Initialize as an empty array if it doesn't exist
-            //         }
-            //         character.createdJournals.push({
-            //             journalBookID: newJournalBook.id,
-            //             journalBookPrompt: newJournalBook.journalBookPrompt,
-            //             selectedMode: newJournalBook.selectedMode,
-            //             createdAt: newJournalBook.createdAt,
-            //             journalEntryID: journalEntry.id,
-            //             journalEntryContent: journalEntry.content
-            //         });
-            //     }
-            // });
-            // setCreatedCharacters(updatedCharacters);
-            console.log('createdCharacters', createdCharacters)
-            setShowModal(false)
         }
     }
 
@@ -108,7 +109,7 @@ const CreateJournalModal = (props) => {
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
-                            createdCharacters={createdCharacters}
+                            availableCharacters={createdCharacters.characters}
                         >
                         </SelectBox>
                         <br></br>
@@ -138,7 +139,7 @@ const CreateJournalModal = (props) => {
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
-                            createdCharacters={createdCharacters}
+                            availableCharacters={createdCharacters.characters}
                         ></SelectBox>
                         <br></br>
                         <div style={styles.scrollableContent}>

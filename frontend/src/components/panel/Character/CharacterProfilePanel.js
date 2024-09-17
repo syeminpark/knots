@@ -6,7 +6,7 @@ import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
 
 const CharacterProfilePanel = (props) => {
-    const { id, caller, panels, setPanels, createdCharacters, setCreatedCharacters } = props;
+    const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
 
     const [activeTab, setActiveTab] = useState('About');
     const [connectedCharacters, setConnectedCharacters] = useState(caller.connectedCharacters);
@@ -16,7 +16,7 @@ const CharacterProfilePanel = (props) => {
 
     // Effect to update local state when `createdCharacters` is updated
     useEffect(() => {
-        const updatedCharacter = createdCharacters.find(character => character.uuid === caller.uuid);
+        const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
         if (updatedCharacter) {
             setName(updatedCharacter.name);
             setPersonaAttributes(updatedCharacter.personaAttributes);
@@ -27,7 +27,7 @@ const CharacterProfilePanel = (props) => {
 
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
-            const foundCharacter = createdCharacters.find(
+            const foundCharacter = createdCharacters.characters.find(
                 (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
             );
             if (foundCharacter) {
@@ -50,22 +50,19 @@ const CharacterProfilePanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
-        const updatedCharacters = createdCharacters.map(character => {
-            if (character.uuid === caller.uuid) {
-                // Return a new object with updated values
-                return {
-                    ...character,//Copies all properties from the original character and the lines beneath override specific properties
-                    name: name, // Update name
-                    personaAttributes: personaAttributes, // Update other properties as needed
-                    connectedCharacters: connectedCharacters,
-                    imageSrc: imageSrc
-                };
+        dispatchCreatedCharacters({
+            type: 'EDIT_CREATED_CHARACTER',
+            payload: {
+                name,
+                uuid: caller.uuid,
+                personaAttributes,
+                connectedCharacters,
+                imageSrc
             }
-            return character; // Return unchanged character
-        });
-        // Set the updated characters array back into state
-        setCreatedCharacters(updatedCharacters);
-    }
+        })
+    };
+
+
 
     return (
         <BasePanel

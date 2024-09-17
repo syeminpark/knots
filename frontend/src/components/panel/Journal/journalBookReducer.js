@@ -4,12 +4,12 @@ const journalBookReducer = (state, action) => {
     switch (action.type) {
         case 'CREATE_JOURNAL_BOOK':
             const newJournalBook = {
-                id: uuidv4(),
+                uuid: uuidv4(),
                 journalBookPrompt: action.payload.journalBookPrompt,
                 selectedMode: action.payload.selectedMode,
                 createdAt: Date.now(),
                 journalEntries: action.payload.selectedCharacters.map(character => ({
-                    id: uuidv4(),
+                    uuid: uuidv4(),
                     ownerUUID: character.uuid,
                     content: action.payload.journalBookPrompt,
                     commentThreads: [],
@@ -18,17 +18,18 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: [...state.journalBooks, newJournalBook],
+                lastCreatedJournalBook: newJournalBook,
             };
 
         case 'EDIT_JOURNAL_ENTRY':
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.id === action.payload.journalBookID) {
+                    if (book.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
                             journalEntries: book.journalEntries.map(entry => {
-                                if (entry.id === action.payload.journalEntryID) {
+                                if (entry.uuid === action.payload.journalEntryUUID) {
                                     return {
                                         ...entry,
                                         content: action.payload.newValue
@@ -46,10 +47,10 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.id === action.payload.journalBookID) {
+                    if (book.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
-                            journalEntries: book.journalEntries.filter(entry => entry.id !== action.payload.journalEntryID)
+                            journalEntries: book.journalEntries.filter(entry => entry.uuid !== action.payload.journalEntryUUID)
                         };
                     }
                     return book;
@@ -61,22 +62,22 @@ const journalBookReducer = (state, action) => {
 };
 
 // Selectors
-export const getJournalBookById = (state, journalBookID) =>
-    state.journalBooks.find((book) => book.id === journalBookID) || null;
+export const getJournalBookById = (state, journalBookUUID) =>
+    state.journalBooks.find((book) => book.uuid === journalBookUUID) || null;
 
-export const getJournalEntryByIds = (state, journalBookID, journalEntryID) => {
-    const journalBook = state.journalBooks.find((book) => book.id === journalBookID);
+export const getJournalEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
+    const journalBook = state.journalBooks.find((book) => book.uuid === journalBookUUID);
     if (journalBook) {
-        const journalEntry = journalBook.journalEntries.find((entry) => entry.id === journalEntryID);
+        const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
         return journalEntry || null;
     }
     return null;
 };
 
-export const getJournalEntryFullData = (state, journalBookID, journalEntryID) => {
-    const journalBook = state.journalBooks.find((book) => book.id === journalBookID);
+export const getJournalEntryFullData = (state, journalBookUUID, journalEntryUUID) => {
+    const journalBook = state.journalBooks.find((book) => book.uuid === journalBookUUID);
     if (journalBook) {
-        const journalEntry = journalBook.journalEntries.find((entry) => entry.id === journalEntryID);
+        const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
         if (journalEntry) {
             // Return the full data
             return {
