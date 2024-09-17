@@ -51,7 +51,7 @@ const JournalPanel = (props) => {
                     <JournalGroup
                         key={0}
                         id={0}
-                        selectedMode={selectedJournal}
+
 
                     ></JournalGroup>
 
