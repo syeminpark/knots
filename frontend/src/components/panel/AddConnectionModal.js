@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import SelectBox from '../SelectBox';
 
@@ -10,14 +10,15 @@ const AddConnectionModal = (props) => {
         if (selectedCharacters.length > 0) {
             let temp = []
             for (let character of selectedCharacters) {
-                temp.push({ name: character.name, description: '', object: character })
+                temp.push({ name: character.name, description: '', uuid: character.uuid })
                 console.log(temp)
             }
             setConnectedCharacters([...connectedCharacters, ...temp])
             setShowModal(false);
         }
-
     };
+
+
 
     return (
         <div>
@@ -33,8 +34,8 @@ const AddConnectionModal = (props) => {
                     setSelectedCharacters={setSelectedCharacters}
                     createdCharacters={createdCharacters.filter(createdCharacter =>
                         !connectedCharacters.some(connectedCharacter =>
-                            connectedCharacter.object.uuid === createdCharacter.uuid
-                        ) && createdCharacter.uuid !== caller.uuid)}
+                            connectedCharacter.uuid === createdCharacter.uuid
+                        ) && (caller?.uuid ? createdCharacter.uuid !== caller.uuid : true))}
 
                 >
                 </SelectBox>

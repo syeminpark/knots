@@ -1,14 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import CharacterButton from './CharacterButton';
 
 const SelectBox = (props) => {
-    const { selectedCharacters, setSelectedCharacters, createdCharacters } = props;
+    const { selectedCharacters, setSelectedCharacters, createdCharacters = [] } = props; // Default to empty array if undefined
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
 
     // Handle multiple character selection
     const handleSelectCharacter = (character) => {
         const isSelected = selectedCharacters.some((c) => c.uuid === character.uuid);
-
         if (isSelected) {
             // If already selected, remove it from the array
             setSelectedCharacters(selectedCharacters.filter((c) => c.uuid !== character.uuid));
@@ -21,6 +20,21 @@ const SelectBox = (props) => {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
+    useEffect(() => {
+        const updatedSelectedCharacters = selectedCharacters.map((selectedCharacter) => {
+            const foundCharacter = createdCharacters.find(
+                (createdCharacter) => createdCharacter.uuid === selectedCharacter.uuid
+            );
+            return foundCharacter ? foundCharacter : selectedCharacter;
+        });
+        const hasChanges = updatedSelectedCharacters.some((updatedCharacter, index) => {
+            return updatedCharacter.name !== selectedCharacters[index]?.name;
+        });
+        if (hasChanges) {
+            setSelectedCharacters(updatedSelectedCharacters);
+        }
+    }, [createdCharacters, selectedCharacters, setSelectedCharacters]);
 
     return (
         <div style={styles.modalBody}>
@@ -37,27 +51,33 @@ const SelectBox = (props) => {
 
                 {dropdownOpen && (
                     <div style={styles.dropdownList}>
-                        {createdCharacters.map((character) => (
-                            <div
-                                key={character.uuid}
-                                style={{
-                                    ...styles.dropdownItem,
-                                    backgroundColor: selectedCharacters.some((c) => c.uuid === character.uuid)
-                                        ? '#E0E0FF' // selected color
-                                        : 'transparent',
-                                }}
-                                onClick={() => handleSelectCharacter(character)}
-                            >
-                                <div style={styles.dropdownIcon}></div>
-                                <span style={styles.dropdownText}>{character.name}</span>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
-                                    onChange={() => handleSelectCharacter(character)}
-                                    style={styles.checkbox}
-                                />
+                        {createdCharacters.length > 0 ? (
+                            createdCharacters.map((character) => (
+                                <div
+                                    key={character.uuid}
+                                    style={{
+                                        ...styles.dropdownItem,
+                                        backgroundColor: selectedCharacters.some((c) => c.uuid === character.uuid)
+                                            ? '#E0E0FF' // selected color
+                                            : 'transparent',
+                                    }}
+                                    onClick={() => handleSelectCharacter(character)}
+                                >
+                                    {/* Use CharacterButton to render the character */}
+                                    <CharacterButton createdCharacter={character} />
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
+                                        onChange={() => handleSelectCharacter(character)}
+                                        style={styles.checkbox}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={styles.noCharactersMessage}>
+                                No characters available.
                             </div>
-                        ))}
+                        )}
                     </div>
                 )}
             </div>
@@ -106,25 +126,16 @@ const styles = {
         padding: '10px 15px',
         cursor: 'pointer',
         transition: 'background-color 0.2s ease',
-        // borderBottom: '1px solid #E0E0E0',
     },
     checkbox: {
         marginLeft: 'auto',
-        width: '16px', // 체크박스 크기 조정
+        width: '16px',
         height: '16px',
     },
-    dropdownIcon: {
-        width: '25px', // 아이콘 크기
-        height: '25px',
-        borderRadius: '50%',
-        backgroundColor: '#A0A0FF', // 원형 아이콘 배경색
-        marginRight: '10px',
-    },
-    dropdownText: {
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#333',
+    noCharactersMessage: {
+        padding: '10px',
+        textAlign: 'center',
+        color: '#666',
     },
 };
 

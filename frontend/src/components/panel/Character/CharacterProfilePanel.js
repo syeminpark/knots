@@ -28,12 +28,11 @@ const CharacterProfilePanel = (props) => {
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
             const foundCharacter = createdCharacters.find(
-                (createdCharacter) => createdCharacter.uuid === connectedCharacter.object.uuid
+                (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
             );
             if (foundCharacter) {
                 return {
                     ...connectedCharacter,
-                    object: foundCharacter,
                     name: foundCharacter.name,
                 };
             }
