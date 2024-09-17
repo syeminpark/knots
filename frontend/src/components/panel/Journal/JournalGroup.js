@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import calculateTimeAgo from './CaluclateTimeAgo';
 
 const JournalGroup = (props) => {
-    const { selectedMode, journalBookPrompt, createdAt, children } = props
+    const { key, selectedMode, journalBookPrompt, createdAt, children, } = props
     const [timeAgo, setTimeAgo] = useState('');
     const [expandedGroup, setExpandedGroup] = useState({});
 
@@ -30,12 +30,10 @@ const JournalGroup = (props) => {
                 <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
             </div>
             {/* Toggle Button */}
-            <button style={styles.entryToggle} onClick={() => toggleEntry('entry1')}>
-                {expandedGroup['entry1'] ? 'ʌ' : 'v'} {/* Toggle icon based on state */}
+            <button style={styles.entryToggle} onClick={() => toggleEntry(key)}>
+                {expandedGroup[key] ? 'ʌ' : 'v'}
             </button>
-
-            {/* Conditionally render expanded view */}
-            {expandedGroup['entry1'] && (
+            {expandedGroup[key] && (
                 children
             )}
         </div>
@@ -54,6 +52,7 @@ const styles = {
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
         textAlign: 'center',
         position: 'relative',
+        marginBottom: '20px',
     },
     entryHeader: {
         display: 'flex',
