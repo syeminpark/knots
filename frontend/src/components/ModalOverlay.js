@@ -41,6 +41,7 @@ const styles = {
         alignItems: 'center',
         zIndex: 1000,
 
+
     },
     modalBox: {
         backgroundColor: 'white',
@@ -49,6 +50,7 @@ const styles = {
         width: '400px',
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
         position: 'relative',
+
     },
     modalHeader: {
         display: 'flex',
@@ -66,7 +68,6 @@ const styles = {
         textAlign: 'center',
     },
     modalDoneBtn: {
-
         backgroundColor: 'black',
         color: 'white',
         padding: '10px 20px',

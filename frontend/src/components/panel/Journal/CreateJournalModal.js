@@ -37,7 +37,7 @@ const CreateJournalModal = (props) => {
             alert('write something')
         }
         else {
-            console.log(selectedCharacters)
+
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
                 payload: {
@@ -176,7 +176,7 @@ const styles = {
         alignItems: 'center',
     },
     scrollableContent: {
-        maxHeight: '800px',        // Define the maximum height for the content
+        maxHeight: '600px',        // Define the maximum height for the content
         overflowY: 'auto',         // Enable vertical scrolling
     }
 }

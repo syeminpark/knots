@@ -1,18 +1,18 @@
 import TextArea from "../../TextArea";
 const PostTextArea = (props) => {
     const { title, placeholder, attribute, onChange } = props;
-    
+
     return (
         <div style={styles.attributeContainer}>
             <div style={styles.sectionHeader}>
                 <label style={styles.sectionHeaderLabel}>{title}</label>
             </div>
             <TextArea
-            attribute={attribute}
-            placeholder={placeholder}
-            onChange={onChange}
-            styles={styles}></TextArea>
-            
+                attribute={attribute}
+                placeholder={placeholder}
+                onChange={onChange}
+                styles={styles}></TextArea>
+
         </div>
     );
 };

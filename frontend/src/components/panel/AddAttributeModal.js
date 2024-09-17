@@ -21,12 +21,12 @@ const AddAttributeModal = (props) => {
                 footerButtonLabel="Done"
                 onFooterButtonClick={handleAddAttribute}
             >
-                <input
-                    type="text"
+
+                <textarea
                     value={attribute}
-                    onChange={(e) => setAttribute(`${e.target.value}`)}
-                    placeholder="Add Attribute Name (e.g., age, gender, nationality, hobby, personality, occupation, etc.)"
-                    style={styles.input}
+                    onChange={(e) => setAttribute(e.target.value)}
+                    placeholder="Attribute Name (e.g., age, gender, nationality, hobby, personality, occupation, etc.)"
+                    style={styles.textarea}
                 />
             </ModalOverlay>
         </div>
@@ -34,11 +34,15 @@ const AddAttributeModal = (props) => {
 };
 
 const styles = {
-    input: {
+    textarea: {
         width: '100%',
         padding: '10px',
         borderRadius: '5px',
         border: '1px solid #ccc',
+        marginBottom: '10px',
+        resize: 'vertical',  // Allow resizing vertically
+        whiteSpace: 'pre-wrap', // Make sure line breaks are supported in the text
+        overflowWrap: 'break-word', // Break long words if necessary
     },
 };
 
