@@ -42,7 +42,6 @@ const CharacterCreationPanel = (props) => {
         setConnectedCharacters(updatedConnectedCharacters);
     }, [createdCharacters]);  // Dependency array
 
-
     return (
         <BasePanel
             id={id}

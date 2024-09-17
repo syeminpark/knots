@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import CharacterButton from './CharacterButton';
 
 const SelectBox = (props) => {
-    const { selectedCharacters, setSelectedCharacters, createdCharacters = [] } = props; // Default to empty array if undefined
+    const { selectedCharacters, setSelectedCharacters, createdCharacters = [] } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     // Handle multiple character selection
@@ -34,7 +34,7 @@ const SelectBox = (props) => {
         if (hasChanges) {
             setSelectedCharacters(updatedSelectedCharacters);
         }
-    }, [createdCharacters, selectedCharacters, setSelectedCharacters]);
+    }, [createdCharacters]);
 
     return (
         <div style={styles.modalBody}>
@@ -63,8 +63,11 @@ const SelectBox = (props) => {
                                     }}
                                     onClick={() => handleSelectCharacter(character)}
                                 >
-                                    {/* Use CharacterButton to render the character */}
-                                    <CharacterButton createdCharacter={character} />
+                                    <CharacterButton
+                                        createdCharacter={character}
+                                        iconStyle={styles.dropdownIcon}
+                                        textStyle={styles.dropdownText}
+                                    />
                                     <input
                                         type="checkbox"
                                         checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
@@ -136,6 +139,19 @@ const styles = {
         padding: '10px',
         textAlign: 'center',
         color: '#666',
+    },
+    dropdownIcon: {
+        width: '25px',
+        height: '25px',
+        borderRadius: '50%',
+        backgroundColor: '#A0A0FF',
+        marginRight: '10px',
+    },
+    dropdownText: {
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: '16px',
+        fontWeight: 'bold',
+        color: '#333',
     },
 };
 
