@@ -103,16 +103,13 @@ const Home = (props) => {
       </div>
 
       <div className="panelContainer">
-        <div>
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={panels.map(panel => panel.id)}>
-              {/* <div style={{ display: 'flex', gap: '20px', flexDirection: 'row-reverse' }}> */}
-              <div style={{ display: 'flex', gap: '20px', }}>
-                {panels.map(panel => (renderPanel((panel))))}
-              </div>
-            </SortableContext>
-          </DndContext>
-        </div>
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={panels.map(panel => panel.id)}>
+            <div style={{ display: 'flex', gap: '20px', }}>
+              {panels.map(panel => (renderPanel((panel))))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </div>
 
       <div className="HomeButtonContainer">
@@ -123,7 +120,7 @@ const Home = (props) => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
       </div>
-    </div>
+    </div >
   );
 }
 

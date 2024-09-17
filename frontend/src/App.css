@@ -55,13 +55,14 @@
 .panelContainer {
   position: relative;
   display: flex;
+
   align-items: stretch;
   justify-content: space-around;
-  padding-right: 250px;
-  padding-left: 100px;
+
   padding-top: 100px;
   background-color: gr;
   /* border: solid 2px #305077; */
+
 }
 
 /***** Sidebar button *****/
@@ -285,7 +286,7 @@
   flex-direction: column;
   border-radius: 10px;
   padding: 20px;
-  width: 450px;
+  min-width: 430px;
   /* Make the panel height exactly the window height */
   height: calc(100vh - 150px);
   /* Subtract any header or additional spacing */
