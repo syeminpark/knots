@@ -54,7 +54,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        marginBottom: '20px',
+        marginBottom: '10px',
+        fontSize: '14px',
     },
     modalContent: {
         marginBottom: '20px',
@@ -63,11 +64,11 @@ const styles = {
         textAlign: 'center',
     },
     modalDoneBtn: {
-        backgroundColor: '#6C63FF',
+        backgroundColor: 'black',
         color: 'white',
         padding: '10px 20px',
         border: 'none',
-        borderRadius: '5px',
+        borderRadius: '6px',
         cursor: 'pointer',
         fontSize: '16px',
     },

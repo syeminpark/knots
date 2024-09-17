@@ -163,15 +163,15 @@ const CreateJournalModal = (props) => {
 const styles = {
     subtitle: {
         color: "#6c63ff",
-        fontSize: "18px",
+        fontSize: "16px",
         fontWeight: "500",
         marginBottom: "20px",
         textAlign: "center",
-        backgroundColor: '#f0eaff',
-        borderRadius: '8px',
-        width: 'auto',
-        paddingRight: '10px',
-        paddingLeft: '10px'
+        // backgroundColor: '#f0eaff',
+        // borderRadius: '6px',
+        // width: 'auto',
+        // paddingRight: '10px',
+        // paddingLeft: '10px'
     },
     subtitleContainer: {
         display: 'flex',
