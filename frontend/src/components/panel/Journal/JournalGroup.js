@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import calculateTimeAgo from './CaluclateTimeAgo';
 
 const JournalGroup = (props) => {
-    const { key, selectedMode, journalBookPrompt, createdAt, children, } = props
+    const { id, selectedMode, journalBookPrompt, createdAt, children, } = props
     const [timeAgo, setTimeAgo] = useState('');
     const [expandedGroup, setExpandedGroup] = useState({});
 
@@ -30,10 +30,10 @@ const JournalGroup = (props) => {
                 <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
             </div>
             {/* Toggle Button */}
-            <button style={styles.entryToggle} onClick={() => toggleEntry(key)}>
-                {expandedGroup[key] ? 'ʌ' : 'v'}
+            <button style={styles.entryToggle} onClick={() => toggleEntry(id)}>
+                {expandedGroup[id] ? 'ʌ' : 'v'}
             </button>
-            {expandedGroup[key] && (
+            {expandedGroup[id] && (
                 children
             )}
         </div>

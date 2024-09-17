@@ -97,7 +97,7 @@
 .sidebarLeft-title {
   font-size: 18px;
   font-weight: bold;
-  font-family: "Roboto Mono", monospace; 
+  font-family: "Roboto Mono", monospace;
   color: black;
 
 }
@@ -152,33 +152,31 @@
   color: rgb(0, 0, 0);
 }
 
-/* Character list */
 .character-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* Space between each character item */
   height: 100%;
   overflow-y: auto;
 }
 
-/* Individual character item with width-based margins */
 .character-item {
   cursor: pointer;
   display: flex;
   align-items: center;
+  /* Align items to the top */
   background-color: #f7f7f7;
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #ddd;
   margin-left: 5%;
-  /* 5% margin based on the sidebar's width */
   margin-right: 5%;
-  /* 5% margin based on the sidebar's width */
-  font-family: "Roboto Mono", monospace;
+
   font-weight: 500;
   font-size: 14px;
+  /* Adjusted font size */
 }
+
 
 /* Character icon (circle) */
 .character-icon {
@@ -188,20 +186,15 @@
   border-radius: 50%;
   margin-right: 10px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
-.button-container {
-  position: sticky;
-  bottom: 0px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: #ffffff;
-  display: flex;
-  height: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 10px;
+/* Character name styling */
+.character-name {
+  word-wrap: break-word;
+  flex-grow: 1;
+  min-width: 0;
+  max-width: calc(100% - 50px);
 }
 
 /* Create button */
@@ -261,7 +254,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 260px;
+  height: 100px;
 }
 
 .inputContainer {
@@ -453,7 +446,8 @@
   text-align: center;
   border-radius: 6px;
   color: #a7a7a7;
-  transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+  transition: box-shadow 0.3s ease;
+  /* Smooth shadow transition */
 }
 
 .tab.active {
@@ -461,7 +455,8 @@
   /* border: 1px solid #6e6e6e; */
   font-weight: bold;
   color: #000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Adds a subtle shadow */
 
 }
 

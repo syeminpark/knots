@@ -14,6 +14,7 @@ const Feed = (props) => {
             {createdJournalBooks.journalBooks.slice().reverse().map((journalBook, index) => (  // Reverse the order of journals
                 <JournalGroup
                     key={index}
+                    id={index}
                     selectedMode={journalBook.selectedMode}
                     journalBookPrompt={journalBook.journalBookPrompt}
                     createdAt={journalBook.createdAt}

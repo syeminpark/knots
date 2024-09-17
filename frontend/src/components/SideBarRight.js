@@ -12,7 +12,6 @@ const SidebarRight = (props) => {
             <div className="character-list">
                 {/* Render all Attribute components for each selected character */}
                 {createdCharacters.length > 0 && (
-
                     createdCharacters.map((character) => (
                         <button key={character.uuid} className="character-item" onClick={() => { openNewPanel(panels, setPanels, 'character-profile', character) }}>
                             <CharacterButton
@@ -24,7 +23,7 @@ const SidebarRight = (props) => {
                     ))
                 )}
             </div>
-            <div className="button-container">
+            <div className="buttonContainer">
                 <button className="create-button" onClick={() => { openNewPanel(panels, setPanels, "character-creation") }}>
                     <i className="icon">+</i> Create
                 </button>
