@@ -24,7 +24,7 @@ const Feed = (props) => {
                             key={id}
                             panels={panels}
                             setPanels={setPanels}
-                            createdCharacter={createdCharacters.find(character => character.name === journalEntry.ownerName)}
+                            createdCharacter={createdCharacters.find(character => character.uuid === journalEntry.ownerUUID)}
                             content={journalEntry.content}
                             journalBookID={journalBook.id}
                             journalEntryID={journalEntry.id}

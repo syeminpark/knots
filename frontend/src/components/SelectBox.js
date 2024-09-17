@@ -1,14 +1,17 @@
 import { useState } from 'react';
 
 const SelectBox = (props) => {
-    const { selectedCharacters, setSelectedCharacters, allCharacters } = props;
+    const { selectedCharacters, setSelectedCharacters, createdCharacters } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
 
     // Handle multiple character selection
     const handleSelectCharacter = (character) => {
-        if (selectedCharacters.includes(character)) {
+        const isSelected = selectedCharacters.some((c) => c.uuid === character.uuid);
+
+        if (isSelected) {
             // If already selected, remove it from the array
-            setSelectedCharacters(selectedCharacters.filter((c) => c !== character));
+            setSelectedCharacters(selectedCharacters.filter((c) => c.uuid !== character.uuid));
         } else {
             // Otherwise, add it to the array
             setSelectedCharacters([...selectedCharacters, character]);
@@ -26,7 +29,7 @@ const SelectBox = (props) => {
                 <div style={styles.dropdownHeader} onClick={toggleDropdown}>
                     <span>
                         {selectedCharacters.length > 0
-                            ? selectedCharacters.join(', ')
+                            ? selectedCharacters.map((char) => char.name).join(', ')
                             : 'Select Characters'}
                     </span>
                     <span>{dropdownOpen ? '▲' : '▼'}</span>
@@ -34,22 +37,22 @@ const SelectBox = (props) => {
 
                 {dropdownOpen && (
                     <div style={styles.dropdownList}>
-                        {allCharacters.map((character) => (
+                        {createdCharacters.map((character) => (
                             <div
-                                key={character}
+                                key={character.uuid}
                                 style={{
                                     ...styles.dropdownItem,
-                                    backgroundColor: selectedCharacters.includes(character)
+                                    backgroundColor: selectedCharacters.some((c) => c.uuid === character.uuid)
                                         ? '#E0E0FF' // selected color
                                         : 'transparent',
                                 }}
                                 onClick={() => handleSelectCharacter(character)}
                             >
                                 <div style={styles.dropdownIcon}></div>
-                                <span style={styles.dropdownText}>{character}</span>
+                                <span style={styles.dropdownText}>{character.name}</span>
                                 <input
                                     type="checkbox"
-                                    checked={selectedCharacters.includes(character)}
+                                    checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
                                     onChange={() => handleSelectCharacter(character)}
                                     style={styles.checkbox}
                                 />

@@ -29,7 +29,6 @@ const JournalGroup = (props) => {
             <div>
                 <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
             </div>
-            {/* Toggle Button */}
             <button style={styles.entryToggle} onClick={() => toggleEntry(id)}>
                 {expandedGroup[id] ? 'ʌ' : 'v'}
             </button>

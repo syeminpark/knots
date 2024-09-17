@@ -12,7 +12,6 @@ const Admin = (props) => {
     //With Dependencies: If you provide a dependency array with specific values, useEffect will run after the initial render and only re-run when one or more of the dependencies change.
     useEffect(() => {
         const fetchData = async () => {
-
             try {
                 const { users } = await apiRequest('getAllUsers', 'GET')
                 setData(users);

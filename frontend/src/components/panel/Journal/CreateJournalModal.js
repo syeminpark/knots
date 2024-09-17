@@ -11,10 +11,6 @@ const CreateJournalModal = (props) => {
     const [selectedCharacters, setSelectedCharacters] = useState([])
     const [journalBookPrompt, setJournalBookPrompt] = useState(null)
 
-    useEffect(() => {
-        console.log('new Journal (updated state):', createdJournalBooks);
-    }, [createdJournalBooks]);
-
     const nextButtonClick = () => {
         if (selectedMode) {
             console.log(`Selected mode: ${selectedMode}`);
@@ -41,6 +37,7 @@ const CreateJournalModal = (props) => {
             alert('write something')
         }
         else {
+            console.log(selectedCharacters)
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
                 payload: {
@@ -111,7 +108,7 @@ const CreateJournalModal = (props) => {
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
-                            allCharacters={createdCharacters.map(character => character.name)}
+                            createdCharacters={createdCharacters}
                         >
                         </SelectBox>
                         <br></br>
@@ -141,7 +138,7 @@ const CreateJournalModal = (props) => {
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
-                            allCharacters={createdCharacters.map(character => character.name)}
+                            createdCharacters={createdCharacters}
                         ></SelectBox>
                         <br></br>
                         <div style={styles.scrollableContent}>

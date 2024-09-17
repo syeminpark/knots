@@ -40,12 +40,13 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,
+
     },
     modalBox: {
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
-        width: '400px',  
+        width: '400px',
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
         position: 'relative',
     },
@@ -56,6 +57,7 @@ const styles = {
         position: 'relative',
         marginBottom: '10px',
         fontSize: '14px',
+
     },
     modalContent: {
         marginBottom: '20px',
@@ -64,6 +66,7 @@ const styles = {
         textAlign: 'center',
     },
     modalDoneBtn: {
+
         backgroundColor: 'black',
         color: 'white',
         padding: '10px 20px',

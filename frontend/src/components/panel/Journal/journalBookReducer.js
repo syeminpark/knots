@@ -8,10 +8,9 @@ const journalBookReducer = (state, action) => {
                 journalBookPrompt: action.payload.journalBookPrompt,
                 selectedMode: action.payload.selectedMode,
                 createdAt: Date.now(),
-                selectedCharacters: action.payload.selectedCharacters,
-                journalEntries: action.payload.selectedCharacters.map(characterName => ({
+                journalEntries: action.payload.selectedCharacters.map(character => ({
                     id: uuidv4(),
-                    ownerName: characterName,
+                    ownerUUID: character.uuid,
                     content: action.payload.journalBookPrompt,
                     commentThreads: [],
                 })),

@@ -3,22 +3,20 @@ import ModalOverlay from '../ModalOverlay';
 import SelectBox from '../SelectBox';
 
 const AddConnectionModal = (props) => {
-    const { setShowModal, connectedCharacters, setConnectedCharacters } = props;
+    const { setShowModal, connectedCharacters, setConnectedCharacters, createdCharacters, caller } = props;
     const [selectedCharacters, setSelectedCharacters] = useState([]);
-
-    const allCharacters = ['Harry', 'Ron', 'Snape', 'R', 'Z', 'C',];
-
+    console.log('caller', caller, createdCharacters)
     const handleAddConnection = () => {
         if (selectedCharacters.length > 0) {
-            console.log(`Adding connection to: ${selectedCharacters.join(', ')}`);
             let temp = []
             for (let character of selectedCharacters) {
-                temp.push({ name: character, description: '' })
+                temp.push({ name: character.name, description: '', object: character })
                 console.log(temp)
             }
             setConnectedCharacters([...connectedCharacters, ...temp])
             setShowModal(false);
         }
+
     };
 
     return (
@@ -30,13 +28,18 @@ const AddConnectionModal = (props) => {
                 onFooterButtonClick={handleAddConnection}
                 isFooterButtonDisabled={selectedCharacters.length === 0}
             >
-                <SelectBox selectedCharacters={selectedCharacters}
+                <SelectBox
+                    selectedCharacters={selectedCharacters}
                     setSelectedCharacters={setSelectedCharacters}
-                    allCharacters={allCharacters}
+                    createdCharacters={createdCharacters.filter(createdCharacter =>
+                        !connectedCharacters.some(connectedCharacter =>
+                            connectedCharacter.object.uuid === createdCharacter.uuid
+                        ) && createdCharacter.uuid !== caller.uuid)}
+
                 >
                 </SelectBox>
             </ModalOverlay>
-        </div>
+        </div >
     );
 };
 

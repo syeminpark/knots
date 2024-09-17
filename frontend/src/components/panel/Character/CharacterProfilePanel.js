@@ -25,6 +25,23 @@ const CharacterProfilePanel = (props) => {
         }
     }, [createdCharacters, caller.uuid]);
 
+    useEffect(() => {
+        const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
+            const foundCharacter = createdCharacters.find(
+                (createdCharacter) => createdCharacter.uuid === connectedCharacter.object.uuid
+            );
+            if (foundCharacter) {
+                return {
+                    ...connectedCharacter,
+                    object: foundCharacter,
+                    name: foundCharacter.name,
+                };
+            }
+            return connectedCharacter;
+        });
+        setConnectedCharacters(updatedConnectedCharacters);
+    }, [createdCharacters]);  // Dependency array
+
 
     const saveFunction = () => {
         if (!name.trim()) {
@@ -79,6 +96,8 @@ const CharacterProfilePanel = (props) => {
                 <ConnectionsTab
                     connectedCharacters={connectedCharacters}
                     setConnectedCharacters={setConnectedCharacters}
+                    createdCharacters={createdCharacters}
+                    caller={caller}
                 />
             ) : null}
             <div className="save-btn-container">

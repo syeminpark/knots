@@ -1,35 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Attribute from '../Attribute';
 import AddConnectionModal from '../AddConnectionModal';
 
 const ConnectionsTab = (props) => {
-    const { connectedCharacters, setConnectedCharacters } = props
+    const { connectedCharacters, setConnectedCharacters, createdCharacters, caller } = props
     const [showModal, setShowModal] = useState(false);
 
     const deleteConnection = (name) => {
         const newConnections = connectedCharacters.filter(character => character.name !== name);
         setConnectedCharacters(newConnections)
-
     };
 
     const onChange = (title, value) => {
-        setConnectedCharacters(connectedCharacters.map(attribute =>
-            attribute.name === title ? { ...attribute, description: value } : attribute
+        setConnectedCharacters(connectedCharacters.map(child =>
+            child.name === title ? { ...child, description: value } : child
         ));
     };
 
     return (
         <>
             <div>{`${connectedCharacters.length} Connections`}</div>
-            {connectedCharacters.map(character => (
+            {connectedCharacters.map(child => (
                 <Attribute
-                    key={character.name}
-                    title={character.name}
+                    key={child.name}
+                    title={child.name}
                     placeholder="Add relationship details"
                     deleteFunction={deleteConnection}
                     list={connectedCharacters}
                     setter={setConnectedCharacters}
-                    onChange={(event) => { onChange(character.name, event.target.value) }}
+                    onChange={(event) => { onChange(child.name, event.target.value) }}
                 />
             ))}
             <button className="add-attributes-btn" onClick={() => setShowModal(true)}>
@@ -40,6 +39,8 @@ const ConnectionsTab = (props) => {
                     setShowModal={setShowModal}
                     connectedCharacters={connectedCharacters}
                     setConnectedCharacters={setConnectedCharacters}
+                    createdCharacters={createdCharacters}
+                    caller={caller}
                 />
             )}
         </>

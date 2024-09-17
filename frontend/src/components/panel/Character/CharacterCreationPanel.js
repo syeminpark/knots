@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BasePanel from '../BasePanel';
 import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
@@ -25,6 +25,23 @@ const CharacterCreationPanel = (props) => {
         const newCharacter = { uuid, name, personaAttributes, connectedCharacters, imageSrc };
         setCreatedCharacters((prevCharacters) => [...prevCharacters, newCharacter]);
     };
+
+    useEffect(() => {
+        const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
+            const foundCharacter = createdCharacters.find(
+                (createdCharacter) => createdCharacter.uuid === connectedCharacter.object.uuid
+            );
+            if (foundCharacter) {
+                return {
+                    ...connectedCharacter,
+                    object: foundCharacter,
+                    name: foundCharacter.name,
+                };
+            }
+            return connectedCharacter;
+        });
+        setConnectedCharacters(updatedConnectedCharacters);
+    }, [createdCharacters]);  // Dependency array
 
     return (
         <BasePanel
@@ -58,6 +75,8 @@ const CharacterCreationPanel = (props) => {
                     <ConnectionsTab
                         connectedCharacters={connectedCharacters}
                         setConnectedCharacters={setConnectedCharacters}
+                        createdCharacters={createdCharacters}
+
                     />
                 ) : null}
             </div>
