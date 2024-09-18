@@ -62,14 +62,12 @@ const CharacterProfilePanel = (props) => {
         })
     };
 
-
-
     return (
         <BasePanel
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="Character Profile"
+            title="Profile"
             saveFunction={saveFunction}
         >
             <div style={styles.stickyHeader}>
