@@ -303,7 +303,8 @@
   overflow-y: auto;
   flex-grow: 1;
   overflow-x: hidden;
-  height: calc(100vh - 350px); /* Adjust height to ensure the scroll starts after the "About" section */
+  height: calc(100vh - 350px);
+  /* Adjust height to ensure the scroll starts after the "About" section */
   padding-right: 5px;
   padding-left: 5px;
   box-sizing: content-box;
@@ -313,7 +314,8 @@
 .panel-content {
   overflow-y: auto;
   flex-grow: 1;
-  max-height: calc(100vh - 300px); /* Ensure content scrolls after sticky header */
+  max-height: calc(100vh - 300px);
+  /* Ensure content scrolls after sticky header */
   padding-right: 5px;
   padding-left: 5px;
   box-sizing: content-box;
@@ -321,17 +323,17 @@
 
 /******scrollbar styling******/
 .panel-content::-webkit-scrollbar {
-  width: 8px; 
+  width: 8px;
 }
 
 .panel-content::-webkit-scrollbar-track {
-  background: #f2f2f2; 
-  border-radius: 10px; 
+  background: #f2f2f2;
+  border-radius: 10px;
 }
 
 .panel-content::-webkit-scrollbar-thumb {
   background-color: #d9d9d9;
-  border-radius: 10px; 
+  border-radius: 10px;
   border: 2px solid transparent;
 }
 
@@ -359,8 +361,6 @@
   padding-right: 5px;
   padding-left: 5px;
 }
-
-
 
 .panel-header {
   background-color: transparent;

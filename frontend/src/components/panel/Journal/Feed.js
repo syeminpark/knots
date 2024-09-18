@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import JournalContent from './JournalContent';
-import TimeAgo from './TimeAgo';
+import TimeAgo from '../../TimeAgo';
 import ToggleButton from '../../ToggleButton';
 
 const Feed = (props) => {
@@ -38,10 +38,11 @@ const Feed = (props) => {
                 <p>No Journals yet...</p>
             )}
             {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
-                <div style={styles.journalEntry}>
+                <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
                     <div style={styles.entryHeader}>
                         <span style={styles.entryTime}>
                             <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
+
                         </span>
                         <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
                     </div>

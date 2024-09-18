@@ -2,7 +2,7 @@ import BasePanel from '../BasePanel';
 import { useEffect, useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
-import JournalSpecificContent from './JournalSpecificContent';
+import DetailedJournal from './DetailedJournal';
 
 const JournalPanel = (props) => {
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks, reference } = props;
@@ -57,8 +57,8 @@ const JournalPanel = (props) => {
                     ></Feed>
                 </>
             ) : (
-                <div>
-                    <JournalSpecificContent
+                <>
+                    <DetailedJournal
                         key={0}
                         panels={panels}
                         setPanels={setPanels}
@@ -68,8 +68,9 @@ const JournalPanel = (props) => {
                         dispatchCreatedCharacters={dispatchCreatedCharacters}
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     >
-                    </JournalSpecificContent>
-                </div>
+                    </DetailedJournal>
+                </>
+
             )
             }
         </BasePanel >
