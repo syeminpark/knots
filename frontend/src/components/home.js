@@ -69,6 +69,7 @@ const Home = (props) => {
             id={panel.id}
             panels={panels}
             setPanels={setPanels}
+            reference={panel.reference}
             createdCharacters={createdCharacters}
             dispatchCreatedCharacters={dispatchCreatedCharacters}
             createdJournalBooks={createdJournalBooks}

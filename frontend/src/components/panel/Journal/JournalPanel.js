@@ -5,10 +5,18 @@ import Feed from './Feed';
 import JournalSpecificContent from './JournalSpecificContent';
 
 const JournalPanel = (props) => {
-    const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
+    const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks, reference } = props;
     const [showModal, setShowModal] = useState(false);
     const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)
     const [expandedGroup, setExpandedGroup] = useState({});
+    const [trackingJournalEntry, setTrackingJournalEntry] = useState(null);
+
+    useEffect(() => {
+        if (reference) {
+            setTrackingJournalEntry(reference.entryUUID);
+            setExpandedGroup({ [reference.bookUUID]: true })
+        }
+    }, [reference]);
 
     return (
         <BasePanel
@@ -44,6 +52,8 @@ const JournalPanel = (props) => {
                         setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                         expandedGroup={expandedGroup}
                         setExpandedGroup={setExpandedGroup}
+                        trackingJournalEntry={trackingJournalEntry}  // Pass the selected UUID
+                        setTrackingJournalEntry={setTrackingJournalEntry}
                     ></Feed>
                 </>
             ) : (

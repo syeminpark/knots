@@ -99,6 +99,8 @@ const CharacterProfilePanel = (props) => {
                     caller={caller}
                     createdJournalBooks={createdJournalBooks}
                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                    panels={panels}
+                    setPanels={setPanels}
                 ></JournalsTab>
 
             ) : null}

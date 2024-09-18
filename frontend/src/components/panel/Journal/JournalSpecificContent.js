@@ -15,7 +15,7 @@ const JournalSpecificContent = (props) => {
         setSelectedBookAndJournalEntry,
         createdCharacters,
         dispatchCreatedCharacters,
-        dispatchCreatedJournalBooks
+        dispatchCreatedJournalBooks,
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);

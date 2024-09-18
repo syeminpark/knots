@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getJournalsByCharacterUUID } from '../Journal/journalBookReducer';
 import JournalCard from '../Journal/JournalCard';
+import openNewPanel from '../../openNewPanel';
 
 const JournalsTab = (props) => {
-    const { caller, createdJournalBooks } = props;
+    const { panels, setPanels, caller, createdJournalBooks } = props;
     const [journalData, setJournalData] = useState([]); // Update to handle an array of journals
 
     useEffect(() => {
@@ -14,7 +15,8 @@ const JournalsTab = (props) => {
     const sortByLatest = (journals) => {
         return journals.sort((a, b) => new Date(b.bookInfo.createdAt) - new Date(a.bookInfo.createdAt));
     };
-    const onClick = () => {
+    const onClick = (bookUUID, entryUUID) => {
+        openNewPanel(panels, setPanels, 'journal', null, { type: "journal", bookUUID: bookUUID, entryUUID: entryUUID })
     }
 
     return (
@@ -31,7 +33,7 @@ const JournalsTab = (props) => {
                     content={journal.journalEntry.content}
                     createdAt={journal.bookInfo.createdAt}
                     entryTag={journal.bookInfo.selectedMode}
-                    onClick={() => onClick()}
+                    onClick={() => onClick(journal.bookInfo.uuid, journal.journalEntry.uuid)}
                 />
             ))}
         </>

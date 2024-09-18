@@ -2,18 +2,19 @@ import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import ToggleButton from "../../ToggleButton";
+import React, { forwardRef } from 'react';
 
-const JournalContent = (props) => {
-    const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks } = props;
+const JournalContent = forwardRef((props, ref) => {
+    const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks, setTrackingJournalEntry } = props;
 
     const onMoreButtonClick = () => {
         const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
         setSelectedBookAndJournalEntry(journalBookInfoandJournalEntry);
-        console.log(journalBookInfoandJournalEntry, journalBookUUID, journalEntryUUID);
+        setTrackingJournalEntry(journalEntryUUID);
     };
 
     return (
-        <div style={styles.expandedContent}>
+        <div style={styles.expandedContent} ref={ref}>
             <div style={styles.expandedHeader}>
                 <button
                     style={styles.profileButtonContainer}
@@ -29,21 +30,26 @@ const JournalContent = (props) => {
                     />
                 </button>
                 {/* Use the ToggleButton here, static mode */}
-                <ToggleButton
-                    expandable={false}  // This makes it a static button, not toggleable
-                    direction="right"   // Specify the arrow direction (e.g., right for ">")
-                    size="small"       // You can change the size to small, medium, or large
-                    onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
-                    text="More"
-                />
+
             </div>
 
             <div style={styles.journalText}>
                 {content}
+
+            </div>
+            <div style={styles.toggleContainer}>
+                <ToggleButton
+                    expandable={false}  // This makes it a static button, not toggleable
+                    direction="left"   // Specify the arrow direction (e.g., right for ">")
+                    size="small"       // You can change the size to small, medium, or large
+                    onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
+                    icon={'💬'}
+                    text='See Comments'
+                />
             </div>
         </div >
     );
-};
+});
 
 const styles = {
     expandedContent: {
@@ -70,6 +76,9 @@ const styles = {
         whiteSpace: "pre-line",
         overflowWrap: 'break-word',
 
+    },
+    toggleContainer: {
+        padding: "15px",
     },
     profileButtonContainer: {
         display: "flex",

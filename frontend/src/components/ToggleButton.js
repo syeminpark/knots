@@ -13,7 +13,7 @@ const sizeStyles = {
     large: { fontSize: '24px' },
 };
 
-const ToggleButton = ({ expandable, expanded, onClick, direction = 'right', size = 'medium', text }) => {
+const ToggleButton = ({ expandable, expanded, onClick, direction = 'right', size = 'medium', text, icon }) => {
     const sizeStyle = sizeStyles[size] || sizeStyles.medium; // Default to medium if an unknown size is provided
 
     const getTextPositionStyle = () => {
@@ -22,24 +22,25 @@ const ToggleButton = ({ expandable, expanded, onClick, direction = 'right', size
                 return { flexDirection: 'column-reverse' };
             case 'down':
                 return { flexDirection: 'column' };
-
             case 'left':
                 return { flexDirection: 'row-reverse' };
             case 'right':
             default:
                 return { flexDirection: 'row' };
-
         }
     };
 
     return (
         <div style={{ ...styles.container, ...getTextPositionStyle(), ...sizeStyle }}>
-
             <button onClick={onClick} style={{ ...styles.button, ...sizeStyle }}>
                 {text && <span style={{ ...styles.text, ...sizeStyle }}>{text}</span>}
-                {expandable ? (expanded ? '▲' : '▼') : arrowDirections[direction]}
+                {icon ? (
+                    <span style={{ ...sizeStyle }}>{icon}</span>  // Render the icon (like emoji)
+                ) : (
+                    expandable ? (expanded ? '▲' : '▼') : arrowDirections[direction]
+                )}
             </button>
-        </div>
+        </div >
     );
 };
 
@@ -59,6 +60,7 @@ const styles = {
         marginRight: '5px',
         color: 'gray', // Match button color
     },
+
 };
 
 export default ToggleButton;

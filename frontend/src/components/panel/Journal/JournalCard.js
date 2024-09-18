@@ -9,10 +9,12 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
                 {/* Title and EntryTag on the same line */}
                 <div style={styles.titleWithTag}>
                     <strong style={styles.title}>{title}
+                        <br></br>
+                        <span style={styles.entryTag}>{entryTag}</span>
                         <span style={styles.time}>
                             <TimeAgo createdAt={createdAt} />
                         </span>
-                        <span style={styles.entryTag}>{entryTag}</span>
+
                     </strong>
                 </div>
                 <div style={styles.toggleButtonContainer}>
@@ -22,6 +24,7 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
                         onClick={onClick}
                         size={'medium'}
                         direction={'right'}
+
                     />
                 </div>
             </div>
@@ -61,7 +64,7 @@ const styles = {
         fontSize: '16px',
     },
     entryTag: {
-        padding: '5px 10px',
+        paddingRight: "10px",
         borderRadius: '8px',
         fontSize: '12px',
 
@@ -81,7 +84,7 @@ const styles = {
         alignItems: 'flex-end', // Align both time and toggle button to the right
     },
     time: {
-        marginLeft: '5px',
+
         fontSize: '12px',
         color: '#9b9b9b',
     },
@@ -92,6 +95,15 @@ const styles = {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: "pre-line",
+
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical',
+        textOverflow: 'ellipsis',
+        textAlign: 'left',
+        maxWidth: '100%',
+
+
     },
 };
 

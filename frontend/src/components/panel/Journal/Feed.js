@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import JournalContent from './JournalContent';
 import TimeAgo from './TimeAgo';
 import ToggleButton from '../../ToggleButton';
 
 const Feed = (props) => {
-    const { createdJournalBooks, createdCharacters, panels, setPanels, setSelectedBookAndJournalEntry, expandedGroup, setExpandedGroup } = props;
+    const {
+        createdJournalBooks,
+        createdCharacters,
+        panels,
+        setPanels,
+        setSelectedBookAndJournalEntry,
+        expandedGroup,
+        setExpandedGroup,
+        trackingJournalEntry,
+        setTrackingJournalEntry,
+    } = props;
+
+    const journalEntryRefs = useRef({});  // Ref to store journal elements
+
+    useEffect(() => {
+        if (trackingJournalEntry && journalEntryRefs.current[trackingJournalEntry]) {
+            journalEntryRefs.current[trackingJournalEntry].scrollIntoView({ behavior: 'instant' });
+        }
+    }, [trackingJournalEntry]);
 
     const toggleEntry = (entryId) => {
         setExpandedGroup(prev => ({
@@ -15,13 +33,12 @@ const Feed = (props) => {
 
     return (
         <div style={styles.journalFeed}>
-            {/* Feed Section */}
             <h2 style={styles.feedHeader}>Feed</h2>
             {createdJournalBooks.journalBooks.length === 0 && (
                 <p>No Journals yet...</p>
             )}
             {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
-                <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
+                <div style={styles.journalEntry}>
                     <div style={styles.entryHeader}>
                         <span style={styles.entryTime}>
                             <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
@@ -46,6 +63,7 @@ const Feed = (props) => {
                         journalBook.journalEntries.map((journalEntry) => (
                             <JournalContent
                                 key={journalEntry.uuid}
+                                ref={el => journalEntryRefs.current[journalEntry.uuid] = el}
                                 panels={panels}
                                 setPanels={setPanels}
                                 createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
@@ -54,6 +72,7 @@ const Feed = (props) => {
                                 journalEntryUUID={journalEntry.uuid}
                                 setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                                 createdJournalBooks={createdJournalBooks}
+                                setTrackingJournalEntry={setTrackingJournalEntry}
                             />
                         ))
                     )}
@@ -64,9 +83,7 @@ const Feed = (props) => {
 };
 
 const styles = {
-    journalFeed: {
-
-    },
+    journalFeed: {},
     journalEntry: {
         backgroundColor: '#f7f7ff',
         padding: '15px',
