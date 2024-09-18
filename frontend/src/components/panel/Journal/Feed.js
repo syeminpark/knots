@@ -16,7 +16,7 @@ const Feed = (props) => {
                     key={index}
                     id={index}
                     selectedMode={journalBook.bookInfo.selectedMode}
-                    journalBookPrompt={journalBook.bookInfo.prompt}
+                    journalBookTitle={journalBook.bookInfo.title}
                     createdAt={journalBook.bookInfo.createdAt}
                 >
                     {journalBook.journalEntries.map((journalEntry, id) => (

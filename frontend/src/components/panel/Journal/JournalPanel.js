@@ -52,23 +52,15 @@ const JournalPanel = (props) => {
                 </>
             ) : (
                 <div>
-                    {console.log(selectedBookAndJournalEntry)}
-                    {/* <JournalGroup
-                        key={0}
-                        id='specific'
-                        selectedMode={selectedBookAndJournalEntry.bookInfo.selectedMode}
-                        journalBookPrompt={selectedBookAndJournalEntry.bookInfo.prompt}
-                        createdAt={selectedBookAndJournalEntry.bookInfo.createdAt}
-
-                    > */}
                     <JournalSpecificContent
                         key={0}
                         panels={panels}
                         setPanels={setPanels}
-                        jouranlBookInfo={selectedBookAndJournalEntry.bookInfo}
-                        journalEntry={selectedBookAndJournalEntry.journalEntry}
-                        createdCharacter={createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID)}
+                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                        setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                         createdCharacters={createdCharacters}
+                        dispatchCreatedCharacters={dispatchCreatedCharacters}
+                        dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     >
 
                     </JournalSpecificContent>

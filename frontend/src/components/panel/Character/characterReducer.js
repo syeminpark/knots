@@ -39,11 +39,11 @@ const characterReducer = (state, action) => {
                     if (character.uuid === action.payload.characterUUID) {
                         const newJournal = {
                             journalBookUUID: action.payload.ournalBookUUID,
-                            journalBookPrompt: action.payload.journalBookPrompt,
+                            journalBookTitle: action.payload.journalBookTitle,
                             selectedMode: action.payload.selectedMode,
                             createdAt: action.payload.createdAt,
                             journalEntryUUID: action.payload.journalEntryUUID,
-                            journalEntryContent: action.payload.journalBookPrompt,
+                            journalEntryContent: action.payload.journalEntryContent
                         };
 
                         // Add the new journal to the character's createdJournals array

@@ -6,14 +6,14 @@ const journalBookReducer = (state, action) => {
             const newJournalBook = {
                 bookInfo: {
                     uuid: uuidv4(),
-                    prompt: action.payload.journalBookPrompt,
+                    title: action.payload.journalBookTitle,
                     selectedMode: action.payload.selectedMode,
                     createdAt: Date.now(),
                 },
                 journalEntries: action.payload.selectedCharacters.map(character => ({
                     uuid: uuidv4(),
                     ownerUUID: character.uuid,
-                    content: action.payload.journalBookPrompt,
+                    content: action.payload.journalBookContent,
                     commentThreads: [],
                 })),
             };

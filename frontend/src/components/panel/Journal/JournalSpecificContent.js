@@ -1,34 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import SelectBox from "../../SelectBox";
 import TextArea from "../../TextArea";
+import TimeAgo from './TimeAgo';
+import JournalEntryHeader from "./JounralEntryHeader";
+
 
 const JournalSpecificContent = (props) => {
     const {
         panels,
         setPanels,
-        journalBookInfo,
-        journalEntry,
-        createdCharacter,
+        selectedBookAndJournalEntry,
+        setSelectedBookAndJournalEntry,
         createdCharacters,
+        dispatchCreatedCharacters,
+        dispatchCreatedJournalBooks
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
-    const [editedContent, setEditedContent] = useState(journalEntry.content);
-
+    const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
+    const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID)
+    const { bookInfo, journalEntry } = selectedBookAndJournalEntry
 
     const onEditButtonClick = () => {
+        if (isEditing) {
+            journalEntry.content = editedContent
+        }
         setIsEditing(!isEditing);
     };
 
     const onReturnClick = () => {
-        console.log("Return button clicked");
-    };
-
-    const saveEditedContent = () => {
-        setIsEditing(false);
+        setSelectedBookAndJournalEntry(null)
     };
 
     return (
@@ -36,18 +40,20 @@ const JournalSpecificContent = (props) => {
             {/* Journal Entry Section */}
             <div style={styles.journalEntry}>
                 <div style={styles.entryHeader}>
-                    <button style={styles.returnButton} onClick={onReturnClick}>
-                        {"<"}
-                    </button>
+
                     <div>
-                        <strong style={styles.entryTitle}>{'What was your dream yesterday?'}</strong>
-                        <span style={styles.entryTime}>{'1h'}</span>
+                        <strong style={styles.entryTitle}>{bookInfo.title}</strong>
+                        <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
                     </div>
                     <div>
                         <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{'Manual Post'}</span>
                     </div>
                 </div>
+
                 <div style={styles.characterSection}>
+                    <button style={styles.returnButton} onClick={onReturnClick}>
+                        {"<"}
+                    </button>
                     <button
                         style={styles.profileButtonContainer}
                         key={createdCharacter.uuid}
@@ -62,7 +68,7 @@ const JournalSpecificContent = (props) => {
                         />
                     </button>
                     <button style={styles.editButton} onClick={onEditButtonClick}>
-                        {isEditing ? "💾" : "✎"} {/* Show Save icon when editing, Pen icon otherwise */}
+                        {isEditing ? "💾" : "✎"}
                     </button>
                 </div>
 
@@ -70,12 +76,12 @@ const JournalSpecificContent = (props) => {
                     {isEditing ? (
                         <TextArea
                             attribute={{ description: editedContent }}
-                            placeholder="Edit your content"
+                            placeholder="Edit content"
                             onChange={(e) => setEditedContent(e.target.value)}
                             styles={{ description: styles.textArea }}
                         />
                     ) : (
-                        <div onClick={onEditButtonClick}>
+                        <div >
                             {journalEntry.content || '"Lorem ipsum dolor sit amet, consectetur adipiscing elit...'}
                         </div>
                     )}
@@ -127,7 +133,7 @@ const styles = {
         borderRadius: '8px 8px 0 0',
     },
     journalEntry: {
-        marginBottom: '300px',
+        marginBottom: 'auto',
     },
     entryHeader: {
         display: 'flex',
@@ -141,7 +147,7 @@ const styles = {
         padding: '20px 15px',
         borderRadius: '8px 8px 0 0',
         fontSize: '16px',
-        fontWeight: 'bold',
+
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -152,17 +158,21 @@ const styles = {
         WebkitLineClamp: 3,
         WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
-        textAlign: 'center',
+        textAlign: 'left',       // Ensure the text is centered
         maxWidth: '100%',
+        resize: 'vertical', // Allows the user to manually resize vertically
+
+
     },
     entryTime: {
         color: '#9b9b9b',
         fontSize: '12px',
         position: 'absolute',
         right: '15px',
-        top: '50%',
-        transform: 'translateY(-50%)',
+        top: '0%',
+        transform: 'translateY(50%)',  // Adjust for vertical centering
         whiteSpace: 'nowrap',
+
     },
     entryTag: {
         padding: '5px 10px',
@@ -170,6 +180,7 @@ const styles = {
         fontSize: '12px',
         marginBottom: '10px',
         alignItems: 'center',
+        fontWeight: 'bold',
     },
     systemGenerated: {
         backgroundColor: '#f0eaff',
@@ -189,16 +200,14 @@ const styles = {
         border: 'none',
     },
     returnButton: {
-        position: 'absolute',
         left: '15px', // Position the button on the left side of the header
-        top: '50%',
-        transform: 'translateY(-50%)',
         backgroundColor: 'transparent',
         border: 'none',
         fontSize: '24px',
         cursor: 'pointer',
         color: '#333',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingRight: '15px',
     },
     editButton: {
         marginLeft: 'auto',

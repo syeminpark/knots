@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
-import calculateTimeAgo from './CaluclateTimeAgo';
+import TimeAgo from './TimeAgo';
 
 const JournalGroup = (props) => {
-    const { id, selectedMode, journalBookPrompt, createdAt, children, } = props
-    const [timeAgo, setTimeAgo] = useState('');
+    const { id, selectedMode, journalBookTitle, createdAt, children, } = props
     const [expandedGroup, setExpandedGroup] = useState({});
 
-    useEffect(() => {
-        const updateAgo = () => setTimeAgo(calculateTimeAgo(createdAt));
-        updateAgo(); // Initial calculation
-        const interval = setInterval(updateAgo, 60000); // Recalculate every minute
-        return () => clearInterval(interval); // Cleanup interval on unmount
-    }, [createdAt]);
 
     const toggleEntry = (entryId) => {
         setExpandedGroup(prev => ({
@@ -29,8 +22,8 @@ const JournalGroup = (props) => {
     return (
         <div style={styles.journalEntry}>
             <div style={styles.entryHeader}>
-                <strong style={styles.entryTitle}>{journalBookPrompt}</strong>
-                <span style={styles.entryTime}>{timeAgo}</span>
+                <span style={styles.entryTime}><TimeAgo createdAt={createdAt} /></span>
+                <strong style={styles.entryTitle}>{journalBookTitle}</strong>
             </div>
             <div>
                 <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{selectedMode}</span>
@@ -68,7 +61,8 @@ const styles = {
         position: 'relative',      // Allow absolute positioning of the time element
         marginBottom: '10px',
         paddingLeft: '30px',
-        paddingRight: '30px'
+        paddingRight: '30px',
+
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -79,16 +73,17 @@ const styles = {
         WebkitLineClamp: 3,        // Limit to 3 lines
         WebkitBoxOrient: 'vertical', // Set box orientation to vertical for clamping
         textOverflow: 'ellipsis',  // Add ellipsis for long text
-        textAlign: 'center',       // Ensure the text is centered
+        textAlign: 'left',       // Ensure the text is centered
         maxWidth: '100%',          // Allow the title to take up available space
+        resize: 'vertical', // Allows the user to manually resize vertically
     },
     entryTime: {
         color: '#9b9b9b',
-        fontSize: '12px',
+        fontSize: '10px',
         position: 'absolute',      // Absolute positioning to the right
         right: '0',                // Stick to the right edge of the container
-        top: '50%',                // Vertically center the time
-        transform: 'translateY(-50%)',  // Adjust for vertical centering
+        // Vertically center the time
+        bottom: '0',
         whiteSpace: 'nowrap',      // Prevent wrapping of the time
     },
     entryTag: {
