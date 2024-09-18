@@ -58,6 +58,8 @@ const Home = (props) => {
             caller={panel.caller}
             createdCharacters={createdCharacters}
             dispatchCreatedCharacters={dispatchCreatedCharacters}
+            createdJournalBooks={createdJournalBooks}
+            dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
           />
         );
       case 'journal':

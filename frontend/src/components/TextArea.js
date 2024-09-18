@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 const TextArea = (props) => {
 
-    const { attribute, placeholder, onChange,styles} = props
+    const { attribute, placeholder, onChange, styles } = props
     const textareaRef = useRef(null); // Create a ref for the text area
     // Function to adjust the height of the text area
     const autoGrow = () => {

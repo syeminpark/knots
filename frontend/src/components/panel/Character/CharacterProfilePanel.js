@@ -4,9 +4,10 @@ import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
 import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
+import JournalsTab from './JournalsTab';
 
 const CharacterProfilePanel = (props) => {
-    const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
+    const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
 
     const [activeTab, setActiveTab] = useState('About');
     const [connectedCharacters, setConnectedCharacters] = useState(caller.connectedCharacters);
@@ -93,6 +94,13 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                     caller={caller}
                 />
+            ) : activeTab === 'Journals' ? (
+                <JournalsTab
+                    caller={caller}
+                    createdJournalBooks={createdJournalBooks}
+                    dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                ></JournalsTab>
+
             ) : null}
             <div className="save-btn-container">
                 <button className="save-btn" onClick={saveFunction}>

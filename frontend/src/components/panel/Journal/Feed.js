@@ -1,6 +1,7 @@
+import React from 'react';
 import JournalContent from './JournalContent';
-import { useState } from 'react';
 import TimeAgo from './TimeAgo';
+import ToggleButton from '../../ToggleButton';
 
 const Feed = (props) => {
     const { createdJournalBooks, createdCharacters, panels, setPanels, setSelectedBookAndJournalEntry, expandedGroup, setExpandedGroup } = props;
@@ -20,7 +21,6 @@ const Feed = (props) => {
                 <p>No Journals yet...</p>
             )}
             {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
-                /* Gournal Group */
                 <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
                     <div style={styles.entryHeader}>
                         <span style={styles.entryTime}>
@@ -31,14 +31,18 @@ const Feed = (props) => {
                     <div>
                         <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{journalBook.bookInfo.selectedMode}</span>
                     </div>
-                    <button
-                        style={styles.entryToggle}
-                        onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
-                    >
-                        {expandedGroup[journalBook.bookInfo.uuid] ? 'ʌ' : 'v'}
-                    </button>
+
+                    {/* Toggle Button */}
+                    <div style={styles.toggleButtonContainer}>
+                        <ToggleButton
+                            expandable={true}
+                            expanded={expandedGroup[journalBook.bookInfo.uuid]}
+                            onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
+                            size="medium"
+                        />
+                    </div>
+
                     {expandedGroup[journalBook.bookInfo.uuid] && (
-                        /* Each Journal Entry */
                         journalBook.journalEntries.map((journalEntry) => (
                             <JournalContent
                                 key={journalEntry.uuid}
@@ -116,18 +120,16 @@ const styles = {
         backgroundColor: '#f0eaff',
         color: '#6c63ff',
     },
+    toggleButtonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: '10px',
+        position: 'relative',
+    },
     manual: {
         backgroundColor: '#e0eaff',
         color: '#6c63ff',
-    },
-    entryToggle: {
-        backgroundColor: 'transparent',
-        border: 'none',
-        fontSize: '18px',
-        color: 'gray',
-        cursor: 'pointer',
-        marginTop: '10px',
-        alignSelf: 'center',
     },
     stickyButtonContainer: {
         position: 'sticky',

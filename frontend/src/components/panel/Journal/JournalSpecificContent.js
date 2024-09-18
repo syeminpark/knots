@@ -4,7 +4,7 @@ import openNewPanel from "../../openNewPanel";
 import SelectBox from "../../SelectBox";
 import TextArea from "../../TextArea";
 import TimeAgo from './TimeAgo';
-import JournalEntryHeader from "./JounralEntryHeader";
+import ToggleButton from "../../ToggleButton"; // Import the ToggleButton
 
 
 const JournalSpecificContent = (props) => {
@@ -21,18 +21,28 @@ const JournalSpecificContent = (props) => {
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
-    const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID)
-    const { bookInfo, journalEntry } = selectedBookAndJournalEntry
+    const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
+    const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
     const onEditButtonClick = () => {
+        console.log(bookInfo, journalEntry)
         if (isEditing) {
-            journalEntry.content = editedContent
+            journalEntry.content = editedContent;
+            dispatchCreatedJournalBooks({
+                type: 'EDIT_JOURNAL_ENTRY',
+                payload: {
+                    journalBookUUID: bookInfo.uuid,
+                    journalEntryUUID: journalEntry.uuid,
+                    newValue: journalEntry.content
+                }
+            })
+
         }
         setIsEditing(!isEditing);
     };
 
     const onReturnClick = () => {
-        setSelectedBookAndJournalEntry(null)
+        setSelectedBookAndJournalEntry(null);
     };
 
     return (
@@ -40,7 +50,6 @@ const JournalSpecificContent = (props) => {
             {/* Journal Entry Section */}
             <div style={styles.journalEntry}>
                 <div style={styles.entryHeader}>
-
                     <div>
                         <strong style={styles.entryTitle}>{bookInfo.title}</strong>
                         <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
@@ -51,9 +60,15 @@ const JournalSpecificContent = (props) => {
                 </div>
 
                 <div style={styles.characterSection}>
-                    <button style={styles.returnButton} onClick={onReturnClick}>
-                        {"<"}
-                    </button>
+                    <div style={styles.toggleButtonContainer}>
+                        <ToggleButton
+                            expandable={false}
+                            direction="left" // Set to left for the back arrow
+                            size="large" // Set the size as you prefer
+                            onClick={onReturnClick}
+                            text
+                        />
+                    </div>
                     <button
                         style={styles.profileButtonContainer}
                         key={createdCharacter.uuid}
@@ -81,7 +96,7 @@ const JournalSpecificContent = (props) => {
                             styles={{ description: styles.textArea }}
                         />
                     ) : (
-                        <div >
+                        <div>
                             {journalEntry.content || '"Lorem ipsum dolor sit amet, consectetur adipiscing elit...'}
                         </div>
                     )}
@@ -147,7 +162,6 @@ const styles = {
         padding: '20px 15px',
         borderRadius: '8px 8px 0 0',
         fontSize: '16px',
-
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -158,11 +172,12 @@ const styles = {
         WebkitLineClamp: 3,
         WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
-        textAlign: 'left',       // Ensure the text is centered
+        textAlign: 'left',
         maxWidth: '100%',
-        resize: 'vertical', // Allows the user to manually resize vertically
-
-
+        resize: 'vertical',
+    },
+    toggleButtonContainer: {
+        marginRight: '10px',
     },
     entryTime: {
         color: '#9b9b9b',
@@ -170,9 +185,8 @@ const styles = {
         position: 'absolute',
         right: '15px',
         top: '0%',
-        transform: 'translateY(50%)',  // Adjust for vertical centering
+        transform: 'translateY(50%)',
         whiteSpace: 'nowrap',
-
     },
     entryTag: {
         padding: '5px 10px',
@@ -198,16 +212,6 @@ const styles = {
         cursor: 'pointer',
         backgroundColor: 'transparent',
         border: 'none',
-    },
-    returnButton: {
-        left: '15px', // Position the button on the left side of the header
-        backgroundColor: 'transparent',
-        border: 'none',
-        fontSize: '24px',
-        cursor: 'pointer',
-        color: '#333',
-        fontWeight: 'bold',
-        paddingRight: '15px',
     },
     editButton: {
         marginLeft: 'auto',

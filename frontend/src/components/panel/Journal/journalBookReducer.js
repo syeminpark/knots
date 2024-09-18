@@ -22,12 +22,11 @@ const journalBookReducer = (state, action) => {
                 journalBooks: [...state.journalBooks, newJournalBook],
                 lastCreatedJournalBook: newJournalBook,
             };
-
         case 'EDIT_JOURNAL_ENTRY':
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.bookinfo.uuid === action.payload.journalBookUUID) {
+                    if (book.bookInfo.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
                             journalEntries: book.journalEntries.map(entry => {
@@ -91,6 +90,26 @@ export const getJournalBookInfoAndEntryByIds = (state, journalBookUUID, journalE
     }
     return null;
 };
+
+export const getJournalsByCharacterUUID = (state, characterUUID) => {
+    const result = [];
+
+    state.journalBooks.forEach((journalBook) => {
+        const characterJournalEntries = journalBook.journalEntries.filter(
+            (entry) => entry.ownerUUID === characterUUID
+        );
+
+        characterJournalEntries.forEach((journalEntry) => {
+            result.push({
+                bookInfo: journalBook.bookInfo,
+                journalEntry: journalEntry,
+            });
+        });
+    });
+
+    return result;
+};
+
 
 
 export default journalBookReducer;

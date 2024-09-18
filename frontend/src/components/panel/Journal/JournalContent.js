@@ -1,15 +1,17 @@
 import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
+import ToggleButton from "../../ToggleButton";
 
 const JournalContent = (props) => {
     const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks } = props;
+
     const onMoreButtonClick = () => {
         const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
-        setSelectedBookAndJournalEntry(journalBookInfoandJournalEntry)
-        console.log(journalBookInfoandJournalEntry, journalBookUUID, journalEntryUUID)
+        setSelectedBookAndJournalEntry(journalBookInfoandJournalEntry);
+        console.log(journalBookInfoandJournalEntry, journalBookUUID, journalEntryUUID);
+    };
 
-    }
     return (
         <div style={styles.expandedContent}>
             <div style={styles.expandedHeader}>
@@ -26,13 +28,20 @@ const JournalContent = (props) => {
                         createdCharacter={createdCharacter}
                     />
                 </button>
-                <button style={styles.arrowButton} onClick={() => { onMoreButtonClick() }}> {'>'}</button>
+                {/* Use the ToggleButton here, static mode */}
+                <ToggleButton
+                    expandable={false}  // This makes it a static button, not toggleable
+                    direction="right"   // Specify the arrow direction (e.g., right for ">")
+                    size="small"       // You can change the size to small, medium, or large
+                    onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
+                    text="More"
+                />
             </div>
 
-            <div style={styles.journalText} onClick={() => { onMoreButtonClick() }}>
+            <div style={styles.journalText}>
                 {content}
             </div>
-        </div>
+        </div >
     );
 };
 
@@ -60,7 +69,7 @@ const styles = {
         borderRadius: "5px",
         whiteSpace: "pre-line",
         overflowWrap: 'break-word',
-        cursor: "pointer",
+
     },
     profileButtonContainer: {
         display: "flex",
@@ -69,14 +78,6 @@ const styles = {
         padding: "5px",
         backgroundColor: "transparent",
         border: "none",
-    },
-    arrowButton: {
-        cursor: "pointer",
-        backgroundColor: "transparent",
-        border: "none",
-        fontSize: "20px",
-        fontWeight: 'bold',
-        color: "#9b9b9b"
     }
 };
 
