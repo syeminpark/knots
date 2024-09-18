@@ -2,17 +2,13 @@ import BasePanel from '../BasePanel';
 import { useEffect, useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
-import JournalGroup from './JournalGroup';
 import JournalSpecificContent from './JournalSpecificContent';
 
 const JournalPanel = (props) => {
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
     const [showModal, setShowModal] = useState(false);
     const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)
-
-    const onCreateNewJournalBook = () => {
-        setShowModal(true);
-    };
+    const [expandedGroup, setExpandedGroup] = useState({});
 
     return (
         <BasePanel
@@ -22,7 +18,6 @@ const JournalPanel = (props) => {
             title="📑 Journal"
             iconStyles="journal-icon"
         >
-
             {showModal && (
                 <CreateJournalModal
                     setShowModal={setShowModal}
@@ -32,7 +27,6 @@ const JournalPanel = (props) => {
                     dispatchCreatedCharacters={dispatchCreatedCharacters}
                 />
             )}
-
             {selectedBookAndJournalEntry === null ? (
                 <>
                     {/* Create New Journal Book Button */}
@@ -48,6 +42,8 @@ const JournalPanel = (props) => {
                         panels={panels}
                         setPanels={setPanels}
                         setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                        expandedGroup={expandedGroup}
+                        setExpandedGroup={setExpandedGroup}
                     ></Feed>
                 </>
             ) : (
@@ -62,10 +58,7 @@ const JournalPanel = (props) => {
                         dispatchCreatedCharacters={dispatchCreatedCharacters}
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     >
-
                     </JournalSpecificContent>
-                    {/* </JournalGroup> */}
-
                 </div>
             )
             }
