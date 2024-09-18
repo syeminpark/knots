@@ -103,7 +103,7 @@ const styles = {
     dropdownHeader: {
         border: '1px solid black',
         borderRadius: '5px',
-        padding: '10px',
+        padding: '5px',
         display: 'flex',
         justifyContent: 'space-between',
         cursor: 'pointer',

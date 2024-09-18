@@ -33,20 +33,20 @@ const styles = {
     comment: {
         backgroundColor: '#f0f0f0',
         borderRadius: '8px',
-        padding: '10px',
+        padding: '5px',
         marginBottom: '5px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
     },
     commentHeader: {
         display: 'flex',
         alignItems: 'center',
+        padding: '5px',
     },
     avatar: {
         width: '40px',
         height: '40px',
         borderRadius: '50%',
         backgroundColor: '#d8d8d8',
-        marginRight: '10px',
     },
     commentInfo: {
         display: 'flex',

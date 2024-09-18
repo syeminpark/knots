@@ -33,16 +33,16 @@ const JournalContent = forwardRef((props, ref) => {
                 <ToggleButton
                     expandable={false}  // This makes it a static button, not toggleable
                     direction="right"   // Specify the arrow direction (e.g., right for ">")
-                    size="small"       // You can change the size to small, medium, or large
+                    size="medium"       // You can change the size to small, medium, or large
                     onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
-                    text={'💬'}></ToggleButton>
+                ></ToggleButton>
             </div>
 
             <div style={styles.journalText}>
                 {content}
 
             </div>
-            {/* <div style={styles.toggleContainer}>
+            <div style={styles.toggleContainer}>
                 <ToggleButton
                     expandable={false}  // This makes it a static button, not toggleable
                     direction="left"   // Specify the arrow direction (e.g., right for ">")
@@ -51,7 +51,7 @@ const JournalContent = forwardRef((props, ref) => {
                     icon={'💬'}
                     text='See Comments'
                 />
-            </div> */}
+            </div>
         </div >
     );
 });

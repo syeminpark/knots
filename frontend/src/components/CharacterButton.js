@@ -4,9 +4,15 @@ const CharacterButton = (props) => {
     return (
         <>
             <div className="character-icon" style={iconStyle}>
-                <img src={createdCharacter.imageSrc} className="profile-image-preview" />
+                {createdCharacter.imageSrc ? (
+                    <img src={createdCharacter.imageSrc} alt="Character" className="profile-image-preview" />
+                ) : (
+                    <div className="default-icon" />
+                )}
             </div>
-            <span className="character-name" style={textStyle}>{createdCharacter.name}</span>
+            <span className="character-name" style={textStyle}>
+                {createdCharacter.name || 'Unnamed Character'}
+            </span>
         </>
     );
 };

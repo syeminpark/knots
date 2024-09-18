@@ -95,7 +95,7 @@ const styles = {
         position: 'relative',
         marginBottom: '10px',
         backgroundColor: '#f7f7ff',
-        padding: '20px 15px',
+        padding: '10px 15px',
         borderRadius: '8px 8px 0 0',
         fontSize: '16px',
     },

@@ -85,7 +85,7 @@ const Home = (props) => {
     <div className="homeContainer">
       <div className="logoContainer">
         <span className="logoText">
-          Knots
+          ⩉ Knots
         </span>
       </div>
 
