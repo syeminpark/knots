@@ -128,6 +128,9 @@ const styles = {
     journalEntry: {
         height: '100%',
     },
+    journalEntry: {
+        flexGrow: 1,
+    },
 
     entryHeader: {
         display: 'flex',
@@ -176,15 +179,14 @@ const styles = {
     commentContainer: {
         paddingLeft: "20px",
         paddingRight: "20px",
-        marginBottom: '300px',
+        marginBottom: '100px',
     },
     bottom: {
         backgroundColor: '#f7f7ff',
         padding: '10px',
         width: '100%',
-        height: '100%',
         position: 'sticky',
-        bottom: '0px',
+        bottom: 0,
     },
 };
 

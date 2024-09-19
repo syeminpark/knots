@@ -4,7 +4,6 @@ import EntryTag from '../../EntryTag';
 
 const Comment = (props) => {
     const { createdCharacter, content, createdAt, selectedMode } = props;
-    console.log(selectedMode)
     return (
         <>
             <div style={styles.comment}>
@@ -41,8 +40,8 @@ const styles = {
     comment: {
         backgroundColor: '#f0f0f0',
         borderRadius: '8px',
-        padding: '5px 10px',
-        marginBottom: '3px',
+        padding: '10px 10px',
+        marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
     },
     commentHeader: {
@@ -58,9 +57,9 @@ const styles = {
         alignItems: 'center',
     },
     commentTime: {
-        marginLeft: '10px',
         fontSize: '10px',
         color: '#9b9b9b',
+        marginLeft: '5px',
     },
     commentText: {
         display: 'flex',
@@ -70,7 +69,7 @@ const styles = {
         color: '#333',
         padding: '5px',
         whiteSpace: "pre-line",
-        lineHeight: '1.5',
+        lineHeight: '1.4',
     },
     commentActions: {
         display: 'flex',
@@ -78,12 +77,13 @@ const styles = {
         justifyContent: 'flex-end',
         gap: '10px',
         marginBottom: '15px',
+        marginRight: '6px',
     },
     commentAction: {
         cursor: 'pointer',
         fontSize: '12px',
         color: '#9b9b9b',
-        fontWeight: 'bold',
+        fontWeight: '500',
     },
     // Styles for CharacterButton integration
     characterButtonIconStyle: {
@@ -98,3 +98,4 @@ const styles = {
 };
 
 export default Comment;
+
