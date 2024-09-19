@@ -10,19 +10,7 @@ const ModeSelection = (props) => {
         <div style={styles.modeSelectionContainer}>
             <div style={styles.modeButtons}>
                 {/* Manual Post Mode */}
-                <div
-                    style={{
-                        ...styles.modeButton,
-                        ...(selectedMode === "Manual Post" ? styles.selectedModeButton : {}),
-                    }}
-                    onClick={() => handleModeSelect("Manual Post")}
-                >
-                    <div style={styles.iconContainer}>
-                        <span className="icon"> 📝
-                        </span>
-                    </div>
-                    <span style={styles.modeLabel}>Manual Post</span>
-                </div>
+
 
                 {/* System Generate Mode */}
                 <div
@@ -36,6 +24,19 @@ const ModeSelection = (props) => {
                         <span className="icon">✨</span>
                     </div>
                     <span style={styles.modeLabel}>System Generate</span>
+                </div>
+                <div
+                    style={{
+                        ...styles.modeButton,
+                        ...(selectedMode === "Manual Post" ? styles.selectedModeButton : {}),
+                    }}
+                    onClick={() => handleModeSelect("Manual Post")}
+                >
+                    <div style={styles.iconContainer}>
+                        <span className="icon"> 📝
+                        </span>
+                    </div>
+                    <span style={styles.modeLabel}>Manual Post</span>
                 </div>
             </div>
         </div>

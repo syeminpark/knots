@@ -109,7 +109,7 @@ const styles = {
     },
     entryTitle: {
         fontWeight: 'bold',
-        fontSize: '16px',
+        fontSize: '18px',
         whiteSpace: 'normal',
         overflow: 'hidden',
         display: '-webkit-box',
@@ -123,7 +123,7 @@ const styles = {
     entryTime: {
         color: '#9b9b9b',
         fontWeight: '400',
-        fontSize: '10px',
+        fontSize: '12px',
         position: 'absolute',
         right: '0',
         bottom: '0',
@@ -132,8 +132,9 @@ const styles = {
     entryTag: {
         padding: '5px 10px',
         borderRadius: '8px',
-        fontSize: '12px',
+        fontSize: '14px',
         marginBottom: '10px',
+        fontWeight: 'bold',
         alignItems: 'center',
     },
     systemGenerated: {

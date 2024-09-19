@@ -1,22 +1,24 @@
-
 import TimeAgo from '../../TimeAgo';
 import CharacterButton from "../../CharacterButton";
 
 const Comment = (props) => {
-
-    const { createdCharacter, commentText, createdAt } = props
+    const { createdCharacter, content, createdAt } = props;
     return (
         <>
             <div style={styles.comment}>
                 <div style={styles.commentHeader}>
                     <div style={styles.commentInfo}>
-                        <div style={styles.avatar}></div>
-                        <span style={styles.commentAuthor}>Stranger 1</span>
-                        <span style={styles.commentTime}><TimeAgo createdAt={'text'} /></span>
+                        {/* Use CharacterButton here */}
+                        <CharacterButton
+                            createdCharacter={createdCharacter}
+                            iconStyle={styles.characterButtonIconStyle}
+                            textStyle={styles.characterButtonTextStyle}
+                        />
+                        <span style={styles.commentTime}><TimeAgo createdAt={createdAt} /></span>
                     </div>
                 </div>
                 <div style={styles.commentText}>
-                    Come to our store to buy magic potions!
+                    {content}
                 </div>
             </div>
             <div style={styles.commentActions}>
@@ -25,67 +27,66 @@ const Comment = (props) => {
                 <span style={styles.commentAction}>Edit</span>
                 <span style={styles.commentAction}>Delete</span>
             </div>
-
         </>
-    )
-}
+    );
+};
+
 const styles = {
     comment: {
         backgroundColor: '#f0f0f0',
         borderRadius: '8px',
-        padding: '5px',
-        marginBottom: '5px',
+        padding: '5px 10px',
+        marginBottom: '3px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
     },
     commentHeader: {
         display: 'flex',
         alignItems: 'center',
-        padding: '5px',
-    },
-    avatar: {
-        width: '40px',
-        height: '40px',
-        borderRadius: '50%',
-        backgroundColor: '#d8d8d8',
     },
     commentInfo: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        gap: '10px',
-        alignItems: 'center'
-    },
-
-    commentAuthor: {
-        fontWeight: 'bold',
-        fontSize: '14px',
+        gap: '5px',
+        alignItems: 'center',
     },
     commentTime: {
-        fontSize: '12px',
+        fontSize: '10px',
         color: '#9b9b9b',
     },
     commentText: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        fontSize: '14px',
+        fontSize: '16px',
         color: '#333',
-        marginLeft: '50px',
-        marginBottom: '5px',
+        padding: '5px',
+        whiteSpace: "pre-line",
+        lineHeight: '1.5',
     },
-
     commentActions: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         gap: '10px',
-        marginBottom: '20px',
+        marginBottom: '15px',
     },
     commentAction: {
         cursor: 'pointer',
         fontSize: '12px',
         color: '#9b9b9b',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
-}
-export default Comment
+    // Styles for CharacterButton integration
+    characterButtonIconStyle: {
+        width: '30px',
+        height: '30px',
+    },
+    characterButtonTextStyle: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+
+    },
+};
+
+export default Comment;

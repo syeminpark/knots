@@ -61,12 +61,12 @@ const styles = {
     },
     title: {
         fontWeight: 'bold',
-        fontSize: '16px',
+        fontSize: '18px',
     },
     entryTag: {
         paddingRight: "10px",
         borderRadius: '8px',
-        fontSize: '12px',
+        fontSize: '14px',
 
         color: '#6c63ff',
         whiteSpace: 'nowrap', // Prevents wrapping of the entryTag
@@ -85,12 +85,12 @@ const styles = {
     },
     time: {
         fontWeight: '400',
-        fontSize: '10px',
+        fontSize: '12px',
         color: '#9b9b9b',
     },
-    
+
     content: {
-        fontSize: '14px',
+        fontSize: '16px',
         color: '#555',
         marginTop: '10px',
         overflow: 'hidden',

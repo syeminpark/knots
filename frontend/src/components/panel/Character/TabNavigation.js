@@ -1,8 +1,21 @@
-const TabNavigation = (props) => {
-    const { tabs, activeTab, setActiveTab } = props;
+import React, { useState } from 'react';
+
+const TabNavigation = ({ tabs, activeTab, setActiveTab }) => {
+
+    const getSliderPosition = () => {
+        return activeTab === tabs[0] ? 'translateX(0%)' : 'translateX(100%)';
+    };
+
     return (
         <div className="tabs">
-            {tabs.map(tab => (
+            {/* Sliding background */}
+            <div
+                className="tab-slider"
+                style={{ transform: getSliderPosition() }}
+            ></div>
+
+            {/* Tab buttons */}
+            {tabs.map((tab) => (
                 <button
                     key={tab}
                     className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -13,6 +26,6 @@ const TabNavigation = (props) => {
             ))}
         </div>
     );
-}
+};
 
-export default TabNavigation
+export default TabNavigation;

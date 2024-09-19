@@ -57,6 +57,79 @@ const journalBookReducer = (state, action) => {
                     return book;
                 })
             };
+        case 'CREATE_COMMENT': {
+            let newComment = null;
+            let commentThreadUUID = null;
+
+            return {
+                ...state,
+                journalBooks: state.journalBooks.map((book) => {
+                    if (book.bookInfo.uuid === action.payload.journalBookUUID) {
+                        return {
+                            ...book,
+                            journalEntries: book.journalEntries.map((entry) => {
+                                if (entry.uuid === action.payload.journalEntryUUID) {
+                                    let updatedCommentThreads = entry.commentThreads;
+
+                                    if (action.payload.commentThreadUUID) {
+                                        // Add a new comment to the existing thread
+                                        updatedCommentThreads = entry.commentThreads.map(thread => {
+                                            if (thread.uuid === action.payload.commentThreadUUID) {
+                                                const newThreadComment = {
+                                                    uuid: uuidv4(),
+                                                    ownerUUID: action.payload.ownerUUID,
+                                                    content: action.payload.content,
+                                                    createdAt: Date.now(),
+                                                    selectedMode: action.payload.selectedMode,
+                                                };
+                                                newComment = {
+                                                    ...newThreadComment,
+                                                    commentThreadUUID: thread.uuid, // Set commentThreadUUID here
+                                                };
+                                                return {
+                                                    ...thread,
+                                                    comments: [...thread.comments, newThreadComment],
+                                                };
+                                            }
+                                            return thread;
+                                        });
+                                    } else {
+                                        // Create a new comment thread
+                                        const newThreadUUID = uuidv4();
+                                        const newThread = {
+                                            uuid: newThreadUUID,
+                                            createdAt: Date.now(),
+                                            comments: [
+                                                {
+                                                    uuid: uuidv4(),
+                                                    ownerUUID: action.payload.ownerUUID,
+                                                    content: action.payload.content,
+                                                    createdAt: Date.now(),
+                                                    selectedMode: action.payload.selectedMode,
+                                                },
+                                            ],
+                                        };
+                                        newComment = {
+                                            ...newThread.comments[0],
+                                            commentThreadUUID: newThreadUUID, // Set commentThreadUUID here
+                                        };
+                                        updatedCommentThreads = [...entry.commentThreads, newThread];
+                                    }
+
+                                    return {
+                                        ...entry,
+                                        commentThreads: updatedCommentThreads,
+                                    };
+                                }
+                                return entry;
+                            }),
+                        };
+                    }
+                    return book;
+                }),
+                newComment, // The updated comment with commentThreadUUID
+            };
+        }
         default:
             return state;
     }
@@ -67,8 +140,11 @@ export const getJournalBookById = (state, journalBookUUID) =>
     state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID) || null;
 
 export const getJournalEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
+
     const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
+    console.log(journalBook)
     if (journalBook) {
+
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
         return journalEntry || null;
     }
@@ -78,7 +154,6 @@ export const getJournalBookInfoAndEntryByIds = (state, journalBookUUID, journalE
     const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
 
     if (journalBook) {
-
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
 
         if (journalEntry) {
@@ -110,6 +185,33 @@ export const getJournalsByCharacterUUID = (state, characterUUID) => {
     return result;
 };
 
+export const getCommentsByThread = (state, journalBookUUID, journalEntryUUID) => {
+    const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
+    if (journalBook) {
+        const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
+        if (journalEntry) {
+            const organizedComments = {};
+            journalEntry.commentThreads.forEach((thread) => {
+                organizedComments[thread.uuid] = thread.comments;
+            });
+            return organizedComments;
+        }
+    }
+    return null;
+};
+
+export const getCommentThreadById = (state, journalBookUUID, journalEntryUUID, commentThreadUUID) => {
+    const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
+    if (journalBook) {
+        const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
+        if (journalEntry) {
+            return journalEntry.commentThreads.find(thread => thread.uuid === commentThreadUUID) || null;
+        }
+    }
+    return null;
+};
 
 
 export default journalBookReducer;
+
+

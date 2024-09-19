@@ -73,12 +73,13 @@ const styles = {
     },
     journalText: {
         color: '#333',
-        fontSize: '14px',
+        fontSize: '16px',
         marginTop: "10px",
         backgroundColor: '#f0f0f0',
         padding: "15px",
         borderRadius: "5px",
         whiteSpace: "pre-line",
+        lineHeight: '1.5',
 
 
     },

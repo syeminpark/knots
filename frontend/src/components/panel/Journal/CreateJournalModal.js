@@ -71,28 +71,28 @@ const CreateJournalModal = (props) => {
                 }
             });
 
-            const lastCreatedJournalBook = createdJournalBooks?.lastCreatedJournalBook;
-            if (lastCreatedJournalBook) {
-                selectedCharacters.forEach((selectedCharacter) => {
-                    const journalEntry = lastCreatedJournalBook.journalEntries.find(
-                        (entry) => entry.ownerUUID === selectedCharacter.uuid
-                    );
-                    if (journalEntry) {
-                        dispatchCreatedCharacters({
-                            type: 'CREATE_NEW_JOURNAL',
-                            payload: {
-                                journalBookUUID: lastCreatedJournalBook.bookInfo.uuid,
-                                journalBookTitle: lastCreatedJournalBook.bookInfo.title,
-                                selectedMode,
-                                createdAt: lastCreatedJournalBook.bookInfo.createdAt,
-                                journalEntryContent: content,
-                                journalEntryUUID: journalEntry.uuid,
-                                characterUUID: selectedCharacter.uuid,
-                            }
-                        });
-                    }
-                });
-            }
+            // const lastCreatedJournalBook = createdJournalBooks?.lastCreatedJournalBook;
+            // if (lastCreatedJournalBook) {
+            //     selectedCharacters.forEach((selectedCharacter) => {
+            //         const journalEntry = lastCreatedJournalBook.journalEntries.find(
+            //             (entry) => entry.ownerUUID === selectedCharacter.uuid
+            //         );
+            //         if (journalEntry) {
+            //             dispatchCreatedCharacters({
+            //                 type: 'CREATE_NEW_JOURNAL',
+            //                 payload: {
+            //                     journalBookUUID: lastCreatedJournalBook.bookInfo.uuid,
+            //                     journalBookTitle: lastCreatedJournalBook.bookInfo.title,
+            //                     selectedMode,
+            //                     createdAt: lastCreatedJournalBook.bookInfo.createdAt,
+            //                     journalEntryContent: content,
+            //                     journalEntryUUID: journalEntry.uuid,
+            //                     characterUUID: selectedCharacter.uuid,
+            //                 }
+            //             });
+            //         }
+            //     });
+            // }
 
             setShowModal(false);
         }

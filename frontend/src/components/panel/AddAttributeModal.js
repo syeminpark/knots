@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
-
+import TextArea from '../TextArea';
 const AddAttributeModal = (props) => {
     const { setShowModal, personaAttributes, setPersonaAttributes } = props
     const [attribute, setAttribute] = useState('');
@@ -21,28 +21,31 @@ const AddAttributeModal = (props) => {
                 footerButtonLabel="Done"
                 onFooterButtonClick={handleAddAttribute}
             >
-
-                <textarea
-                    value={attribute}
+                <TextArea
+                    attribute={attribute}
+                    placeholder={"Example: age, gender, nationality, hobby, personality, occupation"}
                     onChange={(e) => setAttribute(e.target.value)}
-                    placeholder="Attribute Name (e.g., age, gender, nationality, hobby, personality, occupation, etc.)"
-                    style={styles.textarea}
-                />
+                    styles={styles}
+                >
+                </TextArea>
+
             </ModalOverlay>
         </div>
     );
 };
 
 const styles = {
-    textarea: {
+    description: {
         width: '100%',
         padding: '10px',
+        fontSize: "12px",
         borderRadius: '5px',
-        border: '1px solid #ccc',
+        border: '1px solid black',
         marginBottom: '10px',
         resize: 'vertical',  // Allow resizing vertically
         whiteSpace: 'pre-wrap', // Make sure line breaks are supported in the text
         overflowWrap: 'break-word', // Break long words if necessary
+        overflow: 'hidden'
     },
 };
 

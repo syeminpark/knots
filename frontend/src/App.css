@@ -301,7 +301,7 @@ body {
   flex-direction: column;
   border-radius: 10px;
   padding: 15px;
-  width: 430px;
+  width: 630px;
   /* Make the panel height exactly the window height */
   height: calc(100vh - 80px);
   /* Subtract any header or additional spacing */
@@ -482,7 +482,6 @@ body {
   justify-content: space-between;
   background: #F2F2F5;
   margin-bottom: 20px;
-  /* border: 1px solid #ddd; */
   border-radius: 6px;
   padding: 3px;
 }
@@ -496,8 +495,7 @@ body {
   text-align: center;
   border-radius: 6px;
   color: #a7a7a7;
-  transition: box-shadow 0.3s ease;
-  /* Smooth shadow transition */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tab.active {

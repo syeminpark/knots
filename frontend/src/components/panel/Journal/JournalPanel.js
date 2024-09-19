@@ -66,6 +66,7 @@ const JournalPanel = (props) => {
                         setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                         createdCharacters={createdCharacters}
                         dispatchCreatedCharacters={dispatchCreatedCharacters}
+                        createdJournalBooks={createdJournalBooks}
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     >
                     </DetailedJournal>

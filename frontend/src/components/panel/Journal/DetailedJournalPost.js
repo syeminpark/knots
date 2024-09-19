@@ -110,7 +110,7 @@ const styles = {
         padding: '15px',
         marginLeft: '15px',
         marginRight: '15px',
-        fontSize: '14px',
+        fontSize: '16px',
         lineHeight: '1.5',
         color: '#333',
         textAlign: 'left',
