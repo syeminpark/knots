@@ -50,6 +50,7 @@ const styles = {
     },
     headerInfo: {
         marginLeft: '5px',
+
     },
     commentInfo: {
         display: 'flex',
