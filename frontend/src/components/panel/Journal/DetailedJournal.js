@@ -174,7 +174,7 @@ const styles = {
     commentContainer: {
         paddingLeft: "20px",
         paddingRight: "20px",
-        marginBottom: '300px',
+        marginBottom: '100px',
     },
     bottom: {
         backgroundColor: '#f7f7ff',
