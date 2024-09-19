@@ -123,7 +123,9 @@ const styles = {
         overflowY: 'auto',
         overflowX: 'hidden',
     },
-    journalEntry: {},
+    journalEntry: {
+        flexGrow: 1, 
+    },
 
     entryHeader: {
         display: 'flex',
@@ -178,9 +180,8 @@ const styles = {
         backgroundColor: '#f7f7ff',
         padding: '10px',
         width: '100%',
-        height: '100%',
         position: 'sticky',
-        bottom: '0px',
+        bottom: 0,
     },
 };
 
