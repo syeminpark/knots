@@ -18,7 +18,7 @@ const AboutTab = (props) => {
     };
 
     return (
-        <div style={styles.attributeWrapper}>
+        <div style={styles.abouttabWrapper}>
             {personaAttributes.map(attribute => (
                 <Attribute
                     key={attribute.name}
@@ -44,7 +44,7 @@ const AboutTab = (props) => {
 };
 
 const styles = {
-    attributeWrapper: {
+    abouttabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 400px)',
     },
