@@ -211,6 +211,8 @@ body {
   flex-grow: 1;
   min-width: 0;
   max-width: calc(100% - 50px);
+  font-family: "Roboto Mono", monospace;
+  font-weight: 600;
 }
 
 /* Create button */
@@ -337,7 +339,7 @@ body {
 .panel-header {
   background-color: transparent;
   padding: 10px;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   cursor: grab;
   color: #000000;
   display: flex;
@@ -450,7 +452,8 @@ body {
   display: flex;
   justify-content: space-between;
   background: #F2F2F5;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
+  /* border: 1px solid #ddd; */
   border-radius: 6px;
   padding: 3px;
 }
@@ -465,6 +468,7 @@ body {
   border-radius: 6px;
   color: #a7a7a7;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  /* Smooth shadow transition */
 }
 
 .tab.active {

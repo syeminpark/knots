@@ -73,15 +73,14 @@ const styles = {
     },
     journalText: {
         color: '#333',
-        fontSize: '16px',
+        fontSize: '14px',
+        lineHeight: "140%",
         marginTop: "10px",
         backgroundColor: '#f0f0f0',
         padding: "15px",
         borderRadius: "5px",
         whiteSpace: "pre-line",
-        lineHeight: '1.5',
-
-
+        wordBreak: "break-word",
     },
     toggleContainer: {
         padding: "15px",
