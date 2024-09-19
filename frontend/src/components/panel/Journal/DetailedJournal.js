@@ -124,7 +124,7 @@ const styles = {
 
     },
     journalEntry: {
-
+        flexGrow: 1, 
     },
     entryHeader: {
         display: 'flex',
@@ -138,10 +138,10 @@ const styles = {
         padding: '10px 15px',
         borderRadius: '8px 8px 0 0',
         fontSize: '16px',
-        backgroundColor: '#f0f0ff',  // 배경색을 부모와 맞추기
-        padding: '20px 15px',  // padding으로 간격 조절
+        backgroundColor: '#f0f0ff',
+        padding: '20px 15px',  
     },
-
+ 
     titleContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -156,19 +156,20 @@ const styles = {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         textAlign: 'center',
-        width: '100%',
-        padding: '0 50px',
+        width: '100%',  
+        padding: '0 50px', 
     },
     entryTime: {
         color: '#9b9b9b',
         fontSize: '12px',
         position: 'absolute',
-        right: '15px',
-        top: '50%',  // 제목과 같은 높이로 설정
-        transform: 'translateY(-50%)',  // 수직 중앙 정렬 제거
+
+        top: '0',
+        right: '0',
+        transform: 'translate(-50%,50%)',
         whiteSpace: 'nowrap',
     },
-
+    
     entryTag: {
         padding: '5px 10px',
         borderRadius: '8px',
@@ -177,7 +178,7 @@ const styles = {
         alignItems: 'center',
         fontWeight: 'bold',
     },
-
+    
     systemGenerated: {
         backgroundColor: '#f0eaff',
         color: '#6c63ff',
@@ -194,8 +195,8 @@ const styles = {
     commentContainer: {
         paddingLeft: "15px",
         paddingRight: "15px",
-        marginBottom: '300px'
-
+        marginBottom: '100px'
+        
     },
     bottom: {
         backgroundColor: '#f7f7ff',
