@@ -46,18 +46,14 @@ const styles = {
         zIndex: 1000,
         width: '100%',
         height: '100',
-
-
     },
     modalBox: {
-
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
         width: '95%',
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
         position: 'relative',
-
     },
     modalHeader: {
         display: 'flex',
@@ -71,7 +67,8 @@ const styles = {
     modalContent: {
         marginBottom: '20px',
         position: 'relative',
-        height: '100%',
+        maxHeight: '70vh',
+        overflowY: 'auto',
     },
     modalFooter: {
         textAlign: 'center',

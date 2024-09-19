@@ -43,8 +43,9 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         position: 'relative',
-        marginBottom: '15px',
         textAlign: 'left',
+        width: '95%',
+        margin: '0 auto 15px',
     },
     cardHeader: {
         display: 'flex',

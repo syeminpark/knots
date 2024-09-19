@@ -20,7 +20,7 @@ const JournalsTab = (props) => {
     }
 
     return (
-        <>
+        <div style={styles.journalstabWrapper}>
             {journalData.length === 0 && (
                 <div>
                     0 Journals
@@ -36,8 +36,15 @@ const JournalsTab = (props) => {
                     onClick={() => onClick(journal.bookInfo.uuid, journal.journalEntry.uuid)}
                 />
             ))}
-        </>
+        </div>
     );
 };
+
+const styles = {
+    journalstabWrapper: {
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 400px)',
+    },
+}
 
 export default JournalsTab;
