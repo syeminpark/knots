@@ -112,26 +112,20 @@ const styles = {
     container: {
         backgroundColor: '#ffffff',
         width: '100%',
-        height: '100%',
+        height: '98%',
         marginTop: '10px',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column', // Add flexbox to the container
         position: 'relative',
         borderRadius: '8px',
         boxShadow: '0px 0px 3px rgba(0, 0, 0, 0.3)',
-        flexGrow: 1,
-        overflowY: 'auto',
-        overflowX: 'hidden',
-
+        flexGrow: 1, // Allow the journal entry section to take the remaining space
+        overflowY: 'auto', // Enable scrolling if the content is too long
 
     },
     journalEntry: {
-        height: '100%',
-    },
-    journalEntry: {
-        flexGrow: 1,
-    },
 
+    },
     entryHeader: {
         display: 'flex',
         flexDirection: 'column',
@@ -141,32 +135,52 @@ const styles = {
         position: 'relative',
         marginBottom: '10px',
         backgroundColor: '#f7f7ff',
-        padding: '25px',
+        padding: '10px 15px',
         borderRadius: '8px 8px 0 0',
+        fontSize: '16px',
+        backgroundColor: '#f0f0ff',  // 배경색을 부모와 맞추기
+        padding: '20px 15px',  // padding으로 간격 조절
+    },
+
+    titleContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        width: '100%',
     },
     entryTitle: {
         fontWeight: 'bold',
-        fontSize: '18px',
+        fontSize: '16px',
         whiteSpace: 'normal',
         overflow: 'hidden',
-        display: '-webkit-box',
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
-        textAlign: 'left',
-        maxWidth: '100%',
-        resize: 'vertical',
-        marginBottom: '10px',
+        textAlign: 'center',
+        width: '100%',
+        padding: '0 50px',
     },
     entryTime: {
         color: '#9b9b9b',
         fontSize: '12px',
         position: 'absolute',
-
-        top: '0',
-        right: '0',
-        transform: 'translate(-50%,50%)',
+        right: '15px',
+        top: '50%',  // 제목과 같은 높이로 설정
+        transform: 'translateY(-50%)',  // 수직 중앙 정렬 제거
         whiteSpace: 'nowrap',
+    },
+
+    entryTag: {
+        padding: '5px 10px',
+        borderRadius: '8px',
+        fontSize: '12px',
+        marginBottom: '10px',
+        alignItems: 'center',
+        fontWeight: 'bold',
+    },
+
+    systemGenerated: {
+        backgroundColor: '#f0eaff',
+        color: '#6c63ff',
     },
 
     commentIcon: {
@@ -176,18 +190,21 @@ const styles = {
         textAlign: 'left',
         fontWeight: 'bold',
     },
+
     commentContainer: {
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        marginBottom: '100px',
+        paddingLeft: "15px",
+        paddingRight: "15px",
+        marginBottom: '300px'
+
     },
     bottom: {
         backgroundColor: '#f7f7ff',
         padding: '10px',
         width: '100%',
         position: 'sticky',
-        bottom: 0,
+        bottom: 0, // Position at the bottom of the container
     },
+
 };
 
 export default DetailedJournal;
