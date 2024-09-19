@@ -26,6 +26,9 @@ const DetailedJournalPost = (props) => {
         }
         setIsEditing(!isEditing);
     };
+    useEffect(() => {
+
+    })
 
     const onReturnClick = () => {
         setSelectedBookAndJournalEntry(null);
@@ -50,10 +53,14 @@ const DetailedJournalPost = (props) => {
                         openNewPanel(panels, setPanels, "character-profile", createdCharacter);
                     }}
                 >
+
                     <CharacterButton
                         panels={panels}
                         setPanels={setPanels}
                         createdCharacter={createdCharacter}
+                        isButton={true}
+                        onClick={() => { openNewPanel(panels, setPanels, "character-profile", createdCharacter) }}
+
                     />
                 </button>
                 <button style={styles.editButton} onClick={onEditButtonClick}>

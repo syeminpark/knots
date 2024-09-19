@@ -18,3 +18,4 @@ const CharacterButton = (props) => {
 };
 
 export default CharacterButton;
+

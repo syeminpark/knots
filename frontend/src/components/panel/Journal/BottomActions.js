@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import SelectBox from "../../SelectBox";
 import TabNavigation from "../Character/TabNavigation";
-import ToggleButton from "../../ToggleButton";
+import ToggleButton from "../../ToggleButton"
+import WriteCommentInput from "./WriteCommentInput";
 
-const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdCharacters, onCreateComment, }) => {
+const BottomActions = (props) => {
+    const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry } = props
     const [commentValue, setCommentValue] = useState("");
     const [activeTab, setActiveTab] = useState('System Generate');
     const [isMultipleSelect, setIsMultipleSelect] = useState(true);
     const [commentPlaceholder, setCommentPlaceholder] = useState(true);
     const [isExpanded, setIsExpanded] = useState(true);
+    const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
-    const onInputChange = (e) => {
-        setCommentValue(e.target.value);
-    };
+
 
     const onSendButtonClick = () => {
         if (selectedCharacters.length < 1) {
@@ -26,15 +27,18 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
             selectedCharacters.forEach(selectedCharacter => {
                 //if activeTab is SystemGenerate, run the API CALL HERE
                 //also use Set(CommentValue here after the api call)
-                onCreateComment(selectedCharacter.uuid, commentValue, activeTab)
+                dispatchCreatedJournalBooks({
+                    type: 'CREATE_COMMENT',
+                    payload: {
+                        journalBookUUID: bookInfo.uuid,
+                        journalEntryUUID: journalEntry.uuid,
+                        ownerUUID: selectedCharacter.uuid,
+                        content: commentValue,
+                        selectedMode: activeTab,
+                    },
+                });
             })
             setCommentValue('');
-        }
-    };
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter" && commentValue.trim()) {
-            e.preventDefault(); // Prevent default Enter key behavior
-            onSendButtonClick();
         }
     };
 
@@ -101,17 +105,13 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
                             {/* Manual Mode */}
                             {activeTab === "Manual Post" && (
                                 <div style={styles.commentInputContainer}>
-                                    <input
-                                        type="text"
+                                    <WriteCommentInput
                                         placeholder={commentPlaceholder}
-                                        value={commentValue}
-                                        onChange={onInputChange}
-                                        style={styles.commentInput}
-                                        onKeyDown={handleKeyDown} // Listen for Enter key press
-                                    />
-                                    <button style={styles.sendCommentButton} onClick={onSendButtonClick}>
-                                        {'⩥'}
-                                    </button>
+                                        commentValue={commentValue}
+                                        setCommentValue={setCommentValue}
+                                        sendButtonCallback={onSendButtonClick}
+                                    >
+                                    </WriteCommentInput>
                                 </div>
                             )}
                         </>
@@ -159,23 +159,7 @@ const styles = {
         marginTop: '10px',
         width: '100%',
     },
-    commentInput: {
-        flex: 1,
-        padding: '10px',
-        borderRadius: '8px',
-        border: '1px solid #ccc',
-        paddingRight: '40px',
-    },
-    sendCommentButton: {
-        position: 'absolute',
-        right: '10px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-        padding: 0,
-    },
+
 };
 
 export default BottomActions;

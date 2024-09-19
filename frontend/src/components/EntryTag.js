@@ -24,6 +24,7 @@ const EntryTag = (props) => {
 
 const styles = {
     entryTag: {
+
         fontWeight: 'bold',
         borderRadius: '8px',
         color: '#6c63ff',

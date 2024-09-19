@@ -130,36 +130,104 @@ const journalBookReducer = (state, action) => {
                 newComment, // The updated comment with commentThreadUUID
             };
         }
+        case 'EDIT_COMMENT': {
+            return {
+                ...state,
+                journalBooks: state.journalBooks.map(book => {
+                    if (book.bookInfo.uuid === action.payload.journalBookUUID) {
+                        return {
+                            ...book,
+                            journalEntries: book.journalEntries.map(entry => {
+                                if (entry.uuid === action.payload.journalEntryUUID) {
+                                    return {
+                                        ...entry,
+                                        commentThreads: entry.commentThreads.map(thread => {
+                                            if (thread.uuid === action.payload.threadUUID) {
+                                                return {
+                                                    ...thread,
+                                                    comments: thread.comments.map(comment => {
+                                                        if (comment.uuid === action.payload.commentUUID) {
+                                                            return {
+                                                                ...comment,
+                                                                content: action.payload.newContent,
+                                                                editedAt: Date.now(), // Track when the comment was edited
+                                                            };
+                                                        }
+                                                        return comment;
+                                                    }),
+                                                };
+                                            }
+                                            return thread;
+                                        }),
+                                    };
+                                }
+                                return entry;
+                            }),
+                        };
+                    }
+                    return book;
+                }),
+            };
+        }
+
+        case 'DELETE_COMMENT': {
+            return {
+                ...state,
+                journalBooks: state.journalBooks.map(book => {
+                    if (book.bookInfo.uuid === action.payload.journalBookUUID) {
+                        return {
+                            ...book,
+                            journalEntries: book.journalEntries.map(entry => {
+                                if (entry.uuid === action.payload.journalEntryUUID) {
+                                    return {
+                                        ...entry,
+                                        commentThreads: entry.commentThreads.map(thread => {
+                                            if (thread.uuid === action.payload.threadUUID) {
+                                                return {
+                                                    ...thread,
+                                                    comments: thread.comments.filter(comment => comment.uuid !== action.payload.commentUUID),
+                                                };
+                                            }
+                                            return thread;
+                                        }),
+                                    };
+                                }
+                                return entry;
+                            }),
+                        };
+                    }
+                    return book;
+                }),
+            };
+        }
+
         default:
             return state;
     }
 };
 
 // Selectors
+
 export const getJournalBookById = (state, journalBookUUID) =>
     state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID) || null;
 
 export const getJournalEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
-
     const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
-    console.log(journalBook)
     if (journalBook) {
-
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
         return journalEntry || null;
     }
     return null;
 };
+
 export const getJournalBookInfoAndEntryByIds = (state, journalBookUUID, journalEntryUUID) => {
     const journalBook = state.journalBooks.find((book) => book.bookInfo.uuid === journalBookUUID);
-
     if (journalBook) {
         const journalEntry = journalBook.journalEntries.find((entry) => entry.uuid === journalEntryUUID);
-
         if (journalEntry) {
             return {
                 bookInfo: journalBook.bookInfo,
-                journalEntry: journalEntry
+                journalEntry: journalEntry,
             };
         }
     }
@@ -168,12 +236,10 @@ export const getJournalBookInfoAndEntryByIds = (state, journalBookUUID, journalE
 
 export const getJournalsByCharacterUUID = (state, characterUUID) => {
     const result = [];
-
     state.journalBooks.forEach((journalBook) => {
         const characterJournalEntries = journalBook.journalEntries.filter(
             (entry) => entry.ownerUUID === characterUUID
         );
-
         characterJournalEntries.forEach((journalEntry) => {
             result.push({
                 bookInfo: journalBook.bookInfo,
@@ -181,7 +247,6 @@ export const getJournalsByCharacterUUID = (state, characterUUID) => {
             });
         });
     });
-
     return result;
 };
 
@@ -211,7 +276,4 @@ export const getCommentThreadById = (state, journalBookUUID, journalEntryUUID, c
     return null;
 };
 
-
 export default journalBookReducer;
-
-
