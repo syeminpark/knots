@@ -33,56 +33,56 @@ const Feed = (props) => {
 
     return (
         <>
-        <h2 style={styles.feedHeader}>Feed</h2>
+            <h2 style={styles.feedHeader}>Feed</h2>
 
-        <div style={styles.journalFeedWrapper}>
-            {createdJournalBooks.journalBooks.length === 0 && (
-                <p>No Journals yet...</p>
-            )}
-            {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
-                <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
-                    <div style={styles.entryHeader}>
-                        <span style={styles.entryTime}>
-                            <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
+            <div style={styles.journalFeedWrapper}>
+                {createdJournalBooks.journalBooks.length === 0 && (
+                    <p>No Journals yet...</p>
+                )}
+                {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
+                    <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
+                        <div style={styles.entryHeader}>
+                            <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
+                            <div style={styles.entryTime}>
+                                <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
+                            </div>
+                        </div>
 
-                        </span>
-                        <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
-                    </div>
-                    <div>
-                        <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{journalBook.bookInfo.selectedMode}</span>
-                    </div>
+                        <div>
+                            <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{journalBook.bookInfo.selectedMode}</span>
+                        </div>
 
-                    {/* Toggle Button */}
-                    <div style={styles.toggleButtonContainer}>
-                        <ToggleButton
-                            expandable={true}
-                            expanded={expandedGroup[journalBook.bookInfo.uuid]}
-                            onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
-                            size="medium"
-                        />
-                    </div>
-
-                    {expandedGroup[journalBook.bookInfo.uuid] && (
-                        journalBook.journalEntries.map((journalEntry) => (
-                            <JournalContent
-                                key={journalEntry.uuid}
-                                ref={el => journalEntryRefs.current[journalEntry.uuid] = el}
-                                panels={panels}
-                                setPanels={setPanels}
-                                createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
-                                content={journalEntry.content}
-                                journalBookUUID={journalBook.bookInfo.uuid}
-                                journalEntryUUID={journalEntry.uuid}
-                                setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
-                                createdJournalBooks={createdJournalBooks}
-                                setTrackingJournalEntry={setTrackingJournalEntry}
+                        {/* Toggle Button */}
+                        <div style={styles.toggleButtonContainer}>
+                            <ToggleButton
+                                expandable={true}
+                                expanded={expandedGroup[journalBook.bookInfo.uuid]}
+                                onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
+                                size="medium"
                             />
-                        ))
-                    )}
-                </div>
-            ))}
-        </div>
-    </>
+                        </div>
+
+                        {expandedGroup[journalBook.bookInfo.uuid] && (
+                            journalBook.journalEntries.map((journalEntry) => (
+                                <JournalContent
+                                    key={journalEntry.uuid}
+                                    ref={el => journalEntryRefs.current[journalEntry.uuid] = el}
+                                    panels={panels}
+                                    setPanels={setPanels}
+                                    createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
+                                    content={journalEntry.content}
+                                    journalBookUUID={journalBook.bookInfo.uuid}
+                                    journalEntryUUID={journalEntry.uuid}
+                                    setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                                    createdJournalBooks={createdJournalBooks}
+                                    setTrackingJournalEntry={setTrackingJournalEntry}
+                                />
+                            ))
+                        )}
+                    </div>
+                ))}
+            </div>
+        </>
     );
 };
 
@@ -91,7 +91,7 @@ const styles = {
         maxHeight: 'calc(100vh - 300px)',
         overflowY: 'auto',
     },
-    
+
     journalEntry: {
         backgroundColor: '#f7f7ff',
         padding: '15px',
@@ -113,6 +113,7 @@ const styles = {
         marginBottom: '10px',
         paddingLeft: '30px',
         paddingRight: '30px',
+        height: '100%'
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -134,6 +135,8 @@ const styles = {
         position: 'absolute',
         right: '0',
         bottom: '0',
+        transform: 'translate(-30%,0%)',
+        height: '100%',
         whiteSpace: 'nowrap',
     },
     entryTag: {

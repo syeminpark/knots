@@ -337,7 +337,7 @@ body {
 .panel-header {
   background-color: transparent;
   padding: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
   cursor: grab;
   color: #000000;
   display: flex;
