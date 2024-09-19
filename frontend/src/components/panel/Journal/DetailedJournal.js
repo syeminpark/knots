@@ -112,7 +112,7 @@ const styles = {
     container: {
         backgroundColor: '#ffffff',
         width: '100%',
-        height: '%',
+        height: '100%',
         marginTop: '10px',
         display: 'flex',
         flexDirection: 'column',

@@ -85,6 +85,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         marginTop: '10px',
+
     },
     toggleButtonContainer: {
         marginRight: '10px',
