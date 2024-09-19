@@ -28,8 +28,7 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-/*---------------------------- Main Screen Styles*/
-/***** Logo area *****/
+/* ======== Logo area ======== */
 .logoText {
   font-size: 30px;
   font-family: "Roboto Mono", monospace;
@@ -69,7 +68,7 @@ body {
 
 }
 
-/***** Sidebar button *****/
+/* ======== Sidebar Left ======== */
 .sidebarLeft {
   border-radius: 20px;
   position: fixed;
@@ -104,7 +103,6 @@ body {
   font-weight: bold;
   font-family: "Roboto Mono", monospace;
   color: black;
-
 }
 
 .journal-icon {
@@ -125,6 +123,7 @@ body {
   display: inline-block;
 }
 
+/* ======== Sidebar Right ======== */
 .sidebarRight {
   border-radius: 20px;
   position: fixed;
@@ -134,7 +133,6 @@ body {
   height: calc(100vh - 150px);
   /* Subtract any header or additional spacing */
   background-color: rgba(255, 255, 255, 0.5);
-
   box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
   z-index: 1000;
   display: flex;
@@ -183,7 +181,6 @@ body {
   /* Adjusted font size */
 }
 
-
 /* Character icon (circle) */
 .character-icon {
   width: 40px;
@@ -218,16 +215,15 @@ body {
 
 /* Create button */
 .create-button {
-  background-color:  rgb(109, 109, 208);
+  background-color: rgb(109, 109, 208);
   color: white;
   border: none;
   border-radius: 10px;
   padding: 15px;
   cursor: pointer;
   width: 90%;
-  font-size: medium
+  font-size: medium;
 }
-
 
 .null {
   background-color: #6c63ff;
@@ -299,7 +295,7 @@ body {
 }
 
 
-/*----------------------------Character Creation*/
+/* ======== Character Creation ======== */
 .panel {
   display: flex;
   flex-direction: column;
@@ -514,8 +510,9 @@ body {
 
 }
 
-
-.add-attributes-btn {
+/* ======== Global Button Styles ======== */
+/* add attribuites, add connections, create new journal */
+.create-new-btn {
   width: 100%;
   padding: 10px;
   background-color: #7575ff;
@@ -523,35 +520,22 @@ body {
   border-radius: 6px;
   color: white;
   font-size: 16px;
+  font-family: "Roboto", sans-serif;
   margin-top: 6px;
   cursor: pointer;
 }
 
-.create-journal-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #7575ff;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-size: 16px;
-  margin-top: 6px;
-  cursor: pointer;
-}
-
+/* save */
 .save-btn {
-  width: 100px;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: black;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   float: right;
-
 }
-
 
 .save-btn-container {
   display: flex;
@@ -563,10 +547,9 @@ body {
   /* Position it 20px from the bottom */
   right: 20px;
   /* Position it 20px from the right */
-
 }
 
-/*--------------------------------*/
+/* ======== thread animation ======== */
 .thread-wrapper {
   display: flex;
   align-items: center;

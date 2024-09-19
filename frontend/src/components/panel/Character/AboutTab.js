@@ -29,7 +29,7 @@ const AboutTab = (props) => {
                     onChange={(event) => { onChange(attribute.name, event.target.value) }}
                 />
             ))}
-            <button className="add-attributes-btn" onClick={() => setShowModal(true)}>
+            <button className="create-new-btn" onClick={() => setShowModal(true)}>
                 + Add Attributes
             </button>
             {showModal && (

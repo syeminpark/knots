@@ -31,7 +31,7 @@ const ConnectionsTab = (props) => {
                     onChange={(event) => { onChange(child.name, event.target.value) }}
                 />
             ))}
-            <button className="add-attributes-btn" onClick={() => setShowModal(true)}>
+            <button className="create-new-btn" onClick={() => setShowModal(true)}>
                 + Add Connections
             </button>
             {showModal && (
