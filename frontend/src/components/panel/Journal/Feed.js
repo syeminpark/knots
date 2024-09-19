@@ -32,8 +32,10 @@ const Feed = (props) => {
     };
 
     return (
-        <div style={styles.journalFeed}>
-            <h2 style={styles.feedHeader}>Feed</h2>
+        <>
+        <h2 style={styles.feedHeader}>Feed</h2>
+
+        <div style={styles.journalFeedWrapper}>
             {createdJournalBooks.journalBooks.length === 0 && (
                 <p>No Journals yet...</p>
             )}
@@ -80,11 +82,16 @@ const Feed = (props) => {
                 </div>
             ))}
         </div>
+    </>
     );
 };
 
 const styles = {
-    journalFeed: {},
+    journalFeedWrapper: {
+        maxHeight: 'calc(100vh - 300px)',
+        overflowY: 'auto',
+    },
+    
     journalEntry: {
         backgroundColor: '#f7f7ff',
         padding: '15px',

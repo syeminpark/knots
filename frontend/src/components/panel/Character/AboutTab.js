@@ -18,7 +18,7 @@ const AboutTab = (props) => {
     };
 
     return (
-        <>
+        <div style={styles.attributeWrapper}>
             {personaAttributes.map(attribute => (
                 <Attribute
                     key={attribute.name}
@@ -39,8 +39,15 @@ const AboutTab = (props) => {
                     setPersonaAttributes={setPersonaAttributes}
                 />
             )}
-        </>
+        </div>
     );
 };
+
+const styles = {
+    attributeWrapper: {
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 400px)',
+    },
+}
 
 export default AboutTab

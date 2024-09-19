@@ -215,7 +215,7 @@ body {
 
 /* Create button */
 .create-button {
-  background-color: rgb(109, 109, 208);
+  background-color: #7575ff;
   color: white;
   border: none;
   border-radius: 10px;
@@ -315,7 +315,7 @@ body {
 }
 
 .panel-content {
-  overflow-y: auto;
+  overflow-y: hidden;
   flex-grow: 1;
   max-height: calc(100vh - 100px);
   /* Ensure content scrolls after sticky header */
@@ -325,7 +325,7 @@ body {
 }
 
 /******scrollbar styling******/
-.panel-content::-webkit-scrollbar {
+/* .panel-content::-webkit-scrollbar {
   width: 8px;
 }
 
@@ -353,7 +353,7 @@ body {
 
 .panel-content::-webkit-scrollbar-thumb:hover {
   background-color: #909090;
-}
+} */
 
 .panel-header-sticky {
   position: sticky;
@@ -481,7 +481,7 @@ body {
   display: flex;
   justify-content: space-between;
   background: #F2F2F5;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* border: 1px solid #ddd; */
   border-radius: 6px;
   padding: 3px;
