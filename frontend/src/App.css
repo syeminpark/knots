@@ -321,18 +321,6 @@ body {
 .panel-content {
   overflow-y: auto;
   flex-grow: 1;
-  overflow-x: hidden;
-  height: calc(100vh - 350px);
-  /* Adjust height to ensure the scroll starts after the "About" section */
-  padding-right: 5px;
-  padding-left: 5px;
-  box-sizing: content-box;
-  /* This ensures the scrollable content starts below the header */
-}
-
-.panel-content {
-  overflow-y: auto;
-  flex-grow: 1;
   max-height: calc(100vh - 100px);
   /* Ensure content scrolls after sticky header */
   padding-right: 5px;
