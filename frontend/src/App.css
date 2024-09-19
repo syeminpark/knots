@@ -1,5 +1,27 @@
+/* ======== Font Variables ======== */
+:root {
+  /* Font Families */
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Roboto Mono', monospace;
+
+  /* Font Sizes */
+  --font-xs: 12px;
+  --font-small: 14px;
+  --font-medium: 16px;
+  --font-large: 18px;
+  --font-xl: 24px;
+
+  /* Font Weights */
+  --font-regular: 400;
+  --font-bold: 700;
+
+  /* Line Heights */
+  --line-height: 1.4;
+}
+
+/* ======== basic setting ======== */
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-primary);
 }
 
 html,
@@ -13,7 +35,6 @@ body {
   height: 100vh;
   width: 100vw;
   overflow-y: hidden;
-  font-family: 'Roboto', sans-serif;
   background-color: gr;
 }
 
@@ -25,13 +46,12 @@ body {
   position: relative;
   align-items: center;
   justify-content: center;
-  font-family: 'Roboto', sans-serif;
 }
 
 /* ======== Logo area ======== */
 .logoText {
   font-size: 30px;
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-secondary);
   color: aliceblue;
 }
 
@@ -99,9 +119,9 @@ body {
 
 /* Icon and text styling */
 .sidebarLeft-title {
-  font-size: 18px;
+  font-size: var(--font-large);
   font-weight: bold;
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-secondary);
   color: black;
 }
 
@@ -141,9 +161,9 @@ body {
 
 /* Sidebar title */
 .sidebarRight-title {
-  font-size: 20px;
+  font-size: var(--font-large);
   font-weight: bold;
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-secondary);
   color: rgb(0, 0, 0);
   margin-bottom: 20px;
   text-align: center;
@@ -152,7 +172,7 @@ body {
 
 .sidebarRight-subtitle {
   padding: 10px;
-  font-size: 15px;
+  font-size: var(--font-small);
   color: rgb(0, 0, 0);
 }
 
@@ -177,7 +197,7 @@ body {
   margin-right: 5%;
   text-align: left;
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--font-small);
   /* Adjusted font size */
 }
 
@@ -200,7 +220,7 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 24px;
+  font-size: var(--font-xl);
   font-weight: bold;
   border-radius: 50%;
 }
@@ -211,7 +231,7 @@ body {
   flex-grow: 1;
   min-width: 0;
   max-width: calc(100% - 50px);
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-secondary);
   font-weight: 600;
 }
 
@@ -224,7 +244,7 @@ body {
   padding: 15px;
   cursor: pointer;
   width: 90%;
-  font-size: medium;
+  font-size: var(--font-medium);
 }
 
 .null {
@@ -284,7 +304,7 @@ body {
 
 .inputContainer>.errorLabel {
   color: red;
-  font-size: 12px;
+  font-size: var(--font-xs);;
 }
 
 .inputBox {
@@ -357,7 +377,7 @@ body {
 .header-title {
   flex-grow: 1;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-secondary);
   margin: 0;
 }
 
@@ -383,7 +403,7 @@ body {
 }
 
 .close-btn {
-  font-size: 18px;
+  font-size: var(--font-large);
 }
 
 .profile-image-container {
@@ -414,7 +434,7 @@ body {
   background-color: rgb(109, 109, 208);
   color: #ffffff;
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--font-xs);
   text-align: center;
 }
 
@@ -490,8 +510,7 @@ body {
   border: none;
   border-radius: 6px;
   color: white;
-  font-size: 16px;
-  font-family: "Roboto", sans-serif;
+  font-size: var(--font-medium);
   margin-top: 6px;
   cursor: pointer;
 }
@@ -503,7 +522,7 @@ body {
   border: none;
   border-radius: 6px;
   color: white;
-  font-size: 16px;
+  font-size: var(--font-medium);
   cursor: pointer;
   float: right;
 }

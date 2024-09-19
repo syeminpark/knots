@@ -61,7 +61,7 @@ const styles = {
         alignItems: 'center',
         position: 'relative',
         marginBottom: '10px',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
 
     },
     modalContent: {
@@ -80,7 +80,7 @@ const styles = {
         border: 'none',
         borderRadius: '6px',
         cursor: 'pointer',
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
     },
 };
 
