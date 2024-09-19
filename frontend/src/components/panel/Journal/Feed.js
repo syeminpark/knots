@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import JournalContent from './JournalContent';
 import TimeAgo from '../../TimeAgo';
 import ToggleButton from '../../ToggleButton';
+import EntryTag from '../../EntryTag';
 
 const Feed = (props) => {
     const {
@@ -45,12 +46,8 @@ const Feed = (props) => {
                             <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
                         </div>
                         <div style={styles.entryHeader}>
-
                             <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
-                        </div>
-
-                        <div>
-                            <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{journalBook.bookInfo.selectedMode}</span>
+                            <EntryTag selectedMode={journalBook.bookInfo.selectedMode} size='large'> </EntryTag>
                         </div>
 
                         {/* Toggle Button */}
@@ -129,6 +126,7 @@ const styles = {
         textAlign: 'left',
         maxWidth: '100%',
         resize: 'vertical',
+        marginBottom: '10px'
     },
     entryTime: {
         color: '#9b9b9b',
@@ -141,18 +139,7 @@ const styles = {
         whiteSpace: 'nowrap',
 
     },
-    entryTag: {
-        padding: '5px 10px',
-        borderRadius: '8px',
-        fontSize: '14px',
-        marginBottom: '10px',
-        fontWeight: 'bold',
-        alignItems: 'center',
-    },
-    systemGenerated: {
-        backgroundColor: '#f0eaff',
-        color: '#6c63ff',
-    },
+
     toggleButtonContainer: {
         display: 'flex',
         flexDirection: 'row',

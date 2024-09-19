@@ -2,7 +2,8 @@ import TimeAgo from '../../TimeAgo';
 import CharacterButton from "../../CharacterButton";
 
 const Comment = (props) => {
-    const { createdCharacter, content, createdAt } = props;
+    const { createdCharacter, content, createdAt, selectedMode } = props;
+    console.log(selectedMode)
     return (
         <>
             <div style={styles.comment}>
@@ -47,10 +48,11 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        gap: '5px',
+
         alignItems: 'center',
     },
     commentTime: {
+        marginLeft: '10px',
         fontSize: '10px',
         color: '#9b9b9b',
     },

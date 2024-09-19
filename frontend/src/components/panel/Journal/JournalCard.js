@@ -1,6 +1,7 @@
 import React from 'react';
 import TimeAgo from '../../TimeAgo';
 import ToggleButton from '../../ToggleButton';
+import EntryTag from '../../EntryTag';
 
 const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
     return (
@@ -10,12 +11,13 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
                 <div style={styles.titleWithTag}>
                     <strong style={styles.title}>{title}
                         <br></br>
-                        <span style={styles.entryTag}>{entryTag}</span>
+                    </strong>
+                    <div>
+                        <EntryTag selectedMode={entryTag} size='large' hasBackground={false}> </EntryTag>
                         <span style={styles.time}>
                             <TimeAgo createdAt={createdAt} />
                         </span>
-
-                    </strong>
+                    </div>
                 </div>
                 <div style={styles.toggleButtonContainer}>
 
@@ -51,27 +53,26 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '5px',
+        marginBottom: '10px',
     },
     titleWithTag: {
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start', // Keep title and entryTag aligned
-        gap: '10px', // Adds spacing between title and entryTag
+        gap: '5px',
         flex: 1, // Allows the title to take up available space
     },
     title: {
         fontWeight: 'bold',
         fontSize: '18px',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
-    entryTag: {
-        paddingRight: "10px",
-        borderRadius: '8px',
-        fontSize: '14px',
 
-        color: '#6c63ff',
-        whiteSpace: 'nowrap', // Prevents wrapping of the entryTag
-    },
     toggleButtonContainer: {
         position: 'relative',
         right: '-10px',
@@ -88,6 +89,7 @@ const styles = {
         fontWeight: '400',
         fontSize: '12px',
         color: '#9b9b9b',
+        marginLeft: '5px'
     },
 
     content: {
@@ -96,10 +98,10 @@ const styles = {
         marginTop: '10px',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        whiteSpace: "pre-line",
+        // whiteSpace: "pre-line",
 
         display: '-webkit-box',
-        WebkitLineClamp: 3,
+        WebkitLineClamp: 5,
         WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
         textAlign: 'left',

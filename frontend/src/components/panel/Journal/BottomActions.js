@@ -31,6 +31,12 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
             setCommentValue('');
         }
     };
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && commentValue.trim()) {
+            e.preventDefault(); // Prevent default Enter key behavior
+            onSendButtonClick();
+        }
+    };
 
     useEffect(() => {
         if (activeTab === "Manual Post") {
@@ -101,6 +107,7 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
                                         value={commentValue}
                                         onChange={onInputChange}
                                         style={styles.commentInput}
+                                        onKeyDown={handleKeyDown} // Listen for Enter key press
                                     />
                                     <button style={styles.sendCommentButton} onClick={onSendButtonClick}>
                                         {'⩥'}

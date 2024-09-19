@@ -4,6 +4,7 @@ import Comment from "./Comment";
 import BottomActions from "./BottomActions";
 import DetailedJournalPost from "./DetailedJournalPost";
 import { getJournalEntryByIds } from "./journalBookReducer";
+import EntryTag from "../../EntryTag";
 
 const DetailedJournal = (props) => {
     const {
@@ -56,7 +57,8 @@ const DetailedJournal = (props) => {
                         <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
                     </div>
                     <div>
-                        <span style={{ ...styles.entryTag, ...styles.systemGenerated }}>{bookInfo.selectedMode}</span>
+                        <EntryTag selectedMode={bookInfo.selectedMode} size='large'> </EntryTag>
+
                     </div>
                 </div>
 
@@ -85,13 +87,12 @@ const DetailedJournal = (props) => {
                                 createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
                                 content={comment.content}
                                 createdAt={comment.createdAt}
+                                selectedMode={comment}
                             />
                         ))}
                     </div>
                 ))}
             </div>
-
-
 
             {/* Bottom Section with Character Selection and Comment Input */}
             <div style={styles.bottom}>
@@ -148,6 +149,7 @@ const styles = {
         textAlign: 'left',
         maxWidth: '100%',
         resize: 'vertical',
+        marginBottom: '10px',
     },
     entryTime: {
         color: '#9b9b9b',
@@ -159,18 +161,7 @@ const styles = {
         transform: 'translate(-50%,50%)',
         whiteSpace: 'nowrap',
     },
-    entryTag: {
-        padding: '5px 10px',
-        borderRadius: '8px',
-        fontSize: '14px',
-        marginBottom: '10px',
-        alignItems: 'center',
-        fontWeight: 'bold',
-    },
-    systemGenerated: {
-        backgroundColor: '#f0eaff',
-        color: '#6c63ff',
-    },
+
     commentIcon: {
         marginTop: '15px',
         marginLeft: '15px',
