@@ -40,17 +40,21 @@ const styles = {
         left: '50%',           // Center the modal horizontally in the panel
         transform: 'translate(-50%, -50%)',  // Adjusts for the modal's own width/height
         display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,
+        width: '100%',
+        height: '100',
 
 
     },
     modalBox: {
+
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
-        width: '400px',
+        width: '95%',
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
         position: 'relative',
 
@@ -66,6 +70,8 @@ const styles = {
     },
     modalContent: {
         marginBottom: '20px',
+        position: 'relative',
+        height: '100%',
     },
     modalFooter: {
         textAlign: 'center',

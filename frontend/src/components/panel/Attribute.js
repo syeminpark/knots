@@ -59,6 +59,7 @@ const styles = {
         resize: 'vertical', // Allows the user to manually resize vertically
         overflow: 'hidden', // Hides overflow to prevent the scroll bar
 
+
     }
 
 

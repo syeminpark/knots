@@ -21,26 +21,26 @@ const AddConnectionModal = (props) => {
 
 
     return (
-        <div>
-            <ModalOverlay
-                title="Add New Connection"
-                setShowModal={setShowModal}
-                footerButtonLabel="Add"
-                onFooterButtonClick={handleAddConnection}
-                isFooterButtonDisabled={selectedCharacters.length === 0}
-            >
-                <SelectBox
-                    selectedCharacters={selectedCharacters}
-                    setSelectedCharacters={setSelectedCharacters}
-                    availableCharacters={createdCharacters.characters.filter(createdCharacter =>
-                        !connectedCharacters.some(connectedCharacter =>
-                            connectedCharacter.uuid === createdCharacter.uuid
-                        ) && (caller?.uuid ? createdCharacter.uuid !== caller.uuid : true))}
 
-                >
-                </SelectBox>
-            </ModalOverlay>
-        </div >
+        <ModalOverlay
+            title="Add New Connection"
+            setShowModal={setShowModal}
+            footerButtonLabel="Add"
+            onFooterButtonClick={handleAddConnection}
+            isFooterButtonDisabled={selectedCharacters.length === 0}
+        >
+            <SelectBox
+                selectedCharacters={selectedCharacters}
+                setSelectedCharacters={setSelectedCharacters}
+                availableCharacters={createdCharacters.characters.filter(createdCharacter =>
+                    !connectedCharacters.some(connectedCharacter =>
+                        connectedCharacter.uuid === createdCharacter.uuid
+                    ) && (caller?.uuid ? createdCharacter.uuid !== caller.uuid : true))}
+
+            >
+            </SelectBox>
+        </ModalOverlay>
+
     );
 };
 
