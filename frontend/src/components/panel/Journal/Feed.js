@@ -123,7 +123,7 @@ const styles = {
         WebkitLineClamp: 3,
         WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
-        textAlign: 'left',
+        textAlign: 'center',
         maxWidth: '100%',
         resize: 'vertical',
         marginBottom: '10px'

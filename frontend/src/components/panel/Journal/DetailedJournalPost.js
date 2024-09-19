@@ -111,10 +111,11 @@ const styles = {
         marginLeft: '15px',
         marginRight: '15px',
         fontSize: '16px',
-        lineHeight: '1.5',
+        lineHeight: '140%',
         color: '#333',
         textAlign: 'left',
         whiteSpace: "pre-line",
+        wordBreak: "break-word",
     },
     textArea: {
         width: '100%',
@@ -124,5 +125,4 @@ const styles = {
         border: '1px solid #ccc',
     },
 }
-export default DetailedJournalPost
-
+export default DetailedJournalPost;

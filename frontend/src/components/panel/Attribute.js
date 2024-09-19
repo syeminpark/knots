@@ -28,7 +28,8 @@ const styles = {
         backgroundColor: '#f0f0ff',
         padding: '15px',
         borderRadius: '10px',
-        marginBottom: '20px',
+        marginTop: '10px',
+        marginBottom: '12px',
     },
     sectionHeader: {
         display: 'flex',
