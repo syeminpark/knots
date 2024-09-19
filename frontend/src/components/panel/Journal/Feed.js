@@ -41,11 +41,12 @@ const Feed = (props) => {
                 )}
                 {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
                     <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
+                        <div style={styles.entryTime}>
+                            <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
+                        </div>
                         <div style={styles.entryHeader}>
+
                             <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
-                            <div style={styles.entryTime}>
-                                <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
-                            </div>
                         </div>
 
                         <div>
@@ -102,18 +103,19 @@ const styles = {
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
         textAlign: 'center',
         position: 'relative',
+
         marginBottom: '20px',
     },
 
     entryHeader: {
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
         marginBottom: '10px',
         paddingLeft: '30px',
         paddingRight: '30px',
-        height: '100%'
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -134,10 +136,10 @@ const styles = {
         fontSize: '12px',
         position: 'absolute',
         right: '0',
-        bottom: '0',
-        transform: 'translate(-30%,0%)',
-        height: '100%',
+        top: '0',
+        transform: 'translate(-50%,50%)',
         whiteSpace: 'nowrap',
+
     },
     entryTag: {
         padding: '5px 10px',

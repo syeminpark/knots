@@ -135,7 +135,6 @@ const styles = {
         backgroundColor: '#f7f7ff',
         padding: '25px',
         borderRadius: '8px 8px 0 0',
-        fontSize: '16px',
     },
     entryTitle: {
         fontWeight: 'bold',
@@ -154,9 +153,10 @@ const styles = {
         color: '#9b9b9b',
         fontSize: '12px',
         position: 'absolute',
-        right: '15px',
-        bottom: '0%',
-        transform: 'translate(-50%,-50%)',
+
+        top: '0',
+        right: '0',
+        transform: 'translate(-50%,50%)',
         whiteSpace: 'nowrap',
     },
     entryTag: {
