@@ -87,7 +87,7 @@ const DetailedJournal = (props) => {
                                 createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
                                 content={comment.content}
                                 createdAt={comment.createdAt}
-                                selectedMode={comment}
+                                selectedMode={comment.selectedMode}
                             />
                         ))}
                     </div>
@@ -112,7 +112,7 @@ const styles = {
     container: {
         backgroundColor: '#ffffff',
         width: '100%',
-        height: '98%',
+        height: '%',
         marginTop: '10px',
         display: 'flex',
         flexDirection: 'column',
@@ -122,8 +122,12 @@ const styles = {
         flexGrow: 1,
         overflowY: 'auto',
         overflowX: 'hidden',
+
+
     },
-    journalEntry: {},
+    journalEntry: {
+        height: '100%',
+    },
 
     entryHeader: {
         display: 'flex',

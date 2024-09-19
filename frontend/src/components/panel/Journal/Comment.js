@@ -1,5 +1,6 @@
 import TimeAgo from '../../TimeAgo';
 import CharacterButton from "../../CharacterButton";
+import EntryTag from '../../EntryTag';
 
 const Comment = (props) => {
     const { createdCharacter, content, createdAt, selectedMode } = props;
@@ -15,13 +16,17 @@ const Comment = (props) => {
                             iconStyle={styles.characterButtonIconStyle}
                             textStyle={styles.characterButtonTextStyle}
                         />
-                        <span style={styles.commentTime}><TimeAgo createdAt={createdAt} /></span>
+                        <div style={styles.headerInfo}>
+                            <EntryTag selectedMode={selectedMode} size='small' hasBackground={false}> </EntryTag>
+                            <span style={styles.commentTime}><TimeAgo createdAt={createdAt} /></span>
+                        </div>
+
                     </div>
                 </div>
                 <div style={styles.commentText}>
                     {content}
                 </div>
-            </div>
+            </div >
             <div style={styles.commentActions}>
                 <span style={styles.commentAction}>Manual Reply</span>
                 <span style={styles.commentAction}>Generate Reply</span>
@@ -44,11 +49,12 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
     },
+    headerInfo: {
+        marginLeft: '5px',
+    },
     commentInfo: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
-
         alignItems: 'center',
     },
     commentTime: {
