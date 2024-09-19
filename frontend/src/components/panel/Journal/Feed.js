@@ -92,11 +92,12 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
         textAlign: 'center',
         position: 'relative',
         marginBottom: '20px',
     },
+
     entryHeader: {
         display: 'flex',
         justifyContent: 'center',
@@ -121,6 +122,7 @@ const styles = {
     },
     entryTime: {
         color: '#9b9b9b',
+        fontWeight: '400',
         fontSize: '10px',
         position: 'absolute',
         right: '0',

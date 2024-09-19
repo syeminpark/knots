@@ -38,7 +38,7 @@ const styles = {
         backgroundColor: '#f7f7ff',
         padding: '25px',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -84,10 +84,11 @@ const styles = {
         alignItems: 'flex-end', // Align both time and toggle button to the right
     },
     time: {
-
-        fontSize: '12px',
+        fontWeight: '400',
+        fontSize: '10px',
         color: '#9b9b9b',
     },
+    
     content: {
         fontSize: '14px',
         color: '#555',

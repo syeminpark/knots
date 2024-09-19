@@ -29,7 +29,7 @@ const SidebarRight = (props) => {
             </div>
             <div className="buttonContainer">
                 <button className="create-button" onClick={() => { openNewPanel(panels, setPanels, "character-creation") }}>
-                    <i className="icon">+</i> Create
+                    <span className="icon">+</span> Create
                 </button>
             </div>
         </div >

@@ -7,7 +7,7 @@ const SidebarLeft = (props) => {
     return (
         <button className="sidebarLeft" onClick={() => { openNewPanel(panels, setPanels, 'journal') }}>
             <span className="journal-icon"></span>
-            <i className="sidebarLeft-title">Journal</i>
+            <span className="sidebarLeft-title">Journal</span>
         </button>
     );
 }
