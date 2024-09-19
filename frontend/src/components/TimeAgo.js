@@ -33,3 +33,17 @@ const TimeAgo = ({ createdAt }) => {
 };
 
 export default TimeAgo;
+
+
+export const formatDateNow = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // getMonth() is zero-indexed, so add 1.
+    const day = now.getDate();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const amPm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = ((hour + 11) % 12 + 1); // Convert 24h to 12h format
+    const formattedMinute = minute < 10 ? `0${minute}` : minute; // Ensure two-digit minutes
+    return `${year}:${month < 10 ? `0${month}` : month}:${day}:${formattedHour}:${formattedMinute}${amPm}`;
+};

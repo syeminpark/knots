@@ -10,6 +10,7 @@ const CreateJournalModal = (props) => {
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const [journalBookText, setJournalBookText] = useState({ title: "", content: "" });
+    const [contentPlaceholder, setContentPlaceholder] = useState(true);
     let content = '';
 
     const nextButtonClick = () => {
@@ -32,6 +33,13 @@ const CreateJournalModal = (props) => {
     const onChangeContent = (value) => {
         setJournalBookText((prev) => ({ ...prev, content: value }));
     };
+
+    useEffect(() => {
+        if (selectedCharacters.length > 0) {
+            setContentPlaceholder(`What is '${selectedCharacters[0].name}' thinking about?`)
+        }
+
+    }, [selectedCharacters])
 
     const onAnyPostButtonClick = () => {
         const characters = createdCharacters?.characters || [];
@@ -126,25 +134,31 @@ const CreateJournalModal = (props) => {
                             multipleSelect={false}
                         />
                         <br />
-                        <div style={styles.scrollableContent}>
-                            <div style={styles.attributeContainer}>
-                                <div style={styles.sectionHeader}>
-                                    <label style={styles.sectionHeaderLabel}>{""}</label>
+                        {selectedCharacters.length > 0 && (
+                            <div style={styles.scrollableContent}>
+                                <div style={styles.attributeContainer}>
+                                    <div style={styles.sectionHeader}>
+                                        <label style={styles.sectionHeaderLabel}>{""}</label>
+                                    </div>
+                                    <TextArea
+                                        attribute={journalBookText.title}
+                                        placeholder={"Title"}
+                                        onChange={(event) => onChangeTitle(event.target.value)}
+                                        styles={styles}
+                                    />
+                                    {/* {journalBookText.title !== " null" && ( */}
+                                    <TextArea
+                                        attribute={journalBookText.content}
+                                        placeholder={contentPlaceholder}
+                                        onChange={(event) => onChangeContent(event.target.value)}
+                                        styles={styles}
+
+                                    />
+                                    {/* )} */}
+
                                 </div>
-                                <TextArea
-                                    attribute={journalBookText.title}
-                                    placeholder={"Title"}
-                                    onChange={(event) => onChangeTitle(event.target.value)}
-                                    styles={styles}
-                                />
-                                <TextArea
-                                    attribute={journalBookText.content}
-                                    placeholder={"What is on the character's mind?"}
-                                    onChange={(event) => onChangeContent(event.target.value)}
-                                    styles={styles}
-                                />
                             </div>
-                        </div>
+                        )}
                     </ModalOverlay>
                 </div>
             ) : (
@@ -164,19 +178,21 @@ const CreateJournalModal = (props) => {
                             availableCharacters={createdCharacters?.characters || []}
                         />
                         <br />
-                        <div style={styles.scrollableContent}>
-                            <div style={styles.attributeContainer}>
-                                <div style={styles.sectionHeader}>
-                                    <label style={styles.sectionHeaderLabel}>{""}</label>
+                        {selectedCharacters.length > 0 && (
+                            <div style={styles.scrollableContent}>
+                                <div style={styles.attributeContainer}>
+                                    <div style={styles.sectionHeader}>
+                                        <label style={styles.sectionHeaderLabel}>{""}</label>
+                                    </div>
+                                    <TextArea
+                                        attribute={journalBookText.title}
+                                        placeholder={"What should the characters write about?"}
+                                        onChange={(event) => onChangeTitle(event.target.value)}
+                                        styles={styles}
+                                    />
                                 </div>
-                                <TextArea
-                                    attribute={journalBookText.title}
-                                    placeholder={"What should the characters write about?"}
-                                    onChange={(event) => onChangeTitle(event.target.value)}
-                                    styles={styles}
-                                />
                             </div>
-                        </div>
+                        )}
                     </ModalOverlay>
                 </div>
             )

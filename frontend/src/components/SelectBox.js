@@ -39,6 +39,12 @@ const SelectBox = (props) => {
         }
     }, [availableCharacters]);
 
+    useEffect(() => {
+        if (selectedCharacters.length > 1 && !multipleSelect) {
+            setSelectedCharacters([])
+        }
+    }, [multipleSelect])
+
     return (
         <div style={styles.modalBody}>
             {/* Dropdown for selecting characters */}
@@ -46,8 +52,9 @@ const SelectBox = (props) => {
                 <div style={styles.dropdownHeader} onClick={toggleDropdown}>
                     <span>
                         {selectedCharacters.length > 0
-                            ? selectedCharacters.map((char) => char.name).join(', ')
-                            : 'Select Characters'}
+                            ?
+                            selectedCharacters.map((char) => char.name).join(', ')
+                            : multipleSelect ? 'Select Characters' : "Select Character"}
                     </span>
                     <span>{dropdownOpen ? '▲' : '▼'}</span>
                 </div>

@@ -1,3 +1,5 @@
+import ToggleButton
+    from "./ToggleButton";
 const ModalOverlay = (props) => {
     const { title, children, setShowModal, footerButtonLabel, onFooterButtonClick, onBackArrowClick, showBackArrow } = props;
 
@@ -7,9 +9,10 @@ const ModalOverlay = (props) => {
                 {/* Modal Header */}
                 <div style={styles.modalHeader}>
                     {showBackArrow && (
-                        <button style={styles.backArrowBtn} onClick={onBackArrowClick}>
-                            &lt;
-                        </button>
+                        <ToggleButton
+                            onClick={onBackArrowClick}
+                            direction="left"
+                        ></ToggleButton>
                     )}
                     <h2 className="header-title">{title}</h2>
                 </div>

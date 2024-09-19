@@ -218,7 +218,7 @@ body {
 
 /* Create button */
 .create-button {
-  background-color: #a0a0ff;
+  background-color:  rgb(109, 109, 208);
   color: white;
   border: none;
   border-radius: 10px;

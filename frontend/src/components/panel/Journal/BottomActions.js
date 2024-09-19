@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectBox from "../../SelectBox";
 import TabNavigation from "../Character/TabNavigation";
 
 const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdCharacters }) => {
     const [commentValue, setCommentValue] = useState("");
-    const [activeTab, setActiveTab] = useState('Generate Mode'); // State for active tab
+    const [activeTab, setActiveTab] = useState('Generate Mode');
+    const [isMultipleSelect, setIsMultipleSelect] = useState(true);
+    const [commentPlaceholder, setCommentPlaceholder] = useState(true);
 
     const onInputChange = (e) => {
         setCommentValue(e.target.value);
@@ -22,6 +24,23 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
         }
     };
 
+    useEffect(() => {
+        if (activeTab === "Generate Mode") {
+            setIsMultipleSelect(true);
+        } else {
+            setIsMultipleSelect(false);
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        if (selectedCharacters.length > 0) {
+            setCommentPlaceholder(`Write comment as '${selectedCharacters[0].name}'`)
+        }
+
+    }, [selectedCharacters])
+
+
+
     return (
         <div>
             <div style={styles.commentTitle}>
@@ -37,31 +56,36 @@ const BottomActions = ({ selectedCharacters, setSelectedCharacters, createdChara
                     selectedCharacters={selectedCharacters}
                     setSelectedCharacters={setSelectedCharacters}
                     availableCharacters={createdCharacters.characters}
-                    multipleSelect={false}
+                    multipleSelect={isMultipleSelect}
                 />
             </div>
 
-            {/* Generate Mode */}
-            {activeTab === "Generate Mode" && (
-                <div style={styles.generateButtonContainer}>
-                    <button style={styles.generateButton}>✨ Generate</button>
-                </div>
-            )}
+            {/* Only render Generate button or Comment input if characters are selected */}
+            {selectedCharacters.length > 0 && (
+                <>
+                    {/* Generate Mode */}
+                    {activeTab === "Generate Mode" && (
+                        <div style={styles.generateButtonContainer}>
+                            <button style={styles.generateButton}>✨ Generate</button>
+                        </div>
+                    )}
 
-            {/* Manual Mode */}
-            {activeTab === "Manual Mode" && (
-                <div style={styles.commentInputContainer}>
-                    <input
-                        type="text"
-                        placeholder="Write a comment as a character"
-                        value={commentValue}
-                        onChange={onInputChange}
-                        style={styles.commentInput}
-                    />
-                    <button style={styles.sendCommentButton} onClick={onSendButtonClick}>
-                        {'⩥'}
-                    </button>
-                </div>
+                    {/* Manual Mode */}
+                    {activeTab === "Manual Mode" && (
+                        <div style={styles.commentInputContainer}>
+                            <input
+                                type="text"
+                                placeholder={commentPlaceholder}
+                                value={commentValue}
+                                onChange={onInputChange}
+                                style={styles.commentInput}
+                            />
+                            <button style={styles.sendCommentButton} onClick={onSendButtonClick}>
+                                {'⩥'}
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
