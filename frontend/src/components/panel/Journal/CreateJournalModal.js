@@ -15,7 +15,7 @@ const CreateJournalModal = (props) => {
 
     const nextButtonClick = () => {
         if (selectedMode) {
-            console.log(`Selected mode: ${selectedMode}`);
+            //console.log(`Selected mode: ${selectedMode}`);
             setStage(1);
         } else {
             alert('Please select a mode');

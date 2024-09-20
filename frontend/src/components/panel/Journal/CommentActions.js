@@ -4,7 +4,7 @@ const CommentActions = (props) => {
     const { isManualReplying, setIsManualReplying, onReplySend, onEditSave, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal"
     } = props
 
-    console.log(repliedTo)
+
     // Handle manual reply toggle
     const handleManualReplyToggle = () => {
         if (isManualReplying) {

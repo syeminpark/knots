@@ -21,8 +21,7 @@ const BottomActions = (props) => {
         } else if (!commentValue && activeTab == "Manual Post") {
             alert('Write Something');
         } else {
-            console.log("Comment:", commentValue);
-            console.log("Selected Character:", selectedCharacters);
+
 
             selectedCharacters.forEach(selectedCharacter => {
                 //if activeTab is SystemGenerate, run the API CALL HERE
