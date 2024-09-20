@@ -133,8 +133,8 @@ const styles = {
 
     },
     commentTitle: {
-        fontSize: '14px',
-        fontWeight: 'bold',
+        fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-bold)',
     },
     characterSelect: {
         marginBottom: '10px',

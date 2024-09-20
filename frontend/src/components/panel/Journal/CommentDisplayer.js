@@ -196,12 +196,11 @@ const CommentDisplayer = (props) => {
 
 const styles = {
     comment: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
         padding: '10px 10px',
         marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-        marginTop: '10px'
     },
 
     replyContainer: {

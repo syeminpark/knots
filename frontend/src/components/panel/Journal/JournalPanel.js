@@ -84,21 +84,7 @@ const styles = {
         position: 'sticky',
         zIndex: 10,
         backgroundColor: 'white',
-    },
-    createJournalBtn: {
-        display: 'block',
-        backgroundColor: '#6c63ff',
-        color: 'white',
-        border: 'none',
-        borderRadius: '8px',
-        padding: '14px 0',
-        fontSize: '16px',
-        cursor: 'pointer',
-        textAlign: 'center',
-        width: '100%',
-        fontWeight: 'bold',
-        marginBottom: '10px',
-    },
+    }
 };
 
 export default JournalPanel;

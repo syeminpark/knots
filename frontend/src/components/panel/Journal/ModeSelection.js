@@ -66,7 +66,7 @@ const styles = {
         justifyContent: "center",
         width: "140px",
         height: "120px",
-        backgroundColor: "#f7f7ff",
+        backgroundColor: 'var(--color-bg-lightpurple)',
         borderRadius: "10px",
         cursor: "pointer",
         padding: "10px",
@@ -81,7 +81,7 @@ const styles = {
         marginBottom: "10px",
     },
     modeLabel: {
-        fontSize: "14px",
+        fontSize: 'var(--font-small)',
         color: "#333",
     },
 };

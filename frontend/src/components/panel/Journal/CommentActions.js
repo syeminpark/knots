@@ -71,8 +71,8 @@ const styles = {
     },
     commentAction: {
         cursor: 'pointer',
-        fontSize: '12px',
+        fontSize: 'var(--font-xs)',
         color: '#9b9b9b',
-        fontWeight: '500',
+        fontWeight: 'var(--font-semibold)',
     },
 }

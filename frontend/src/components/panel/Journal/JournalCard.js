@@ -37,7 +37,7 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
 
 const styles = {
     card: {
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '25px',
         borderRadius: '8px',
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
@@ -64,8 +64,8 @@ const styles = {
         flex: 1, // Allows the title to take up available space
     },
     title: {
-        fontWeight: 'bold',
-        fontSize: '18px',
+        fontWeight: 'var(--font-bold)',
+        fontSize: 'var(--font-large)',
         display: '-webkit-box',
         WebkitLineClamp: 3,
         WebkitBoxOrient: 'vertical',
@@ -86,14 +86,14 @@ const styles = {
         alignItems: 'flex-end', // Align both time and toggle button to the right
     },
     time: {
-        fontWeight: '400',
-        fontSize: '12px',
+        fontWeight: 'var(--font-regular)',
+        fontSize: 'var(--font-xs)',
         color: '#9b9b9b',
         marginLeft: '5px'
     },
 
     content: {
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
         color: '#555',
         marginTop: '10px',
         overflow: 'hidden',

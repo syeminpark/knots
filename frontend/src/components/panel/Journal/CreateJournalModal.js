@@ -10,7 +10,7 @@ const CreateJournalModal = (props) => {
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const [journalBookText, setJournalBookText] = useState({ title: "", content: "" });
-    const [contentPlaceholder, setContentPlaceholder] = useState(true);
+    const [contentPlaceholder, setContentPlaceholder] = useState("");
     let content = '';
 
     const nextButtonClick = () => {
@@ -202,7 +202,7 @@ const CreateJournalModal = (props) => {
 
 const styles = {
     attributeContainer: {
-        backgroundColor: '#f0f0ff',
+        backgroundColor: 'var(--color-bg-grey)',
         padding: '15px',
         borderRadius: '10px',
         marginBottom: '20px',
@@ -215,8 +215,8 @@ const styles = {
     },
     sectionHeaderLabel: {
         color: '#6d6dff',
-        fontSize: '16px',
-        fontWeight: 'bold'
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-bold)',
     },
     description: {
         width: '100%',
@@ -226,14 +226,14 @@ const styles = {
         borderRadius: '5px',
         border: '1px solid #ccc',
         backgroundColor: 'white',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         resize: 'vertical',
         overflow: 'hidden',
     },
     subtitle: {
         color: "#6c63ff",
-        fontSize: "16px",
-        fontWeight: "500",
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-semibold)',
         marginBottom: "20px",
         textAlign: "center",
     },

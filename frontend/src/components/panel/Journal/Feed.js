@@ -91,7 +91,7 @@ const styles = {
     },
 
     journalEntry: {
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '15px',
         display: 'flex',
         flexDirection: 'column',
@@ -115,8 +115,8 @@ const styles = {
         paddingRight: '30px',
     },
     entryTitle: {
-        fontWeight: 'bold',
-        fontSize: '18px',
+        fontWeight: 'var(--font-bold)',
+        fontSize: 'var(--font-large)',
         whiteSpace: 'normal',
         overflow: 'hidden',
         display: '-webkit-box',
@@ -130,8 +130,8 @@ const styles = {
     },
     entryTime: {
         color: '#9b9b9b',
-        fontWeight: '400',
-        fontSize: '12px',
+        fontWeight: 'var(--font-regular)',
+        fontSize: 'var(--font-xs)',
         position: 'absolute',
         right: '0',
         top: '0',
@@ -148,7 +148,7 @@ const styles = {
         position: 'relative',
     },
     manual: {
-        backgroundColor: '#e0eaff',
+        backgroundColor: 'var(--color-bg-grey)',
         color: '#6c63ff',
     },
     stickyButtonContainer: {
@@ -158,16 +158,16 @@ const styles = {
     },
     createJournalBtn: {
         display: 'block',
-        backgroundColor: '#6c63ff',
+        backgroundColor: 'var(--color-secondary)',
         color: 'white',
         border: 'none',
         borderRadius: '8px',
         padding: '14px 0',
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
         cursor: 'pointer',
         textAlign: 'center',
         width: '100%',
-        fontWeight: 'bold',
+        fontWeight: 'var(--font-bold)',
         marginBottom: '10px',
     },
 };

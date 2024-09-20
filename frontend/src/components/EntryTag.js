@@ -25,12 +25,12 @@ const EntryTag = (props) => {
 const styles = {
     entryTag: {
 
-        fontWeight: 'bold',
+        fontWeight: 'var(--font-bold)',
         borderRadius: '8px',
         color: '#6c63ff',
     },
     background: {
-        backgroundColor: '#f0eaff',
+        backgroundColor: 'var(--color-bg-greypurple)',
     },
     noBackground: {
         backgroundColor: 'transparent',

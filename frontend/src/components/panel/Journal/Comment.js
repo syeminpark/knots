@@ -62,7 +62,6 @@ const Comment = (props) => {
 }
 export default Comment
 const styles = {
-
     commentHeader: {
         display: 'flex',
         alignItems: 'center',
@@ -86,27 +85,28 @@ const styles = {
 
     },
     characterButtonTextStyle: {
-        fontSize: '14px',
-        fontWeight: 'bold',
+        fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-bold)',
         marginRight: '10px',
     }, commentTime: {
         fontSize: '10px',
         color: '#9b9b9b',
         marginLeft: '10px',
-    }, commentText: {
+    },
+    commentText: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
         color: '#333',
         padding: '5px',
         whiteSpace: "pre-line",
-        lineHeight: '1.4',
+        lineHeight: 'var(--line-height)',
     },
     editInput: {
         width: '100%',
         padding: '5px',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         borderRadius: '5px',
         border: '1px solid #ccc',
     },
