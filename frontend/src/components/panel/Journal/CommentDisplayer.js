@@ -44,19 +44,19 @@ import CommentActions from './CommentActions';
 
 const CommentDisplayer = (props) => {
     const { createdCharacter, content, createdAt, selectedMode, selectedBookAndJournalEntry, commentThreadUUID, commentUUID, dispatchCreatedJournalBooks,
-        panels, setPanels, repliedTo, firstInTheThread
+        panels, setPanels, repliedTo, firstInTheThread, previousCharacter
     } = props;
     const [isEditing, setIsEditing] = useState(false); //
     const [editContent, setEditContent] = useState(content);
     const [isManualReplying, setIsManualReplying] = useState(false);
     const [replyContent, setReplyContent] = useState(''); // State to manage reply content
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry
-
+    console.log('previousCharacter', previousCharacter)
     useEffect(() => {
         setIsManualReplying(false)
     }, [editContent])
 
-    const onReplySend = (selectedReplyMode) => {
+    const onReplySend = (selectedReplyMode, character = createdCharacter) => {
         if (replyContent === '' && selectedReplyMode == "Manaul Post") {
             alert('Write Something');
         }
@@ -66,7 +66,7 @@ const CommentDisplayer = (props) => {
                 payload: {
                     journalBookUUID: bookInfo.uuid,
                     journalEntryUUID: journalEntry.uuid,
-                    ownerUUID: createdCharacter.uuid,
+                    ownerUUID: character.uuid,
                     content: replyContent,
                     selectedMode: selectedReplyMode,
                     commentThreadUUID: commentThreadUUID
@@ -151,9 +151,9 @@ const CommentDisplayer = (props) => {
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
                 onReplySend={onReplySend}
-                onEditSave={onEditSave}
                 onDelete={onDelete}
                 repliedTo={repliedTo}
+                previousCharacter={previousCharacter}
             ></CommentActions>
 
 
@@ -169,15 +169,15 @@ const CommentDisplayer = (props) => {
                                 <Comment
                                     panels={panels}
                                     setPanels={setPanels}
-                                    createdCharacter={createdCharacter}
+                                    createdCharacter={previousCharacter}
                                     selectedMode={selectedMode}
                                 ></Comment>
                                 <div style={styles.replyInputContainer}>
                                     <WriteCommentInput
-                                        placeholder={`Reply as ${createdCharacter.name}`}
+                                        placeholder={`Reply as ${previousCharacter.name}`}
                                         commentValue={replyContent}
                                         setCommentValue={setReplyContent}
-                                        sendButtonCallback={() => { onReplySend('Manual Post') }}
+                                        sendButtonCallback={() => { onReplySend('Manual Post', previousCharacter) }}
                                     ></WriteCommentInput>
                                 </div>
                             </div>
@@ -231,3 +231,11 @@ const styles = {
 };
 
 export default CommentDisplayer;
+
+
+
+/*
+getPreviousCharacterUUID 
+also if index==0 the previous character is the journalEntry.ownerUUID
+
+*/

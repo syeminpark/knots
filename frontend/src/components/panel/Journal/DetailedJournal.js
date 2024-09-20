@@ -72,26 +72,30 @@ const DetailedJournal = (props) => {
                 <div style={styles.commentContainer}>
                     {journalEntry.commentThreads.map(thread => (
                         <div key={thread.uuid} style={styles.commentThread}>
-                            {thread.comments.map((comment, index) => (
-                                <div key={comment.uuid}>
-                                    <CommentDisplayer
-                                        panels={panels}
-                                        setPanels={setPanels}
-                                        createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
-                                        content={comment.content}
-                                        createdAt={comment.createdAt}
-                                        selectedMode={comment.selectedMode}
-                                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                                        commentUUID={comment.uuid}
-                                        commentThreadUUID={thread.uuid}
-                                        dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-
-                                        // Compute firstInTheThread and repliedTo dynamically
-                                        firstInTheThread={index === 0}
-                                        repliedTo={index < thread.comments.length - 1}
-                                    />
-                                </div>
-                            ))}
+                            {thread.comments.map((comment, index) => {
+                                const previousCharacterUUID = index === 0
+                                    ? journalEntry.ownerUUID
+                                    : thread.comments[index - 1].ownerUUID;
+                                return (
+                                    <div key={comment.uuid}>
+                                        <CommentDisplayer
+                                            panels={panels}
+                                            setPanels={setPanels}
+                                            createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
+                                            content={comment.content}
+                                            createdAt={comment.createdAt}
+                                            selectedMode={comment.selectedMode}
+                                            selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                                            commentUUID={comment.uuid}
+                                            commentThreadUUID={thread.uuid}
+                                            dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                                            previousCharacter={createdCharacters.characters.find(character => character.uuid === previousCharacterUUID)}
+                                            firstInTheThread={index === 0}
+                                            repliedTo={index < thread.comments.length - 1}
+                                        />
+                                    </div>
+                                )
+                            })}
                         </div>
                     ))}
                 </div>

@@ -1,7 +1,7 @@
 
 const CommentActions = (props) => {
 
-    const { isManualReplying, setIsManualReplying, onReplySend, onEditSave, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal"
+    const { isManualReplying, setIsManualReplying, onReplySend, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal", previousCharacter
     } = props
 
 
@@ -23,7 +23,7 @@ const CommentActions = (props) => {
                         !repliedTo ? (
                             <>
                                 <div style={styles.commentActions}>
-                                    <span style={styles.commentAction} onClick={() => { onReplySend('System Generate') }}>Generate Reply</span>
+                                    <span style={styles.commentAction} onClick={() => { onReplySend('System Generate', previousCharacter) }}>Generate Reply</span>
                                     <span style={styles.commentAction} onClick={handleManualReplyToggle}>
                                         Manual Reply
                                     </span>
