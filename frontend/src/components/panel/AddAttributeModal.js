@@ -7,10 +7,14 @@ const AddAttributeModal = (props) => {
 
     const handleAddAttribute = () => {
         if (attribute) {
-            console.log(`Adding attribute: ${attribute}`);
-
-            setPersonaAttributes([...personaAttributes, { name: attribute, description: '' }])
-            setShowModal(false);
+            if (personaAttributes.find(personaAttribute => personaAttribute.name.toLowerCase() === attribute.toLowerCase())) {
+                alert('Attribute already exists')
+            }
+            else {
+                console.log(`Adding attribute: ${attribute}`);
+                setPersonaAttributes([...personaAttributes, { name: attribute, description: '' }])
+                setShowModal(false);
+            }
         }
     };
     return (

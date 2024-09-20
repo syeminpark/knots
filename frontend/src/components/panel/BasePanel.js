@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 
 const BasePanel = (props) => {
-    const { id, panels, setPanels, children, title, saveFunction, } = props;
+    const { id, panels, setPanels, children, title, saveFunction, deleteFunction } = props;
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
 
     const panelStyle = {
@@ -24,7 +24,9 @@ const BasePanel = (props) => {
                 <h2 className="header-title">{title}</h2>
             </div>
             <div className="x-more-button-container">
-                <button className="more-btn">...</button>
+                {deleteFunction && (
+                    <button className="more-btn" >...</button >
+                )}
                 <button className="close-btn" onClick={onCloseButtonClick}>✖</button>
             </div>
 

@@ -63,6 +63,10 @@ const CharacterProfilePanel = (props) => {
         })
     };
 
+    const deleteFunction = () => {
+        const currentCharacter = createdCharacters.charactrs.find(character => character.uuid === caller.uuid)
+    }
+
     return (
         <BasePanel
             id={id}
@@ -70,6 +74,7 @@ const CharacterProfilePanel = (props) => {
             setPanels={setPanels}
             title="Profile"
             saveFunction={saveFunction}
+            deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
                 {<ProfileSection

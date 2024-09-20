@@ -87,7 +87,7 @@ const BottomActions = (props) => {
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
-                            availableCharacters={createdCharacters.characters}
+                            availableCharacters={createdCharacters.characters.filter(character => character.uuid !== journalEntry.ownerUUID)}
                             multipleSelect={isMultipleSelect}
                         />
                     </div>

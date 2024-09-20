@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TimeAgo from '../../TimeAgo';
-import Comment from "./Comment";
+import CommentDisplayer from "./CommentDisplayer";
 import BottomActions from "./BottomActions";
 import DetailedJournalPost from "./DetailedJournalPost";
 import { getJournalEntryByIds } from "./journalBookReducer";
@@ -24,6 +24,8 @@ const DetailedJournal = (props) => {
 
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
+
+    const { commentActionStatus, setCommentActionStatus } = useState()
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
@@ -68,9 +70,9 @@ const DetailedJournal = (props) => {
             <div style={styles.commentContainer}>
                 {journalEntry.commentThreads.map(thread => (
                     <div key={thread.uuid} style={styles.commentThread}>
-                        {thread.comments.map(comment => (
+                        {thread.comments.map((comment, index) => (
                             <div key={comment.uuid}>
-                                <Comment
+                                <CommentDisplayer
                                     panels={panels}
                                     setPanels={setPanels}
                                     createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
@@ -79,11 +81,13 @@ const DetailedJournal = (props) => {
                                     selectedMode={comment.selectedMode}
                                     selectedBookAndJournalEntry={selectedBookAndJournalEntry}
                                     commentUUID={comment.uuid}
-                                    threadUUID={thread.uuid}
+                                    commentThreadUUID={thread.uuid}
                                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-                                ></Comment>
 
-
+                                    // Compute firstInTheThread and repliedTo dynamically
+                                    firstInTheThread={index === 0}
+                                    repliedTo={index < thread.comments.length - 1}
+                                />
                             </div>
                         ))}
                     </div>

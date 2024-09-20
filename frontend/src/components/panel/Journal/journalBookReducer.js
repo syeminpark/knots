@@ -48,7 +48,7 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: state.journalBooks.map(book => {
-                    if (book.bookinfo.uuid === action.payload.journalBookUUID) {
+                    if (book.bookInfo.uuid === action.payload.journalBookUUID) {
                         return {
                             ...book,
                             journalEntries: book.journalEntries.filter(entry => entry.uuid !== action.payload.journalEntryUUID)
@@ -142,7 +142,7 @@ const journalBookReducer = (state, action) => {
                                     return {
                                         ...entry,
                                         commentThreads: entry.commentThreads.map(thread => {
-                                            if (thread.uuid === action.payload.threadUUID) {
+                                            if (thread.uuid === action.payload.commentThreadUUID) {
                                                 return {
                                                     ...thread,
                                                     comments: thread.comments.map(comment => {
@@ -182,7 +182,7 @@ const journalBookReducer = (state, action) => {
                                     return {
                                         ...entry,
                                         commentThreads: entry.commentThreads.map(thread => {
-                                            if (thread.uuid === action.payload.threadUUID) {
+                                            if (thread.uuid === action.payload.commentThreadUUID) {
                                                 return {
                                                     ...thread,
                                                     comments: thread.comments.filter(comment => comment.uuid !== action.payload.commentUUID),
