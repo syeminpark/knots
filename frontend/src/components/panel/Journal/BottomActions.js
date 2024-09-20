@@ -9,7 +9,7 @@ const BottomActions = (props) => {
     const [commentValue, setCommentValue] = useState("");
     const [activeTab, setActiveTab] = useState('System Generate');
     const [isMultipleSelect, setIsMultipleSelect] = useState(true);
-    const [commentPlaceholder, setCommentPlaceholder] = useState(true);
+    const [commentPlaceholder, setCommentPlaceholder] = useState("");
     const [isExpanded, setIsExpanded] = useState(true);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
