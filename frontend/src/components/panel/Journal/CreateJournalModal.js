@@ -215,8 +215,8 @@ const styles = {
     },
     sectionHeaderLabel: {
         color: '#6d6dff',
-        fontSize: '16px',
-        fontWeight: 'bold'
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-bold)',
     },
     description: {
         width: '100%',
@@ -226,14 +226,14 @@ const styles = {
         borderRadius: '5px',
         border: '1px solid #ccc',
         backgroundColor: 'white',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         resize: 'vertical',
         overflow: 'hidden',
     },
     subtitle: {
         color: "#6c63ff",
-        fontSize: "16px",
-        fontWeight: "500",
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-semibold)',
         marginBottom: "20px",
         textAlign: "center",
     },

@@ -38,7 +38,7 @@ const styles = {
     description: {
         width: '100%',
         padding: '10px',
-        fontSize: "12px",
+        fontSize: 'var(--font-xs)',
         borderRadius: '5px',
         border: '1px solid black',
         marginBottom: '10px',

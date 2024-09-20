@@ -134,15 +134,15 @@ const styles = {
         padding: '20px 15px',
     },
     entryTitle: {
-        fontWeight: 'bold',
-        fontSize: '16px',
+        fontWeight: 'var(--font-bold)',
+        fontSize: 'var(--font-large)',
         textAlign: 'center',
         width: '100%',
         padding: '0 50px',
     },
     entryTime: {
         color: '#9b9b9b',
-        fontSize: '12px',
+        fontSize: 'var(--font-xs)',
         position: 'absolute',
         top: '0',
         right: '0',
@@ -152,9 +152,9 @@ const styles = {
     commentIcon: {
         marginTop: '15px',
         marginLeft: '15px',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         textAlign: 'left',
-        fontWeight: 'bold',
+        fontWeight: 'var(--font-bold)',
     },
     commentContainer: {
         paddingLeft: "15px",

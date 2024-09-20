@@ -115,10 +115,10 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         cursor: 'pointer',
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
         color: '#333', 
         backgroundColor: '#F9F9F9', 
-        fontWeight: '500',  
+        fontWeight: 'var(--font-semibold)',
         transition: 'background-color 0.2s ease',
     },
     dropdownList: {
@@ -161,9 +161,9 @@ const styles = {
         marginRight: '10px',
     },
     dropdownText: {
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: '16px',
-        fontWeight: 'bold',
+        fontFamily: 'var(--font-secondary)',
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-bold)',
         color: '#333',
     },
 };

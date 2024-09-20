@@ -35,8 +35,8 @@ const styles = {
 
     },
     entryTitle: {
-        fontWeight: 'bold',
-        fontSize: '16px',
+        fontWeight: 'var(--font-bold)',
+        fontSize: 'var(--font-medium)',
         whiteSpace: 'normal',
         overflow: 'hidden',
         display: '-webkit-box',
@@ -56,9 +56,9 @@ const styles = {
     },
     entryTag: {
         padding: '5px 10px',
-        fontSize: '12px',
+        fontSize: 'var(--font-xs)',
         borderRadius: '8px',
-        fontWeight: 'bold',
+        fontWeight: 'var(--font-bold)',
     },
     systemGenerated: {
         backgroundColor: '#f0eaff',
@@ -71,9 +71,9 @@ const styles = {
         transform: 'translateY(-50%)',
         backgroundColor: 'transparent',
         border: 'none',
-        fontSize: '24px',
+        fontSize: 'var(--font-xl)',
         cursor: 'pointer',
         color: '#333',
-        fontWeight: 'bold',
+        fontWeight: 'var(--font-bold)',
     },
 };

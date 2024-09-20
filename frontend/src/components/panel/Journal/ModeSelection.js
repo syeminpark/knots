@@ -81,7 +81,7 @@ const styles = {
         marginBottom: "10px",
     },
     modeLabel: {
-        fontSize: "14px",
+        fontSize: 'var(--font-small)',
         color: "#333",
     },
 };

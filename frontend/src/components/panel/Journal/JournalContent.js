@@ -73,8 +73,8 @@ const styles = {
     },
     journalText: {
         color: '#333',
-        fontSize: '14px',
-        lineHeight: "140%",
+        fontSize: 'var(--font-small)',
+        lineHeight: 'var(--line-height)',
         marginTop: "10px",
         backgroundColor: '#f0f0f0',
         padding: "15px",

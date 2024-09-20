@@ -39,13 +39,13 @@ const styles = {
     },
     sectionHeaderLabel: {
         color: '#6d6dff',
-        fontSize: '16px',
-        fontWeight: 'bold'
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-bold)',
     },
     closeSectionBtn: {
         backgroundColor: 'transparent',
         border: 'none',
-        fontSize: '12px',
+        fontSize: 'var(--font-xs)',
         cursor: 'pointer',
         color: 'gray',
     },
@@ -56,7 +56,7 @@ const styles = {
         borderRadius: '5px',
         border: '1px solid #ccc',
         backgroundColor: 'white',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         resize: 'vertical', // Allows the user to manually resize vertically
         overflow: 'hidden', // Hides overflow to prevent the scroll bar
 

@@ -176,11 +176,11 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        fontSize: '16px',
+        fontSize: 'var(--font-medium)',
         color: '#333',
         padding: '5px',
         whiteSpace: "pre-line",
-        lineHeight: '1.4',
+        lineHeight: 'var(--line-height)',
     },
     profileButtonContainer: {
         display: 'flex', // Keep flex alignment
@@ -200,14 +200,14 @@ const styles = {
     },
     commentAction: {
         cursor: 'pointer',
-        fontSize: '12px',
+        fontSize: 'var(--font-xs)',
         color: '#9b9b9b',
-        fontWeight: '500',
+        fontWeight: 'var(--font-semibold)',
     },
     editInput: {
         width: '100%',
         padding: '5px',
-        fontSize: '14px',
+        fontSize: 'var(--font-small)',
         borderRadius: '5px',
         border: '1px solid #ccc',
     },
@@ -218,8 +218,8 @@ const styles = {
 
     },
     characterButtonTextStyle: {
-        fontSize: '14px',
-        fontWeight: 'bold',
+        fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-bold)',
         marginRight: '10px',
     },
     replyContainer: {
