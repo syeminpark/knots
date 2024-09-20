@@ -3,8 +3,14 @@ import Attribute from '../Attribute';
 import AddConnectionModal from '../AddConnectionModal';
 
 const ConnectionsTab = (props) => {
-    const { connectedCharacters, setConnectedCharacters, createdCharacters, caller } = props
+    const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller } = props
     const [showModal, setShowModal] = useState(false);
+
+    let currentCharacterName = "this character"
+    if (caller) {
+        currentCharacterName = caller.name
+    }
+
 
     const deleteConnection = (name) => {
         const newConnections = connectedCharacters.filter(character => character.name !== name);
@@ -22,13 +28,16 @@ const ConnectionsTab = (props) => {
             <div>{`${connectedCharacters.length} Connections`}</div>
             {connectedCharacters.map(child => (
                 <Attribute
+                    panels={panels}
+                    setPanels={setPanels}
                     key={child.name}
                     title={child.name}
-                    placeholder="Add relationship details"
+                    placeholder={`What is their relationship or shared history? How does ${currentCharacterName} feel about ${child.name}?`}
                     deleteFunction={deleteConnection}
                     list={connectedCharacters}
                     setter={setConnectedCharacters}
                     onChange={(event) => { onChange(child.name, event.target.value) }}
+                    connectedCharacter={createdCharacters.characters.find(character => character.uuid === child.uuid)}
                 />
             ))}
             <button className="create-new-btn" onClick={() => setShowModal(true)}>

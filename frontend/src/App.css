@@ -475,6 +475,7 @@ body {
   width: 100%;
   background-color: var(--color-bg-grey);
   margin-left: 20px;
+  font-size: var(--font-large);
 }
 
 .tabs {

@@ -38,7 +38,7 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
 const styles = {
     card: {
         backgroundColor: 'var(--color-bg-lightpurple)',
-        padding: '25px',
+        padding: '20px',
         borderRadius: '8px',
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
         display: 'flex',
@@ -46,7 +46,7 @@ const styles = {
         justifyContent: 'center',
         position: 'relative',
         textAlign: 'left',
-        width: '95%',
+        width: '100%',
         margin: '0 auto 15px',
     },
     cardHeader: {
@@ -75,7 +75,7 @@ const styles = {
 
     toggleButtonContainer: {
         position: 'relative',
-        right: '-10px',
+
     },
     rightContent: {
         position: 'absolute',

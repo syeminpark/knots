@@ -10,12 +10,17 @@ import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 
-// Container to hold panels
 const Home = (props) => {
+  const initialState = {
+    journalBooks: [],
+    lastCreatedJournalBook: null,
+    participantIndex: {},
+  };
+
   const [panels, setPanels] = useState([])
   const { loggedIn, userName } = props
   const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: [] })
-  const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, { journalBooks: [] })
+  const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState)
 
   const navigate = useNavigate()
 

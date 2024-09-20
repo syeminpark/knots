@@ -82,7 +82,6 @@ const styles = {
     characterButtonIconStyle: {
         width: '30px',
         height: '30px',
-
     },
     characterButtonTextStyle: {
         fontSize: 'var(--font-small)',

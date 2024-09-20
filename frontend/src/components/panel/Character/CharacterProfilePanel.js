@@ -5,6 +5,7 @@ import ConnectionsTab from './ConnectionsTab';
 import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
 import JournalsTab from './JournalsTab';
+import CommentsTab from './CommentsTab';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
@@ -94,6 +95,8 @@ const CharacterProfilePanel = (props) => {
                 />
             ) : activeTab === 'Connections' ? (
                 <ConnectionsTab
+                    panels={panels}
+                    setPanels={setPanels}
                     connectedCharacters={connectedCharacters}
                     setConnectedCharacters={setConnectedCharacters}
                     createdCharacters={createdCharacters}
@@ -107,6 +110,15 @@ const CharacterProfilePanel = (props) => {
                     panels={panels}
                     setPanels={setPanels}
                 ></JournalsTab>
+
+            ) : activeTab === 'Comments' ? (
+                <CommentsTab
+                    panels={panels}
+                    setPanels={setPanels}
+                    caller={caller}
+                    createdJournalBooks={createdJournalBooks}
+                    createdCharacters={createdCharacters}
+                ></CommentsTab>
 
             ) : null}
             <div className="save-btn-container">

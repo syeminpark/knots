@@ -110,7 +110,6 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        marginBottom: '10px',
         paddingLeft: '30px',
         paddingRight: '30px',
     },

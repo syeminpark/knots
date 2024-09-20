@@ -20,7 +20,7 @@ const JournalsTab = (props) => {
     }
 
     return (
-        <div style={styles.journalstabWrapper}>
+        <div style={styles.journalsTabWrapper}>
             {journalData.length === 0 && (
                 <div>
                     0 Journals
@@ -41,9 +41,10 @@ const JournalsTab = (props) => {
 };
 
 const styles = {
-    journalstabWrapper: {
+    journalsTabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 400px)',
+        width: '100%',
     },
 }
 
