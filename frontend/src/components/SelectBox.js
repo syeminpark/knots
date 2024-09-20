@@ -117,7 +117,7 @@ const styles = {
         cursor: 'pointer',
         fontSize: 'var(--font-medium)',
         color: '#333', 
-        backgroundColor: '#F9F9F9', 
+        backgroundColor: 'var(--color-bg-grey)', 
         fontWeight: 'var(--font-semibold)',
         transition: 'background-color 0.2s ease',
     },
@@ -157,7 +157,7 @@ const styles = {
         width: '25px',
         height: '25px',
         borderRadius: '50%',
-        backgroundColor: '#A0A0FF',
+        backgroundColor: 'var(--color-primary)',
         marginRight: '10px',
     },
     dropdownText: {

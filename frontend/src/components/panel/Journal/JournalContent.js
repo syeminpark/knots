@@ -76,7 +76,7 @@ const styles = {
         fontSize: 'var(--font-small)',
         lineHeight: 'var(--line-height)',
         marginTop: "10px",
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--color-bg-grey)',
         padding: "15px",
         borderRadius: "5px",
         whiteSpace: "pre-line",

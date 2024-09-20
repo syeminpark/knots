@@ -38,7 +38,7 @@ const styles = {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: '#f9f9f9',
+        backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
         padding: '5px 10px',
         boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1)',

@@ -130,7 +130,7 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: '10px',
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '20px 15px',
     },
     entryTitle: {
@@ -163,7 +163,7 @@ const styles = {
     },
 
     bottom: {
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '10px',
         width: '100%',
         position: 'sticky',

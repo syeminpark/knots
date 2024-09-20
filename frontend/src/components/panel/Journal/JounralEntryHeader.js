@@ -61,7 +61,7 @@ const styles = {
         fontWeight: 'var(--font-bold)',
     },
     systemGenerated: {
-        backgroundColor: '#f0eaff',
+        backgroundColor: 'var(--color-bg-greypurple)',
         color: '#6c63ff',
     },
     returnButton: {

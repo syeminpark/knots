@@ -91,7 +91,7 @@ const styles = {
     },
 
     journalEntry: {
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '15px',
         display: 'flex',
         flexDirection: 'column',
@@ -148,7 +148,7 @@ const styles = {
         position: 'relative',
     },
     manual: {
-        backgroundColor: '#e0eaff',
+        backgroundColor: 'var(--color-bg-grey)',
         color: '#6c63ff',
     },
     stickyButtonContainer: {
@@ -158,7 +158,7 @@ const styles = {
     },
     createJournalBtn: {
         display: 'block',
-        backgroundColor: '#6c63ff',
+        backgroundColor: 'var(--color-secondary)',
         color: 'white',
         border: 'none',
         borderRadius: '8px',

@@ -37,7 +37,7 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
 
 const styles = {
     card: {
-        backgroundColor: '#f7f7ff',
+        backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '25px',
         borderRadius: '8px',
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',

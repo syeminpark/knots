@@ -202,7 +202,7 @@ const CreateJournalModal = (props) => {
 
 const styles = {
     attributeContainer: {
-        backgroundColor: '#f0f0ff',
+        backgroundColor: 'var(--color-bg-grey)',
         padding: '15px',
         borderRadius: '10px',
         marginBottom: '20px',

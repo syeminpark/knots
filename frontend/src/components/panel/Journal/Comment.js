@@ -148,7 +148,7 @@ const Comment = (props) => {
 
 const styles = {
     comment: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
         padding: '10px 10px',
         marginBottom: '10px',
@@ -225,7 +225,7 @@ const styles = {
     replyContainer: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--color-bg-grey)',
         padding: '10px',
         borderRadius: '8px',
         marginBottom: '30px',

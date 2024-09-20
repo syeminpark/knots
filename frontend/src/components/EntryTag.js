@@ -30,7 +30,7 @@ const styles = {
         color: '#6c63ff',
     },
     background: {
-        backgroundColor: '#f0eaff',
+        backgroundColor: 'var(--color-bg-greypurple)',
     },
     noBackground: {
         backgroundColor: 'transparent',

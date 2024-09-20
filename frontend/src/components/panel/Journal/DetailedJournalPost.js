@@ -113,7 +113,7 @@ const styles = {
         fontSize: 'var(--font-medium)',
     },
     journalText: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
         padding: '15px',
         marginLeft: '15px',
