@@ -38,56 +38,57 @@ const DetailedJournal = (props) => {
 
     return (
         <div style={styles.container}>
-            {/* Journal Entry Section */}
-            <div style={styles.journalEntry}>
-                <div style={styles.entryHeader}>
-                    <div>
-                        <strong style={styles.entryTitle}>{bookInfo.title}</strong>
-                        <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
+            {/* Scrollable Content Container */}
+            <div style={styles.scrollableContent}>
+                {/* Journal Entry Section */}
+                <div style={styles.journalEntry}>
+                    <div style={styles.entryHeader}>
+                        <div>
+                            <strong style={styles.entryTitle}>{bookInfo.title}</strong>
+                            <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
+                        </div>
+                        <div>
+                            <EntryTag selectedMode={bookInfo.selectedMode} size='large'> </EntryTag>
+                        </div>
                     </div>
-                    <div>
-                        <EntryTag selectedMode={bookInfo.selectedMode} size='large'> </EntryTag>
+
+                    <DetailedJournalPost
+                        panels={panels}
+                        setPanels={setPanels}
+                        createdCharacter={createdCharacter}
+                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                        setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                        dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                    />
+
+                    <div style={styles.commentIcon}>
+                        <p> 💬 Comments</p>
                     </div>
                 </div>
 
-                <DetailedJournalPost
-                    panels={panels}
-                    setPanels={setPanels}
-                    createdCharacter={createdCharacter}
-                    selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                    setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
-                    dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-                />
-
-                <div style={styles.commentIcon}>
-                    <p> 💬 Comments</p>
+                {/* Comment Container */}
+                <div style={styles.commentContainer}>
+                    {journalEntry.commentThreads.map(thread => (
+                        <div key={thread.uuid} style={styles.commentThread}>
+                            {thread.comments.map(comment => (
+                                <div key={comment.uuid}>
+                                    <Comment
+                                        panels={panels}
+                                        setPanels={setPanels}
+                                        createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
+                                        content={comment.content}
+                                        createdAt={comment.createdAt}
+                                        selectedMode={comment.selectedMode}
+                                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                                        commentUUID={comment.uuid}
+                                        threadUUID={thread.uuid}
+                                        dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                                    ></Comment>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
                 </div>
-            </div>
-
-            {/* Render comments */}
-            <div style={styles.commentContainer}>
-                {journalEntry.commentThreads.map(thread => (
-                    <div key={thread.uuid} style={styles.commentThread}>
-                        {thread.comments.map(comment => (
-                            <div key={comment.uuid}>
-                                <Comment
-                                    panels={panels}
-                                    setPanels={setPanels}
-                                    createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
-                                    content={comment.content}
-                                    createdAt={comment.createdAt}
-                                    selectedMode={comment.selectedMode}
-                                    selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                                    commentUUID={comment.uuid}
-                                    threadUUID={thread.uuid}
-                                    dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-                                ></Comment>
-
-
-                            </div>
-                        ))}
-                    </div>
-                ))}
             </div>
 
             {/* Bottom Section with Character Selection and Comment Input */}
@@ -97,9 +98,7 @@ const DetailedJournal = (props) => {
                     setSelectedCharacters={setSelectedCharacters}
                     createdCharacters={createdCharacters}
                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-
                     selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-
                 />
             </div>
         </div>
@@ -117,18 +116,22 @@ const styles = {
         position: 'relative',
         borderRadius: '8px',
         boxShadow: '0px 0px 3px rgba(0, 0, 0, 0.3)',
+    },
+    scrollableContent: {
         flexGrow: 1,
         overflowY: 'auto',
+        paddingBottom: '10px',
     },
     journalEntry: {
-        flexGrow: 1,
+        paddingBottom: '15px',
     },
     entryHeader: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
+        gap: '12px',
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'relative',
         marginBottom: '10px',
         backgroundColor: 'var(--color-bg-lightpurple)',
         padding: '20px 15px',
@@ -138,17 +141,16 @@ const styles = {
         fontSize: 'var(--font-large)',
         textAlign: 'center',
         width: '100%',
-        padding: '0 50px',
     },
     entryTime: {
         color: '#9b9b9b',
         fontSize: 'var(--font-xs)',
         position: 'absolute',
-        top: '0',
-        right: '0',
-        transform: 'translate(-50%,50%)',
+        top: '10px',
+        right: '15px',
         whiteSpace: 'nowrap',
     },
+
     commentIcon: {
         marginTop: '15px',
         marginLeft: '15px',
@@ -159,7 +161,7 @@ const styles = {
     commentContainer: {
         paddingLeft: "15px",
         paddingRight: "15px",
-        marginBottom: '100px',
+        paddingBottom: "15px",
     },
 
     bottom: {
