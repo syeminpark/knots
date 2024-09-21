@@ -5,7 +5,6 @@ import openNewPanel from '../openNewPanel';
 const Attribute = (props) => {
     const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter } = props;
     const attribute = list.find(attr => attr.name === title);
-    console.log(connectedCharacter)
     return (
         <div style={styles.attributeContainer}>
             <div style={styles.sectionHeader}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import TimeAgo from '../../TimeAgo';
 import CommentDisplayer from "./CommentDisplayer";
 import BottomActions from "./BottomActions";
@@ -17,10 +17,12 @@ const DetailedJournal = (props) => {
         dispatchCreatedCharacters,
         createdJournalBooks,
         dispatchCreatedJournalBooks,
+        trackingCommentThread,
+        setTrackingCommentThread
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
-
+    const commentThreadRefs = useRef({});
 
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
@@ -35,6 +37,13 @@ const DetailedJournal = (props) => {
             setSelectedBookAndJournalEntry(NewJournalBookInfoandEntry)
         }
     }, [createdJournalBooks]);
+
+    useEffect(() => {
+        if (trackingCommentThread && commentThreadRefs.current[trackingCommentThread]) {
+            commentThreadRefs.current[trackingCommentThread].scrollIntoView({ behavior: 'instant', block: 'start' });
+            setTrackingCommentThread(null);
+        }
+    }, [trackingCommentThread]);
 
 
 
@@ -71,7 +80,10 @@ const DetailedJournal = (props) => {
                 {/* Render comments */}
                 <div style={styles.commentContainer}>
                     {journalEntry.commentThreads.map(thread => (
-                        <div key={thread.uuid} style={styles.commentThread}>
+                        <div key={thread.uuid} style={styles.commentThread} ref={(el) => {
+                            commentThreadRefs.current[thread.uuid] = el;
+                        }}
+                        >
                             {thread.comments.map((comment, index) => {
                                 const previousCharacterUUID = index === 0
                                     ? journalEntry.ownerUUID

@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { DndContext, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
 import { useNavigate } from 'react-router-dom'
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
@@ -21,6 +21,7 @@ const Home = (props) => {
   const { loggedIn, userName } = props
   const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: [] })
   const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState)
+
 
   const navigate = useNavigate()
 

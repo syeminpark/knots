@@ -51,7 +51,7 @@ const CommentDisplayer = (props) => {
     const [isManualReplying, setIsManualReplying] = useState(false);
     const [replyContent, setReplyContent] = useState(''); // State to manage reply content
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry
-    console.log('previousCharacter', previousCharacter)
+
     useEffect(() => {
         setIsManualReplying(false)
     }, [editContent])

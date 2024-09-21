@@ -64,6 +64,11 @@ const journalBookReducer = (state, action) => {
             const ownerUUID = action.payload.ownerUUID;
             const participantIndex = { ...state.participantIndex }; // Clone the participantIndex
 
+            // Ensure participantIndex[ownerUUID] is initialized as a Set
+            if (!participantIndex[ownerUUID]) {
+                participantIndex[ownerUUID] = new Set();
+            }
+
             const updatedJournalBooks = state.journalBooks.map((book) => {
                 if (book.bookInfo.uuid === action.payload.journalBookUUID) {
                     return {
@@ -89,12 +94,8 @@ const journalBookReducer = (state, action) => {
                                             };
 
                                             // Update participantIndex
-                                            if (!participantIndex[ownerUUID]) {
-                                                participantIndex[ownerUUID] = new Set();
-                                            }
                                             participantIndex[ownerUUID].add(thread.uuid);
 
-                                            // Update participantUUIDs in thread
                                             const updatedParticipantUUIDs = new Set(thread.participantUUIDs || []);
                                             updatedParticipantUUIDs.add(ownerUUID);
 
@@ -130,9 +131,6 @@ const journalBookReducer = (state, action) => {
                                     updatedCommentThreads = [...entry.commentThreads, newThread];
 
                                     // Update participantIndex
-                                    if (!participantIndex[ownerUUID]) {
-                                        participantIndex[ownerUUID] = new Set();
-                                    }
                                     participantIndex[ownerUUID].add(newThreadUUID);
                                 }
 
@@ -151,10 +149,11 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: updatedJournalBooks,
-                participantIndex: participantIndex, // Update participantIndex in the state
+                participantIndex, // Update participantIndex in the state
                 newComment, // The updated comment with commentThreadUUID
             };
         }
+
 
 
         case 'EDIT_COMMENT': {
@@ -267,7 +266,7 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: updatedJournalBooks,
-                participantIndex: participantIndex, // Update participantIndex in the state
+                participantIndex, // Update participantIndex in the state
             };
         }
 
@@ -359,47 +358,7 @@ const createThreadIndex = (state) => {
     });
     return threadIndex;
 };
-export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUID2) => {
-    const result = [];
-    const participantIndex = state.participantIndex;
 
-    // Get the sets of thread UUIDs for each character
-    const threadsForChar1 = participantIndex[characterUUID1] || new Set();
-    const threadsForChar2 = participantIndex[characterUUID2] || new Set();
-
-    // Find the intersection of threads
-    const commonThreads = [...threadsForChar1].filter((threadUUID) =>
-        threadsForChar2.has(threadUUID)
-    );
-
-    // Create a thread index for efficient access
-    const threadIndex = createThreadIndex(state);
-
-    // For each common thread, retrieve the comments
-    commonThreads.forEach((threadUUID) => {
-        const threadData = threadIndex[threadUUID];
-        if (threadData) {
-            const { thread, journalEntry, journalBookInfo } = threadData;
-
-            // Collect comments from both characters
-            const commentsBetweenCharacters = thread.comments.filter(
-                (comment) =>
-                    comment.ownerUUID === characterUUID1 || comment.ownerUUID === characterUUID2
-            );
-
-            if (commentsBetweenCharacters.length > 0) {
-                result.push({
-                    journalBookInfo,
-                    journalEntryInfo: journalEntry,
-                    commentThreadUUID: thread.uuid,
-                    comments: commentsBetweenCharacters,
-                });
-            }
-        }
-    });
-
-    return result;
-};
 export const getInteractedCharactersWithPosts = (state, characterUUID) => {
     const interactedCharacters = new Set();
 
@@ -443,13 +402,69 @@ export const getInteractedCharactersWithPosts = (state, characterUUID) => {
     // Convert set to an array to return
     return Array.from(interactedCharacters);
 };
+export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUID2) => {
+    const result = [];
+    const participantIndex = state.participantIndex;
+
+    // Get the sets of thread UUIDs for each character
+    const threadsForChar1 = participantIndex[characterUUID1] || new Set();
+    const threadsForChar2 = participantIndex[characterUUID2] || new Set();
+
+    // Create a thread index for efficient access
+    const threadIndex = createThreadIndex(state);
+
+    // Combine both sets of threads to include both characters' threads
+    const combinedThreads = new Set([...threadsForChar1, ...threadsForChar2]);
+
+    // Create an intermediate structure to group by journalEntryUUID
+    const journalEntryGroups = {};
+
+    // For each thread, retrieve the comments where either character has commented
+    combinedThreads.forEach((threadUUID) => {
+        const threadData = threadIndex[threadUUID];
+        if (threadData) {
+            const { thread, journalEntry, journalBookInfo } = threadData;
+
+            // Collect comments from both characters
+            const commentsBetweenCharacters = thread.comments.filter(
+                (comment) =>
+                    comment.ownerUUID === characterUUID1 || comment.ownerUUID === characterUUID2
+            );
+
+            if (commentsBetweenCharacters.length > 0) {
+                // If this journal entry has not been added to the result yet, initialize it
+                if (!journalEntryGroups[journalEntry.uuid]) {
+                    journalEntryGroups[journalEntry.uuid] = {
+                        journalEntryInfo: journalEntry,
+                        journalBookInfo: journalBookInfo,
+                        commentThreads: []
+                    };
+                }
+
+                // Add this thread and its comments to the grouped entry
+                journalEntryGroups[journalEntry.uuid].commentThreads.push({
+                    commentThreadUUID: thread.uuid,
+                    createdAt: thread.createdAt,
+                    comments: commentsBetweenCharacters
+                });
+            }
+        }
+    });
+
+    // Convert the grouped journal entries into an array of results
+    return Object.values(journalEntryGroups);
+};
+
+
 
 export const getCommentExchangeHistory = (state, characterUUID, otherCharacterUUID) => {
     const result = [];
     const participantIndex = state.participantIndex;
 
+
     // Get the set of thread UUIDs for the given character
     const threadsForChar = participantIndex[characterUUID] || new Set();
+    console.log(threadsForChar)
 
     // Create a thread index for efficient access
     const threadIndex = createThreadIndex(state);
@@ -460,8 +475,12 @@ export const getCommentExchangeHistory = (state, characterUUID, otherCharacterUU
         if (threadData) {
             const { thread, journalEntry, journalBookInfo } = threadData;
 
-            // Check if the other character is also a participant in this thread
-            if (thread.participantUUIDs.includes(otherCharacterUUID)) {
+            // Check if the other character is also a participant in this thread or has commented
+            const hasOtherCharacterCommented = thread.comments.some(
+                (comment) => comment.ownerUUID === otherCharacterUUID
+            );
+
+            if (hasOtherCharacterCommented) {
                 // Collect comments from both characters
                 const commentsBetweenCharacters = thread.comments.filter(
                     (comment) =>
@@ -482,7 +501,6 @@ export const getCommentExchangeHistory = (state, characterUUID, otherCharacterUU
 
     return result;
 };
-
 
 
 

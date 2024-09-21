@@ -17,17 +17,18 @@ const ToggleButton = ({ expandable, expanded, onClick, direction = 'right', size
     const sizeStyle = sizeStyles[size] || sizeStyles.medium; // Default to medium if an unknown size is provided
 
     const getTextPositionStyle = () => {
-        switch (direction) {
-            case 'up':
-                return { flexDirection: 'column-reverse' };
-            case 'down':
-                return { flexDirection: 'column' };
-            case 'left':
-                return { flexDirection: 'row-reverse' };
-            case 'right':
-            default:
-                return { flexDirection: 'row' };
-        }
+        if (text)
+            switch (direction) {
+                case 'up':
+                    return { flexDirection: 'column-reverse' };
+                case 'down':
+                    return { flexDirection: 'column' };
+                case 'left':
+                    return { flexDirection: 'row-reverse' };
+                case 'right':
+                default:
+                    return { flexDirection: 'row' };
+            }
     };
 
     return (

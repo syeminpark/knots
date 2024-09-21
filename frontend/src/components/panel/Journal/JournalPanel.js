@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
 import DetailedJournal from './DetailedJournal';
+import { getJournalBookInfoAndEntryByIds } from './journalBookReducer';
 
 const JournalPanel = (props) => {
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks, reference } = props;
@@ -10,12 +11,20 @@ const JournalPanel = (props) => {
     const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)
     const [expandedGroup, setExpandedGroup] = useState({});
     const [trackingJournalEntry, setTrackingJournalEntry] = useState(null);
+    const [trackingCommentThread, setTrackingCommentThread] = useState(null);
 
     useEffect(() => {
         if (reference) {
             setTrackingJournalEntry(reference.entryUUID);
             setExpandedGroup({ [reference.bookUUID]: true })
+            setTrackingCommentThread(reference.commentThreadUUID)
+
+            if (reference.type == 'comment') {
+                setSelectedBookAndJournalEntry(getJournalBookInfoAndEntryByIds
+                    (createdJournalBooks, reference.bookUUID, reference.entryUUID))
+            }
         }
+
     }, [reference]);
 
     return (
@@ -68,6 +77,8 @@ const JournalPanel = (props) => {
                         dispatchCreatedCharacters={dispatchCreatedCharacters}
                         createdJournalBooks={createdJournalBooks}
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                        trackingCommentThread={trackingCommentThread}
+                        setTrackingCommentThread={setTrackingCommentThread}
                     >
                     </DetailedJournal>
                 </>
