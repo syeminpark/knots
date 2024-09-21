@@ -8,7 +8,7 @@ router
     .get('/getAllCharacters', auth, character.onGetAllCharactersByUser)
     .get('/getCharacterById/:uuid', auth, character.onGetCharacterByUUID)
     .post('/createCharacter', auth, character.onCreateCharacter)
-    .put('/updateCharacter/:uuid', auth, character.onUpdateCharacter)
+    .put('/updateCharacter', auth, character.onUpdateCharacter)
     .delete('/deleteCharacter/:uuid', auth, character.onDeleteCharacterByUUID)
     .delete('/deleteAllCharacters', auth, character.onDeleteAllCharactersByUser);
 

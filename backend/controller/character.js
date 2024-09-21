@@ -70,18 +70,21 @@ export default {
      */
     onUpdateCharacter: async (req, res) => {
         try {
-            const { uuid } = req.params;
-            const updateData = req.body;
-
+            const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
+            const updateData = {
+                name,
+                personaAttributes,
+                connectedCharacters,
+                imageSrc
+            };
             const character = await CharacterModel.updateCharacter(uuid, updateData);
-
             if (character) {
                 res.status(200).json(character);
             } else {
                 res.status(404).json({ error: 'Character not found.' });
             }
         } catch (error) {
-            console.error(`Error updating character with UUID ${req.params.uuid}:`, error);
+            console.error(`Error updating character with UUID ${req.body.uuid}:`, error);
             res.status(500).json({ error: 'An error occurred while updating the character.' });
         }
     },

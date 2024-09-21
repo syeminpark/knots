@@ -16,7 +16,6 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
   const [initialData, setInitialData] = useState({ characters: [], journals: [] })
 
-
   const initializeData = async () => {
     try {
       const data = await apiRequest('/getAllCharacters', 'GET',);
@@ -28,7 +27,6 @@ function App() {
     }
   }
 
-
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
     if (!user || !user.token) {
@@ -37,6 +35,7 @@ function App() {
 
       return
     }
+
     const verifyToken = async () => {
       try {
         const result = await apiRequest('/verify', 'POST',)

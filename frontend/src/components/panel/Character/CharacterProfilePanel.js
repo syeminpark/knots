@@ -6,6 +6,7 @@ import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
 import JournalsTab from './JournalsTab';
 import CommentsTab from './CommentsTab';
+import apiRequest from '../../../utility/apiRequest';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
@@ -44,7 +45,7 @@ const CharacterProfilePanel = (props) => {
     }, [createdCharacters]);  // Dependency array
 
 
-    const saveFunction = () => {
+    const saveFunction = async () => {
         if (!name.trim()) {
             alert("Name is required");
             return;
@@ -52,16 +53,25 @@ const CharacterProfilePanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
+        const CharacterData = {
+            name: name,
+            personaAttributes: personaAttributes,
+            connectedCharacters: connectedCharacters,
+            imageSrc: imageSrc,
+            uuid: caller.uuid,
+        }
+
         dispatchCreatedCharacters({
             type: 'EDIT_CREATED_CHARACTER',
-            payload: {
-                name,
-                uuid: caller.uuid,
-                personaAttributes,
-                connectedCharacters,
-                imageSrc
-            }
+            payload: CharacterData
         })
+        try {
+            const response = await apiRequest('/updateCharacter', 'PUT', CharacterData);
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
     };
 
     const deleteFunction = () => {

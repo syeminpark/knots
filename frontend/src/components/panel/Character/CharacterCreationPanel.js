@@ -36,7 +36,8 @@ const CharacterCreationPanel = (props) => {
             payload: CharcterData
         })
         try {
-            await apiRequest('/createCharacter', 'POST', CharcterData);
+            const response = await apiRequest('/createCharacter', 'POST', CharcterData);
+            console.log(response)
         }
         catch (error) {
             console.log(error)
