@@ -6,14 +6,13 @@ import adminAuth from '../middleware/adminAuth.js'
 const router = express.Router();
 
 router
-    .get('/getAllUsers', adminAuth, user.onGetAllUsers)
-    .get('/getUserById', auth, user.onGetUserById)
-    .post('/createUser', adminAuth, user.onCreateUser)
-    .post('/verify', auth, user.onAuthOnly)
-    .post('/verifyAdmin', adminAuth, user.onAuthOnly)
+    .get('/getAllUsers', user.onGetAllUsers)
+    .get('/getUserById', user.onGetUserById)
+    .post('/createUser', user.onCreateUser)
+    .post('/verify', user.onAuthOnly)
+    .post('/verifyAdmin', user.onAuthOnly)
     .post('/loginUser', user.onLoginUser)
-    .put('/updateUser', adminAuth, user.onUpdateUser)
-    .delete('/deleteUser', adminAuth, user.onDeleteUserById)
-    .delete('/deleteAllUsers', adminAuth, user.onDeleteAllUsers)
+    .put('/updateUser', user.onUpdateUser)
+    .delete('/deleteUser', user.onDeleteUserById)
 
 export default router;

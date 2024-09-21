@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 export default {
     onCreateUser: async (req, res) => {
         const { userName, password, auth_type, } = req.body;
+        console.log(userName, password, auth_type)
 
         try {
             const user = await UserModel.getUserByUserName(userName);

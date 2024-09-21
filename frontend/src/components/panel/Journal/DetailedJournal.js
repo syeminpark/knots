@@ -3,7 +3,6 @@ import TimeAgo from '../../TimeAgo';
 import CommentDisplayer from "./CommentDisplayer";
 import BottomActions from "./BottomActions";
 import DetailedJournalPost from "./DetailedJournalPost";
-import { getJournalEntryByIds } from "./journalBookReducer";
 import EntryTag from "../../EntryTag";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 

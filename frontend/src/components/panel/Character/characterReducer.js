@@ -4,14 +4,12 @@ const characterReducer = (state, action) => {
     switch (action.type) {
         case 'CREATE_CHARACTER':
             const newCharacter = {
-                uuid: uuidv4(),
+                uuid: action.payload.uuid,
                 name: action.payload.name,
                 personaAttributes: action.payload.personaAttributes,
                 connectedCharacters: action.payload.connectedCharacters,
                 imageSrc: action.payload.imageSrc,
-                createdJournals: [],
-                createdComments: [],
-            }
+            };
             return {
                 ...state,
                 characters: [...state.characters, newCharacter],
@@ -32,34 +30,15 @@ const characterReducer = (state, action) => {
                         : character
                 ),
             };
-        case 'CREATE_NEW_JOURNAL':
+        case 'INITIALIZE_CHARACTERS': // New action to initialize characters
             return {
                 ...state,
-                characters: state.characters.map((character) => {
-                    if (character.uuid === action.payload.characterUUID) {
-                        const newJournal = {
-                            journalBookUUID: action.payload.ournalBookUUID,
-                            journalBookTitle: action.payload.journalBookTitle,
-                            selectedMode: action.payload.selectedMode,
-                            createdAt: action.payload.createdAt,
-                            journalEntryUUID: action.payload.journalEntryUUID,
-                            journalEntryContent: action.payload.journalEntryContent
-                        };
-
-                        // Add the new journal to the character's createdJournals array
-                        return {
-                            ...character,
-                            createdJournals: [...character.createdJournals, newJournal],
-                        };
-                    }
-                    return character;
-                }),
+                characters: action.payload.characters,  // Set the initial characters from the payload
             };
 
         default:
             return state;
     }
+};
 
-
-}
-export default characterReducer
+export default characterReducer;

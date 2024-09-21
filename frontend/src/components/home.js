@@ -18,10 +18,9 @@ const Home = (props) => {
   };
 
   const [panels, setPanels] = useState([])
-  const { loggedIn, userName } = props
-  const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: [] })
+  const { loggedIn, userName, initialData } = props
+  const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: initialData.characters })
   const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState)
-
 
   const navigate = useNavigate()
 
@@ -32,6 +31,18 @@ const Home = (props) => {
     }
     navigate('/')
   }
+
+  useEffect(() => {
+    dispatchCreatedCharacters({
+      type: 'INITIALIZE_CHARACTERS',
+      payload: {
+        characters: initialData.characters,
+      },
+    });
+
+  }, [initialData])
+
+
 
   const handleDragEnd = ({ active, over }) => {
     if (over && active.id !== over.id) {

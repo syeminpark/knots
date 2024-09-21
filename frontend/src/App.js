@@ -14,10 +14,21 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [userName, setUserName] = useState('')
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
+  const [initialData, setInitialData] = useState({ characters: [], journals: [] })
 
-  //using the loggedIn as a dependency creates an infinte loop so only use it when 
-  //the component firstmounts 
-  //the purpose is to log out 
+
+  const initializeData = async () => {
+    try {
+      const data = await apiRequest('/getAllCharacters', 'GET',);
+      console.log(data)
+      setInitialData({ characters: data })
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
     if (!user || !user.token) {
@@ -29,9 +40,12 @@ function App() {
     const verifyToken = async () => {
       try {
         const result = await apiRequest('/verify', 'POST',)
+        console.log(result)
 
         setLoggedIn(result.success);
         setUserName(user.userName || '');
+
+        initializeData()
       }
       catch (error) {
         console.log(error)
@@ -39,7 +53,6 @@ function App() {
       }
       try {
         const result = await apiRequest('/verifyAdmin', 'POST',)
-
         setIsAdmin(result.isAdmin)
       }
       catch (error) {
@@ -49,6 +62,8 @@ function App() {
     }
     verifyToken();
   }, []);
+
+
 
   return (
     <div className="App">
@@ -78,7 +93,7 @@ function App() {
             path="/"
             element={
               loggedIn ? (
-                <Home userName={userName} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                <Home userName={userName} loggedIn={loggedIn} setLoggedIn={setLoggedIn} initialData={initialData} />
               ) : (
                 <Navigate to="/login" replace /> // Redirect to login if not logged in
               )

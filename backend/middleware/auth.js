@@ -13,6 +13,9 @@ const auth = async (req, res, next) => {
         if (!user) {
             throw new Error();
         }
+        else {
+            req.user = user
+        }
         next();
     }
 

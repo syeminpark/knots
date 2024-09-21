@@ -5,6 +5,7 @@ import ConnectionsTab from './ConnectionsTab';
 import TabNavigation from './TabNavigation';
 import { v4 as uuidv4 } from 'uuid';
 import ProfileSection from './ProfileSection';
+import apiRequest from '../../../utility/apiRequest';
 
 const CharacterCreationPanel = (props) => {
     const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
@@ -14,7 +15,7 @@ const CharacterCreationPanel = (props) => {
     const [imageSrc, setImageSrc] = useState(null);
     const [name, setName] = useState('');
 
-    const saveFunction = () => {
+    const saveFunction = async () => {
         if (!name.trim()) {
             alert("Name is required");
             return;
@@ -22,17 +23,25 @@ const CharacterCreationPanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
+        const CharcterData = {
+            name: name,
+            personaAttributes: personaAttributes,
+            connectedCharacters: connectedCharacters,
+            imageSrc: imageSrc,
+            uuid: uuidv4()
+        }
+
         dispatchCreatedCharacters({
             type: 'CREATE_CHARACTER',
-            payload: {
-                name,
-                personaAttributes,
-                connectedCharacters,
-                imageSrc
-            }
+            payload: CharcterData
         })
+        try {
+            await apiRequest('/createCharacter', 'POST', CharcterData);
+        }
+        catch (error) {
+            console.log(error)
+        }
     };
-
 
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
