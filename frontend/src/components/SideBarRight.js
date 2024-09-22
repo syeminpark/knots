@@ -29,11 +29,11 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
 
     const draggableAreaStyle = {
         flex: 1,
-        width: '10%',
+        width: '8%',
         cursor: 'grab',
         backgroundColor: 'white',
         borderRadius: '20px',
-        padding: '5px',
+        padding: '8px',
         // boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
 
     };
