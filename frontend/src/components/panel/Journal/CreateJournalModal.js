@@ -66,7 +66,6 @@ const CreateJournalModal = (props) => {
             const payload = {
 
             }
-
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
                 payload: {
@@ -78,7 +77,7 @@ const CreateJournalModal = (props) => {
                 }
             });
 
-            await apiRequest('/journalBooks', 'POST',)
+            // await apiRequest('/journalBooks', 'POST',)
 
             // const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
 
