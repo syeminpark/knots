@@ -187,7 +187,7 @@ body {
 .character-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 5px;
   height: 100%;
   overflow-y: auto;
 }
@@ -427,10 +427,13 @@ body {
 }
 
 
+
+
 .profile-image-preview {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
 }
 
 .profile-image-placeholder {

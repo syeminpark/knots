@@ -36,6 +36,12 @@ const characterReducer = (state, action) => {
                 characters: action.payload.characters,  // Set the initial characters from the payload
             };
 
+        case 'REORDER_CHARACTERS':
+            return {
+                ...state,
+                characters: action.payload,
+            };
+
         default:
             return state;
     }

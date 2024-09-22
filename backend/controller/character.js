@@ -45,6 +45,8 @@ export default {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
             const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
 
+            const existingCharacters = await CharacterModel.getAllCharactersByUserUUID(userUUID);
+            const nextOrderValue = existingCharacters.length; // New character should be at the end of the list
 
             const character = await CharacterModel.createCharacter(
 
@@ -54,6 +56,7 @@ export default {
                 personaAttributes,
                 connectedCharacters,
                 imageSrc,
+                nextOrderValue,
             );
 
             res.status(201).json(character);
@@ -115,4 +118,22 @@ export default {
             res.status(500).json({ error: 'An error occurred while deleting all characters.' });
         }
     },
-};
+    onReorderCharacters: async (req, res) => {
+        try {
+            const userUUID = req.user.uuid; // Get userUUID from the authenticated user
+            const { characters } = req.body; // This will be an array of character UUIDs in the new order
+
+            if (!characters || !Array.isArray(characters)) {
+                return res.status(400).json({ error: 'Invalid character data' });
+            }
+
+            // Call the model to reorder characters
+            await CharacterModel.reorderCharacters(userUUID, characters);
+
+            res.status(200).json({ message: 'Characters reordered successfully.' });
+        } catch (error) {
+            console.error('Error reordering characters:', error);
+            res.status(500).json({ error: 'An error occurred while reordering characters.' });
+        }
+    },
+}

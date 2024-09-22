@@ -28,7 +28,6 @@ const CharacterCreationPanel = (props) => {
         try {
             let imageUrl = null;
             if (imageSrc) {
-
                 const formData = new FormData();
                 formData.append('image', imageSrc);
                 formData.append('characterUUID', uuid);

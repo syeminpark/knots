@@ -33,6 +33,11 @@ const characterSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.Mixed,
             required: false,
         },
+        order: {
+            type: Number,  // New field for tracking character's position
+            required: true,
+            default: 0,
+        },
     },
     {
         timestamps: true,
@@ -49,6 +54,7 @@ characterSchema.statics.createCharacter = async function (
     personaAttributes,
     connectedCharacters,
     imageSrc,
+    order
 ) {
     try {
         const character = await this.create({
@@ -57,7 +63,8 @@ characterSchema.statics.createCharacter = async function (
             name,
             personaAttributes,
             connectedCharacters,
-            imageSrc
+            imageSrc,
+            order
         });
         return character;
     } catch (error) {
@@ -89,7 +96,8 @@ characterSchema.statics.getCharacterByUUID = async function (uuid) {
 // Get all characters for a specific user
 characterSchema.statics.getAllCharactersByUserUUID = async function (userUUID) {
     try {
-        const characters = await this.find({ userUUID });
+        // Fetch characters for the user and sort them by their order field
+        const characters = await this.find({ userUUID }).sort({ order: 1 });
         return characters;
     } catch (error) {
         throw error;
@@ -109,6 +117,25 @@ characterSchema.statics.deleteCharacterByUUID = async function (uuid) {
 characterSchema.statics.deleteAllCharactersByUserUUID = async function (userUUID) {
     try {
         await this.deleteMany({ userUUID });
+    } catch (error) {
+        throw error;
+    }
+};
+
+characterSchema.statics.reorderCharacters = async function (userUUID, characters) {
+    const bulkOperations = characters.map((uuid, index) => {
+        console.log(uuid, index)
+        return {
+            updateOne: {
+                filter: { uuid, uuid },
+                update: { order: index },
+            },
+        };
+    });
+
+    try {
+        // Perform bulk update to save the new order in the database
+        await this.bulkWrite(bulkOperations);
     } catch (error) {
         throw error;
     }

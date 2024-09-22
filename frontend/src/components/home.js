@@ -107,11 +107,16 @@ const Home = (props) => {
       </div>
 
       {/* Integrating Sidebar Right */}
-      <SidebarRight panels={panels}
-        setPanels={setPanels}
-        createdCharacters={createdCharacters}
-      ></SidebarRight>
-
+      <DndContext
+        colliSonDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SidebarRight panels={panels}
+          setPanels={setPanels}
+          createdCharacters={createdCharacters}
+          dispatchCreatedCharacters={dispatchCreatedCharacters}
+        ></SidebarRight>
+      </DndContext>
       {/* Integrating Sidebar Left */}
       <SidebarLeft panels={panels} setPanels={setPanels}></SidebarLeft>
 
