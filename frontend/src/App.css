@@ -537,6 +537,12 @@ body {
   float: right;
 }
 
+.save-btn:disabled {
+  background-color: grey; 
+  cursor: not-allowed; 
+  opacity: 0.6;
+}
+
 .save-btn-container {
   display: flex;
   /* Aligns the button to the right */

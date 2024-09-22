@@ -17,6 +17,19 @@ const CharacterProfilePanel = (props) => {
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
     const [name, setName] = useState(caller.name);
 
+    const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
+
+    // enabling save button 
+    useEffect(() => {
+        const hasChanges =
+            name !== caller.name ||
+            JSON.stringify(personaAttributes) !== JSON.stringify(caller.personaAttributes) ||
+            JSON.stringify(connectedCharacters) !== JSON.stringify(caller.connectedCharacters) ||
+            imageSrc !== caller.imageSrc;
+
+        setSaveButtonEnabled(hasChanges);
+    }, [name, personaAttributes, connectedCharacters, imageSrc, caller]);
+
     // Effect to update local state when `createdCharacters` is updated
     useEffect(() => {
         const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
@@ -42,8 +55,7 @@ const CharacterProfilePanel = (props) => {
             return connectedCharacter;
         });
         setConnectedCharacters(updatedConnectedCharacters);
-    }, [createdCharacters]);  // Dependency array
-
+    }, [createdCharacters]);
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -86,11 +98,11 @@ const CharacterProfilePanel = (props) => {
         } catch (error) {
             console.log('Error updating character:', error);
         }
-    }
+    };
 
     const deleteFunction = () => {
-        const currentCharacter = createdCharacters.charactrs.find(character => character.uuid === caller.uuid)
-    }
+        const currentCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+    };
 
     return (
         <BasePanel
@@ -102,13 +114,13 @@ const CharacterProfilePanel = (props) => {
             deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
-                {<ProfileSection
+                <ProfileSection
                     id={id}
                     imageSrc={imageSrc}
                     setImageSrc={setImageSrc}
                     name={name}
                     setName={setName}
-                ></ProfileSection>}
+                />
                 <TabNavigation tabs={['About', 'Connections', 'Journals', 'Comments']} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
@@ -133,8 +145,7 @@ const CharacterProfilePanel = (props) => {
                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     panels={panels}
                     setPanels={setPanels}
-                ></JournalsTab>
-
+                />
             ) : activeTab === 'Comments' ? (
                 <CommentsTab
                     panels={panels}
@@ -142,17 +153,21 @@ const CharacterProfilePanel = (props) => {
                     caller={caller}
                     createdJournalBooks={createdJournalBooks}
                     createdCharacters={createdCharacters}
-                ></CommentsTab>
-
+                />
             ) : null}
             <div className="save-btn-container">
-                <button className="save-btn" onClick={saveFunction}>
+                <button
+                    className="save-btn"
+                    onClick={saveFunction}
+                    disabled={!saveButtonEnabled}
+                >
                     Save
                 </button>
             </div>
         </BasePanel>
-    )
-}
+    );
+};
+
 const styles = {
     stickyHeader: {
         position: 'sticky',
@@ -163,4 +178,4 @@ const styles = {
     },
 };
 
-export default CharacterProfilePanel
+export default CharacterProfilePanel;
