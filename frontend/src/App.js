@@ -60,7 +60,7 @@ function App() {
       }
     }
     verifyToken();
-  }, []);
+  }, [loggedIn]);
 
 
 

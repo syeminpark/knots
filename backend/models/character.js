@@ -122,12 +122,12 @@ characterSchema.statics.deleteAllCharactersByUserUUID = async function (userUUID
     }
 };
 
-characterSchema.statics.reorderCharacters = async function (userUUID, characters) {
+characterSchema.statics.reorderCharacters = async function (characters) {
     const bulkOperations = characters.map((uuid, index) => {
         console.log(uuid, index)
         return {
             updateOne: {
-                filter: { uuid, uuid },
+                filter: { uuid, uuid, },
                 update: { order: index },
             },
         };
