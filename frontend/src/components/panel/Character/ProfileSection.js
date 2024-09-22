@@ -1,5 +1,7 @@
+import React, { useState, useEffect } from 'react';
 const ProfileSection = (props) => {
     const { id, imageSrc, setImageSrc, name, setName } = props
+    const [preview, setPreview] = useState(null)
 
     // Handle image upload
     const handleImageUpload = (e) => {
@@ -7,7 +9,8 @@ const ProfileSection = (props) => {
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImageSrc(reader.result);  // Use the setImageSrc passed as a prop
+                setImageSrc(file)
+                setPreview(reader.result)
             };
             reader.readAsDataURL(file);
         }
@@ -22,12 +25,19 @@ const ProfileSection = (props) => {
         < div className="profile-section" >
             <label htmlFor={`image-upload-${id}`} className="profile-image-label">
                 {imageSrc ? (
-                    <div className="profile-image-container">
-                        <img src={imageSrc} alt="Uploaded" className="profile-image-preview" />
-                    </div>
-                ) : (
-                    <div className="profile-image-placeholder">Upload Image</div>
-                )}
+                    preview !== null ? (
+                        <div className="profile-image-container">
+                            <img src={preview
+                            } alt="Uploaded" className="profile-image-preview" />
+                        </div>) : (
+                        <div className="profile-image-container">
+                            <img src={imageSrc
+                            } alt="Uploaded" className="profile-image-preview" />
+                        </div>)
+                )
+                    : (
+                        <div className="profile-image-placeholder">Upload Image</div>
+                    )}
             </label>
             <input
                 id={`image-upload-${id}`}

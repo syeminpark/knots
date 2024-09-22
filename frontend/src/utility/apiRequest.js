@@ -1,4 +1,4 @@
-const apiRequest = async (url, method, data = null) => {
+export const apiRequest = async (url, method, data = null) => {
     const { token } = JSON.parse(localStorage.getItem('user')) || {};
 
     const options = {
@@ -26,3 +26,28 @@ const apiRequest = async (url, method, data = null) => {
     }
 };
 export default apiRequest;
+
+
+export const apiRequestFormData = async (url, method, formData) => {
+    const { token } = JSON.parse(localStorage.getItem('user')) || {};
+
+    const options = {
+        method,
+        headers: {
+            ...(token && { 'Authorization': `Bearer ${token}` }), // Include Authorization header if token is provided
+        },
+        body: formData, // Set FormData as the request body
+    };
+
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.error || 'An error occurred');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error in API request:', error);
+        throw error; // Re-throw the error so it can be handled by the calling function
+    }
+};

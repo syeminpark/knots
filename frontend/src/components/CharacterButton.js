@@ -1,6 +1,7 @@
 const CharacterButton = (props) => {
     const { createdCharacter, iconStyle, textStyle } = props;
 
+
     return (
         <>
             <div className="character-icon" style={iconStyle}>
@@ -18,4 +19,3 @@ const CharacterButton = (props) => {
 };
 
 export default CharacterButton;
-

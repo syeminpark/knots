@@ -6,7 +6,7 @@ import TabNavigation from './TabNavigation';
 import ProfileSection from './ProfileSection';
 import JournalsTab from './JournalsTab';
 import CommentsTab from './CommentsTab';
-import apiRequest from '../../../utility/apiRequest';
+import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
@@ -53,26 +53,40 @@ const CharacterProfilePanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
-        const CharacterData = {
-            name: name,
-            personaAttributes: personaAttributes,
-            connectedCharacters: connectedCharacters,
-            imageSrc: imageSrc,
-            uuid: caller.uuid,
-        }
+        const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+        const characterUUID = caller.uuid;
+        const updatedData = {};
 
-        dispatchCreatedCharacters({
-            type: 'EDIT_CREATED_CHARACTER',
-            payload: CharacterData
-        })
+        if (name !== existingCharacter.name) updatedData.name = name;
+        if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;
+        if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) updatedData.connectedCharacters = connectedCharacters;
+
+        const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
+        if (!Object.keys(updatedData).length && !isImageUpdated) {
+            alert('No changes to save.');
+            return;
+        }
         try {
-            const response = await apiRequest('/updateCharacter', 'PUT', CharacterData);
-            console.log(response)
+            if (isImageUpdated) {
+                const formData = new FormData();
+                formData.append('image', imageSrc);
+                formData.append('characterUUID', characterUUID);
+
+                const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
+                if (uploadResponse.imageUrl) {
+                    updatedData.imageSrc = uploadResponse.imageUrl;
+                }
+            }
+            dispatchCreatedCharacters({
+                type: 'EDIT_CREATED_CHARACTER',
+                payload: { ...updatedData, uuid: characterUUID }
+            });
+            const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
+            console.log('Character update response:', response);
+        } catch (error) {
+            console.log('Error updating character:', error);
         }
-        catch (error) {
-            console.log(error)
-        }
-    };
+    }
 
     const deleteFunction = () => {
         const currentCharacter = createdCharacters.charactrs.find(character => character.uuid === caller.uuid)

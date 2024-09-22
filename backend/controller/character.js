@@ -43,11 +43,8 @@ export default {
     onCreateCharacter: async (req, res) => {
         try {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
-            const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
+            const { uuid, name, personaAttributes, connectedCharacters } = req.body;
 
-            if (!name) {
-                return res.status(400).json({ error: 'Character name is required.' });
-            }
 
             const character = await CharacterModel.createCharacter(
                 userUUID, // Associate the character with the user
@@ -55,7 +52,6 @@ export default {
                 name,
                 personaAttributes,
                 connectedCharacters,
-                imageSrc
             );
 
             res.status(201).json(character);
@@ -70,13 +66,9 @@ export default {
      */
     onUpdateCharacter: async (req, res) => {
         try {
-            const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
-            const updateData = {
-                name,
-                personaAttributes,
-                connectedCharacters,
-                imageSrc
-            };
+            const updateData = req.body;
+            const { uuid } = req.params
+            console.log(uuid)
             const character = await CharacterModel.updateCharacter(uuid, updateData);
             if (character) {
                 res.status(200).json(character);

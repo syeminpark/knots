@@ -5,7 +5,7 @@ import ConnectionsTab from './ConnectionsTab';
 import TabNavigation from './TabNavigation';
 import { v4 as uuidv4 } from 'uuid';
 import ProfileSection from './ProfileSection';
-import apiRequest from '../../../utility/apiRequest';
+import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
 
 const CharacterCreationPanel = (props) => {
     const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
@@ -23,26 +23,32 @@ const CharacterCreationPanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
-        const CharcterData = {
-            name: name,
-            personaAttributes: personaAttributes,
-            connectedCharacters: connectedCharacters,
-            imageSrc: imageSrc,
-            uuid: uuidv4()
-        }
-
-        dispatchCreatedCharacters({
-            type: 'CREATE_CHARACTER',
-            payload: CharcterData
-        })
+        const uuid = uuidv4()
+        const formData = new FormData();
+        formData.append('image', imageSrc);
+        formData.append('characterUUID', uuid);
         try {
-            const response = await apiRequest('/createCharacter', 'POST', CharcterData);
-            console.log(response)
+            const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
+            if (uploadResponse.imageUrl) {
+                const characterData = {
+                    name: name,
+                    personaAttributes: personaAttributes,
+                    connectedCharacters: connectedCharacters,
+                    imageSrc: uploadResponse.imageUrl,
+                    uuid: uuid,
+                };
+
+                dispatchCreatedCharacters({
+                    type: 'CREATE_CHARACTER',
+                    payload: characterData,
+                });
+                const createCharacterResponse = await apiRequest('/createCharacter', 'POST', characterData);
+                console.log('Character creation response:', createCharacterResponse);
+            }
+        } catch (error) {
+            console.log('Error:', error);
         }
-        catch (error) {
-            console.log(error)
-        }
-    };
+    }
 
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
