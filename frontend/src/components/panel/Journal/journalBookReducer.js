@@ -5,7 +5,7 @@ const journalBookReducer = (state, action) => {
         case 'CREATE_JOURNAL_BOOK':
             const newJournalBook = {
                 bookInfo: {
-                    uuid: uuidv4(),
+                    uuid: action.payload.uuid,
                     title: action.payload.journalBookTitle,
                     selectedMode: action.payload.selectedMode,
                     createdAt: Date.now(),

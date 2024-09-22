@@ -3,6 +3,8 @@ import ModalOverlay from "../../ModalOverlay";
 import ModeSelection from "./ModeSelection";
 import SelectBox from "../../SelectBox";
 import TextArea from "../../TextArea";
+import apiRequest from "../../../utility/apiRequest";
+import { v4 as uuidv4 } from 'uuid';
 
 const CreateJournalModal = (props) => {
     const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, dispatchCreatedCharacters } = props;
@@ -41,7 +43,7 @@ const CreateJournalModal = (props) => {
 
     }, [selectedCharacters])
 
-    const onAnyPostButtonClick = () => {
+    const onAnyPostButtonClick = async () => {
         const characters = createdCharacters?.characters || [];
 
         if (characters.length === 0) {
@@ -60,39 +62,28 @@ const CreateJournalModal = (props) => {
             } else {
                 console.log("Perform API call for system generation");
             }
+            const journalBookUUID = uuidv4()
+            const payload = {
+
+            }
 
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
                 payload: {
+                    uuid: journalBookUUID,
                     journalBookTitle: journalBookText.title,
                     journalBookContent: content,
-                    selectedMode,
+                    selectedMode: selectedMode,
                     selectedCharacters,
                 }
             });
 
-            // const lastCreatedJournalBook = createdJournalBooks?.lastCreatedJournalBook;
-            // if (lastCreatedJournalBook) {
-            //     selectedCharacters.forEach((selectedCharacter) => {
-            //         const journalEntry = lastCreatedJournalBook.journalEntries.find(
-            //             (entry) => entry.ownerUUID === selectedCharacter.uuid
-            //         );
-            //         if (journalEntry) {
-            //             dispatchCreatedCharacters({
-            //                 type: 'CREATE_NEW_JOURNAL',
-            //                 payload: {
-            //                     journalBookUUID: lastCreatedJournalBook.bookInfo.uuid,
-            //                     journalBookTitle: lastCreatedJournalBook.bookInfo.title,
-            //                     selectedMode,
-            //                     createdAt: lastCreatedJournalBook.bookInfo.createdAt,
-            //                     journalEntryContent: content,
-            //                     journalEntryUUID: journalEntry.uuid,
-            //                     characterUUID: selectedCharacter.uuid,
-            //                 }
-            //             });
-            //         }
-            //     });
-            // }
+            await apiRequest('/journalBooks', 'POST',)
+
+            // const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
+
+
+
 
             setShowModal(false);
         }

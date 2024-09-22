@@ -43,15 +43,17 @@ export default {
     onCreateCharacter: async (req, res) => {
         try {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
-            const { uuid, name, personaAttributes, connectedCharacters } = req.body;
+            const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
 
 
             const character = await CharacterModel.createCharacter(
+
                 userUUID, // Associate the character with the user
                 uuid,
                 name,
                 personaAttributes,
                 connectedCharacters,
+                imageSrc,
             );
 
             res.status(201).json(character);

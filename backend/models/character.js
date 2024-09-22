@@ -48,6 +48,7 @@ characterSchema.statics.createCharacter = async function (
     name,
     personaAttributes,
     connectedCharacters,
+    imageSrc,
 ) {
     try {
         const character = await this.create({
@@ -56,6 +57,7 @@ characterSchema.statics.createCharacter = async function (
             name,
             personaAttributes,
             connectedCharacters,
+            imageSrc
         });
         return character;
     } catch (error) {

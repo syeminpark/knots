@@ -23,28 +23,35 @@ const CharacterCreationPanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
-        const uuid = uuidv4()
-        const formData = new FormData();
-        formData.append('image', imageSrc);
-        formData.append('characterUUID', uuid);
-        try {
-            const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
-            if (uploadResponse.imageUrl) {
-                const characterData = {
-                    name: name,
-                    personaAttributes: personaAttributes,
-                    connectedCharacters: connectedCharacters,
-                    imageSrc: uploadResponse.imageUrl,
-                    uuid: uuid,
-                };
 
-                dispatchCreatedCharacters({
-                    type: 'CREATE_CHARACTER',
-                    payload: characterData,
-                });
-                const createCharacterResponse = await apiRequest('/createCharacter', 'POST', characterData);
-                console.log('Character creation response:', createCharacterResponse);
+        const uuid = uuidv4()
+        try {
+            let imageUrl = null;
+            if (imageSrc) {
+
+                const formData = new FormData();
+                formData.append('image', imageSrc);
+                formData.append('characterUUID', uuid);
+
+                const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
+                if (uploadResponse.imageUrl) {
+                    imageUrl = uploadResponse.imageUrl;
+                }
             }
+            const characterData = {
+                name: name,
+                personaAttributes: personaAttributes,
+                connectedCharacters: connectedCharacters,
+                imageSrc: imageUrl,
+                uuid: uuid,
+            };
+            dispatchCreatedCharacters({
+                type: 'CREATE_CHARACTER',
+                payload: characterData,
+            });
+            const createCharacterResponse = await apiRequest('/createCharacter', 'POST', characterData);
+            console.log('Character creation response:', createCharacterResponse);
+
         } catch (error) {
             console.log('Error:', error);
         }

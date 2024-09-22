@@ -9,7 +9,7 @@ const journalController = {
      */
     createJournalBook: async (req, res) => {
         try {
-            const { journalBookTitle, selectedMode, selectedCharacters, journalBookContent } = req.body;
+            const { uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, } = req.body;
             const userUUID = req.user.uuid; // Assuming you have user authentication
 
             if (!journalBookTitle || !selectedCharacters || !journalBookContent) {
@@ -17,9 +17,8 @@ const journalController = {
             }
 
             // Create JournalBook
-            const bookUUID = uuidv4();
             const journalBook = new JournalBook({
-                uuid: bookUUID,
+                uuid: uuid,
                 title: journalBookTitle,
                 selectedMode,
                 createdAt: Date.now(),

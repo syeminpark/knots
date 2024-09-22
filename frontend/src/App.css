@@ -586,7 +586,7 @@ body {
   background-color: rgba(0, 0, 0, 0.434);
   border-radius: 50px;
   transform-origin: right center;
-  animation: move-left 60s ease-in-out infinite alternate;
+  animation: move-left 30s ease-in-out infinite alternate;
   mix-blend-mode: multiply;
   /* Apply blend mode to allow colors to mix */
 }
@@ -602,7 +602,7 @@ body {
   background-color: rgba(0, 0, 0, 0.434);
   border-radius: 50px;
   transform-origin: left center;
-  animation: move-right 60s ease-in-out infinite alternate;
+  animation: move-right 30s ease-in-out infinite alternate;
   mix-blend-mode: multiply;
   /* Apply blend mode to allow colors to mix */
 }
