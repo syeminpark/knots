@@ -19,7 +19,7 @@ const TimeAgo = ({ createdAt }) => {
                 setTimeAgo(`${hours}h`);
             } else if (minutes > 0) {
                 setTimeAgo(`${minutes}m`);
-            } else if (seconds > 0) {
+            } else {
                 setTimeAgo(`now`);
             }
         };
