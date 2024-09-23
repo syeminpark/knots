@@ -18,6 +18,7 @@ const CharacterProfilePanel = (props) => {
     const [name, setName] = useState(caller.name);
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
 
     // enabling save button 
     useEffect(() => {
@@ -102,6 +103,15 @@ const CharacterProfilePanel = (props) => {
 
     const deleteFunction = () => {
         const currentCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+
+        if (currentCharacter) {
+            console.log('delete check');
+        }
+    };
+    
+
+    const toggleDeleteButton = () => {
+        setShowDelete(prev => !prev);
     };
 
     return (

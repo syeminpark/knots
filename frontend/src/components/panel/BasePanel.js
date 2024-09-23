@@ -1,10 +1,17 @@
 import React from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
+import { useState } from 'react'; 
 
 const BasePanel = (props) => {
     const { id, panels, setPanels, children, title, saveFunction, deleteFunction } = props;
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
+
+    const [showDelete, setShowDelete] = useState(false); 
+
+    const toggleDeleteButton = () => {
+        setShowDelete(prev => !prev);
+    };
 
     const panelStyle = {
         transform: CSS.Transform.toString(transform),
@@ -25,7 +32,10 @@ const BasePanel = (props) => {
             </div>
             <div className="x-more-button-container">
                 {deleteFunction && (
-                    <button className="more-btn" >...</button >
+                    <button className="more-btn" onClick={toggleDeleteButton}>...</button>
+                )}
+                {showDelete && deleteFunction && (
+                     <button className="delete-btn" onClick={deleteFunction}>Delete</button>
                 )}
                 <button className="close-btn" onClick={onCloseButtonClick}>✖</button>
             </div>
