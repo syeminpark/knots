@@ -49,30 +49,32 @@ const CommentsTab = (props) => {
 
     return (
         stage === 0 ? (
-            <div style={styles.profileContainer}>
-                <div style={styles.profileList}>
-                    {interactedCharacterList.map((createdCharacter, index) => (
-                        <div key={index} style={styles.profileItem}>
-                            <button
-                                style={styles.profileButtonContainer}
-                                onClick={() => {
-                                    openNewPanel(panels, setPanels, "character-profile", createdCharacter);
-                                }}
-                            >
-                                <CharacterButton
-                                    createdCharacter={createdCharacter}
-                                    iconStyle={styles.characterButtonIconStyle}
-                                    textStyle={styles.characterButtonTextStyle}
-                                />
-                            </button>
+            <>
+                <div style={styles.profileContainer}>
+                    <div style={styles.profileList}>
+                        {interactedCharacterList.map((createdCharacter, index) => (
+                            <div key={index} style={styles.profileItem}>
+                                <button
+                                    style={styles.profileButtonContainer}
+                                    onClick={() => {
+                                        openNewPanel(panels, setPanels, "character-profile", createdCharacter);
+                                    }}
+                                >
+                                    <CharacterButton
+                                        createdCharacter={createdCharacter}
+                                        iconStyle={styles.characterButtonIconStyle}
+                                        textStyle={styles.characterButtonTextStyle}
+                                    />
+                                </button>
 
-                            <ToggleButton
-                                onClick={() => onClickCharacter(createdCharacter)}
-                            />
-                        </div>
-                    ))}
+                                <ToggleButton
+                                    onClick={() => onClickCharacter(createdCharacter)}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </>
         ) : stage === 1 && selectedCharacter ? (
             <>
                 <div style={styles.header}>
@@ -154,14 +156,9 @@ const CommentsTab = (props) => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <ToggleButton
-                                                direction={'right'}
-                                                onClick={() => onClickComment(
-                                                    journalEntryItem.journalBookInfo.uuid,
-                                                    journalEntryItem.journalEntryInfo.uuid,
-                                                    commentThread.commentThreadUUID
-                                                )}
-                                            />
+                                            <div style={styles.iconWithText}>
+                                                <img src={'/tabs2.svg'} alt="icon" style={{ width: '14px' }} onClick={onClickComment} />
+                                            </div>
                                         </div>
                                     );
                                 })}
@@ -172,7 +169,7 @@ const CommentsTab = (props) => {
                                 )}
                             </div>
                         ))}
-                </div>
+                </div >
             </>
         ) : null
     );
@@ -209,14 +206,12 @@ const styles = {
         backgroundColor: 'transparent',
         border: 'none',
         padding: '0',
-
     },
     leftToggleButtonContainer: {
         position: 'absolute',
         left: '0',
-        transform: 'translateX(50%)'
+        transform: 'translateX(50%)',
     },
-
     profileList: {
         marginTop: '20px',
     },
@@ -233,8 +228,8 @@ const styles = {
     },
     commentThreadContent: {
         flex: 1,
-    },
 
+    },
     header: {
         marginBottom: '20px',
         display: 'flex',
@@ -252,15 +247,16 @@ const styles = {
     connectionIcon: {
         fontSize: 'var(--font-xl)',
         marginLeft: '20px',
-        marginRight: '25px'
+        marginRight: '25px',
     },
     commentsContainer: {
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
-        height: '80%', // Limit height to make it scrollable
-        overflowY: 'scroll', // Enable vertical scrolling
+        height: '80%',
+        overflowY: 'scroll',
         width: '100%',
+
     },
     journalEntry: {
         backgroundColor: '#f0f0ff',
@@ -268,13 +264,11 @@ const styles = {
         padding: '15px',
         marginBottom: '15px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-
     },
     journalHeader: {
         fontWeight: 'var(--font-bold)',
         marginBottom: '10px',
         fontSize: 'var(--font-small)',
-
     },
     commentThread: {
         backgroundColor: '#fff',
@@ -285,14 +279,14 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between', // Ensures space between content and button
+        justifyContent: 'space-between',
         alignItems: 'center',
-
+        gap: '10px', // Adds space between the icon and comment
     },
     comment: {
         display: 'flex',
+        flexDirection: 'column', // Aligns character button and text in a row
         alignItems: 'flex-start',
-        flexDirection: 'column',
         padding: '10px',
         backgroundColor: '#f9f9f9',
         borderRadius: '8px',
@@ -301,21 +295,31 @@ const styles = {
         width: '100%',
 
     },
-
     commentContent: {
-        marginLeft: '10px',
-        flexGrow: 1,
-    },
+        flexGrow: 1, // Ensures the comment text will grow and take up available space
+        width: '100%',
+        wordBreak: 'break-word', // Breaks long words into the next lin
 
+    },
     commentText: {
         color: '#555',
         fontSize: 'var(--font-small)',
         marginTop: '5px',
+        wordWrap: 'break-word', // Ensures long words wrap to the next line
     },
     moreComments: {
         color: '#555',
         fontSize: 'var(--font-medium)',
         marginLeft: '10px',
+    },
+    iconWithText: {
+        fontSize: 'var(--font-xs)',
+        display: 'flex',
+        flexDirection: 'column', // Stack the icon and the text vertically
+        alignItems: 'center',
+        cursor: 'pointer',
 
     },
 };
+
+

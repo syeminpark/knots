@@ -11,7 +11,6 @@ const ConnectionsTab = (props) => {
         currentCharacterName = caller.name
     }
 
-
     const deleteConnection = (name) => {
         const newConnections = connectedCharacters.filter(character => character.name !== name);
         setConnectedCharacters(newConnections)
@@ -25,7 +24,12 @@ const ConnectionsTab = (props) => {
 
     return (
         <>
-            <div>{`${connectedCharacters.length} Connections`}</div>
+            {connectedCharacters.length < 2 ? (
+                <div>{`${connectedCharacters.length} Connection`}</div>
+            ) : (
+                <div>{`${connectedCharacters.length} Connections`}</div>
+            )}
+            <br></br>
             {connectedCharacters.map(child => (
                 <Attribute
                     panels={panels}

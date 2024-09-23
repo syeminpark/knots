@@ -19,19 +19,12 @@ const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {
                         </span>
                     </div>
                 </div>
-                <div style={styles.toggleButtonContainer}>
-
-                    <ToggleButton
-                        expandable={false}
-                        onClick={onClick}
-                        size={'medium'}
-                        direction={'right'}
-
-                    />
+                <div style={styles.iconWithText}>
+                    <img src={'/tabs2.svg'} alt="icon" style={{ width: '14px' }} onClick={onClick} />
                 </div>
             </div>
             <div style={styles.content}>{content}</div>
-        </div>
+        </div >
     );
 };
 
@@ -76,6 +69,13 @@ const styles = {
     toggleButtonContainer: {
         position: 'relative',
 
+    },
+    iconWithText: {
+        fontSize: 'var(--font-xs)',
+        display: 'flex',
+        flexDirection: 'column', // Stack the icon and the text vertically
+        alignItems: 'center',
+        cursor: 'pointer',
     },
     rightContent: {
         position: 'absolute',

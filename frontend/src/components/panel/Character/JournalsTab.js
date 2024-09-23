@@ -20,23 +20,27 @@ const JournalsTab = (props) => {
     }
 
     return (
-        <div style={styles.journalsTabWrapper}>
-            {journalData.length === 0 && (
-                <div>
-                    0 Journals
-                </div>
+        <>
+            {journalData.length < 2 ? (
+                <div>{`${journalData.length} Journal`}</div>
+            ) : (
+                <div>{`${journalData.length} Journals`}</div>
             )}
-            {journalData.length > 0 && sortByLatest(journalData).map((journal) => (
-                <JournalCard
-                    key={journal.bookInfo.uuid}
-                    title={journal.bookInfo.title}
-                    content={journal.journalEntry.content}
-                    createdAt={journal.bookInfo.createdAt}
-                    entryTag={journal.bookInfo.selectedMode}
-                    onClick={() => onClick(journal.bookInfo.uuid, journal.journalEntry.uuid)}
-                />
-            ))}
-        </div>
+
+            <br></br>
+            <div style={styles.journalsTabWrapper}>
+                {journalData.length > 0 && sortByLatest(journalData).map((journal) => (
+                    <JournalCard
+                        key={journal.bookInfo.uuid}
+                        title={journal.bookInfo.title}
+                        content={journal.journalEntry.content}
+                        createdAt={journal.bookInfo.createdAt}
+                        entryTag={journal.bookInfo.selectedMode}
+                        onClick={() => onClick(journal.bookInfo.uuid, journal.journalEntry.uuid)}
+                    />
+                ))}
+            </div>
+        </>
     );
 };
 

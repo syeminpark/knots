@@ -108,7 +108,7 @@ const CharacterProfilePanel = (props) => {
             console.log('delete check');
         }
     };
-    
+
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
@@ -131,7 +131,7 @@ const CharacterProfilePanel = (props) => {
                     name={name}
                     setName={setName}
                 />
-                <TabNavigation tabs={['About', 'Connections', 'Journals', 'Comments']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavigation tabs={['About', 'Connections', 'Journal History', 'Comment History']} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
             {activeTab === 'About' ? (
@@ -148,7 +148,7 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                     caller={caller}
                 />
-            ) : activeTab === 'Journals' ? (
+            ) : activeTab === 'Journal History' ? (
                 <JournalsTab
                     caller={caller}
                     createdJournalBooks={createdJournalBooks}
@@ -156,7 +156,7 @@ const CharacterProfilePanel = (props) => {
                     panels={panels}
                     setPanels={setPanels}
                 />
-            ) : activeTab === 'Comments' ? (
+            ) : activeTab === 'Comment History' ? (
                 <CommentsTab
                     panels={panels}
                     setPanels={setPanels}
