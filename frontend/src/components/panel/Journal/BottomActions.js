@@ -41,13 +41,13 @@ const BottomActions = (props) => {
         }
     };
 
-    useEffect(() => {
-        if (activeTab === "Manual Post") {
-            setIsMultipleSelect(false);
-        } else {
-            setIsMultipleSelect(true);
-        }
-    }, [activeTab]);
+    // useEffect(() => {
+    //     if (activeTab === "Manual Post") {
+    //         setIsMultipleSelect(false);
+    //     } else {
+    //         setIsMultipleSelect(true);
+    //     }
+    // }, [activeTab]);
 
     useEffect(() => {
         if (selectedCharacters.length > 0) {

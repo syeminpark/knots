@@ -124,7 +124,7 @@ const CreateJournalModal = (props) => {
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
                             availableCharacters={createdCharacters?.characters || []}
-                            multipleSelect={false}
+                        // multipleSelect={false}
                         />
                         <br />
                         {selectedCharacters.length > 0 && (
