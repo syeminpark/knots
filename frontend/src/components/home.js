@@ -133,7 +133,7 @@ const Home = (props) => {
 
       <div className="thread-wrapper">
         <div className="thread-container">
-          <h1>Connect To Create, Create To Connect</h1>
+          <h1>KNOTS: A SOCIAL MEDIA FOR YOUR STORY CHARACTERS</h1>
           <span></span>
         </div>
       </div>
