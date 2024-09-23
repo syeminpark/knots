@@ -399,6 +399,15 @@ body {
   gap: 3px;
 }
 
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 .close-btn,
 .more-btn {
   background-color: transparent;
