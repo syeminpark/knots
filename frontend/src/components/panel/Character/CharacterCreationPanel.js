@@ -23,7 +23,6 @@ const CharacterCreationPanel = (props) => {
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
-
         const uuid = uuidv4()
         try {
             let imageUrl = null;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { DndContext, useDraggable, useDroppable, closestCenter } from '@dnd-kit/core';
-import { useNavigate } from 'react-router-dom'
-import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import CharacterCreationPanel from './panel/Character/CharacterCreationPanel.js';
 import CharacterProfilePanel from './panel/Character/CharacterProfilePanel.js';
 import SidebarRight from './SideBarRight.js';
@@ -10,30 +11,35 @@ import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 
-const Home = (props) => {
-  const { loggedIn, userName, initialData } = props
-  const [panels, setPanels] = useState([])
 
-  console.log(initialData)
+const Home = (props) => {
+  const { loggedIn, userName, initialData } = props;
+  const [panels, setPanels] = useState([]);
+  const panelsEndRef = useRef(null);
+
   const initialState = {
     journalBooks: initialData.journalBooks || [],
-    // journalBooks: [],
     lastCreatedJournalBook: null,
     participantIndex: {},
   };
 
-  const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: initialData.characters })
-  const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState)
-
-  const navigate = useNavigate()
+  const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: initialData.characters });
+  const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState);
+  const navigate = useNavigate();
 
   const onButtonClick = () => {
     if (loggedIn) {
-      localStorage.removeItem('user')
-      props.setLoggedIn(false)
+      localStorage.removeItem('user');
+      props.setLoggedIn(false);
     }
-    navigate('/')
-  }
+    navigate('/');
+  };
+
+  const scrollToNewPanel = () => {
+    if (panelsEndRef.current) {
+      panelsEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     dispatchCreatedCharacters({
@@ -42,18 +48,17 @@ const Home = (props) => {
         characters: initialData.characters,
       },
     });
-
     dispatchCreatedJournalBooks({
-
       type: 'INITIALIZE_JOURNALBOOKS',
       payload: {
-        journalBooks: initialData.journalBooks
-      }
-    })
+        journalBooks: initialData.journalBooks,
+      },
+    });
+  }, [initialData]);
 
-  }, [initialData])
-
-
+  useEffect(() => {
+    scrollToNewPanel();
+  }, [panels]);
 
   const handleDragEnd = ({ active, over }) => {
     if (over && active.id !== over.id) {
@@ -68,7 +73,6 @@ const Home = (props) => {
       case 'character-creation':
         return (
           <CharacterCreationPanel
-            key={panel.id}
             id={panel.id}
             panels={panels}
             setPanels={setPanels}
@@ -79,7 +83,6 @@ const Home = (props) => {
       case 'character-profile':
         return (
           <CharacterProfilePanel
-            key={panel.id}
             id={panel.id}
             panels={panels}
             setPanels={setPanels}
@@ -93,7 +96,6 @@ const Home = (props) => {
       case 'journal':
         return (
           <JournalPanel
-            key={panel.id}
             id={panel.id}
             panels={panels}
             setPanels={setPanels}
@@ -112,24 +114,21 @@ const Home = (props) => {
   return (
     <div className="homeContainer">
       <div className="logoContainer">
-        <span className="logoText">
-          ⩉ Knots
-        </span>
+        <span className="logoText">⩉ Knots</span>
       </div>
 
       {/* Integrating Sidebar Right */}
-      <DndContext
-        colliSonDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SidebarRight panels={panels}
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SidebarRight
+          panels={panels}
           setPanels={setPanels}
           createdCharacters={createdCharacters}
           dispatchCreatedCharacters={dispatchCreatedCharacters}
-        ></SidebarRight>
+        />
       </DndContext>
+
       {/* Integrating Sidebar Left */}
-      <SidebarLeft panels={panels} setPanels={setPanels}></SidebarLeft>
+      <SidebarLeft panels={panels} setPanels={setPanels} />
 
       <div className="thread-wrapper">
         <div className="thread-container">
@@ -141,9 +140,22 @@ const Home = (props) => {
       <div className="panelContainer">
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
-            <div style={{ display: 'flex', gap: '20px', }}>
-              {panels.map(panel => (renderPanel((panel))))}
-            </div>
+            <AnimatePresence>
+              <div style={{ display: 'flex', gap: '20px' }}>
+                {panels.map(panel => (
+                  <motion.div
+                    key={panel.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {renderPanel(panel)}
+                  </motion.div>
+                ))}
+                <div ref={panelsEndRef} /> {/* Dummy div for scrolling */}
+              </div>
+            </AnimatePresence>
           </SortableContext>
         </DndContext>
       </div>
@@ -156,7 +168,7 @@ const Home = (props) => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
       </div>
-    </div >
+    </div>
   );
 }
 
