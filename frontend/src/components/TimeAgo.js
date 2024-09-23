@@ -5,9 +5,9 @@ const TimeAgo = ({ createdAt }) => {
 
     useEffect(() => {
         const updateTimeAgo = () => {
+
             const now = Date.now();
             const timeDifference = now - createdAt;
-
             const seconds = Math.floor(timeDifference / 1000);
             const minutes = Math.floor(seconds / 60);
             const hours = Math.floor(minutes / 60);
@@ -19,7 +19,7 @@ const TimeAgo = ({ createdAt }) => {
                 setTimeAgo(`${hours}h`);
             } else if (minutes > 0) {
                 setTimeAgo(`${minutes}m`);
-            } else {
+            } else if (seconds > 0) {
                 setTimeAgo(`now`);
             }
         };

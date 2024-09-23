@@ -10,7 +10,7 @@ const commentSchema = new mongoose.Schema({
     ownerUUID: { type: String, required: true },
     userUUID: { type: String, required: true },
     content: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: String, default: Date.now },
     editedAt: { type: Date },
     selectedMode: { type: String },
 });
@@ -21,7 +21,7 @@ const commentThreadSchema = new mongoose.Schema({
     uuid: { type: String, required: true, unique: true, default: () => uuidv4() },
     journalEntryUUID: { type: String, required: true },
     userUUID: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: String, default: Date.now },
     participantUUIDs: [{ type: String }],
 });
 const CommentThread = mongoose.model('CommentThread', commentThreadSchema);
@@ -41,7 +41,7 @@ const journalBookSchema = new mongoose.Schema({
     uuid: { type: String, required: true, unique: true, default: () => uuidv4() },
     title: { type: String, required: true },
     selectedMode: { type: String },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: String, default: Date.now },
     userUUID: { type: String, required: true }, // Replaced ownerUUID with userUUID
 });
 const JournalBook = mongoose.model('JournalBook', journalBookSchema);

@@ -66,7 +66,6 @@ const CommentsTab = (props) => {
                                         textStyle={styles.characterButtonTextStyle}
                                     />
                                 </button>
-
                                 <ToggleButton
                                     onClick={() => onClickCharacter(createdCharacter)}
                                 />
