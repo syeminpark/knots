@@ -9,6 +9,7 @@ const DetailedJournalPost = (props) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
+    const [showDelete, setShowDelete] = useState(false);
 
     const onEditButtonClick = () => {
         console.log(bookInfo, journalEntry)
@@ -29,6 +30,14 @@ const DetailedJournalPost = (props) => {
     useEffect(() => {
 
     })
+
+    const toggleDeleteButton = () => {
+        setShowDelete(prev => !prev);
+    };
+
+    const onDeleteButtonClick = () => {
+        // delete 기능 추가
+    }
 
     const onReturnClick = () => {
         setSelectedBookAndJournalEntry(null);
@@ -63,9 +72,24 @@ const DetailedJournalPost = (props) => {
 
                     />
                 </button>
+
+                {/* Edit button */}
                 <button style={styles.editButton} onClick={onEditButtonClick}>
                     {isEditing ? "💾" : "✎"}
                 </button>
+
+                {/* more button */}
+                <button style={styles.moreButton} onClick={toggleDeleteButton}>
+                    ...
+                </button>
+
+                {/* Conditionally show delete button */}
+                {showDelete && (
+                    <button style={styles.deleteButton} onClick={onDeleteButtonClick}> 
+                        Delete
+                    </button>
+                )}
+
             </div >
 
             <div style={styles.journalText}>
@@ -111,6 +135,23 @@ const styles = {
         cursor: 'pointer',
         color: '#333',
         fontSize: 'var(--font-medium)',
+    },
+    moreButton: {
+        backgroundColor: 'transparent',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: 'var(--font-medium)',
+        marginLeft: '3px',
+        transform: 'translateY(-3px)',
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '6px 10px',
+        cursor: 'pointer',
+        marginLeft: '5px',
     },
     journalText: {
         backgroundColor: 'var(--color-bg-grey)',
