@@ -29,11 +29,11 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
 
     const draggableAreaStyle = {
         flex: 1,
-        width: '8%',
+        width: '0%',
         cursor: 'grab',
-        backgroundColor: 'white',
-        borderRadius: '20px',
-        padding: '8px',
+        backgroundColor: 'none',
+        padding: '0px',
+
         // boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
 
     };
@@ -59,7 +59,7 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
             {...listeners}
         >
             {/* Draggable Area at the Top */}
-            <div style={draggableAreaStyle}></div>
+            <div style={draggableAreaStyle}>...</div>
 
             {/* Profile and Name at the Bottom */}
             <button
