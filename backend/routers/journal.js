@@ -5,13 +5,13 @@ import journalController from '../controller/journal.js';
 const router = express.Router();
 
 router
-    .get('/allData', auth, journalController.getAllData)
-    .post('/journalBooks', auth, journalController.createJournalBook)
-    .post('/comments', auth, journalController.createComment)
-    .put('/journalEntries/:journalEntryUUID', auth, journalController.editJournalEntry)
-    .put('/comments/:commentUUID', auth, journalController.editComment)
-    .delete('/comments/:commentUUID', auth, journalController.deleteComment)
-    .delete('/journalEntries/:journalEntryUUID', auth, journalController.deleteJournalEntry)
+    .get('/getAllJournalBooks', auth, journalController.getAllData)
+    .post('/createJournalBook', auth, journalController.createJournalBook)
+    .post('/createComment', auth, journalController.createComment)
+    .put('/editJournalEntry/:journalEntryUUID', auth, journalController.editJournalEntry)
+    .put('/editComment/:commentUUID', auth, journalController.editComment)
+    .delete('/deleteComment/:commentUUID', auth, journalController.deleteComment)
+    .delete('/deleteJournalEntry/:journalEntryUUID', auth, journalController.deleteJournalEntry)
 
 export default router;
 

@@ -63,28 +63,31 @@ const CreateJournalModal = (props) => {
                 console.log("Perform API call for system generation");
             }
             const journalBookUUID = uuidv4()
-            const payload = {
 
+            selectedCharacters.forEach(character => character.journalEntryUUID = uuidv4())
+            const payload = {
+                uuid: journalBookUUID,
+                journalBookTitle: journalBookText.title,
+                journalBookContent: content,
+                selectedMode: selectedMode,
+                selectedCharacters,
+                createdAt: Date.now()
             }
             dispatchCreatedJournalBooks({
                 type: 'CREATE_JOURNAL_BOOK',
-                payload: {
-                    uuid: journalBookUUID,
-                    journalBookTitle: journalBookText.title,
-                    journalBookContent: content,
-                    selectedMode: selectedMode,
-                    selectedCharacters,
-                }
+                payload: payload
             });
-
-            // await apiRequest('/journalBooks', 'POST',)
-
-            // const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
-
-
-
-
             setShowModal(false);
+
+            try {
+                const response = await apiRequest('/createJournalBook', 'POST', payload);
+                console.log(payload)
+                console.log(response)
+            }
+            catch (error) { console.log(error) }
+
+
+
         }
     };
 

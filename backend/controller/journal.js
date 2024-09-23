@@ -9,11 +9,13 @@ const journalController = {
      */
     createJournalBook: async (req, res) => {
         try {
-            const { uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, } = req.body;
-            const userUUID = req.user.uuid; // Assuming you have user authentication
+            const { uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, createdAt } = req.body;
+            const userUUID = req.user.ID; // Assuming you have user authentication
 
             if (!journalBookTitle || !selectedCharacters || !journalBookContent) {
+                console.log(journalBookTitle, selectedCharacters, journalBookContent)
                 return res.status(400).json({ error: 'Missing required fields' });
+
             }
 
             // Create JournalBook
@@ -21,17 +23,19 @@ const journalController = {
                 uuid: uuid,
                 title: journalBookTitle,
                 selectedMode,
-                createdAt: Date.now(),
+                createdAt: createdAt,
                 userUUID: userUUID, // Set userUUID to the current user's UUID
             });
             await journalBook.save();
 
             // Create JournalEntries for each character
-            const journalEntries = selectedCharacters.map((characterUUID) => ({
-                uuid: uuidv4(),
-                journalBookUUID: bookUUID,
-                userUUID: characterUUID,
+            const journalEntries = selectedCharacters.map((character) => ({
+                uuid: character.journalEntryUUID,
+                journalBookUUID: uuid,
+                ownerUUID: character.uuid,
+                userUUID: userUUID,
                 content: journalBookContent,
+
             }));
             await JournalEntry.insertMany(journalEntries);
 
@@ -49,7 +53,7 @@ const journalController = {
         try {
             const { journalEntryUUID } = req.params;
             const { newValue } = req.body;
-            const userUUID = req.user.uuid;
+            const userUUID = req.user.ID;
 
             // Find the journal entry
             const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
@@ -80,7 +84,7 @@ const journalController = {
     deleteJournalEntry: async (req, res) => {
         try {
             const { journalEntryUUID } = req.params;
-            const userUUID = req.user.uuid;
+            const userUUID = req.user.ID;
 
             const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
 
@@ -116,17 +120,14 @@ const journalController = {
     createComment: async (req, res) => {
         try {
             const {
-                journalBookUUID,
                 journalEntryUUID,
-                userUUID, // Replaced ownerUUID with userUUID
+                ownerUUID,
                 content,
                 selectedMode,
                 commentThreadUUID,
+                createdAt,
             } = req.body;
-
-            if (!journalEntryUUID || !userUUID || !content) {
-                return res.status(400).json({ error: 'Missing required fields.' });
-            }
+            const userUUID = req.user.ID;
 
             let threadUUID = commentThreadUUID;
 
@@ -139,8 +140,8 @@ const journalController = {
                 }
 
                 // Update participantUUIDs
-                if (!commentThread.participantUUIDs.includes(userUUID)) {
-                    commentThread.participantUUIDs.push(userUUID);
+                if (!commentThread.participantUUIDs.includes(UUID)) {
+                    commentThread.participantUUIDs.push(ownerUUID);
                     await commentThread.save();
                 }
             } else {
@@ -149,8 +150,9 @@ const journalController = {
                 const newCommentThread = new CommentThread({
                     uuid: threadUUID,
                     journalEntryUUID,
-                    createdAt: Date.now(),
-                    participantUUIDs: [userUUID],
+                    userUUID: userUUID,
+                    createdAt: createdAt,
+                    participantUUIDs: [ownerUUID],
                 });
                 await newCommentThread.save();
             }
@@ -160,9 +162,10 @@ const journalController = {
                 uuid: uuidv4(),
                 commentThreadUUID: threadUUID,
                 userUUID,
+                ownerUUID,
                 content,
                 selectedMode,
-                createdAt: Date.now(),
+                createdAt,
             });
             await newComment.save();
 
@@ -180,7 +183,7 @@ const journalController = {
         try {
             const { commentUUID } = req.params;
             const { newContent } = req.body;
-            const userUUID = req.user.uuid;
+            const userUUID = req.user.ID;
 
             const comment = await Comment.findOne({ uuid: commentUUID });
 
@@ -211,7 +214,7 @@ const journalController = {
     deleteComment: async (req, res) => {
         try {
             const { commentUUID } = req.params;
-            const userUUID = req.user.uuid;
+            const userUUID = req.user.ID;
 
             const comment = await Comment.findOne({ uuid: commentUUID });
 
@@ -247,30 +250,30 @@ const journalController = {
      */
     getAllData: async (req, res) => {
         try {
-            const userUUID = req.user.uuid; // Get the user's UUID from the authentication middleware
+            const userUUID = req.user.ID; // Get the user's UUID from the authentication middleware
 
-            // Fetch all JournalBooks owned by the user
+            // Step 1: Fetch all JournalBooks owned by the user
             const journalBooks = await JournalBook.find({ userUUID: userUUID });
 
             // Extract JournalBook UUIDs
             const journalBookUUIDs = journalBooks.map((book) => book.uuid);
 
-            // Fetch JournalEntries related to these JournalBooks
+            // Step 2: Fetch JournalEntries related to these JournalBooks
             const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs } });
 
             // Extract JournalEntry UUIDs
             const journalEntryUUIDs = journalEntries.map((entry) => entry.uuid);
 
-            // Fetch CommentThreads related to these JournalEntries
+            // Step 3: Fetch CommentThreads related to these JournalEntries
             const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs } });
 
             // Extract CommentThread UUIDs
             const commentThreadUUIDs = commentThreads.map((thread) => thread.uuid);
 
-            // Fetch Comments related to these CommentThreads
+            // Step 4: Fetch Comments related to these CommentThreads
             const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs } });
 
-            // Organize Comments by their CommentThread UUID
+            // Step 5: Organize Comments by their CommentThread UUID
             const commentsByThreadUUID = comments.reduce((acc, comment) => {
                 if (!acc[comment.commentThreadUUID]) {
                     acc[comment.commentThreadUUID] = [];
@@ -279,13 +282,13 @@ const journalController = {
                 return acc;
             }, {});
 
-            // Attach Comments to their respective CommentThreads
+            // Step 6: Attach Comments to their respective CommentThreads
             const threadsWithComments = commentThreads.map((thread) => ({
                 ...thread.toObject(),
-                comments: commentsByThreadUUID[thread.uuid] || [],
+                comments: commentsByThreadUUID[thread.uuid] || [], // Attach comments to threads
             }));
 
-            // Organize CommentThreads by their JournalEntry UUID
+            // Step 7: Organize CommentThreads by their JournalEntry UUID
             const threadsByEntryUUID = threadsWithComments.reduce((acc, thread) => {
                 if (!acc[thread.journalEntryUUID]) {
                     acc[thread.journalEntryUUID] = [];
@@ -294,13 +297,13 @@ const journalController = {
                 return acc;
             }, {});
 
-            // Attach CommentThreads to their respective JournalEntries
+            // Step 8: Attach CommentThreads to their respective JournalEntries
             const entriesWithThreads = journalEntries.map((entry) => ({
                 ...entry.toObject(),
-                commentThreads: threadsByEntryUUID[entry.uuid] || [],
+                commentThreads: threadsByEntryUUID[entry.uuid] || [], // Attach threads to entries
             }));
 
-            // Organize JournalEntries by their JournalBook UUID
+            // Step 9: Organize JournalEntries by their JournalBook UUID
             const entriesByBookUUID = entriesWithThreads.reduce((acc, entry) => {
                 if (!acc[entry.journalBookUUID]) {
                     acc[entry.journalBookUUID] = [];
@@ -309,18 +312,25 @@ const journalController = {
                 return acc;
             }, {});
 
-            // Attach JournalEntries to their respective JournalBooks
+            // Step 10: Attach JournalEntries to their respective JournalBooks
             const booksWithEntries = journalBooks.map((book) => ({
-                ...book.toObject(),
-                journalEntries: entriesByBookUUID[book.uuid] || [],
+                bookInfo: { // Structure `bookInfo`
+                    uuid: book.uuid,
+                    title: book.title,
+                    selectedMode: book.selectedMode,
+                    createdAt: book.createdAt,
+                },
+                journalEntries: entriesByBookUUID[book.uuid] || [], // Attach entries to books
             }));
 
+            // Return the final structure of journal books
             res.status(200).json({ journalBooks: booksWithEntries });
         } catch (error) {
             console.error('Error fetching all data:', error);
             res.status(500).json({ error: 'An error occurred while fetching data.' });
         }
-    },
+    }
+
 };
 
 export default journalController;

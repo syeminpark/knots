@@ -14,13 +14,15 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [userName, setUserName] = useState('')
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
-  const [initialData, setInitialData] = useState({ characters: [], journals: [] })
+  const [initialData, setInitialData] = useState({ characters: [], journalBooks: [] })
 
   const initializeData = async () => {
     try {
-      const data = await apiRequest('/getAllCharacters', 'GET',);
-      console.log(data)
-      setInitialData({ characters: data })
+      const characterData = await apiRequest('/getAllCharacters', 'GET',);
+      console.log(characterData)
+      const journalBookData = await apiRequest('/getAllJournalBooks', 'GET',);
+      console.log(journalBookData.journalBooks)
+      setInitialData({ characters: characterData, journalBooks: journalBookData.journalBooks })
     }
     catch (error) {
       console.log(error)

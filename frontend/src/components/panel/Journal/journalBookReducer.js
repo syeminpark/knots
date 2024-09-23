@@ -2,16 +2,24 @@ import { v4 as uuidv4 } from 'uuid';
 
 const journalBookReducer = (state, action) => {
     switch (action.type) {
+
+
+        case 'INITIALIZE_JOURNALBOOKS':
+            return {
+                ...state,
+                journalBooks: action.payload.journalBooks
+            };
+
         case 'CREATE_JOURNAL_BOOK':
             const newJournalBook = {
                 bookInfo: {
                     uuid: action.payload.uuid,
                     title: action.payload.journalBookTitle,
                     selectedMode: action.payload.selectedMode,
-                    createdAt: Date.now(),
+                    createdAt: action.payload.createdAt,
                 },
                 journalEntries: action.payload.selectedCharacters.map(character => ({
-                    uuid: uuidv4(),
+                    uuid: character.journalEntryUUID,
                     ownerUUID: character.uuid,
                     content: action.payload.journalBookContent,
                     commentThreads: [],

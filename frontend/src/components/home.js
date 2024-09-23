@@ -11,14 +11,17 @@ import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 
 const Home = (props) => {
+  const { loggedIn, userName, initialData } = props
+  const [panels, setPanels] = useState([])
+
+  console.log(initialData)
   const initialState = {
-    journalBooks: [],
+    journalBooks: initialData.journalBooks || [],
+    // journalBooks: [],
     lastCreatedJournalBook: null,
     participantIndex: {},
   };
 
-  const [panels, setPanels] = useState([])
-  const { loggedIn, userName, initialData } = props
   const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: initialData.characters })
   const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState)
 
@@ -39,6 +42,14 @@ const Home = (props) => {
         characters: initialData.characters,
       },
     });
+
+    dispatchCreatedJournalBooks({
+
+      type: 'INITIALIZE_JOURNALBOOKS',
+      payload: {
+        journalBooks: initialData.journalBooks
+      }
+    })
 
   }, [initialData])
 

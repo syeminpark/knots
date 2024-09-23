@@ -7,7 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 const commentSchema = new mongoose.Schema({
     uuid: { type: String, required: true, unique: true, default: () => uuidv4() },
     commentThreadUUID: { type: String, required: true },
-    userUUID: { type: String, required: true }, // Replaced ownerUUID with userUUID
+    ownerUUID: { type: String, required: true },
+    userUUID: { type: String, required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     editedAt: { type: Date },
@@ -19,6 +20,7 @@ const Comment = mongoose.model('Comment', commentSchema);
 const commentThreadSchema = new mongoose.Schema({
     uuid: { type: String, required: true, unique: true, default: () => uuidv4() },
     journalEntryUUID: { type: String, required: true },
+    userUUID: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     participantUUIDs: [{ type: String }],
 });
@@ -28,7 +30,8 @@ const CommentThread = mongoose.model('CommentThread', commentThreadSchema);
 const journalEntrySchema = new mongoose.Schema({
     uuid: { type: String, required: true, unique: true, default: () => uuidv4() },
     journalBookUUID: { type: String, required: true },
-    userUUID: { type: String, required: true }, // Replaced ownerUUID with userUUID
+    userUUID: { type: String, required: true }, //
+    ownerUUID: { type: String, required: true },
     content: { type: String, required: true },
 });
 const JournalEntry = mongoose.model('JournalEntry', journalEntrySchema);
