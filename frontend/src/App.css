@@ -187,7 +187,7 @@ body {
 .character-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   height: 100%;
   overflow-y: auto;
 }

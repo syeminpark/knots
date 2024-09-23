@@ -21,21 +21,27 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
         flexDirection: 'column',
         alignItems: 'center',
         borderRadius: '10px',
-        padding: '5px',
+        paddingTop: '0px',
+        paddingBottom: '5px',
+        paddingLeft: '5px',
+        paddingRight: '5px',
         margin: '5px',
         backgroundColor: '#f0f0f0', // Optional: Add a background color
 
     };
 
     const draggableAreaStyle = {
-        flex: 1,
-        width: '0%',
+        // flex: 1,
+        // width: '0%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%', 
         cursor: 'grab',
         backgroundColor: 'none',
         padding: '0px',
-
+        color: '#333',
         // boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-
     };
 
     const profileButtonStyle = {
