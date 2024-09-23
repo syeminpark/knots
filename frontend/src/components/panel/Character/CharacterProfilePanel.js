@@ -101,11 +101,23 @@ const CharacterProfilePanel = (props) => {
         }
     };
 
-    const deleteFunction = () => {
+    const deleteFunction = async () => {
         const currentCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
-
         if (currentCharacter) {
-            console.log('delete check');
+            try {
+                await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE');
+
+                dispatchCreatedCharacters({
+                    type: 'DELETE_CHARACTER',
+                    payload: { uuid: caller.uuid }
+                });
+
+                const newPanels = panels.filter(panel => panel.id !== id);
+                setPanels(newPanels);
+                console.log('Character deleted successfully');
+            } catch (error) {
+                console.error('Error deleting character:', error);
+            }
         }
     };
 

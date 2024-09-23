@@ -41,6 +41,12 @@ const characterReducer = (state, action) => {
                 ...state,
                 characters: action.payload,
             };
+        
+        case 'DELETE_CHARACTER':
+        return {
+            ...state,
+            characters: state.characters.filter((character) => character.uuid !== action.payload.uuid)
+        };
 
         default:
             return state;
