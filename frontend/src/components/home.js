@@ -133,9 +133,8 @@ const Home = (props) => {
 
       <div className="thread-wrapper">
         <div className="thread-container">
-          <div className="thread-left"></div>
-          <div className="thread-right"></div>
           <h1>Connect To Create, Create To Connect</h1>
+          <span></span>
         </div>
       </div>
 

@@ -541,8 +541,8 @@ body {
 }
 
 .save-btn:disabled {
-  background-color: grey; 
-  cursor: not-allowed; 
+  background-color: grey;
+  cursor: not-allowed;
   opacity: 0.6;
 }
 
@@ -584,61 +584,8 @@ body {
 
 }
 
-/* Left thread */
-.thread-left {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 250px;
-  /* Ensure full width to meet at the center */
-  height: 10px;
-  background-color: rgba(0, 0, 0, 0.434);
-  border-radius: 50px;
-  transform-origin: right center;
-  animation: move-left 30s ease-in-out infinite alternate;
-  mix-blend-mode: multiply;
-  /* Apply blend mode to allow colors to mix */
-}
 
-/* Right thread */
-.thread-right {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 250px;
-  /* Ensure full width to meet at the center */
-  height: 10px;
-  background-color: rgba(0, 0, 0, 0.434);
-  border-radius: 50px;
-  transform-origin: left center;
-  animation: move-right 30s ease-in-out infinite alternate;
-  mix-blend-mode: multiply;
-  /* Apply blend mode to allow colors to mix */
-}
 
-/* Animation for left thread to move towards the center */
-@keyframes move-left {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(300px);
-    /* Move towards the center fully */
-  }
-}
-
-/* Animation for right thread to move towards the center */
-@keyframes move-right {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-300px);
-    /* Move towards the center fully */
-  }
-}
 
 .header-icon-title {
   display: flex;
