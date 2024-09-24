@@ -11,7 +11,6 @@ import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 
-
 const Home = (props) => {
   const { loggedIn, userName, initialData } = props;
   const [panels, setPanels] = useState([]);

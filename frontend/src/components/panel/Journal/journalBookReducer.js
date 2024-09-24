@@ -390,6 +390,9 @@ export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUI
 
     // Create an intermediate structure to group by journalEntryUUID
     const journalEntryGroups = {};
+    let totalThreadCount = 0;  // Track total number of threads
+    let totalCommentsSentByChar1 = 0;  // Track total comments sent by characterUUID1
+    let totalCommentsReceivedByChar1 = 0;  // Track total comments received by characterUUID1
 
     // For each thread, retrieve the comments where either character has commented
     combinedThreads.forEach((threadUUID) => {
@@ -404,6 +407,17 @@ export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUI
             );
 
             if (commentsBetweenCharacters.length > 0) {
+                totalThreadCount += 1; // Increment thread count for each relevant thread
+
+                // Separate counts for comments sent and received
+                commentsBetweenCharacters.forEach((comment) => {
+                    if (comment.ownerUUID === characterUUID1) {
+                        totalCommentsSentByChar1 += 1;  // Increment comments sent by characterUUID1
+                    } else {
+                        totalCommentsReceivedByChar1 += 1;  // Increment comments received by characterUUID1
+                    }
+                });
+
                 // If this journal entry has not been added to the result yet, initialize it
                 if (!journalEntryGroups[journalEntry.uuid]) {
                     journalEntryGroups[journalEntry.uuid] = {
@@ -424,7 +438,12 @@ export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUI
     });
 
     // Convert the grouped journal entries into an array of results
-    return Object.values(journalEntryGroups);
+    return {
+        journalEntries: Object.values(journalEntryGroups),
+        totalThreadCount,   // Return the total number of threads
+        totalCommentsSentByChar1,  // Return total comments sent by characterUUID1
+        totalCommentsReceivedByChar1  // Return total comments received by characterUUID1
+    };
 };
 
 
