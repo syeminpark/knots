@@ -5,52 +5,33 @@ import openNewPanel from "../../openNewPanel";
 import ToggleButton from "../../ToggleButton";
 
 const CommentsTab = (props) => {
+
     const { panels, setPanels, caller, createdJournalBooks, createdCharacters } = props;
     const [stage, setStage] = useState(0);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
-    const [characterCommentData, setCharacterCommentData] = useState([]);
-    const profileOwnerCharacter = createdCharacters.characters.find(c => c.uuid === caller.uuid)
+    const [commentExchangeHistory, setCommentExchangeHistory] = useState([]);
 
     const interactedCharacters = getInteractedCharactersWithPosts(createdJournalBooks, caller.uuid);
     const interactedCharacterList = interactedCharacters.map(interactionCharacterUUID =>
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
-    // Limit the display for comments and threads
+
     const commentsLimitShow = 3;
     const threadsLimitShow = 100;
-    // Calculate comments sent/received for each interacted character
-    useEffect(() => {
-        const updatedCharacterCommentData = interactedCharacterList.map((character) => {
-            const commentData = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, character.uuid);
-            return {
-                character,
-                totalCommentsReceived: commentData.totalCommentsReceivedByChar1,
-                totalCommentsSent: commentData.totalCommentsSentByChar1,
-            };
-        });
-        setCharacterCommentData(updatedCharacterCommentData);
-    }, [createdJournalBooks, interactedCharacterList]);
 
-    // Character click handler
-    const onClickCharacter = (character) => {
-        setSelectedCharacter(character);
+    const onClickCharacter = (clickedOnCharacter) => {
+        setSelectedCharacter(clickedOnCharacter);
         setStage(1);
+        const commentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, clickedOnCharacter.uuid);
+        setCommentExchangeHistory(commentHistory);
     };
 
-    // Back button handler
     const onBack = () => {
         setStage(0);
         setSelectedCharacter(null);
+        setCommentExchangeHistory([]);
     };
 
-    // Update selectedCharacter if createdCharacters updates
-    useEffect(() => {
-        if (selectedCharacter) {
-            setSelectedCharacter(createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === selectedCharacter.uuid));
-        }
-    }, [createdCharacters]);
-
-    // Open comment thread in a new panel
     const onClickComment = (bookUUID, entryUUID, commentThreadUUID) => {
         openNewPanel(panels, setPanels, 'journal', null, {
             type: "comment",
@@ -60,61 +41,73 @@ const CommentsTab = (props) => {
         });
     };
 
-    // Get the comment exchange history between caller and the selected character
-    const commentExchangeData = selectedCharacter
-        ? getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, selectedCharacter.uuid)
-        : { journalEntries: [], totalThreadCount: 0, totalCommentsSentByChar1: 0, totalCommentsReceivedByChar1: 0 };
+    useEffect(() => {
+        if (selectedCharacter) {
+            const updatedCharacter = createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === selectedCharacter.uuid);
+            setSelectedCharacter(updatedCharacter);
+        }
+    }, [createdCharacters]);
 
-    const { journalEntries, totalThreadCount, totalCommentsSentByChar1, totalCommentsReceivedByChar1 } = commentExchangeData;
+    useEffect(() => {
+        if (selectedCharacter) {
+            const updatedCommentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, selectedCharacter.uuid);
+            setCommentExchangeHistory(updatedCommentHistory);
+        }
+    }, [createdJournalBooks]);
 
     return (
         stage === 0 ? (
             <>
-                {/* Display the number of interacted characters */}
-                <div>{`Comments with ${interactedCharacterList.length} character${interactedCharacterList.length === 1 ? '' : 's'}`}</div>
+                {interactedCharacterList.length < 2 ? (
+                    <div>{`Comments with ${interactedCharacterList.length} character `}</div>
+                ) : (
+                    <div>{`Comments with ${interactedCharacterList.length} characters `}</div>
+                )}
 
                 <div style={styles.profileContainer}>
                     <div style={styles.profileList}>
-                        {characterCommentData.map((data, index) => (
-                            <>
-
+                        {interactedCharacterList.map((interactedCharacter, index) => {
+                            return (
                                 <div key={index} style={styles.profileItem}>
                                     <button
                                         style={styles.profileButtonContainer}
-                                        onClick={() => openNewPanel(panels, setPanels, "character-profile", data.character)}
+                                        onClick={() => {
+                                            openNewPanel(panels, setPanels, "character-profile", interactedCharacter);
+                                        }}
                                     >
                                         <CharacterButton
-                                            createdCharacter={data.character}
+                                            createdCharacter={interactedCharacter}
                                             iconStyle={styles.characterButtonIconStyle}
                                             textStyle={styles.characterButtonTextStyle}
                                         />
                                     </button>
-                                    <div style={styles.commentLog}>
-                                        {`Recevied: ${data.totalCommentsReceived} Sent: ${data.totalCommentsSent}`}
-                                    </div>
-
-                                    <ToggleButton onClick={() => onClickCharacter(data.character)} />
+                                    <ToggleButton
+                                        onClick={() => onClickCharacter(interactedCharacter)}
+                                    />
                                 </div>
-
-                            </>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </>
         ) : stage === 1 && selectedCharacter ? (
             <>
-                {/* Display selected character interaction */}
                 <div style={styles.header}>
                     <div style={styles.leftToggleButtonContainer}>
-                        <ToggleButton direction={'left'} onClick={onBack} />
+                        <ToggleButton
+                            direction={'left'}
+                            onClick={onBack}
+                        />
                     </div>
                     <div style={styles.characterLink}>
                         <button
                             style={styles.profileButtonContainer}
-                            onClick={() => openNewPanel(panels, setPanels, "character-profile", profileOwnerCharacter)}
+                            onClick={() => {
+                                openNewPanel(panels, setPanels, "character-profile", createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === caller.uuid));
+                            }}
                         >
                             <CharacterButton
-                                createdCharacter={profileOwnerCharacter}
+                                createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === caller.uuid)}
                                 iconStyle={styles.characterButtonIconStyle}
                                 textStyle={styles.characterButtonTextStyle}
                             />
@@ -124,65 +117,64 @@ const CommentsTab = (props) => {
                         </div>
                         <button
                             style={styles.profileButtonContainer}
-                            onClick={() => openNewPanel(panels, setPanels, "character-profile", selectedCharacter)}
+                            onClick={() => {
+                                openNewPanel(panels, setPanels, "character-profile", selectedCharacter);
+                            }}
                         >
                             <CharacterButton
                                 createdCharacter={selectedCharacter}
                                 iconStyle={styles.characterButtonIconStyle}
                                 textStyle={styles.characterButtonTextStyle}
                             />
-
                         </button>
                     </div>
                 </div>
 
-
                 <div style={styles.commentsContainer}>
-                    {journalEntries
+                    {commentExchangeHistory
                         .sort((a, b) => new Date(b.journalBookInfo.createdAt) - new Date(a.journalBookInfo.createdAt))
                         .map((journalEntryItem, journalEntryIndex) => (
                             <div key={journalEntryIndex} style={styles.journalEntry}>
                                 <div style={styles.journalHeader}>
-                                    {createdCharacters.characters.find(c => c.uuid === journalEntryItem.journalEntryInfo.ownerUUID).name}'s Journal
+                                    {createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name}'s Journal
                                 </div>
 
-                                {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => {
-                                    let moreCommentsShown = false;
-                                    return (
-                                        <div key={commentThreadIndex} style={styles.commentThread}>
-                                            <div style={styles.commentThreadContent}>
-                                                {commentThread.comments.slice(0, commentsLimitShow).map((comment, commentIndex) => {
-                                                    const currentCharacter = createdCharacters.characters.find(c => c.uuid === comment.ownerUUID);
-                                                    return (
-                                                        <div key={commentIndex} style={styles.comment}>
-                                                            <button
-                                                                style={styles.profileButtonContainer}
-                                                                onClick={() => openNewPanel(panels, setPanels, "character-profile", currentCharacter)}
-                                                            >
-                                                                <CharacterButton
-                                                                    createdCharacter={currentCharacter}
-                                                                    iconStyle={styles.characterButtonIconSmallStyle}
-                                                                    textStyle={styles.characterButtonTextSmallStyle}
-                                                                />
-                                                            </button>
-                                                            <div style={styles.commentContent}>
-                                                                <div style={styles.commentText}>{comment.content}</div>
-                                                            </div>
+                                {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (
+                                    <div key={commentThreadIndex} style={styles.commentThread}>
+                                        <div style={styles.commentThreadContent}>
+                                            {commentThread.comments.slice(0, commentsLimitShow).map((comment, commentIndex) => {
+                                                const currentCharacter = createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID);
+                                                return (
+                                                    <div key={commentIndex} style={styles.comment}>
+                                                        <button
+                                                            style={styles.profileButtonContainer}
+                                                            onClick={() => {
+                                                                openNewPanel(panels, setPanels, "character-profile", currentCharacter);
+                                                            }}
+                                                        >
+                                                            <CharacterButton
+                                                                createdCharacter={currentCharacter}
+                                                                iconStyle={styles.characterButtonIconSmallStyle}
+                                                                textStyle={styles.characterButtonTextSmallStyle}
+                                                            />
+                                                        </button>
+                                                        <div style={styles.commentContent}>
+                                                            <div style={styles.commentText}>{comment.content}</div>
                                                         </div>
-                                                    );
-                                                })}
-                                                {commentThread.comments.length > commentsLimitShow && !moreCommentsShown && (
-                                                    <div style={styles.moreComments}>
-                                                        {"..."}
                                                     </div>
-                                                )}
-                                            </div>
-                                            <div style={styles.iconWithText}>
-                                                <img src={'/tabs2.svg'} alt="icon" style={{ width: '14px' }} onClick={onClickComment} />
-                                            </div>
+                                                );
+                                            })}
+                                            {commentThread.comments.length > commentsLimitShow && (
+                                                <div style={styles.moreComments}>
+                                                    {"..."}
+                                                </div>
+                                            )}
                                         </div>
-                                    );
-                                })}
+                                        <div style={styles.iconWithText}>
+                                            <img src={'/tabs2.svg'} alt="icon" style={{ width: '14px' }} onClick={() => onClickComment(journalEntryItem.journalBookInfo.uuid, journalEntryItem.journalEntry.uuid, commentThread.commentThreadUUID)} />
+                                        </div>
+                                    </div>
+                                ))}
                                 {journalEntryItem.commentThreads.length > threadsLimitShow && (
                                     <div style={styles.moreComments}>
                                         {"..."}
@@ -190,15 +182,13 @@ const CommentsTab = (props) => {
                                 )}
                             </div>
                         ))}
-                </div>
+                </div >
             </>
         ) : null
     );
 };
 
 export default CommentsTab;
-
-
 
 const styles = {
     profileContainer: {
@@ -251,11 +241,6 @@ const styles = {
     },
     commentThreadContent: {
         flex: 1,
-
-    },
-    commentLog: {
-
-        fontSize: 'var(--font-xs)',
     },
     header: {
         marginBottom: '20px',
@@ -283,7 +268,6 @@ const styles = {
         height: '80%',
         overflowY: 'scroll',
         width: '100%',
-
     },
     journalEntry: {
         backgroundColor: '#f0f0ff',
@@ -308,11 +292,11 @@ const styles = {
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: '10px', // Adds space between the icon and comment
+        gap: '10px',
     },
     comment: {
         display: 'flex',
-        flexDirection: 'column', // Aligns character button and text in a row
+        flexDirection: 'column',
         alignItems: 'flex-start',
         padding: '10px',
         backgroundColor: '#f9f9f9',
@@ -320,19 +304,17 @@ const styles = {
         marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
         width: '100%',
-
     },
     commentContent: {
-        flexGrow: 1, // Ensures the comment text will grow and take up available space
+        flexGrow: 1,
         width: '100%',
-        wordBreak: 'break-word', // Breaks long words into the next lin
-
+        wordBreak: 'break-word',
     },
     commentText: {
         color: '#555',
         fontSize: 'var(--font-small)',
         marginTop: '5px',
-        wordWrap: 'break-word', // Ensures long words wrap to the next line
+        wordWrap: 'break-word',
     },
     moreComments: {
         color: '#555',
@@ -342,11 +324,8 @@ const styles = {
     iconWithText: {
         fontSize: 'var(--font-xs)',
         display: 'flex',
-        flexDirection: 'column', // Stack the icon and the text vertically
+        flexDirection: 'column',
         alignItems: 'center',
         cursor: 'pointer',
-
     },
 };
-
-

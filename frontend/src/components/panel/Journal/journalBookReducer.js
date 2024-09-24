@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 const journalBookReducer = (state, action) => {
     switch (action.type) {
 
-
         case 'INITIALIZE_JOURNALBOOKS':
             return {
                 ...state,
@@ -30,6 +29,7 @@ const journalBookReducer = (state, action) => {
                 journalBooks: [...state.journalBooks, newJournalBook],
                 lastCreatedJournalBook: newJournalBook,
             };
+
         case 'EDIT_JOURNAL_ENTRY':
             return {
                 ...state,
@@ -65,24 +65,19 @@ const journalBookReducer = (state, action) => {
                     return book;
                 })
             };
+
         case 'CREATE_COMMENT': {
             let newComment = null;
             const ownerUUID = action.payload.ownerUUID;
-            const participantIndex = { ...state.participantIndex }; // Clone the participantIndex
-
-            // Ensure participantIndex[ownerUUID] is initialized as a Set
-            if (!participantIndex[ownerUUID]) {
-                participantIndex[ownerUUID] = new Set();
-            }
 
             const updatedJournalBooks = state.journalBooks.map((book) => {
                 if (book.bookInfo.uuid === action.payload.journalBookUUID) {
                     return {
                         ...book,
                         journalEntries: book.journalEntries.map((entry) => {
-                            if (entry.uuid === action.payload.journalEntryUUID) {
-                                let updatedCommentThreads = entry.commentThreads;
+                            let updatedCommentThreads = entry.commentThreads;
 
+                            if (entry.uuid === action.payload.journalEntryUUID) {
                                 if (action.payload.commentThreadUUID) {
                                     // Add a new comment to the existing thread
                                     updatedCommentThreads = entry.commentThreads.map((thread) => {
@@ -99,16 +94,9 @@ const journalBookReducer = (state, action) => {
                                                 commentThreadUUID: thread.uuid, // Set commentThreadUUID here
                                             };
 
-                                            // Update participantIndex
-                                            participantIndex[ownerUUID].add(thread.uuid);
-
-                                            const updatedParticipantUUIDs = new Set(thread.participantUUIDs || []);
-                                            updatedParticipantUUIDs.add(ownerUUID);
-
                                             return {
                                                 ...thread,
                                                 comments: [...thread.comments, newThreadComment],
-                                                participantUUIDs: Array.from(updatedParticipantUUIDs),
                                             };
                                         }
                                         return thread;
@@ -119,7 +107,6 @@ const journalBookReducer = (state, action) => {
                                     const newThread = {
                                         uuid: newThreadUUID,
                                         createdAt: Date.now(),
-                                        participantUUIDs: [ownerUUID], // Initialize participantUUIDs with ownerUUID
                                         comments: [
                                             {
                                                 uuid: uuidv4(),
@@ -135,9 +122,6 @@ const journalBookReducer = (state, action) => {
                                         commentThreadUUID: newThreadUUID, // Set commentThreadUUID here
                                     };
                                     updatedCommentThreads = [...entry.commentThreads, newThread];
-
-                                    // Update participantIndex
-                                    participantIndex[ownerUUID].add(newThreadUUID);
                                 }
 
                                 return {
@@ -155,12 +139,9 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: updatedJournalBooks,
-                participantIndex, // Update participantIndex in the state
                 newComment, // The updated comment with commentThreadUUID
             };
         }
-
-
 
         case 'EDIT_COMMENT': {
             return {
@@ -203,8 +184,6 @@ const journalBookReducer = (state, action) => {
         }
 
         case 'DELETE_COMMENT': {
-            const participantIndex = { ...state.participantIndex }; // Clone the participantIndex
-
             const updatedJournalBooks = state.journalBooks.map((book) => {
                 if (book.bookInfo.uuid === action.payload.journalBookUUID) {
                     return {
@@ -218,38 +197,13 @@ const journalBookReducer = (state, action) => {
                                                 (comment) => comment.uuid !== action.payload.commentUUID
                                             );
 
-                                            // Update participantUUIDs
-                                            const updatedParticipantUUIDs = new Set();
-                                            updatedComments.forEach((comment) => {
-                                                updatedParticipantUUIDs.add(comment.ownerUUID);
-                                            });
-
                                             // If no comments remain, remove the thread
                                             if (updatedComments.length === 0) {
-                                                // Remove thread from participantIndex for all participants
-                                                Object.keys(participantIndex).forEach((participantUUID) => {
-                                                    participantIndex[participantUUID].delete(thread.uuid);
-                                                    // If the participant has no other threads, remove them from the index
-                                                    if (participantIndex[participantUUID].size === 0) {
-                                                        delete participantIndex[participantUUID];
-                                                    }
-                                                });
                                                 return null; // Indicate that this thread should be removed
                                             } else {
-                                                // Update participantIndex for participants who no longer have comments in this thread
-                                                const previousParticipants = new Set(thread.participantUUIDs);
-                                                updatedParticipantUUIDs.forEach((uuid) => previousParticipants.delete(uuid));
-                                                previousParticipants.forEach((participantUUID) => {
-                                                    participantIndex[participantUUID].delete(thread.uuid);
-                                                    if (participantIndex[participantUUID].size === 0) {
-                                                        delete participantIndex[participantUUID];
-                                                    }
-                                                });
-
                                                 return {
                                                     ...thread,
                                                     comments: updatedComments,
-                                                    participantUUIDs: Array.from(updatedParticipantUUIDs),
                                                 };
                                             }
                                         }
@@ -272,12 +226,8 @@ const journalBookReducer = (state, action) => {
             return {
                 ...state,
                 journalBooks: updatedJournalBooks,
-                participantIndex, // Update participantIndex in the state
             };
         }
-
-
-
         default:
             return state;
     }
@@ -315,21 +265,6 @@ export const getJournalsByCharacterUUID = (state, characterUUID) => {
 };
 
 
-const createThreadIndex = (state) => {
-    const threadIndex = {};
-    state.journalBooks.forEach((journalBook) => {
-        journalBook.journalEntries.forEach((journalEntry) => {
-            journalEntry.commentThreads.forEach((thread) => {
-                threadIndex[thread.uuid] = {
-                    thread,
-                    journalEntry,
-                    journalBookInfo: journalBook.bookInfo,
-                };
-            });
-        });
-    });
-    return threadIndex;
-};
 
 export const getInteractedCharactersWithPosts = (state, characterUUID) => {
     const interactedCharacters = new Set();
@@ -374,80 +309,52 @@ export const getInteractedCharactersWithPosts = (state, characterUUID) => {
     // Convert set to an array to return
     return Array.from(interactedCharacters);
 };
+
 export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUID2) => {
     const result = [];
-    const participantIndex = state.participantIndex;
 
-    // Get the sets of thread UUIDs for each character
-    const threadsForChar1 = participantIndex[characterUUID1] || new Set();
-    const threadsForChar2 = participantIndex[characterUUID2] || new Set();
+    // Iterate through all journal books
+    state.journalBooks.forEach((journalBook) => {
+        journalBook.journalEntries.forEach((journalEntry) => {
+            const isCharacter1Owner = journalEntry.ownerUUID === characterUUID1;
+            const isCharacter2Owner = journalEntry.ownerUUID === characterUUID2;
 
-    // Create a thread index for efficient access
-    const threadIndex = createThreadIndex(state);
+            journalEntry.commentThreads.forEach((thread) => {
+                if (isCharacter1Owner || isCharacter2Owner) {
+                    // Check if the thread includes comments from the other character
+                    if (
+                        (isCharacter1Owner && thread.comments.some(comment => comment.ownerUUID === characterUUID2)) ||
+                        (isCharacter2Owner && thread.comments.some(comment => comment.ownerUUID === characterUUID1))
+                    ) {
+                        // Collect relevant comments
+                        const relevantComments = thread.comments.filter(
+                            comment => comment.ownerUUID === characterUUID1 || comment.ownerUUID === characterUUID2
+                        );
 
-    // Combine both sets of threads to include both characters' threads
-    const combinedThreads = new Set([...threadsForChar1, ...threadsForChar2]);
+                        // Initialize journalEntryGroups if not already
+                        let journalEntryGroup = result.find(group => group.journalEntry.uuid === journalEntry.uuid);
+                        if (!journalEntryGroup) {
+                            journalEntryGroup = {
+                                journalBookInfo: journalBook.bookInfo,
+                                journalEntry: journalEntry,
+                                commentThreads: []
+                            };
+                            result.push(journalEntryGroup);
+                        }
 
-    // Create an intermediate structure to group by journalEntryUUID
-    const journalEntryGroups = {};
-    let totalThreadCount = 0;  // Track total number of threads
-    let totalCommentsSentByChar1 = 0;  // Track total comments sent by characterUUID1
-    let totalCommentsReceivedByChar1 = 0;  // Track total comments received by characterUUID1
-
-    // For each thread, retrieve the comments where either character has commented
-    combinedThreads.forEach((threadUUID) => {
-        const threadData = threadIndex[threadUUID];
-        if (threadData) {
-            const { thread, journalEntry, journalBookInfo } = threadData;
-
-            // Collect comments from both characters
-            const commentsBetweenCharacters = thread.comments.filter(
-                (comment) =>
-                    comment.ownerUUID === characterUUID1 || comment.ownerUUID === characterUUID2
-            );
-
-            if (commentsBetweenCharacters.length > 0) {
-                totalThreadCount += 1; // Increment thread count for each relevant thread
-
-                // Separate counts for comments sent and received
-                commentsBetweenCharacters.forEach((comment) => {
-                    if (comment.ownerUUID === characterUUID1) {
-                        totalCommentsSentByChar1 += 1;  // Increment comments sent by characterUUID1
-                    } else {
-                        totalCommentsReceivedByChar1 += 1;  // Increment comments received by characterUUID1
+                        // Add the thread with relevant comments
+                        journalEntryGroup.commentThreads.push({
+                            commentThreadUUID: thread.uuid,
+                            createdAt: thread.createdAt,
+                            comments: relevantComments
+                        });
                     }
-                });
-
-                // If this journal entry has not been added to the result yet, initialize it
-                if (!journalEntryGroups[journalEntry.uuid]) {
-                    journalEntryGroups[journalEntry.uuid] = {
-                        journalEntryInfo: journalEntry,
-                        journalBookInfo: journalBookInfo,
-                        commentThreads: []
-                    };
                 }
-
-                // Add this thread and its comments to the grouped entry
-                journalEntryGroups[journalEntry.uuid].commentThreads.push({
-                    commentThreadUUID: thread.uuid,
-                    createdAt: thread.createdAt,
-                    comments: commentsBetweenCharacters
-                });
-            }
-        }
+            });
+        });
     });
-
-    // Convert the grouped journal entries into an array of results
-    return {
-        journalEntries: Object.values(journalEntryGroups),
-        totalThreadCount,   // Return the total number of threads
-        totalCommentsSentByChar1,  // Return total comments sent by characterUUID1
-        totalCommentsReceivedByChar1  // Return total comments received by characterUUID1
-    };
+    console.log(result)
+    return result;
 };
-
-
-
-
 
 export default journalBookReducer;
