@@ -42,10 +42,14 @@ const characterReducer = (state, action) => {
                 characters: action.payload,
             };
 
-        case 'DELETE_CHARACTER':
+        case 'SOFT_DELETE_CHARACTER': // Add action for soft delete
             return {
                 ...state,
-                characters: state.characters.filter((character) => character.uuid !== action.payload.uuid)
+                characters: state.characters.map((character) =>
+                    character.uuid === action.payload.uuid
+                        ? { ...character, deleted: true } // Mark character as deleted
+                        : character
+                ),
             };
 
         default:

@@ -62,7 +62,9 @@ const SelectBox = (props) => {
                 {dropdownOpen && (
                     <div style={styles.dropdownList}>
                         {availableCharacters.length > 0 ? (
-                            availableCharacters.map((character) => (
+                            availableCharacters
+                            .filter((character) => !character.deleted)
+                            .map((character) => (
                                 <div
                                     key={character.uuid}
                                     style={{

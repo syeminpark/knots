@@ -106,20 +106,21 @@ const CharacterProfilePanel = (props) => {
         if (currentCharacter) {
             try {
                 await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE');
-
+    
                 dispatchCreatedCharacters({
-                    type: 'DELETE_CHARACTER',
+                    type: 'SOFT_DELETE_CHARACTER',
                     payload: { uuid: caller.uuid }
                 });
-
+    
                 const newPanels = panels.filter(panel => panel.id !== id);
                 setPanels(newPanels);
-                console.log('Character deleted successfully');
+                console.log('Character soft deleted successfully');
             } catch (error) {
-                console.error('Error deleting character:', error);
+                console.error('Error soft deleting character:', error);
             }
         }
     };
+    
 
 
     const toggleDeleteButton = () => {
