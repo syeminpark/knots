@@ -93,26 +93,27 @@ export default {
         try {
             const { uuid } = req.params;
             const userUUID = req.user.uuid; // Get the user UUID
-
-            // Step 1: Delete the character by its UUID
-            const character = await CharacterModel.deleteCharacterByUUID(uuid);
-
+    
+            // Soft delete the character
+            const character = await CharacterModel.softDeleteCharacterByUUID(uuid);
+    
             if (character) {
-                // Step 2: Fetch the remaining characters for the user
+                // Fetch the remaining characters for the user
                 const remainingCharacters = await CharacterModel.getAllCharactersByUserUUID(userUUID);
-
-                // Step 3: Reorder the remaining characters based on their current position
+    
+                // Reorder the remaining characters
                 await CharacterModel.reorderCharacters(remainingCharacters.map(char => char.uuid));
-
-                res.status(200).json({ message: 'Character deleted and reordered successfully.' });
+    
+                res.status(200).json({ message: 'Character soft deleted and reordered successfully.' });
             } else {
                 res.status(404).json({ error: 'Character not found.' });
             }
         } catch (error) {
-            console.error(`Error deleting character with UUID ${req.params.uuid}:`, error);
+            console.error(`Error soft deleting character with UUID ${req.params.uuid}:`, error);
             res.status(500).json({ error: 'An error occurred while deleting the character.' });
         }
     },
+    
 
 
     /**

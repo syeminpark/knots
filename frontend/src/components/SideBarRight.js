@@ -128,9 +128,11 @@ const SidebarRight = (props) => {
                     items={createdCharacters.characters.map((char) => char.uuid)}
                     strategy={verticalListSortingStrategy}
                 >
-                    <div className="character-list">
-                        {createdCharacters.characters.length > 0 &&
-                            createdCharacters.characters.map((character) => (
+                <div className="character-list">
+                    {createdCharacters.characters.length > 0 &&
+                        createdCharacters.characters
+                            .filter(character => !character.deleted)
+                            .map((character) => (
                                 <DraggableCharacterItem
                                     key={character.uuid}
                                     character={character}
@@ -138,7 +140,7 @@ const SidebarRight = (props) => {
                                     setPanels={setPanels}
                                 />
                             ))}
-                    </div>
+                </div>
                 </SortableContext>
             </DndContext>
 

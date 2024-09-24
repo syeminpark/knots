@@ -38,6 +38,11 @@ const characterSchema = new mongoose.Schema(
             required: true,
             default: 0,
         },
+        
+        deleted: {
+            type: Boolean,
+            default: false, // New field for soft delete
+        },
     },
     {
         timestamps: true,
@@ -86,7 +91,7 @@ characterSchema.statics.updateCharacter = async function (uuid, update) {
 
 characterSchema.statics.getCharacterByUUID = async function (uuid) {
     try {
-        const character = await this.findOne({ uuid });
+        const character = await this.findOne({ uuid, deleted: false });
         return character;
     } catch (error) {
         throw error;
@@ -96,22 +101,26 @@ characterSchema.statics.getCharacterByUUID = async function (uuid) {
 // Get all characters for a specific user
 characterSchema.statics.getAllCharactersByUserUUID = async function (userUUID) {
     try {
-        // Fetch characters for the user and sort them by their order field
-        const characters = await this.find({ userUUID }).sort({ order: 1 });
+        const characters = await this.find({ userUUID, deleted: false }).sort({ order: 1 });
         return characters;
     } catch (error) {
         throw error;
     }
 };
 
-characterSchema.statics.deleteCharacterByUUID = async function (uuid) {
+characterSchema.statics.softDeleteCharacterByUUID = async function (uuid) {
     try {
-        const character = await this.findOneAndDelete({ uuid });
+        const character = await this.findOneAndUpdate(
+            { uuid },
+            { deleted: true },
+            { new: true }
+        );
         return character;
     } catch (error) {
         throw error;
     }
 };
+
 
 // Delete all characters for a specific user
 characterSchema.statics.deleteAllCharactersByUserUUID = async function (userUUID) {
