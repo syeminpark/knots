@@ -139,11 +139,6 @@ const journalController = {
                     return res.status(404).json({ error: 'Comment thread not found.' });
                 }
 
-                // Update participantUUIDs
-                if (!commentThread.participantUUIDs.includes(UUID)) {
-                    commentThread.participantUUIDs.push(ownerUUID);
-                    await commentThread.save();
-                }
             } else {
                 // New thread
                 threadUUID = uuidv4();
@@ -152,7 +147,6 @@ const journalController = {
                     journalEntryUUID,
                     userUUID: userUUID,
                     createdAt: createdAt,
-                    participantUUIDs: [ownerUUID],
                 });
                 await newCommentThread.save();
             }

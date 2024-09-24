@@ -22,7 +22,6 @@ const commentThreadSchema = new mongoose.Schema({
     journalEntryUUID: { type: String, required: true },
     userUUID: { type: String, required: true },
     createdAt: { type: String, default: Date.now },
-    participantUUIDs: [{ type: String }],
 });
 const CommentThread = mongoose.model('CommentThread', commentThreadSchema);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getInteractedCharactersWithPosts, getCommentsBetweenCharacters } from "../Journal/journalBookReducer";
+import { getInteractedCharactersWithPosts, getCommentsBetweenCharacters, getCommentExchangeCount } from "../Journal/journalBookReducer";
 import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import ToggleButton from "../../ToggleButton";
@@ -11,12 +11,16 @@ const CommentsTab = (props) => {
     const [selectedCharacter, setSelectedCharacter] = useState(null);
     const [commentExchangeHistory, setCommentExchangeHistory] = useState([]);
 
+    const profileOwner = createdCharacters.characters.find(character => character.uuid === caller.uuid)
+
     const interactedCharacters = getInteractedCharactersWithPosts(createdJournalBooks, caller.uuid);
     const interactedCharacterList = interactedCharacters.map(interactionCharacterUUID =>
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
 
-    const commentsLimitShow = 3;
+
+
+    const commentsLimitShow = 100;
     const threadsLimitShow = 100;
 
     const onClickCharacter = (clickedOnCharacter) => {
@@ -67,28 +71,42 @@ const CommentsTab = (props) => {
                 <div style={styles.profileContainer}>
                     <div style={styles.profileList}>
                         {interactedCharacterList.map((interactedCharacter, index) => {
+                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter.uuid)
                             return (
-                                <div key={index} style={styles.profileItem}>
-                                    <button
-                                        style={styles.profileButtonContainer}
-                                        onClick={() => {
-                                            openNewPanel(panels, setPanels, "character-profile", interactedCharacter);
-                                        }}
-                                    >
-                                        <CharacterButton
-                                            createdCharacter={interactedCharacter}
-                                            iconStyle={styles.characterButtonIconStyle}
-                                            textStyle={styles.characterButtonTextStyle}
+                                <>
+
+                                    <div key={index} style={styles.profileItem}>
+                                        <button
+                                            style={styles.profileButtonContainer}
+                                            onClick={() => {
+                                                openNewPanel(panels, setPanels, "character-profile", interactedCharacter);
+                                            }}
+                                        >
+                                            <CharacterButton
+                                                createdCharacter={interactedCharacter}
+                                                iconStyle={styles.characterButtonIconStyle}
+                                                textStyle={styles.characterButtonTextStyle}
+                                            />
+                                        </button>
+                                        <div style={styles.commentCount}>
+                                            {/* {` ${commentCount.receivedComments.length} `} ⇅   {` ${commentCount.sentComments.length} `} */}
+                                            {/* {` ${commentCount.receivedComments.length} `}  ⬇    {` ${commentCount.sentComments.length} `} */}
+
+                                            {` Total: ${commentCount.receivedComments.length + commentCount.sentComments.length} `} ⇵
+                                        </div>
+                                        <ToggleButton
+                                            onClick={() => onClickCharacter(interactedCharacter)}
                                         />
-                                    </button>
-                                    <ToggleButton
-                                        onClick={() => onClickCharacter(interactedCharacter)}
-                                    />
-                                </div>
+
+                                    </div >
+
+
+
+                                </>
                             );
                         })}
                     </div>
-                </div>
+                </div >
             </>
         ) : stage === 1 && selectedCharacter ? (
             <>
@@ -103,11 +121,11 @@ const CommentsTab = (props) => {
                         <button
                             style={styles.profileButtonContainer}
                             onClick={() => {
-                                openNewPanel(panels, setPanels, "character-profile", createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === caller.uuid));
+                                openNewPanel(panels, setPanels, "character-profile", profileOwner);
                             }}
                         >
                             <CharacterButton
-                                createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === caller.uuid)}
+                                createdCharacter={profileOwner}
                                 iconStyle={styles.characterButtonIconStyle}
                                 textStyle={styles.characterButtonTextStyle}
                             />
@@ -136,7 +154,7 @@ const CommentsTab = (props) => {
                         .map((journalEntryItem, journalEntryIndex) => (
                             <div key={journalEntryIndex} style={styles.journalEntry}>
                                 <div style={styles.journalHeader}>
-                                    {createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name}'s Journal
+                                    {profileOwner.name}'s Journal
                                 </div>
 
                                 {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (
@@ -235,12 +253,20 @@ const styles = {
         padding: '10px 20px',
         backgroundColor: '#f9f9f9',
         borderRadius: '8px',
-        marginBottom: '10px',
+        marginBottom: '30px',
         height: '80px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
     },
     commentThreadContent: {
         flex: 1,
+    },
+    commentCount: {
+        position: 'absolute',
+        width: '80%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     header: {
         marginBottom: '20px',

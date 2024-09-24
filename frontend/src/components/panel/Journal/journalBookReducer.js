@@ -228,6 +228,7 @@ const journalBookReducer = (state, action) => {
                 journalBooks: updatedJournalBooks,
             };
         }
+
         default:
             return state;
     }
@@ -308,6 +309,64 @@ export const getInteractedCharactersWithPosts = (state, characterUUID) => {
 
     // Convert set to an array to return
     return Array.from(interactedCharacters);
+
+
+};
+
+export const getCommentExchangeCount = (state, characterUUID1, characterUUID2) => {
+    const result = {
+        sentComments: [], // Comments sent by characterUUID1 to characterUUID2
+        receivedComments: [], // Comments received by characterUUID1 from characterUUID2
+    };
+
+    // Iterate through all journal books
+    state.journalBooks.forEach((journalBook) => {
+        journalBook.journalEntries.forEach((journalEntry) => {
+            const isCharacter1Owner = journalEntry.ownerUUID === characterUUID1;
+            const isCharacter2Owner = journalEntry.ownerUUID === characterUUID2;
+
+            journalEntry.commentThreads.forEach((thread) => {
+                let sentComments = [];
+                let receivedComments = [];
+
+                // Case 1: characterUUID1 owns the journal entry (A's post)
+                if (isCharacter1Owner) {
+                    thread.comments.forEach((comment) => {
+                        // A received a comment from B
+                        if (comment.ownerUUID === characterUUID2) {
+                            receivedComments.push(comment);
+                        }
+                        // A sent a reply to B's comment in A's post
+                        if (comment.ownerUUID === characterUUID1 && thread.comments.some(c => c.ownerUUID === characterUUID2)) {
+                            sentComments.push(comment);
+                        }
+                    });
+                }
+
+                // Case 2: characterUUID2 owns the journal entry (B's post)
+                if (isCharacter2Owner) {
+                    thread.comments.forEach((comment) => {
+                        // A sent a comment on B's post
+                        if (comment.ownerUUID === characterUUID1) {
+                            sentComments.push(comment);
+                        }
+                        // A received a reply from B in B's post
+                        if (comment.ownerUUID === characterUUID2 && thread.comments.some(c => c.ownerUUID === characterUUID1)) {
+                            receivedComments.push(comment);
+                        }
+                    });
+                }
+
+                // If relevant comments were found, add them to the result
+                if (sentComments.length > 0 || receivedComments.length > 0) {
+                    result.sentComments.push(...sentComments);
+                    result.receivedComments.push(...receivedComments);
+                }
+            });
+        });
+    });
+
+    return result;
 };
 
 export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUID2) => {
