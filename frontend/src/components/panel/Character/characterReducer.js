@@ -41,15 +41,11 @@ const characterReducer = (state, action) => {
                 ...state,
                 characters: action.payload,
             };
-
-        case 'SOFT_DELETE_CHARACTER': // Add action for soft delete
+        
+                case 'DELETE_CHARACTER': // 새로운 삭제 액션
             return {
                 ...state,
-                characters: state.characters.map((character) =>
-                    character.uuid === action.payload.uuid
-                        ? { ...character, deleted: true } // Mark character as deleted
-                        : character
-                ),
+                characters: state.characters.filter((character) => character.uuid !== action.payload.uuid)
             };
 
         default:

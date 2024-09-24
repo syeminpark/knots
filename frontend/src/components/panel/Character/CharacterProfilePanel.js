@@ -101,27 +101,14 @@ const CharacterProfilePanel = (props) => {
         }
     };
 
-    const deleteFunction = async () => {
+    const deleteFunction = () => {
         const currentCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+
         if (currentCharacter) {
-            try {
-                await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE');
-    
-                dispatchCreatedCharacters({
-                    type: 'SOFT_DELETE_CHARACTER',
-                    payload: { uuid: caller.uuid }
-                });
-    
-                const newPanels = panels.filter(panel => panel.id !== id);
-                setPanels(newPanels);
-                console.log('Character soft deleted successfully');
-            } catch (error) {
-                console.error('Error soft deleting character:', error);
-            }
+            console.log('delete');  // 삭제 기능이 실행될 때 콘솔에 'delete' 출력
         }
     };
     
-
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
