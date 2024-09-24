@@ -9,8 +9,8 @@ const CommentsTab = (props) => {
     const [stage, setStage] = useState(0);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
     const [characterCommentData, setCharacterCommentData] = useState([]);
+    const profileOwnerCharacter = createdCharacters.characters.find(c => c.uuid === caller.uuid)
 
-    // Get the interacted characters with posts
     const interactedCharacters = getInteractedCharactersWithPosts(createdJournalBooks, caller.uuid);
     const interactedCharacterList = interactedCharacters.map(interactionCharacterUUID =>
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
@@ -76,22 +76,27 @@ const CommentsTab = (props) => {
                 <div style={styles.profileContainer}>
                     <div style={styles.profileList}>
                         {characterCommentData.map((data, index) => (
-                            <div key={index} style={styles.profileItem}>
-                                <button
-                                    style={styles.profileButtonContainer}
-                                    onClick={() => openNewPanel(panels, setPanels, "character-profile", data.character)}
-                                >
-                                    <CharacterButton
-                                        createdCharacter={data.character}
-                                        iconStyle={styles.characterButtonIconStyle}
-                                        textStyle={styles.characterButtonTextStyle}
-                                    />
-                                </button>
-                                <div style={styles.commentLog}>
-                                    {`Comments Received: ${data.totalCommentsReceived}, Sent: ${data.totalCommentsSent}`}
+                            <>
+
+                                <div key={index} style={styles.profileItem}>
+                                    <button
+                                        style={styles.profileButtonContainer}
+                                        onClick={() => openNewPanel(panels, setPanels, "character-profile", data.character)}
+                                    >
+                                        <CharacterButton
+                                            createdCharacter={data.character}
+                                            iconStyle={styles.characterButtonIconStyle}
+                                            textStyle={styles.characterButtonTextStyle}
+                                        />
+                                    </button>
+                                    <div style={styles.commentLog}>
+                                        {`Recevied: ${data.totalCommentsReceived} Sent: ${data.totalCommentsSent}`}
+                                    </div>
+
+                                    <ToggleButton onClick={() => onClickCharacter(data.character)} />
                                 </div>
-                                <ToggleButton onClick={() => onClickCharacter(data.character)} />
-                            </div>
+
+                            </>
                         ))}
                     </div>
                 </div>
@@ -106,10 +111,10 @@ const CommentsTab = (props) => {
                     <div style={styles.characterLink}>
                         <button
                             style={styles.profileButtonContainer}
-                            onClick={() => openNewPanel(panels, setPanels, "character-profile", createdCharacters.characters.find(c => c.uuid === caller.uuid))}
+                            onClick={() => openNewPanel(panels, setPanels, "character-profile", profileOwnerCharacter)}
                         >
                             <CharacterButton
-                                createdCharacter={createdCharacters.characters.find(c => c.uuid === caller.uuid)}
+                                createdCharacter={profileOwnerCharacter}
                                 iconStyle={styles.characterButtonIconStyle}
                                 textStyle={styles.characterButtonTextStyle}
                             />
@@ -130,6 +135,7 @@ const CommentsTab = (props) => {
                         </button>
                     </div>
                 </div>
+
 
                 <div style={styles.commentsContainer}>
                     {journalEntries
