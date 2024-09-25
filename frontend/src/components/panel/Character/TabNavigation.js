@@ -21,11 +21,19 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab }) => {
                     className={`tab ${activeTab === tab ? 'active' : ''}`}
                     onClick={() => setActiveTab(tab)}
                 >
-                    {tab}
+                    <div style={styles.tabTitle}>
+                        {tab}
+                    </div>
                 </button>
             ))}
         </div>
     );
 };
+
+const styles = {
+    tabTitle: {
+        fontSize: 'var(--font-small)',
+    }
+}
 
 export default TabNavigation;

@@ -16,7 +16,7 @@ const BottomActions = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
     const onSendButtonClick = () => {
-        if (selectedCharacters.length < 1) {
+        if (selectedCharacters.leng1th < 1) {
             alert('Select A Character');
         } else if (!commentValue && activeTab == "Manual Post") {
             alert('Write Something');

@@ -14,8 +14,9 @@ import characterReducer from './panel/Character/characterReducer.js';
 const Home = (props) => {
   const { loggedIn, userName, initialData } = props;
   const [panels, setPanels] = useState([]);
+  const [isDragging, setIsDragging] = useState(false); // Track drag state
   const panelsEndRef = useRef(null);
-
+  const prevPanelsLengthRef = useRef(panels.length);
   const initialState = {
     journalBooks: initialData.journalBooks || [],
     lastCreatedJournalBook: null,
@@ -60,10 +61,19 @@ const Home = (props) => {
   }, [initialData]);
 
   useEffect(() => {
-    scrollToNewPanel();
-  }, [panels]);
+    if (panels.length > prevPanelsLengthRef.current) {
+      scrollToNewPanel();
+    }
+    prevPanelsLengthRef.current = panels.length;
+
+  }, [panels.length]);
+
+  const handleDragStart = () => {
+    setIsDragging(true); // Set dragging to true
+  };
 
   const handleDragEnd = ({ active, over }) => {
+    setIsDragging(false); // Reset dragging state
     if (over && active.id !== over.id) {
       const oldIndex = panels.findIndex(panel => panel.id === active.id);
       const newIndex = panels.findIndex(panel => panel.id === over.id);
@@ -121,7 +131,7 @@ const Home = (props) => {
       </div>
 
       {/* Integrating Sidebar Right */}
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <SidebarRight
           panels={panels}
           setPanels={setPanels}
@@ -141,13 +151,14 @@ const Home = (props) => {
       </div>
 
       <div className="panelContainer">
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
-            <AnimatePresence>
-              <div ref={panelsEndRef} style={{ display: 'flex', gap: '20px', paddingRight: '170px', paddingLeft: '120px', }} >
+            <div ref={panelsEndRef} style={{ display: 'flex', gap: '20px', paddingRight: '170px', paddingLeft: '120px', }} >
+              <AnimatePresence>
                 {panels.map(panel => (
                   <motion.div
                     key={panel.id}
+                    layout={!isDragging} // Disable layout animations when dragging
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
@@ -156,9 +167,8 @@ const Home = (props) => {
                     {renderPanel(panel)}
                   </motion.div>
                 ))}
-
-              </div>
-            </AnimatePresence>
+              </AnimatePresence>
+            </div>
           </SortableContext>
         </DndContext>
       </div>

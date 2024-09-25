@@ -7,11 +7,24 @@ const BasePanel = (props) => {
     const { id, panels, setPanels, children, title, saveFunction, deleteFunction } = props;
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
 
+
     const [showDelete, setShowDelete] = useState(false);
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
     };
+
+    const getPanelClass = () => {
+        let panelClass = '';
+        if (panels.length === 1) {
+            panelClass = 'panel-large';
+        } else if (panels.length === 2) {
+            panelClass = 'panel-medium';
+        } else {
+            panelClass = 'panel-small';
+        }
+        return panelClass
+    }
 
     const panelStyle = {
         transform: CSS.Transform.toString(transform),
@@ -25,11 +38,12 @@ const BasePanel = (props) => {
     };
 
     return (
-        <div ref={setNodeRef} className="panel" style={panelStyle}>
+        // <div ref={setNodeRef} className={`panel ${getPanelClass()}`} style={panelStyle}>
+        <div ref={setNodeRef} className='panel' style={panelStyle}>
             {/* Panel Header */}
-            <div className="panel-header" {...listeners} {...attributes}>
+            < div className="panel-header" {...listeners} {...attributes}>
                 <h2 className="header-title">{title}</h2>
-            </div>
+            </div >
             <div className="x-more-button-container">
                 {deleteFunction && (
                     <button className="more-btn" onClick={toggleDeleteButton}>...</button>
