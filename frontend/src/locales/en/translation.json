@@ -4,5 +4,12 @@
     "delete": "Delete",
     "journalfeed": "Journal Feed",
     "create": "Create",
-    "characters": "Characters"
+    "characters": "Characters",
+    "createcharacter": "Create Character",
+    "about": "About",
+    "connections": "Connections",
+    "uploadimage": "Upload Image",
+    "backstory": "Backstory",
+    "addattributes": "Add Attributes",
+    "adddescription": "Add description"
 }
