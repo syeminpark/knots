@@ -6,6 +6,7 @@ import TabNavigation from './TabNavigation';
 import { v4 as uuidv4 } from 'uuid';
 import ProfileSection from './ProfileSection';
 import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
+import { useTranslation } from 'react-i18next';
 
 const CharacterCreationPanel = (props) => {
     const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
@@ -14,6 +15,7 @@ const CharacterCreationPanel = (props) => {
     const [personaAttributes, setPersonaAttributes] = useState([{ name: 'Backstory', description: '' }]);
     const [imageSrc, setImageSrc] = useState(null);
     const [name, setName] = useState('');
+    const { t } = useTranslation();
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -76,7 +78,7 @@ const CharacterCreationPanel = (props) => {
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="Create Character"
+            title= {t('createcharacter')}
             saveFunction={saveFunction}
         >
             <div className="panel-header-sticky">

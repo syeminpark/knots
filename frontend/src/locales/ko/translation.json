@@ -1,0 +1,15 @@
+{
+    "edit": "수정",
+    "save": "저장",
+    "delete": "삭제",
+    "journalfeed": "저널",
+    "create": "만들기",
+    "characters": "캐릭터 목록",
+    "createcharacter": "캐릭터 만들기",
+    "about": "정보",
+    "connections": "커넥션",
+    "uploadimage": "이미지 업로드",
+    "backstory": "배경",
+    "addattributes": "속성 추가",
+    "adddescription": "설명 추가"
+}

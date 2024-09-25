@@ -9,9 +9,12 @@ import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 import ScrollAndDrag from './ScrollAndDrag.js';
 import useSocketListeners from '../utility/useSocketListeners.js';
+import { useTranslation } from 'react-i18next'; // i18n 가져오기
+import '../i18n.js'; // i18n 설정 파일 가져오기
 
 const Home = (props) => {
   const { loggedIn, userName, initialData } = props;
+  const { i18n } = useTranslation(); // useTranslation 추가
   const [panels, setPanels] = useState([]);
   const initialState = {
     journalBooks: initialData.journalBooks || [],
@@ -22,6 +25,11 @@ const Home = (props) => {
   const [createdCharacters, dispatchCreatedCharacters] = useReducer(characterReducer, { characters: initialData.characters });
   const [createdJournalBooks, dispatchCreatedJournalBooks] = useReducer(journalBookReducer, initialState);
   const navigate = useNavigate();
+
+  // 언어 변경 함수
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   const onButtonClick = () => {
     if (loggedIn) {
@@ -130,7 +138,25 @@ const Home = (props) => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
       </div>
+
+      <div className="language-switcher-container">
+        <div className="language-switcher">
+          <button
+            className={i18n.resolvedLanguage === 'en' ? 'selected' : ''}
+            onClick={() => changeLanguage('en')}
+          >
+            EN
+          </button>
+          <button
+            className={i18n.resolvedLanguage === 'ko' ? 'selected' : ''}
+            onClick={() => changeLanguage('ko')}
+          >
+            KR
+          </button>
+        </div>
+      </div>
     </div>
+
   );
 };
 

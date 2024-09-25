@@ -4,6 +4,7 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import CharacterButton from './CharacterButton';
 import openNewPanel from './openNewPanel';
 import apiRequest from '../utility/apiRequest';
+import { useTranslation } from 'react-i18next';
 
 const DraggableCharacterItem = ({ character, panels, setPanels }) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -87,6 +88,8 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
 const SidebarRight = (props) => {
     const { panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
 
+    const { t } = useTranslation();
+
     const handleDragEnd = async ({ active, over }) => {
         if (active.id !== over?.id) {
             const oldIndex = createdCharacters.characters.findIndex(
@@ -119,7 +122,7 @@ const SidebarRight = (props) => {
 
     return (
         <div className="sidebarRight">
-            <h3 className="sidebarRight-title">Characters</h3>
+            <h3 className="sidebarRight-title">{t('characters')}</h3>
 
             <span className="sidebarRight-subtitle">
                 Online - {createdCharacters.characters.length}
@@ -153,7 +156,7 @@ const SidebarRight = (props) => {
                         openNewPanel(panels, setPanels, 'character-creation');
                     }}
                 >
-                    <span className="icon">+</span> Create
+                    <span className="icon">+</span> {t('create')}
                 </button>
             </div>
         </div>

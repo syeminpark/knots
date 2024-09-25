@@ -644,12 +644,39 @@ body {
 
 }
 
-
-
-
 .header-icon-title {
   display: flex;
   align-items: center;
   gap: 10px;
   /* Adds space between the icon and the title */
+}
+
+.language-switcher-container{
+  position: fixed;
+  left: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000000;
+}
+
+.language-switcher button {
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.language-switcher button:hover {
+  background-color: #c0c0c0;
+}
+
+.language-switcher button.selected {
+  background-color: #464646;
+  color: white;
 }
