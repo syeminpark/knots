@@ -38,7 +38,10 @@ const CreateJournalModal = (props) => {
 
     useEffect(() => {
         if (selectedCharacters.length > 0) {
-            setContentPlaceholder(`What is '${selectedCharacters[0].name}' thinking about?`)
+            const characterNames = selectedCharacters
+                .map(character => `'${character.name}'`) // Add single quotes around each name
+                .join(', ');
+            setContentPlaceholder(`What is ${characterNames} thinking about?`)
         }
 
     }, [selectedCharacters])

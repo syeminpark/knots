@@ -60,7 +60,10 @@ const BottomActions = (props) => {
 
     useEffect(() => {
         if (selectedCharacters.length > 0) {
-            setCommentPlaceholder(`Write comment as '${selectedCharacters[0].name}'`)
+            const characterNames = selectedCharacters
+                .map(character => `'${character.name}'`) // Add single quotes around each name
+                .join(', ');
+            setCommentPlaceholder(`Write comment as ${characterNames}`);
         }
 
     }, [selectedCharacters]);

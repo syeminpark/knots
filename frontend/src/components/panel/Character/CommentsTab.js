@@ -73,7 +73,7 @@ const CommentsTab = (props) => {
                     <div style={styles.profileList}>
                         {interactedCharacterList.map((interactedCharacter, index) => {
                             // console.log(caller, interactedCharacter)
-                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter)
+                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter.uuid)
                             return (
                                 <div key={index} style={styles.profileItem}>
                                     <button
