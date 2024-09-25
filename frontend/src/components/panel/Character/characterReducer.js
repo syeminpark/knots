@@ -3,17 +3,26 @@ import { v4 as uuidv4 } from 'uuid';
 const characterReducer = (state, action) => {
     switch (action.type) {
         case 'CREATE_CHARACTER':
-            const newCharacter = {
-                uuid: action.payload.uuid,
-                name: action.payload.name,
-                personaAttributes: action.payload.personaAttributes,
-                connectedCharacters: action.payload.connectedCharacters,
-                imageSrc: action.payload.imageSrc,
-            };
-            return {
-                ...state,
-                characters: [...state.characters, newCharacter],
-            };
+
+            const characterExists = state.characters.some(
+                (character) => character.uuid === action.payload.uuid
+            );
+            if (!characterExists) {
+
+                const newCharacter = {
+                    uuid: action.payload.uuid,
+                    name: action.payload.name,
+                    personaAttributes: action.payload.personaAttributes,
+                    connectedCharacters: action.payload.connectedCharacters,
+                    imageSrc: action.payload.imageSrc,
+                };
+                return {
+                    ...state,
+                    characters: [...state.characters, newCharacter],
+                };
+            }
+            return state;
+
 
         case 'EDIT_CREATED_CHARACTER':
             return {
@@ -43,29 +52,37 @@ const characterReducer = (state, action) => {
             };
 
         case 'DELETE_CHARACTER': {
-            const characterUUIDToDelete = action.payload.uuid;
-
-            // Remove the character itself
-            const updatedCharacters = state.characters.filter(
-                (character) => character.uuid !== characterUUIDToDelete
+            const characterExists = state.characters.some(
+                (character) => character.uuid === action.payload.uuid
             );
 
-            // Traverse through the remaining characters to remove the deleted character from their connectedCharacters
-            const charactersWithUpdatedConnections = updatedCharacters.map((character) => {
-                const updatedConnectedCharacters = character.connectedCharacters.filter(
-                    (connectedCharacter) => connectedCharacter.uuid !== characterUUIDToDelete
+            if (characterExists) {
+
+                const characterUUIDToDelete = action.payload.uuid;
+
+                // Remove the character itself
+                const updatedCharacters = state.characters.filter(
+                    (character) => character.uuid !== characterUUIDToDelete
                 );
 
-                return {
-                    ...character,
-                    connectedCharacters: updatedConnectedCharacters,
-                };
-            });
+                // Traverse through the remaining characters to remove the deleted character from their connectedCharacters
+                const charactersWithUpdatedConnections = updatedCharacters.map((character) => {
+                    const updatedConnectedCharacters = character.connectedCharacters.filter(
+                        (connectedCharacter) => connectedCharacter.uuid !== characterUUIDToDelete
+                    );
 
-            return {
-                ...state,
-                characters: charactersWithUpdatedConnections,
-            };
+                    return {
+                        ...character,
+                        connectedCharacters: updatedConnectedCharacters,
+                    };
+                });
+
+                return {
+                    ...state,
+                    characters: charactersWithUpdatedConnections,
+                };
+            }
+            return state;
         }
 
         default:

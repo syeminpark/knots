@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import CharacterCreationPanel from './panel/Character/CharacterCreationPanel.js';
 import CharacterProfilePanel from './panel/Character/CharacterProfilePanel.js';
 import SidebarRight from './SideBarRight.js';
@@ -10,13 +7,12 @@ import SidebarLeft from './SideBarLeft.js';
 import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
+import ScrollAndDrag from './ScrollAndDrag.js';
+import useSocketListeners from '../utility/useSocketListeners.js';
 
 const Home = (props) => {
   const { loggedIn, userName, initialData } = props;
   const [panels, setPanels] = useState([]);
-  const [isDragging, setIsDragging] = useState(false); // Track drag state
-  const panelsEndRef = useRef(null);
-  const prevPanelsLengthRef = useRef(panels.length);
   const initialState = {
     journalBooks: initialData.journalBooks || [],
     lastCreatedJournalBook: null,
@@ -35,17 +31,8 @@ const Home = (props) => {
     navigate('/');
   };
 
-  const scrollToNewPanel = () => {
-    if (panelsEndRef.current) {
-      panelsEndRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'end'
-      });
-    }
-  };
-
   useEffect(() => {
+    // Initialize characters and journal books from the initial data
     dispatchCreatedCharacters({
       type: 'INITIALIZE_CHARACTERS',
       payload: {
@@ -60,26 +47,8 @@ const Home = (props) => {
     });
   }, [initialData]);
 
-  useEffect(() => {
-    if (panels.length > prevPanelsLengthRef.current) {
-      scrollToNewPanel();
-    }
-    prevPanelsLengthRef.current = panels.length;
-
-  }, [panels.length]);
-
-  const handleDragStart = () => {
-    setIsDragging(true); // Set dragging to true
-  };
-
-  const handleDragEnd = ({ active, over }) => {
-    setIsDragging(false); // Reset dragging state
-    if (over && active.id !== over.id) {
-      const oldIndex = panels.findIndex(panel => panel.id === active.id);
-      const newIndex = panels.findIndex(panel => panel.id === over.id);
-      setPanels(arrayMove(panels, oldIndex, newIndex));
-    }
-  };
+  // Use the custom hook to handle socket events
+  useSocketListeners(dispatchCreatedCharacters, dispatchCreatedJournalBooks, setPanels);
 
   const renderPanel = (panel) => {
     switch (panel.type) {
@@ -131,14 +100,12 @@ const Home = (props) => {
       </div>
 
       {/* Integrating Sidebar Right */}
-      <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <SidebarRight
-          panels={panels}
-          setPanels={setPanels}
-          createdCharacters={createdCharacters}
-          dispatchCreatedCharacters={dispatchCreatedCharacters}
-        />
-      </DndContext>
+      <SidebarRight
+        panels={panels}
+        setPanels={setPanels}
+        createdCharacters={createdCharacters}
+        dispatchCreatedCharacters={dispatchCreatedCharacters}
+      />
 
       {/* Integrating Sidebar Left */}
       <SidebarLeft panels={panels} setPanels={setPanels} />
@@ -150,27 +117,9 @@ const Home = (props) => {
         </div>
       </div>
 
+      {/* Use ScrollToNewPanel to handle drag & scroll functionalities */}
       <div className="panelContainer">
-        <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <SortableContext items={panels.map(panel => panel.id)}>
-            <div ref={panelsEndRef} style={{ display: 'flex', gap: '20px', paddingRight: '170px', paddingLeft: '120px', }} >
-              <AnimatePresence>
-                {panels.map(panel => (
-                  <motion.div
-                    key={panel.id}
-                    layout={!isDragging} // Disable layout animations when dragging
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {renderPanel(panel)}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </SortableContext>
-        </DndContext>
+        <ScrollAndDrag panels={panels} setPanels={setPanels} renderPanel={renderPanel} />
       </div>
 
       <div className="HomeButtonContainer">
@@ -181,8 +130,8 @@ const Home = (props) => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
       </div>
-    </div >
+    </div>
   );
-}
+};
 
 export default Home;

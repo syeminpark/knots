@@ -1,6 +1,7 @@
 // controllers/characterController.js
 
 import CharacterModel from '../models/character.js';
+import { io } from '../app.js';
 
 export default {
 
@@ -59,6 +60,8 @@ export default {
                 nextOrderValue,
             );
 
+            io.emit('characterCreated', character);
+
             res.status(201).json(character);
         } catch (error) {
             console.error('Error creating character:', error);
@@ -76,6 +79,7 @@ export default {
 
             const character = await CharacterModel.updateCharacter(uuid, updateData);
             if (character) {
+                io.emit('characterUpdated', character);
                 res.status(200).json(character);
             } else {
                 res.status(404).json({ error: 'Character not found.' });
@@ -94,20 +98,17 @@ export default {
             const { uuid } = req.params;
             const userUUID = req.user.ID; // Get the user UUID
 
-
             // Step 1: Delete the character by its UUID
             const character = await CharacterModel.deleteCharacterByUUID(uuid);
 
             if (character) {
-
                 // Step 2: Fetch all characters for the user to update their connectedCharacters
                 const remainingCharacters = await CharacterModel.getAllCharactersByUserUUID(userUUID);
 
-
                 // Step 3: Traverse through the remaining characters and update their connectedCharacters
+                const updatedCharacters = [];
                 for (let char of remainingCharacters) {
                     if (char.connectedCharacters && char.connectedCharacters.length > 0) {
-
                         const updatedConnectedCharacters = char.connectedCharacters.filter(
                             connectedCharacter => connectedCharacter.uuid !== uuid
                         );
@@ -115,13 +116,23 @@ export default {
                         if (updatedConnectedCharacters.length !== char.connectedCharacters.length) {
                             // Update the character if any connectedCharacters were removed
                             char.connectedCharacters = updatedConnectedCharacters;
-                            await char.save(); // Save the updated character
+                            await char.save();  // Save the updated character
+                            updatedCharacters.push(char);  // Track the updated characters
                         }
                     }
                 }
 
                 // Step 4: Reorder the remaining characters based on their current position
                 await CharacterModel.reorderCharacters(remainingCharacters.map(char => char.uuid));
+
+                // Emit character deleted and characters reordered events
+                io.emit('characterDeleted', { uuid });
+                io.emit('charactersReordered', { characters: remainingCharacters });
+
+                // Emit character updated events for each character whose connectedCharacters were modified
+                updatedCharacters.forEach((updatedChar) => {
+                    io.emit('characterUpdated', updatedChar);
+                });
 
                 res.status(200).json({ message: 'Character deleted, connected characters updated, and reordered successfully.' });
             } else {
@@ -133,8 +144,6 @@ export default {
         }
     },
 
-
-
     /**
      * Delete all characters for the logged-in user.
      */
@@ -142,12 +151,17 @@ export default {
         try {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
             await CharacterModel.deleteAllCharactersByUserUUID(userUUID); // Delete characters by userUUID
+
+            io.emit('allCharactersDeleted', { userUUID });
+
             res.status(200).json({ message: 'All characters for the user deleted successfully.' });
+
         } catch (error) {
             console.error('Error deleting all characters for the user:', error);
             res.status(500).json({ error: 'An error occurred while deleting all characters.' });
         }
     },
+
     onReorderCharacters: async (req, res) => {
         try {
             const { characters } = req.body; // This will be an array of character UUIDs in the new order
@@ -156,13 +170,18 @@ export default {
                 return res.status(400).json({ error: 'Invalid character data' });
             }
 
-            // Call the model to reorder characters
-            await CharacterModel.reorderCharacters(characters);
+            // Call the model to reorder characters and get the updated characters
+            const newCharacters = await CharacterModel.reorderCharacters(characters);
 
+            // Emit the updated characters to all connected clients
+            io.emit('charactersReordered', { characters: newCharacters });
+
+            // Respond with the updated characters to the client that made the request
             res.status(200).json({ message: 'Characters reordered successfully.' });
         } catch (error) {
             console.error('Error reordering characters:', error);
             res.status(500).json({ error: 'An error occurred while reordering characters.' });
         }
-    },
+
+    }
 }

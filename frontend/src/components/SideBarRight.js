@@ -99,7 +99,9 @@ const SidebarRight = (props) => {
             const newCharacters = Array.from(createdCharacters.characters);
             const [movedItem] = newCharacters.splice(oldIndex, 1);
             newCharacters.splice(newIndex, 0, movedItem);
+            console.log('newCharacter', newCharacters)
 
+            //first reorder then update and then reoder again when the websocekts arrive 
             dispatchCreatedCharacters({
                 type: 'REORDER_CHARACTERS',
                 payload: newCharacters,

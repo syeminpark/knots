@@ -16,14 +16,14 @@ const DetailedJournalPost = (props) => {
 
         if (isEditing) {
             if (editedContent !== journalEntry.content) {
-                dispatchCreatedJournalBooks({
-                    type: 'EDIT_JOURNAL_ENTRY',
-                    payload: {
-                        journalBookUUID: bookInfo.uuid,
-                        journalEntryUUID: journalEntry.uuid,
-                        newValue: editedContent
-                    }
-                })
+                // dispatchCreatedJournalBooks({
+                //     type: 'EDIT_JOURNAL_ENTRY',
+                //     payload: {
+                //         journalBookUUID: bookInfo.uuid,
+                //         journalEntryUUID: journalEntry.uuid,
+                //         newValue: editedContent
+                //     }
+                // })
                 try {
                     const response = await apiRequest(`/editJournalEntry/${journalEntry.uuid}`, 'PUT', { newValue: editedContent });
                     console.log(response)
@@ -41,12 +41,12 @@ const DetailedJournalPost = (props) => {
     };
 
     const onDeleteButtonClick = async () => {
-        dispatchCreatedJournalBooks({
-            type: 'DELETE_JOURNAL_ENTRY', payload: {
-                journalBookUUID: bookInfo.uuid,
-                journalEntryUUID: journalEntry.uuid
-            }
-        })
+        // dispatchCreatedJournalBooks({
+        //     type: 'DELETE_JOURNAL_ENTRY', payload: {
+        //         journalBookUUID: bookInfo.uuid,
+        //         journalEntryUUID: journalEntry.uuid
+        //     }
+        // })
         setSelectedBookAndJournalEntry(null);
         try {
             const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');

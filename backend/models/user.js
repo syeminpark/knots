@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
-import { USER_AUTH_TYPES } from "../constants.js";
+import { USER_AUTH_TYPES } from "../utils/constants.js";
 
 
 import { v4 as uuidv4 } from 'uuid';

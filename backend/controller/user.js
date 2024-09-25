@@ -1,6 +1,6 @@
 
 import UserModel from '../models/user.js';
-import { USER_AUTH_TYPES } from '../constants.js';
+import { USER_AUTH_TYPES } from '../utils/constants.js';
 import jwt from 'jsonwebtoken';
 
 export default {

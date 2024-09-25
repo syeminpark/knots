@@ -21,6 +21,8 @@ function App() {
       const characterData = await apiRequest('/getAllCharacters', 'GET',);
       const journalBookData = await apiRequest('/getAllJournalBooks', 'GET',);
       setInitialData({ characters: characterData, journalBooks: journalBookData.journalBooks })
+      console.log('!!! INITIALIZED!!')
+
     }
     catch (error) {
       console.log(error)

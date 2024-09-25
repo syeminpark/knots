@@ -2,6 +2,8 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { JournalBook, JournalEntry, CommentThread, Comment } from '../models/journal.js';
+import { io } from '../app.js';
+
 
 const journalController = {
     /**
@@ -39,6 +41,8 @@ const journalController = {
             }));
             await JournalEntry.insertMany(journalEntries);
 
+            io.emit('journalBookCreated', { journalBook, journalEntries });
+
             res.status(201).json({ message: 'Journal book created successfully', journalBook });
         } catch (error) {
             console.error('Error creating journal book:', error);
@@ -53,7 +57,6 @@ const journalController = {
         try {
             const { journalEntryUUID } = req.params;
             const { newValue } = req.body;
-            const userUUID = req.user.ID;
 
             const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
 
@@ -70,6 +73,8 @@ const journalController = {
             // Update the journal entry
             journalEntry.content = newValue;
             await journalEntry.save();
+
+            io.emit('journalEntryUpdated', journalEntry);
 
             res.status(200).json({ message: 'Journal entry updated successfully.', journalEntry });
         } catch (error) {
@@ -110,6 +115,8 @@ const journalController = {
                 );
             }
 
+            io.emit('journalEntryDeleted', { journalEntryUUID, journalBookUUID });
+
             res.status(200).json({ message: 'Journal entry, related comments, and possibly journal book soft deleted successfully.' });
         } catch (error) {
             console.error('Error deleting journal entry:', error);
@@ -141,6 +148,8 @@ const journalController = {
                 const commentThreadUUIDs = commentThreads.map(thread => thread.uuid);
                 await Comment.updateMany({ commentThreadUUID: { $in: commentThreadUUIDs } }, { isDeleted: true });
 
+                io.emit('journalEntriesDeleted', { ownerUUID });
+
                 // Step 5: Check if any journal books associated with the journal entries should also be soft deleted
                 const journalBooks = await JournalBook.find({ uuid: { $in: journalEntries.map(entry => entry.journalBookUUID) }, isDeleted: false });
 
@@ -165,8 +174,6 @@ const journalController = {
         }
     },
 
-
-
     createComment: async (req, res) => {
         try {
             const {
@@ -180,23 +187,34 @@ const journalController = {
             } = req.body;
             const userUUID = req.user.ID;
 
-            // Existing thread
-            const commentThread = await CommentThread.findOne({ uuid: commentThreadUUID });
+            // Fetch the journal entry to retrieve the journalBookUUID
+            const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
+            if (!journalEntry) {
+                return res.status(404).json({ error: 'Journal entry not found.' });
+            }
+            const journalBookUUID = journalEntry.journalBookUUID;
+
+            let commentThread;
+            let isNewThread = false; // Flag to check if a new thread was created
+
+            // Check if the comment thread already exists
+            commentThread = await CommentThread.findOne({ uuid: commentThreadUUID });
             if (!commentThread) {
-                // New thread
-                const newCommentThread = new CommentThread({
+                // If the thread doesn't exist, create a new thread
+                commentThread = new CommentThread({
                     uuid: commentThreadUUID,
                     journalEntryUUID,
                     userUUID,
                     createdAt,
                 });
-                await newCommentThread.save();
+                await commentThread.save();
+                isNewThread = true; // Mark as a new thread
             }
 
             // Create the comment
             const newComment = new Comment({
                 uuid: commentUUID,
-                commentThreadUUID,
+                commentThreadUUID: commentThread.uuid, // Use the full thread's UUID
                 userUUID,
                 ownerUUID,
                 content,
@@ -205,12 +223,19 @@ const journalController = {
             });
             await newComment.save();
 
+            // If a new thread was created, emit the thread along with the comment
+
+            // Emit the full commentThread object along with the new comment
+            io.emit('commentCreated', { journalEntry, newComment });
+
+
             res.status(201).json({ message: 'Comment created successfully.', comment: newComment });
         } catch (error) {
             console.error('Error creating comment:', error);
             res.status(500).json({ error: 'An error occurred while creating the comment.' });
         }
     },
+
 
     editComment: async (req, res) => {
         try {
@@ -234,12 +259,19 @@ const journalController = {
             comment.content = newContent;
             await comment.save();
 
+            // Fetch the journal entry to retrieve the journalBookUUID
+            const commentThread = await CommentThread.findOne({ uuid: comment.commentThreadUUID });
+            const journalEntry = await JournalEntry.findOne({ uuid: commentThread.journalEntryUUID });
+
+            io.emit('commentUpdated', { journalEntry, comment });
+
             res.status(200).json({ message: 'Comment updated successfully.', comment });
         } catch (error) {
             console.error('Error editing comment:', error);
             res.status(500).json({ error: 'An error occurred while editing the comment.' });
         }
     },
+
 
     /**
      * Delete a comment and possibly its thread if empty.
@@ -256,6 +288,12 @@ const journalController = {
             // Soft delete the comment
             comment.isDeleted = true;
             await comment.save();
+
+            // Fetch the journal entry to retrieve the journalBookUUID
+            const commentThread = await CommentThread.findOne({ uuid: comment.commentThreadUUID });
+            const journalEntry = await JournalEntry.findOne({ uuid: commentThread.journalEntryUUID });
+
+            io.emit('commentDeleted', { journalEntry, comment });
 
             // Check if the thread has any other comments that are not soft-deleted
             const remainingComments = await Comment.find({ commentThreadUUID: comment.commentThreadUUID, isDeleted: false });

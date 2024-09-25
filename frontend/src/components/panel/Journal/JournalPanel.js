@@ -69,6 +69,7 @@ const JournalPanel = (props) => {
                 <>
                     <DetailedJournal
                         key={0}
+                        panelID={id}
                         panels={panels}
                         setPanels={setPanels}
                         selectedBookAndJournalEntry={selectedBookAndJournalEntry}

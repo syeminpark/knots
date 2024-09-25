@@ -1,38 +1,6 @@
-/*
-So a comment can be two types
-
-Type 1. Normal Comment 
-This has two states 'repliedTo' and 'firstInTheThread'
-
-[State: repliedTo]
-Replied To===False
-- This means that the Normal Comment has no other Normal Comments underneath the same thread, thus is not replied to. 
-- This has the following action items: generate reply, manual reply, edit, delete
-
-Replied To===True
-- This means that the Normal Comment has other Normal Comments underneath the same thread, thus is relied to. 
-    => This has the following action items:  edit, delete
-
-The 'repliedTo' state of a Normal Comment changes from False to True when replied to using the 'Replying Comment'. 
-
-[State: firstInTheThread]
-firstInTheThread===True
-- This means that it is the first Normal comment in the thread 
-- It does not have the arrow on the left.
-
-firstInTheThread===False
-- This means that it is not the first Normal comment in the thread 
-- It has the arrow on the left. 
-
-
-Type 2. Currently Replying Comment 
-- A Currently Replying Comment is shown underneath a Normal Comment, when clicked on 'the manual reply action item 
-- A currently replying comment does not have any of the action items
-- When the tcontent of the currenly replying comment is sent, it changes the Normal Comment is underneath of (parent) into replied to True
-
-*/
-
-import React, { useState, useEffect } from 'react';
+// CommentDisplayer.js
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
 import WriteCommentInput from './WriteCommentInput';
 import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
@@ -40,53 +8,75 @@ import CommentActions from './CommentActions';
 import apiRequest from '../../../utility/apiRequest';
 
 const CommentDisplayer = (props) => {
-    const { createdCharacter, content, createdAt, selectedMode, selectedBookAndJournalEntry, commentThreadUUID, commentUUID, dispatchCreatedJournalBooks,
-        panels, setPanels, repliedTo, firstInTheThread, previousCharacter
+    const {
+        createdCharacter,
+        content,
+        createdAt,
+        selectedMode,
+        selectedBookAndJournalEntry,
+        commentThreadUUID,
+        commentUUID,
+        dispatchCreatedJournalBooks,
+        panels,
+        setPanels,
+        repliedTo,
+        firstInTheThread,
+        previousCharacter,
+        isLastComment // New prop
     } = props;
-    const [isEditing, setIsEditing] = useState(false); //
+
+    const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(content);
     const [isManualReplying, setIsManualReplying] = useState(false);
-    const [replyContent, setReplyContent] = useState(''); // State to manage reply content
-    const { bookInfo, journalEntry } = selectedBookAndJournalEntry
+    const [replyContent, setReplyContent] = useState('');
+    const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
+
+    const replyInputRef = useRef(null); // Ref for the reply input
 
     useEffect(() => {
-        setIsManualReplying(false)
-    }, [editContent])
+        setIsManualReplying(false);
+    }, [editContent]);
+
+    useEffect(() => {
+        if (isManualReplying && replyInputRef.current && isLastComment) {
+            replyInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        }
+    }, [isManualReplying, isLastComment]);
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
-        if (replyContent === '' && selectedReplyMode == "Manaul Post") {
-            alert('Write Something');
-        }
-        else {
+        if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
+            alert('Please write something before submitting your reply.');
+        } else {
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
                 ownerUUID: character.uuid,
-                content: replyContent,
+                content: replyContent.trim(),
                 selectedMode: selectedReplyMode,
                 commentThreadUUID: commentThreadUUID,
                 commentUUID: uuidv4(),
                 createdAt: Date.now()
-            }
-            setIsManualReplying(false)
+            };
 
             dispatchCreatedJournalBooks({
                 type: 'CREATE_COMMENT',
                 payload: payload
             });
+
+            setIsManualReplying(false);
+
             try {
                 const response = await apiRequest('/createComment', 'POST', payload);
-                console.log(response)
-            }
-            catch (error) {
-                console.log(error)
+                console.log(response);
+            } catch (error) {
+                console.error('Error creating comment:', error);
             }
         }
-    }
+    };
 
-    // Handle edit save
     const onEditSave = async () => {
-        setIsEditing(false); // Close the edit mode
+        setIsEditing(false);
 
         if (content !== editContent) {
             dispatchCreatedJournalBooks({
@@ -101,10 +91,9 @@ const CommentDisplayer = (props) => {
             });
             try {
                 const response = await apiRequest(`/editComment/${commentUUID}`, 'PUT', { newContent: editContent });
-                console.log(response)
-            }
-            catch (error) {
-                console.log(error)
+                console.log(response);
+            } catch (error) {
+                console.error('Error editing comment:', error);
             }
         }
     };
@@ -122,97 +111,110 @@ const CommentDisplayer = (props) => {
 
         try {
             const response = await apiRequest(`/deleteComment/${commentUUID}`, 'DELETE');
-            console.log(response)
-        }
-        catch (error) {
-            console.log(error)
+            console.log(response);
+        } catch (error) {
+            console.error('Error deleting comment:', error);
         }
     };
 
-
     return (
         <>
-            {firstInTheThread ? (
-                <div style={styles.comment}>
-                    <Comment
-                        panels={panels}
-                        setPanels={setPanels}
-                        createdCharacter={createdCharacter}
-                        selectedMode={selectedMode}
-                        createdAt={createdAt}
-                        isEditing={isEditing}
-                        editContent={editContent}
-                        setEditContent={setEditContent}
-                        onEditSave={onEditSave}
-                        content={content}
-                    ></Comment>
+            <AnimatePresence>
+                <motion.div
+                    key={commentUUID}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.1 }}
+                    transition={{ duration: 0.1 }}>
 
-                </div>
-            ) :
-                < div style={styles.replyContainer}>
-                    <div style={styles.replyArrow}>
-                        ↳
-                    </div>
-                    <div style={styles.replyCommentContainer}>
-                        <Comment
-                            panels={panels}
-                            setPanels={setPanels}
-                            createdCharacter={createdCharacter}
-                            selectedMode={selectedMode}
-                            createdAt={createdAt}
-                            isEditing={isEditing}
-                            editContent={editContent}
-                            setEditContent={setEditContent}
-                            onEditSave={onEditSave}
-                            content={content}
-                        ></Comment>
-                    </div>
-                </div>
-            }
-            <CommentActions
-                isManualReplying={isManualReplying}
-                setIsManualReplying={setIsManualReplying}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                onReplySend={onReplySend}
-                onDelete={onDelete}
-                repliedTo={repliedTo}
-                previousCharacter={previousCharacter}
-            ></CommentActions>
-
-            {
-                isManualReplying && (
-                    <>
-                        {/* Render reply input only if replying to this specific comment */}
-                        < div style={styles.replyContainer}>
-                            <div style={styles.replyArrow}>
-                                ↳
-                            </div>
+                    {/* Render the Comment */}
+                    {firstInTheThread ? (
+                        <div style={styles.comment}>
+                            <Comment
+                                panels={panels}
+                                setPanels={setPanels}
+                                createdCharacter={createdCharacter}
+                                selectedMode={selectedMode}
+                                createdAt={createdAt}
+                                isEditing={isEditing}
+                                editContent={editContent}
+                                setEditContent={setEditContent}
+                                onEditSave={onEditSave}
+                                content={content}
+                            />
+                        </div>
+                    ) : (
+                        <div style={styles.replyContainer}>
+                            <div style={styles.replyArrow}>↳</div>
                             <div style={styles.replyCommentContainer}>
                                 <Comment
                                     panels={panels}
                                     setPanels={setPanels}
-                                    createdCharacter={previousCharacter}
+                                    createdCharacter={createdCharacter}
                                     selectedMode={selectedMode}
-                                ></Comment>
-                                <div style={styles.replyInputContainer}>
-                                    <WriteCommentInput
-                                        placeholder={`Reply as ${previousCharacter.name}`}
-                                        commentValue={replyContent}
-                                        setCommentValue={setReplyContent}
-                                        sendButtonCallback={() => { onReplySend('Manual Post', previousCharacter) }}
-                                    ></WriteCommentInput>
-                                </div>
+                                    createdAt={createdAt}
+                                    isEditing={isEditing}
+                                    editContent={editContent}
+                                    setEditContent={setEditContent}
+                                    onEditSave={onEditSave}
+                                    content={content}
+                                />
                             </div>
                         </div>
-                        <CommentActions
-                            isManualReplying={isManualReplying}
-                            setIsManualReplying={setIsManualReplying}
-                            type={"Replying"}
-                        ></CommentActions>
-                    </>
-                )
-            }
+                    )}
+
+                    {/* Comment Actions */}
+                    <CommentActions
+                        isManualReplying={isManualReplying}
+                        setIsManualReplying={setIsManualReplying}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
+                        onReplySend={onReplySend}
+                        onDelete={onDelete}
+                        repliedTo={repliedTo}
+                        previousCharacter={previousCharacter}
+                    />
+
+                    {/* Render Reply Input Below the Comment */}
+                    {isManualReplying && (
+                        <>
+                            <div style={styles.replyContainer} ref={replyInputRef}>
+                                <div style={styles.replyArrow}>↳</div>
+                                <div style={styles.replyCommentContainer}>
+                                    <Comment
+                                        panels={panels}
+                                        setPanels={setPanels}
+                                        createdCharacter={previousCharacter}
+                                        selectedMode={selectedMode}
+                                    />
+                                    <AnimatePresence>
+                                        <motion.div
+                                            key={`${commentUUID}-reply-input`}
+                                            initial={{ opacity: 0, scale: 1 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.1 }}>
+                                            <div style={styles.replyInputContainer}>
+                                                <WriteCommentInput
+                                                    placeholder={`Reply as ${previousCharacter.name}`}
+                                                    commentValue={replyContent}
+                                                    setCommentValue={setReplyContent}
+                                                    sendButtonCallback={() => { onReplySend('Manual Post', previousCharacter) }}
+                                                />
+                                            </div>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+                            <CommentActions
+                                isManualReplying={isManualReplying}
+                                setIsManualReplying={setIsManualReplying}
+                                type={"Replying"}
+                            />
+                        </>
+                    )}
+                </motion.div>
+            </AnimatePresence>
         </>
     );
 };
@@ -225,11 +227,11 @@ const styles = {
         marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
     },
-
     replyContainer: {
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
+        marginTop: '10px', // Add spacing between comment and reply input
     },
     replyArrow: {
         width: '5%',
@@ -254,11 +256,3 @@ const styles = {
 };
 
 export default CommentDisplayer;
-
-
-
-/*
-getPreviousCharacterUUID 
-also if index==0 the previous character is the journalEntry.ownerUUID
-
-*/

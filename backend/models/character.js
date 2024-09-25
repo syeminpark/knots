@@ -202,9 +202,15 @@ characterSchema.statics.reorderCharacters = async function (characters) {
             // Perform bulk update to save the new order and history in the database
             await this.bulkWrite(bulkOperations);
         }
+
+        // Fetch and return the newly ordered characters
+        const reorderedCharacters = await this.find({ uuid: { $in: characters }, isDeleted: false }).sort({ order: 1 });
+        return reorderedCharacters;
+
     } catch (error) {
         throw error;
     }
 };
+
 
 export default mongoose.model('Character', characterSchema);

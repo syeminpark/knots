@@ -3,6 +3,7 @@ import JournalContent from './JournalContent';
 import TimeAgo from '../../TimeAgo';
 import ToggleButton from '../../ToggleButton';
 import EntryTag from '../../EntryTag';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Feed = (props) => {
     const {
@@ -40,46 +41,61 @@ const Feed = (props) => {
                 {createdJournalBooks.journalBooks.length === 0 && (
                     <p>No Journals yet...</p>
                 )}
-                {createdJournalBooks.journalBooks.slice().reverse().map((journalBook) => (
-                    <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
-                        <div style={styles.entryTime}>
-                            <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
-                        </div>
-                        <div style={styles.entryHeader}>
-                            <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
-                            <EntryTag selectedMode={journalBook.bookInfo.selectedMode} size='large'> </EntryTag>
-                        </div>
+                {createdJournalBooks.journalBooks.slice().reverse().map((journalBook, index) => (
+                    <AnimatePresence key={journalBook.bookInfo.uuid}>
+                        <motion.div
+                            key={journalBook.bookInfo.uuid}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.1 }}>
+                            <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
+                                <div style={styles.entryTime}>
+                                    <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
+                                </div>
+                                <div style={styles.entryHeader}>
+                                    <strong style={styles.entryTitle}>{journalBook.bookInfo.title}</strong>
+                                    <EntryTag selectedMode={journalBook.bookInfo.selectedMode} size='large'> </EntryTag>
+                                </div>
 
-                        {/* Toggle Button */}
-                        <div style={styles.toggleButtonContainer}>
-                            <ToggleButton
-                                expandable={true}
-                                expanded={expandedGroup[journalBook.bookInfo.uuid]}
-                                onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
-                                size="medium"
-                            />
-                        </div>
+                                {/* Toggle Button */}
+                                <div style={styles.toggleButtonContainer}>
+                                    <ToggleButton
+                                        expandable={true}
+                                        expanded={expandedGroup[journalBook.bookInfo.uuid]}
+                                        onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
+                                        size="medium"
+                                    />
+                                </div>
 
-                        {expandedGroup[journalBook.bookInfo.uuid] && (
-                            journalBook.journalEntries.map((journalEntry) => (
-                                <JournalContent
-                                    key={journalEntry.uuid}
-                                    ref={el => journalEntryRefs.current[journalEntry.uuid] = el}
-                                    panels={panels}
-                                    setPanels={setPanels}
-                                    createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
-                                    content={journalEntry.content}
-                                    journalBookUUID={journalBook.bookInfo.uuid}
-                                    journalEntryUUID={journalEntry.uuid}
-                                    setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
-                                    createdJournalBooks={createdJournalBooks}
-                                    setTrackingJournalEntry={setTrackingJournalEntry}
-                                />
-                            ))
-                        )}
-                    </div>
+                                {expandedGroup[journalBook.bookInfo.uuid] && (
+                                    journalBook.journalEntries.map((journalEntry, index) => (
+
+
+                                        <JournalContent
+                                            key={journalEntry.uuid}
+                                            ref={el => journalEntryRefs.current[journalEntry.uuid] = el}
+                                            panels={panels}
+                                            setPanels={setPanels}
+                                            createdCharacter={createdCharacters.characters.find(character => character.uuid === journalEntry.ownerUUID)}
+                                            content={journalEntry.content}
+                                            journalBookUUID={journalBook.bookInfo.uuid}
+                                            journalEntryUUID={journalEntry.uuid}
+                                            setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                                            createdJournalBooks={createdJournalBooks}
+                                            setTrackingJournalEntry={setTrackingJournalEntry}
+
+                                        />
+
+
+                                    ))
+                                )}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence >
                 ))}
-            </div>
+
+            </div >
         </>
     );
 };

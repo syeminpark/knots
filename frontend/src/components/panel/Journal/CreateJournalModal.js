@@ -76,10 +76,10 @@ const CreateJournalModal = (props) => {
                 selectedCharacters,
                 createdAt: Date.now()
             }
-            dispatchCreatedJournalBooks({
-                type: 'CREATE_JOURNAL_BOOK',
-                payload: payload
-            });
+            // dispatchCreatedJournalBooks({
+            //     type: 'CREATE_JOURNAL_BOOK',
+            //     payload: payload
+            // });
             setShowModal(false);
 
             try {
@@ -88,9 +88,6 @@ const CreateJournalModal = (props) => {
                 console.log(response)
             }
             catch (error) { console.log(error) }
-
-
-
         }
     };
 

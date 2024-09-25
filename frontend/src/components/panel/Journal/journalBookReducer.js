@@ -17,10 +17,10 @@ const journalBookReducer = (state, action) => {
                     selectedMode: action.payload.selectedMode,
                     createdAt: action.payload.createdAt,
                 },
-                journalEntries: action.payload.selectedCharacters.map(character => ({
-                    uuid: character.journalEntryUUID,
-                    ownerUUID: character.uuid,
-                    content: action.payload.journalBookContent,
+                journalEntries: action.payload.journalEntries.map(journalEntry => ({
+                    uuid: journalEntry.uuid,
+                    ownerUUID: journalEntry.ownerUUID,
+                    content: journalEntry.content,
                     commentThreads: [],
                 })),
             };
@@ -128,6 +128,8 @@ const journalBookReducer = (state, action) => {
 
 
 
+
+
         case 'CREATE_COMMENT': {
             let newComment = null;
             const ownerUUID = action.payload.ownerUUID;
@@ -140,52 +142,59 @@ const journalBookReducer = (state, action) => {
                             let updatedCommentThreads = entry.commentThreads;
 
                             if (entry.uuid === action.payload.journalEntryUUID) {
-                                // Add a new comment to the existing thread
-                                const existingThread = entry.commentThreads.find(thread => thread.uuid === action.payload.commentThreadUUID);
+                                // Check if the comment with the same UUID already exists
+                                const commentExists = entry.commentThreads.some(thread =>
+                                    thread.comments.some(comment => comment.uuid === action.payload.commentUUID)
+                                );
 
-                                if (existingThread) {
-                                    updatedCommentThreads = entry.commentThreads.map((thread) => {
-                                        if (thread.uuid === action.payload.commentThreadUUID) {
-                                            const newThreadComment = {
-                                                uuid: action.payload.commentUUID,
-                                                ownerUUID: ownerUUID,
-                                                content: action.payload.content,
-                                                createdAt: action.payload.createdAt,
-                                                selectedMode: action.payload.selectedMode,
-                                            };
-                                            newComment = {
-                                                ...newThreadComment,
-                                                commentThreadUUID: thread.uuid, // Set commentThreadUUID here
-                                            };
+                                if (!commentExists) {
+                                    // Add a new comment to the existing thread
+                                    const existingThread = entry.commentThreads.find(thread => thread.uuid === action.payload.commentThreadUUID);
 
-                                            return {
-                                                ...thread,
-                                                comments: [...thread.comments, newThreadComment],
-                                            };
-                                        }
-                                        return thread;
-                                    });
-                                } else {
-                                    // Create a new comment thread
-                                    const newThreadUUID = action.payload.commentThreadUUID;
-                                    const newThread = {
-                                        uuid: newThreadUUID,
-                                        createdAt: action.payload.createdAt,
-                                        comments: [
-                                            {
-                                                uuid: action.payload.commentUUID,
-                                                ownerUUID: ownerUUID,
-                                                content: action.payload.content,
-                                                createdAt: action.payload.createdAt,
-                                                selectedMode: action.payload.selectedMode,
-                                            },
-                                        ],
-                                    };
-                                    newComment = {
-                                        ...newThread.comments[0],
-                                        commentThreadUUID: newThreadUUID, // Set commentThreadUUID here
-                                    };
-                                    updatedCommentThreads = [...entry.commentThreads, newThread];
+                                    if (existingThread) {
+                                        updatedCommentThreads = entry.commentThreads.map((thread) => {
+                                            if (thread.uuid === action.payload.commentThreadUUID) {
+                                                const newThreadComment = {
+                                                    uuid: action.payload.commentUUID,
+                                                    ownerUUID: ownerUUID,
+                                                    content: action.payload.content,
+                                                    createdAt: action.payload.createdAt,
+                                                    selectedMode: action.payload.selectedMode,
+                                                };
+                                                newComment = {
+                                                    ...newThreadComment,
+                                                    commentThreadUUID: thread.uuid, // Set commentThreadUUID here
+                                                };
+
+                                                return {
+                                                    ...thread,
+                                                    comments: [...thread.comments, newThreadComment],
+                                                };
+                                            }
+                                            return thread;
+                                        });
+                                    } else {
+                                        // Create a new comment thread
+                                        const newThreadUUID = action.payload.commentThreadUUID;
+                                        const newThread = {
+                                            uuid: newThreadUUID,
+                                            createdAt: action.payload.createdAt,
+                                            comments: [
+                                                {
+                                                    uuid: action.payload.commentUUID,
+                                                    ownerUUID: ownerUUID,
+                                                    content: action.payload.content,
+                                                    createdAt: action.payload.createdAt,
+                                                    selectedMode: action.payload.selectedMode,
+                                                },
+                                            ],
+                                        };
+                                        newComment = {
+                                            ...newThread.comments[0],
+                                            commentThreadUUID: newThreadUUID, // Set commentThreadUUID here
+                                        };
+                                        updatedCommentThreads = [...entry.commentThreads, newThread];
+                                    }
                                 }
                             }
 
@@ -204,7 +213,7 @@ const journalBookReducer = (state, action) => {
                 journalBooks: updatedJournalBooks,
                 newComment, // The updated comment with commentThreadUUID
             };
-        };
+        }
 
 
         case 'EDIT_COMMENT': {

@@ -20,8 +20,6 @@ const CharacterProfilePanel = (props) => {
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
-    console.log(createdCharacters)
-
     // enabling save button 
     useEffect(() => {
         const hasChanges =
@@ -35,7 +33,9 @@ const CharacterProfilePanel = (props) => {
 
     // Effect to update local state when `createdCharacters` is updated
     useEffect(() => {
+
         const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+        console.log(updatedCharacter)
         if (updatedCharacter) {
             setName(updatedCharacter.name);
             setPersonaAttributes(updatedCharacter.personaAttributes);
@@ -49,7 +49,7 @@ const CharacterProfilePanel = (props) => {
             const foundCharacter = createdCharacters.characters.find(
                 (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
             );
-            if (foundCharacter) {
+            if (foundCharacter && foundCharacter.name !== connectedCharacter.name) {
                 return {
                     ...connectedCharacter,
                     name: foundCharacter.name,
@@ -57,8 +57,13 @@ const CharacterProfilePanel = (props) => {
             }
             return connectedCharacter;
         });
-        setConnectedCharacters(updatedConnectedCharacters);
-    }, [createdCharacters]);
+
+        // Only update state if there's a change
+        const isDifferent = updatedConnectedCharacters.some((char, index) => char.name !== connectedCharacters[index].name);
+        if (isDifferent) {
+            setConnectedCharacters(updatedConnectedCharacters);
+        }
+    }, [createdCharacters, connectedCharacters]);
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -92,10 +97,10 @@ const CharacterProfilePanel = (props) => {
                     updatedData.imageSrc = uploadResponse.imageUrl;
                 }
             }
-            dispatchCreatedCharacters({
-                type: 'EDIT_CREATED_CHARACTER',
-                payload: { ...updatedData, uuid: characterUUID }
-            });
+            // dispatchCreatedCharacters({
+            //     type: 'EDIT_CREATED_CHARACTER',
+            //     payload: { ...updatedData, uuid: characterUUID }
+            // });
             const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
             console.log('Character update response:', response);
         } catch (error) {
@@ -107,11 +112,11 @@ const CharacterProfilePanel = (props) => {
 
         setPanels([]);
 
-        dispatchCreatedJournalBooks({
-            type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
-            payload: { ownerUUID: caller.uuid }
+        // dispatchCreatedJournalBooks({
+        //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
+        //     payload: { ownerUUID: caller.uuid }
 
-        })
+        // })
 
         dispatchCreatedCharacters({
             type: 'DELETE_CHARACTER',
