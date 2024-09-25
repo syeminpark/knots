@@ -12,6 +12,6 @@ router
     .put('/editComment/:commentUUID', auth, journalController.editComment)
     .delete('/deleteComment/:commentUUID', auth, journalController.deleteComment)
     .delete('/deleteJournalEntry/:journalEntryUUID', auth, journalController.deleteJournalEntry)
+    .delete('/deleteJournalEntryByOwnerUUID/:ownerUUID', auth, journalController.deleteAllJournalEntriesByOwnerUUID)
 
 export default router;
-

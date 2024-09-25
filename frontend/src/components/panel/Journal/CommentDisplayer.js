@@ -33,14 +33,11 @@ Type 2. Currently Replying Comment
 */
 
 import React, { useState, useEffect } from 'react';
-import TimeAgo from '../../TimeAgo';
-import CharacterButton from "../../CharacterButton";
-import EntryTag from '../../EntryTag';
 import WriteCommentInput from './WriteCommentInput';
-import openNewPanel from '../../openNewPanel';
+import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
 import CommentActions from './CommentActions';
-
+import apiRequest from '../../../utility/apiRequest';
 
 const CommentDisplayer = (props) => {
     const { createdCharacter, content, createdAt, selectedMode, selectedBookAndJournalEntry, commentThreadUUID, commentUUID, dispatchCreatedJournalBooks,
@@ -56,44 +53,63 @@ const CommentDisplayer = (props) => {
         setIsManualReplying(false)
     }, [editContent])
 
-    const onReplySend = (selectedReplyMode, character = createdCharacter) => {
+    const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent === '' && selectedReplyMode == "Manaul Post") {
             alert('Write Something');
         }
         else {
+            const payload = {
+                journalBookUUID: bookInfo.uuid,
+                journalEntryUUID: journalEntry.uuid,
+                ownerUUID: character.uuid,
+                content: replyContent,
+                selectedMode: selectedReplyMode,
+                commentThreadUUID: commentThreadUUID,
+                commentUUID: uuidv4(),
+                createdAt: Date.now()
+            }
+            setIsManualReplying(false)
+
             dispatchCreatedJournalBooks({
                 type: 'CREATE_COMMENT',
-                payload: {
-                    journalBookUUID: bookInfo.uuid,
-                    journalEntryUUID: journalEntry.uuid,
-                    ownerUUID: character.uuid,
-                    content: replyContent,
-                    selectedMode: selectedReplyMode,
-                    commentThreadUUID: commentThreadUUID
-
-                },
+                payload: payload
             });
-            setIsManualReplying(false)
+            try {
+                const response = await apiRequest('/createComment', 'POST', payload);
+                console.log(response)
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
     }
 
-
     // Handle edit save
-    const onEditSave = () => {
-        dispatchCreatedJournalBooks({
-            type: 'EDIT_COMMENT',
-            payload: {
-                journalBookUUID: bookInfo.uuid,
-                journalEntryUUID: journalEntry.uuid,
-                commentThreadUUID: commentThreadUUID,
-                commentUUID: commentUUID,
-                newContent: editContent,
-            },
-        });
+    const onEditSave = async () => {
         setIsEditing(false); // Close the edit mode
+
+        if (content !== editContent) {
+            dispatchCreatedJournalBooks({
+                type: 'EDIT_COMMENT',
+                payload: {
+                    journalBookUUID: bookInfo.uuid,
+                    journalEntryUUID: journalEntry.uuid,
+                    commentThreadUUID: commentThreadUUID,
+                    commentUUID: commentUUID,
+                    newContent: editContent,
+                },
+            });
+            try {
+                const response = await apiRequest(`/editComment/${commentUUID}`, 'PUT', { newContent: editContent });
+                console.log(response)
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
     };
 
-    const onDelete = () => {
+    const onDelete = async () => {
         dispatchCreatedJournalBooks({
             type: 'DELETE_COMMENT',
             payload: {
@@ -103,6 +119,14 @@ const CommentDisplayer = (props) => {
                 commentUUID: commentUUID,
             },
         });
+
+        try {
+            const response = await apiRequest(`/deleteComment/${commentUUID}`, 'DELETE');
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
     };
 
 
@@ -155,7 +179,6 @@ const CommentDisplayer = (props) => {
                 repliedTo={repliedTo}
                 previousCharacter={previousCharacter}
             ></CommentActions>
-
 
             {
                 isManualReplying && (

@@ -41,12 +41,32 @@ const characterReducer = (state, action) => {
                 ...state,
                 characters: action.payload,
             };
-        
-                case 'DELETE_CHARACTER': // 새로운 삭제 액션
+
+        case 'DELETE_CHARACTER': {
+            const characterUUIDToDelete = action.payload.uuid;
+
+            // Remove the character itself
+            const updatedCharacters = state.characters.filter(
+                (character) => character.uuid !== characterUUIDToDelete
+            );
+
+            // Traverse through the remaining characters to remove the deleted character from their connectedCharacters
+            const charactersWithUpdatedConnections = updatedCharacters.map((character) => {
+                const updatedConnectedCharacters = character.connectedCharacters.filter(
+                    (connectedCharacter) => connectedCharacter.uuid !== characterUUIDToDelete
+                );
+
+                return {
+                    ...character,
+                    connectedCharacters: updatedConnectedCharacters,
+                };
+            });
+
             return {
                 ...state,
-                characters: state.characters.filter((character) => character.uuid !== action.payload.uuid)
+                characters: charactersWithUpdatedConnections,
             };
+        }
 
         default:
             return state;

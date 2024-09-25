@@ -64,6 +64,7 @@ const styles = {
         WebkitBoxOrient: 'vertical',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        resize: 'vertical',
     },
 
     toggleButtonContainer: {
@@ -106,6 +107,7 @@ const styles = {
         textOverflow: 'ellipsis',
         textAlign: 'left',
         maxWidth: '100%',
+        resize: 'vertical',
 
 
     },

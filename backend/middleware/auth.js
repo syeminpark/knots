@@ -9,7 +9,6 @@ const auth = async (req, res, next) => {
 
         const user = await User.findOne({ ID: decoded.ID, auth_type: decoded.auth_type });
 
-        console.log(user)
         if (!user) {
             throw new Error();
         }

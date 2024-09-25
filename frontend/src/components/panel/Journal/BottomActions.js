@@ -3,6 +3,8 @@ import SelectBox from "../../SelectBox";
 import TabNavigation from "../Character/TabNavigation";
 import ToggleButton from "../../ToggleButton"
 import WriteCommentInput from "./WriteCommentInput";
+import apiRequest from "../../../utility/apiRequest";
+import { v4 as uuidv4 } from 'uuid';
 
 const BottomActions = (props) => {
     const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry } = props
@@ -13,8 +15,6 @@ const BottomActions = (props) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
-
-
     const onSendButtonClick = () => {
         if (selectedCharacters.length < 1) {
             alert('Select A Character');
@@ -22,22 +22,31 @@ const BottomActions = (props) => {
             alert('Write Something');
         } else {
 
-
-            selectedCharacters.forEach(selectedCharacter => {
-                //if activeTab is SystemGenerate, run the API CALL HERE
-                //also use Set(CommentValue here after the api call)
+            selectedCharacters.forEach(async (selectedCharacter) => {
+                const payload = {
+                    journalBookUUID: bookInfo.uuid,
+                    journalEntryUUID: journalEntry.uuid,
+                    ownerUUID: selectedCharacter.uuid,
+                    content: commentValue,
+                    selectedMode: activeTab,
+                    commentThreadUUID: uuidv4(),
+                    commentUUID: uuidv4(),
+                    createdAt: Date.now()
+                }
                 dispatchCreatedJournalBooks({
                     type: 'CREATE_COMMENT',
-                    payload: {
-                        journalBookUUID: bookInfo.uuid,
-                        journalEntryUUID: journalEntry.uuid,
-                        ownerUUID: selectedCharacter.uuid,
-                        content: commentValue,
-                        selectedMode: activeTab,
-                    },
+                    payload: payload
                 });
+                try {
+                    const response = await apiRequest('/createComment', 'POST', payload);
+                    console.log(response)
+                }
+                catch (error) {
+                    console.log(error)
+                }
+
             })
-            setCommentValue('');
+
         }
     };
 

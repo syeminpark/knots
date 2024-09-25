@@ -55,16 +55,78 @@ const journalBookReducer = (state, action) => {
         case 'DELETE_JOURNAL_ENTRY':
             return {
                 ...state,
-                journalBooks: state.journalBooks.map(book => {
+                journalBooks: state.journalBooks.map((book) => {
                     if (book.bookInfo.uuid === action.payload.journalBookUUID) {
+                        const updatedJournalEntries = book.journalEntries.filter(
+                            (entry) => entry.uuid !== action.payload.journalEntryUUID
+                        );
+
+                        // If the updatedJournalEntries is empty, we can skip updating this book (keep it or not)
+                        if (updatedJournalEntries.length === 0) {
+                            return null; // We'll handle this case later in filter
+                        }
+
                         return {
                             ...book,
-                            journalEntries: book.journalEntries.filter(entry => entry.uuid !== action.payload.journalEntryUUID)
+                            journalEntries: updatedJournalEntries,
                         };
                     }
                     return book;
-                })
+                }).filter(book => book !== null), // Remove books with no entries
             };
+
+        case 'DELETE_JOURNAL_ENTRY_OWNER_UUID': {
+            const ownerUUID = action.payload.ownerUUID;
+
+            // Process the journal books and entries
+            const updatedJournalBooks = state.journalBooks.map((book) => {
+                const updatedJournalEntries = book.journalEntries.map((entry) => {
+                    // Filter out comments where the ownerUUID matches the character
+                    const updatedCommentThreads = entry.commentThreads.map((thread) => {
+                        const updatedComments = thread.comments.filter(
+                            (comment) => comment.ownerUUID !== ownerUUID
+                        );
+
+                        // If no comments remain in the thread, remove the thread
+                        if (updatedComments.length === 0) {
+                            return null; // Mark this thread for removal
+                        }
+
+                        return {
+                            ...thread,
+                            comments: updatedComments,
+                        };
+                    }).filter(thread => thread !== null); // Remove threads that are null
+
+                    // If the journal entry itself belongs to the ownerUUID, remove the entry
+                    if (entry.ownerUUID === ownerUUID) {
+                        return null; // Mark this entry for removal
+                    }
+
+                    return {
+                        ...entry,
+                        commentThreads: updatedCommentThreads,
+                    };
+                }).filter(entry => entry !== null); // Remove journal entries that are null
+
+                // If no journal entries remain in the book, remove the book
+                if (updatedJournalEntries.length === 0) {
+                    return null; // Mark this book for removal
+                }
+
+                return {
+                    ...book,
+                    journalEntries: updatedJournalEntries,
+                };
+            }).filter(book => book !== null); // Remove books that have no entries left
+
+            return {
+                ...state,
+                journalBooks: updatedJournalBooks,
+            };
+        }
+
+
 
         case 'CREATE_COMMENT': {
             let newComment = null;
@@ -78,15 +140,17 @@ const journalBookReducer = (state, action) => {
                             let updatedCommentThreads = entry.commentThreads;
 
                             if (entry.uuid === action.payload.journalEntryUUID) {
-                                if (action.payload.commentThreadUUID) {
-                                    // Add a new comment to the existing thread
+                                // Add a new comment to the existing thread
+                                const existingThread = entry.commentThreads.find(thread => thread.uuid === action.payload.commentThreadUUID);
+
+                                if (existingThread) {
                                     updatedCommentThreads = entry.commentThreads.map((thread) => {
                                         if (thread.uuid === action.payload.commentThreadUUID) {
                                             const newThreadComment = {
-                                                uuid: uuidv4(),
+                                                uuid: action.payload.commentUUID,
                                                 ownerUUID: ownerUUID,
                                                 content: action.payload.content,
-                                                createdAt: Date.now(),
+                                                createdAt: action.payload.createdAt,
                                                 selectedMode: action.payload.selectedMode,
                                             };
                                             newComment = {
@@ -103,16 +167,16 @@ const journalBookReducer = (state, action) => {
                                     });
                                 } else {
                                     // Create a new comment thread
-                                    const newThreadUUID = uuidv4();
+                                    const newThreadUUID = action.payload.commentThreadUUID;
                                     const newThread = {
                                         uuid: newThreadUUID,
-                                        createdAt: Date.now(),
+                                        createdAt: action.payload.createdAt,
                                         comments: [
                                             {
-                                                uuid: uuidv4(),
+                                                uuid: action.payload.commentUUID,
                                                 ownerUUID: ownerUUID,
                                                 content: action.payload.content,
-                                                createdAt: Date.now(),
+                                                createdAt: action.payload.createdAt,
                                                 selectedMode: action.payload.selectedMode,
                                             },
                                         ],
@@ -123,14 +187,13 @@ const journalBookReducer = (state, action) => {
                                     };
                                     updatedCommentThreads = [...entry.commentThreads, newThread];
                                 }
-
-                                return {
-                                    ...entry,
-                                    commentThreads: updatedCommentThreads,
-                                };
                             }
-                            return entry;
-                        }),
+
+                            return {
+                                ...entry,
+                                commentThreads: updatedCommentThreads,
+                            };
+                        })
                     };
                 }
                 return book;
@@ -141,7 +204,8 @@ const journalBookReducer = (state, action) => {
                 journalBooks: updatedJournalBooks,
                 newComment, // The updated comment with commentThreadUUID
             };
-        }
+        };
+
 
         case 'EDIT_COMMENT': {
             return {

@@ -19,9 +19,7 @@ function App() {
   const initializeData = async () => {
     try {
       const characterData = await apiRequest('/getAllCharacters', 'GET',);
-      console.log(characterData)
       const journalBookData = await apiRequest('/getAllJournalBooks', 'GET',);
-      console.log(journalBookData.journalBooks)
       setInitialData({ characters: characterData, journalBooks: journalBookData.journalBooks })
     }
     catch (error) {
@@ -41,7 +39,6 @@ function App() {
     const verifyToken = async () => {
       try {
         const result = await apiRequest('/verify', 'POST',)
-        console.log(result)
 
         setLoggedIn(result.success);
         setUserName(user.userName || '');

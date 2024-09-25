@@ -20,6 +20,8 @@ const CharacterProfilePanel = (props) => {
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
+    console.log(createdCharacters)
+
     // enabling save button 
     useEffect(() => {
         const hasChanges =
@@ -101,14 +103,37 @@ const CharacterProfilePanel = (props) => {
         }
     };
 
-    const deleteFunction = () => {
-        const currentCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+    const deleteFunction = async () => {
 
-        if (currentCharacter) {
-            console.log('delete');  // 삭제 기능이 실행될 때 콘솔에 'delete' 출력
+        setPanels([]);
+
+        dispatchCreatedJournalBooks({
+            type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
+            payload: { ownerUUID: caller.uuid }
+
+        })
+
+        dispatchCreatedCharacters({
+            type: 'DELETE_CHARACTER',
+            payload: { uuid: caller.uuid }
+        })
+
+        try {
+            const response = await apiRequest(`/deleteJournalEntryByOwnerUUID/${caller.uuid}`, 'DELETE')
+            console.log('Entry delete response', response)
+        }
+        catch (error) {
+            console.log('Error deleting entries:', error);
+        }
+
+        try {
+            const response = await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE')
+            console.log('Character Delete response: ', response)
+        }
+        catch (error) {
+            console.log('Error deleting character:', error);
         }
     };
-    
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);

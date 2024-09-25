@@ -73,7 +73,7 @@ export default {
         try {
             const updateData = req.body;
             const { uuid } = req.params
-            console.log(uuid)
+
             const character = await CharacterModel.updateCharacter(uuid, updateData);
             if (character) {
                 res.status(200).json(character);
@@ -81,7 +81,7 @@ export default {
                 res.status(404).json({ error: 'Character not found.' });
             }
         } catch (error) {
-            console.error(`Error updating character with UUID ${req.body.uuid}:`, error);
+            console.error(`Error updating character with UUID ${req.params.uuid}:`, error);
             res.status(500).json({ error: 'An error occurred while updating the character.' });
         }
     },
@@ -92,19 +92,38 @@ export default {
     onDeleteCharacterByUUID: async (req, res) => {
         try {
             const { uuid } = req.params;
-            const userUUID = req.user.uuid; // Get the user UUID
+            const userUUID = req.user.ID; // Get the user UUID
+
 
             // Step 1: Delete the character by its UUID
             const character = await CharacterModel.deleteCharacterByUUID(uuid);
 
             if (character) {
-                // Step 2: Fetch the remaining characters for the user
+
+                // Step 2: Fetch all characters for the user to update their connectedCharacters
                 const remainingCharacters = await CharacterModel.getAllCharactersByUserUUID(userUUID);
 
-                // Step 3: Reorder the remaining characters based on their current position
+
+                // Step 3: Traverse through the remaining characters and update their connectedCharacters
+                for (let char of remainingCharacters) {
+                    if (char.connectedCharacters && char.connectedCharacters.length > 0) {
+
+                        const updatedConnectedCharacters = char.connectedCharacters.filter(
+                            connectedCharacter => connectedCharacter.uuid !== uuid
+                        );
+
+                        if (updatedConnectedCharacters.length !== char.connectedCharacters.length) {
+                            // Update the character if any connectedCharacters were removed
+                            char.connectedCharacters = updatedConnectedCharacters;
+                            await char.save(); // Save the updated character
+                        }
+                    }
+                }
+
+                // Step 4: Reorder the remaining characters based on their current position
                 await CharacterModel.reorderCharacters(remainingCharacters.map(char => char.uuid));
 
-                res.status(200).json({ message: 'Character deleted and reordered successfully.' });
+                res.status(200).json({ message: 'Character deleted, connected characters updated, and reordered successfully.' });
             } else {
                 res.status(404).json({ error: 'Character not found.' });
             }
@@ -115,12 +134,13 @@ export default {
     },
 
 
+
     /**
      * Delete all characters for the logged-in user.
      */
     onDeleteAllCharactersByUser: async (req, res) => {
         try {
-            const userUUID = req.user.uuid; // Get userUUID from the authenticated user
+            const userUUID = req.user.ID; // Get userUUID from the authenticated user
             await CharacterModel.deleteAllCharactersByUserUUID(userUUID); // Delete characters by userUUID
             res.status(200).json({ message: 'All characters for the user deleted successfully.' });
         } catch (error) {

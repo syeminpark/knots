@@ -3,6 +3,7 @@ import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import TextArea from "../../TextArea";
 import ToggleButton from "../../ToggleButton"; // Import the ToggleButton
+import apiRequest from '../../../utility/apiRequest';
 
 const DetailedJournalPost = (props) => {
     const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props
@@ -11,32 +12,49 @@ const DetailedJournalPost = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
     const [showDelete, setShowDelete] = useState(false);
 
-    const onEditButtonClick = () => {
-        console.log(bookInfo, journalEntry)
-        if (isEditing) {
-            journalEntry.content = editedContent;
-            dispatchCreatedJournalBooks({
-                type: 'EDIT_JOURNAL_ENTRY',
-                payload: {
-                    journalBookUUID: bookInfo.uuid,
-                    journalEntryUUID: journalEntry.uuid,
-                    newValue: journalEntry.content
-                }
-            })
+    const onEditButtonClick = async () => {
 
+        if (isEditing) {
+            if (editedContent !== journalEntry.content) {
+                dispatchCreatedJournalBooks({
+                    type: 'EDIT_JOURNAL_ENTRY',
+                    payload: {
+                        journalBookUUID: bookInfo.uuid,
+                        journalEntryUUID: journalEntry.uuid,
+                        newValue: editedContent
+                    }
+                })
+                try {
+                    const response = await apiRequest(`/editJournalEntry/${journalEntry.uuid}`, 'PUT', { newValue: editedContent });
+                    console.log(response)
+                }
+                catch (error) {
+                    console.log(error)
+                }
+            }
         }
         setIsEditing(!isEditing);
     };
-    useEffect(() => {
-
-    })
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
     };
 
-    const onDeleteButtonClick = () => {
-        // delete 기능 추가
+    const onDeleteButtonClick = async () => {
+        dispatchCreatedJournalBooks({
+            type: 'DELETE_JOURNAL_ENTRY', payload: {
+                journalBookUUID: bookInfo.uuid,
+                journalEntryUUID: journalEntry.uuid
+            }
+        })
+        setSelectedBookAndJournalEntry(null);
+        try {
+            const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     const onReturnClick = () => {
@@ -85,7 +103,7 @@ const DetailedJournalPost = (props) => {
 
                 {/* Conditionally show delete button */}
                 {showDelete && (
-                    <button style={styles.deleteButton} onClick={onDeleteButtonClick}> 
+                    <button style={styles.deleteButton} onClick={onDeleteButtonClick}>
                         Delete
                     </button>
                 )}

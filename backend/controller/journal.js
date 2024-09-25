@@ -13,7 +13,7 @@ const journalController = {
             const userUUID = req.user.ID; // Assuming you have user authentication
 
             if (!journalBookTitle || !selectedCharacters || !journalBookContent) {
-                console.log(journalBookTitle, selectedCharacters, journalBookContent)
+                // console.log(journalBookTitle, selectedCharacters, journalBookContent)
                 return res.status(400).json({ error: 'Missing required fields' });
 
             }
@@ -55,17 +55,17 @@ const journalController = {
             const { newValue } = req.body;
             const userUUID = req.user.ID;
 
-            // Find the journal entry
             const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
 
             if (!journalEntry) {
                 return res.status(404).json({ error: 'Journal entry not found.' });
             }
 
-            // Verify ownership
-            if (journalEntry.userUUID !== userUUID) {
-                return res.status(403).json({ error: 'You are not authorized to edit this journal entry.' });
-            }
+            // Add previous content to the history array
+            journalEntry.history.push({
+                previousContent: journalEntry.content,
+                editedAt: journalEntry.createdAt,
+            });
 
             // Update the journal entry
             journalEntry.content = newValue;
@@ -78,45 +78,95 @@ const journalController = {
         }
     },
 
-    /**
-     * Delete a journal entry and its related comment threads and comments.
-     */
+
     deleteJournalEntry: async (req, res) => {
         try {
             const { journalEntryUUID } = req.params;
-            const userUUID = req.user.ID;
 
+            // Step 1: Find the journal entry by its UUID
             const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
 
             if (!journalEntry) {
                 return res.status(404).json({ error: 'Journal entry not found.' });
             }
 
-            // Verify ownership
-            if (journalEntry.userUUID !== userUUID) {
-                return res.status(403).json({ error: 'You are not authorized to delete this journal entry.' });
+            // Step 2: Soft delete the journal entry
+            journalEntry.isDeleted = true;
+            await journalEntry.save();
+
+            // Step 3: Soft delete related comment threads and comments
+            await CommentThread.updateMany({ journalEntryUUID }, { isDeleted: true });
+            await Comment.updateMany({ commentThreadUUID: { $in: journalEntryUUID } }, { isDeleted: true });
+
+            // Step 4: Check if the related JournalBook has any remaining non-deleted entries
+            const journalBookUUID = journalEntry.journalBookUUID;
+            const remainingEntries = await JournalEntry.find({ journalBookUUID: journalBookUUID, isDeleted: false });
+
+            // Step 5: If no remaining non-deleted entries, soft delete the JournalBook
+            if (remainingEntries.length === 0) {
+                await JournalBook.findOneAndUpdate(
+                    { uuid: journalBookUUID },
+                    { isDeleted: true }
+                );
             }
 
-            // Delete the journal entry
-            await JournalEntry.deleteOne({ uuid: journalEntryUUID });
-
-            // Delete related comment threads and comments
-            const commentThreads = await CommentThread.find({ journalEntryUUID });
-            const threadUUIDs = commentThreads.map((thread) => thread.uuid);
-
-            await Comment.deleteMany({ commentThreadUUID: { $in: threadUUIDs } });
-            await CommentThread.deleteMany({ journalEntryUUID });
-
-            res.status(200).json({ message: 'Journal entry and related comments deleted successfully.' });
+            res.status(200).json({ message: 'Journal entry, related comments, and possibly journal book soft deleted successfully.' });
         } catch (error) {
             console.error('Error deleting journal entry:', error);
             res.status(500).json({ error: 'An error occurred while deleting the journal entry.' });
         }
     },
 
-    /**
-     * Create a new comment (either in a new thread or existing thread).
-     */
+
+    deleteAllJournalEntriesByOwnerUUID: async (req, res) => {
+        try {
+            const { ownerUUID } = req.params;
+
+
+            // Step 1: Find all journal entries belonging to the ownerUUID that are not soft-deleted
+            const journalEntries = await JournalEntry.find({ ownerUUID: ownerUUID, isDeleted: false });
+
+            // Step 2: Soft delete all journal entries for the ownerUUID
+            if (journalEntries.length > 0) {
+                await JournalEntry.updateMany({ ownerUUID: ownerUUID }, { isDeleted: true });
+
+                // Step 3: Soft delete all associated comment threads and comments
+                const journalEntryUUIDs = journalEntries.map(entry => entry.uuid);
+
+                // Soft delete related comment threads
+                await CommentThread.updateMany({ journalEntryUUID: { $in: journalEntryUUIDs } }, { isDeleted: true });
+
+                // Soft delete related comments in those threads
+                const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false });
+                const commentThreadUUIDs = commentThreads.map(thread => thread.uuid);
+                await Comment.updateMany({ commentThreadUUID: { $in: commentThreadUUIDs } }, { isDeleted: true });
+
+                // Step 5: Check if any journal books associated with the journal entries should also be soft deleted
+                const journalBooks = await JournalBook.find({ uuid: { $in: journalEntries.map(entry => entry.journalBookUUID) }, isDeleted: false });
+
+                for (let journalBook of journalBooks) {
+                    const activeEntries = await JournalEntry.find({ journalBookUUID: journalBook.uuid, isDeleted: false });
+
+                    // If no active entries remain, soft delete the journal book
+                    if (activeEntries.length === 0) {
+                        journalBook.isDeleted = true;
+                        await journalBook.save();
+                    }
+                }
+            }
+
+            // Step 4: Soft delete all comments authored by the ownerUUID (character) across all threads
+            await Comment.updateMany({ ownerUUID: ownerUUID }, { isDeleted: true });
+
+            res.status(200).json({ message: 'All journal entries, comments authored by the character, related comments, and empty journal books soft deleted successfully.' });
+        } catch (error) {
+            console.error('Error deleting journal entries by ownerUUID:', error);
+            res.status(500).json({ error: 'An error occurred while deleting journal entries and comments.' });
+        }
+    },
+
+
+
     createComment: async (req, res) => {
         try {
             const {
@@ -125,36 +175,28 @@ const journalController = {
                 content,
                 selectedMode,
                 commentThreadUUID,
+                commentUUID,
                 createdAt,
             } = req.body;
             const userUUID = req.user.ID;
 
-            let threadUUID = commentThreadUUID;
-
-            if (commentThreadUUID) {
-                // Existing thread
-                const commentThread = await CommentThread.findOne({ uuid: commentThreadUUID });
-
-                if (!commentThread) {
-                    return res.status(404).json({ error: 'Comment thread not found.' });
-                }
-
-            } else {
+            // Existing thread
+            const commentThread = await CommentThread.findOne({ uuid: commentThreadUUID });
+            if (!commentThread) {
                 // New thread
-                threadUUID = uuidv4();
                 const newCommentThread = new CommentThread({
-                    uuid: threadUUID,
+                    uuid: commentThreadUUID,
                     journalEntryUUID,
-                    userUUID: userUUID,
-                    createdAt: createdAt,
+                    userUUID,
+                    createdAt,
                 });
                 await newCommentThread.save();
             }
 
             // Create the comment
             const newComment = new Comment({
-                uuid: uuidv4(),
-                commentThreadUUID: threadUUID,
+                uuid: commentUUID,
+                commentThreadUUID,
                 userUUID,
                 ownerUUID,
                 content,
@@ -170,14 +212,11 @@ const journalController = {
         }
     },
 
-    /**
-     * Edit a comment.
-     */
     editComment: async (req, res) => {
         try {
             const { commentUUID } = req.params;
             const { newContent } = req.body;
-            const userUUID = req.user.ID;
+            const userUUID = req.user.ID; // Assuming you have the user ID from authentication
 
             const comment = await Comment.findOne({ uuid: commentUUID });
 
@@ -185,14 +224,14 @@ const journalController = {
                 return res.status(404).json({ error: 'Comment not found.' });
             }
 
-            // Verify ownership
-            if (comment.userUUID !== userUUID) {
-                return res.status(403).json({ error: 'You are not authorized to edit this comment.' });
-            }
+            // Add previous content to the history array
+            comment.history.push({
+                previousContent: comment.content,
+                editedAt: comment.createdAt,
+            });
 
             // Update the comment
             comment.content = newContent;
-            comment.editedAt = Date.now();
             await comment.save();
 
             res.status(200).json({ message: 'Comment updated successfully.', comment });
@@ -208,36 +247,31 @@ const journalController = {
     deleteComment: async (req, res) => {
         try {
             const { commentUUID } = req.params;
-            const userUUID = req.user.ID;
-
             const comment = await Comment.findOne({ uuid: commentUUID });
 
             if (!comment) {
                 return res.status(404).json({ error: 'Comment not found.' });
             }
 
-            // Verify ownership
-            if (comment.userUUID !== userUUID) {
-                return res.status(403).json({ error: 'You are not authorized to delete this comment.' });
-            }
+            // Soft delete the comment
+            comment.isDeleted = true;
+            await comment.save();
 
-            // Delete the comment
-            await Comment.deleteOne({ uuid: commentUUID });
-
-            // Check if the thread has any other comments
-            const remainingComments = await Comment.find({ commentThreadUUID: comment.commentThreadUUID });
+            // Check if the thread has any other comments that are not soft-deleted
+            const remainingComments = await Comment.find({ commentThreadUUID: comment.commentThreadUUID, isDeleted: false });
 
             if (remainingComments.length === 0) {
-                // Delete the thread if empty
-                await CommentThread.findOneAndDelete({ uuid: comment.commentThreadUUID });
+                // Soft delete the thread if no active comments
+                await CommentThread.findOneAndUpdate({ uuid: comment.commentThreadUUID }, { isDeleted: true });
             }
 
-            res.status(200).json({ message: 'Comment deleted successfully.' });
+            res.status(200).json({ message: 'Comment soft deleted successfully.' });
         } catch (error) {
             console.error('Error deleting comment:', error);
             res.status(500).json({ error: 'An error occurred while deleting the comment.' });
         }
     },
+
 
     /**
      * Get all data (JournalBooks, JournalEntries, CommentThreads, Comments) for the user.
@@ -246,26 +280,26 @@ const journalController = {
         try {
             const userUUID = req.user.ID; // Get the user's UUID from the authentication middleware
 
-            // Step 1: Fetch all JournalBooks owned by the user
-            const journalBooks = await JournalBook.find({ userUUID: userUUID });
+            // Step 1: Fetch all JournalBooks owned by the user and not soft-deleted
+            const journalBooks = await JournalBook.find({ userUUID: userUUID, isDeleted: false });
 
             // Extract JournalBook UUIDs
             const journalBookUUIDs = journalBooks.map((book) => book.uuid);
 
-            // Step 2: Fetch JournalEntries related to these JournalBooks
-            const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs } });
+            // Step 2: Fetch JournalEntries related to these JournalBooks and not soft-deleted
+            const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs }, isDeleted: false });
 
             // Extract JournalEntry UUIDs
             const journalEntryUUIDs = journalEntries.map((entry) => entry.uuid);
 
-            // Step 3: Fetch CommentThreads related to these JournalEntries
-            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs } });
+            // Step 3: Fetch CommentThreads related to these JournalEntries and not soft-deleted
+            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false });
 
             // Extract CommentThread UUIDs
             const commentThreadUUIDs = commentThreads.map((thread) => thread.uuid);
 
-            // Step 4: Fetch Comments related to these CommentThreads
-            const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs } });
+            // Step 4: Fetch Comments related to these CommentThreads and not soft-deleted
+            const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs }, isDeleted: false });
 
             // Step 5: Organize Comments by their CommentThread UUID
             const commentsByThreadUUID = comments.reduce((acc, comment) => {
@@ -308,7 +342,7 @@ const journalController = {
 
             // Step 10: Attach JournalEntries to their respective JournalBooks
             const booksWithEntries = journalBooks.map((book) => ({
-                bookInfo: { // Structure `bookInfo`
+                bookInfo: {
                     uuid: book.uuid,
                     title: book.title,
                     selectedMode: book.selectedMode,
@@ -324,6 +358,7 @@ const journalController = {
             res.status(500).json({ error: 'An error occurred while fetching data.' });
         }
     }
+
 
 };
 

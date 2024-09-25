@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 export default {
     onCreateUser: async (req, res) => {
         const { userName, password, auth_type, } = req.body;
-        console.log(userName, password, auth_type)
 
         try {
             const user = await UserModel.getUserByUserName(userName);
@@ -63,7 +62,7 @@ export default {
                     return res.status(500).json({ success: false, error: 'Invalid password' })
                 }
                 else {
-                    console.log(user.userName, user.auth_type, process.env.JWT_SECRET)
+
                     const token = jwt.sign({ ID: user.ID, auth_type: user.auth_type }, process.env.JWT_SECRET);
                     return res.json({ success: true, auth_type: user.auth_type, token });
                 }
@@ -92,7 +91,6 @@ export default {
     onDeleteUserById: async (req, res) => {
         try {
             const { ID } = req.body;
-            console.log('req', req.body, ID)
             const user = await UserModel.deleteUserByID(ID);
             if (!user) {
                 return res.status(500).json({ success: false, error: "no User Found" });

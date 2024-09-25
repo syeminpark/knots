@@ -50,7 +50,7 @@ userSchema.statics.createUser = async function (
             password,
             auth_type
         });
-        console.log(user)
+
         return user;
     } catch (error) {
         throw error;
@@ -71,7 +71,7 @@ userSchema.statics.updateUser = async function (_ID, update) {
 userSchema.statics.getUserByID = async function (_ID) {
     try {
         const user = await this.findOne({ ID: _ID });
-        console.log('user', user)
+
         return user;
     } catch (error) {
         throw error;
@@ -80,7 +80,7 @@ userSchema.statics.getUserByID = async function (_ID) {
 userSchema.statics.getUserByUserName = async function (_userName) {
     try {
         const user = await this.findOne({ userName: _userName });
-        console.log('user', user)
+
         return user;
     } catch (error) {
         throw error;
@@ -90,7 +90,7 @@ userSchema.statics.getUserByUserName = async function (_userName) {
 userSchema.statics.getAllUsers = async function () {
     try {
         const users = await this.find();
-        console.log('users', users)
+
         return users;
     } catch (error) {
         throw error;

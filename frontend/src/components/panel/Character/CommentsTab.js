@@ -18,6 +18,7 @@ const CommentsTab = (props) => {
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
 
+    console.log(createdJournalBooks)
 
 
     const commentsLimitShow = 100;
@@ -71,38 +72,32 @@ const CommentsTab = (props) => {
                 <div style={styles.profileContainer}>
                     <div style={styles.profileList}>
                         {interactedCharacterList.map((interactedCharacter, index) => {
-                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter.uuid)
+                            // console.log(caller, interactedCharacter)
+                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter)
                             return (
-                                <>
-
-                                    <div key={index} style={styles.profileItem}>
-                                        <button
-                                            style={styles.profileButtonContainer}
-                                            onClick={() => {
-                                                openNewPanel(panels, setPanels, "character-profile", interactedCharacter);
-                                            }}
-                                        >
-                                            <CharacterButton
-                                                createdCharacter={interactedCharacter}
-                                                iconStyle={styles.characterButtonIconStyle}
-                                                textStyle={styles.characterButtonTextStyle}
-                                            />
-                                        </button>
-                                        <div style={styles.commentCount}>
-                                            {/* {` ${commentCount.receivedComments.length} `} ⇅   {` ${commentCount.sentComments.length} `} */}
-                                            {/* {` ${commentCount.receivedComments.length} `}  ⬇    {` ${commentCount.sentComments.length} `} */}
-
-                                            {` Total: ${commentCount.receivedComments.length + commentCount.sentComments.length} `} ⇵
-                                        </div>
-                                        <ToggleButton
-                                            onClick={() => onClickCharacter(interactedCharacter)}
+                                <div key={index} style={styles.profileItem}>
+                                    <button
+                                        style={styles.profileButtonContainer}
+                                        onClick={() => {
+                                            openNewPanel(panels, setPanels, "character-profile", interactedCharacter);
+                                        }}
+                                    >
+                                        <CharacterButton
+                                            createdCharacter={interactedCharacter}
+                                            iconStyle={styles.characterButtonIconStyle}
+                                            textStyle={styles.characterButtonTextStyle}
                                         />
+                                    </button>
+                                    <div style={styles.commentCount}>
+                                        {/* {` ${commentCount.receivedComments.length} `} ⇅   {` ${commentCount.sentComments.length} `} */}
+                                        {/* {` ${commentCount.receivedComments.length} `}  ⬇    {` ${commentCount.sentComments.length} `} */}
 
-                                    </div >
-
-
-
-                                </>
+                                        {` Total: ${commentCount.receivedComments.length + commentCount.sentComments.length} `} ⇵
+                                    </div>
+                                    <ToggleButton
+                                        onClick={() => onClickCharacter(interactedCharacter)}
+                                    />
+                                </div >
                             );
                         })}
                     </div>
@@ -259,6 +254,7 @@ const styles = {
     },
     commentThreadContent: {
         flex: 1,
+
     },
     commentCount: {
         position: 'absolute',
@@ -294,6 +290,7 @@ const styles = {
         height: '80%',
         overflowY: 'scroll',
         width: '100%',
+
     },
     journalEntry: {
         backgroundColor: '#f0f0ff',
@@ -319,6 +316,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: '10px',
+
     },
     comment: {
         display: 'flex',
@@ -337,7 +335,6 @@ const styles = {
         wordBreak: 'break-word',
     },
     commentText: {
-        color: '#555',
         fontSize: 'var(--font-small)',
         marginTop: '5px',
         wordWrap: 'break-word',
