@@ -1,4 +1,4 @@
-install related packages. 
+npm i => install related packages. 
 
 cd into frontend. 
 npm start
