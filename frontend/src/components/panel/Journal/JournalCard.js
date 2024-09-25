@@ -99,7 +99,7 @@ const styles = {
         marginTop: '10px',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        // whiteSpace: "pre-line",
+        whiteSpace: "pre-line",
 
         display: '-webkit-box',
         WebkitLineClamp: 5,

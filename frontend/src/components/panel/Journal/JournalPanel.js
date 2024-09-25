@@ -32,7 +32,7 @@ const JournalPanel = (props) => {
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="📑 Journal"
+            title="📑 Journal Feed"
             iconStyles="journal-icon"
         >
             {showModal && (
