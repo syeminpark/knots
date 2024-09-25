@@ -36,7 +36,11 @@ const Home = (props) => {
 
   const scrollToNewPanel = () => {
     if (panelsEndRef.current) {
-      panelsEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      panelsEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'end'
+      });
     }
   };
 
@@ -140,7 +144,7 @@ const Home = (props) => {
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={panels.map(panel => panel.id)}>
             <AnimatePresence>
-              <div style={{ display: 'flex', gap: '20px' }}>
+              <div ref={panelsEndRef} style={{ display: 'flex', gap: '20px', paddingRight: '170px', paddingLeft: '120px', }} >
                 {panels.map(panel => (
                   <motion.div
                     key={panel.id}
@@ -152,7 +156,7 @@ const Home = (props) => {
                     {renderPanel(panel)}
                   </motion.div>
                 ))}
-                <div ref={panelsEndRef} /> {/* Dummy div for scrolling */}
+
               </div>
             </AnimatePresence>
           </SortableContext>
@@ -167,7 +171,7 @@ const Home = (props) => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
       </div>
-    </div>
+    </div >
   );
 }
 

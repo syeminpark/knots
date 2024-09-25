@@ -25,6 +25,7 @@
   --color-bg-grey: #f7f7f7;
   --color-bg-greypurple: #f0eaff;
   --color-bg-lightpurple: #f7f7ff;
+  --color-bg-white: rgba(255, 255, 255, 1);
   --color-bg-white-transparent: rgba(255, 255, 255, 0.5);
 
 }
@@ -44,7 +45,7 @@ body {
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  overflow-y: hidden;
+
 }
 
 .mainContainer {
@@ -90,6 +91,7 @@ body {
   display: flex;
   align-items: stretch;
   justify-content: space-around;
+  overflow-y: hidden;
 
   padding-top: 60px;
   /* border: solid 2px #305077; */
@@ -121,21 +123,20 @@ body {
 
 /* ======== Sidebar Left ======== */
 .sidebarLeft {
-  border-radius: 20px;
+  /* border-radius: 20px; */
   position: fixed;
   width: 100px;
-  left: 20px;
-  height: 120px;
+  left: 0px;
+  height: calc(100vh - 50px);
   background-color: var(--color-bg-white-transparent);
-  z-index: 1000;
+  z-index: 1000000000;
   box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
   border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-top: 50px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   padding: 15px;
   flex-direction: column;
@@ -176,18 +177,24 @@ body {
 
 /* ======== Sidebar Right ======== */
 .sidebarRight {
-  border-radius: 20px;
+  /* border-radius: 20px; */
   position: fixed;
-  margin-top: 100px;
+  margin-top: 50px;
   width: 150px;
-  right: 20px;
-  height: calc(100vh - 150px);
+  right: 0px;
+  height: calc(100vh - 50px);
   /* Subtract any header or additional spacing */
   background-color: var(--color-bg-white-transparent);
-  box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
-  z-index: 1000;
+  box-shadow: -1px 0px 5px hsl(0, 0%, 78%);
+  z-index: 1000000000;
   display: flex;
   flex-direction: column;
+}
+
+/* Hover effect for the button */
+.sidebarRight:hover {
+  background-color: white;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Sidebar title */
@@ -199,6 +206,7 @@ body {
   margin-bottom: 20px;
   text-align: center;
   /* Centers the title */
+  margin-top: 30px;
 }
 
 .sidebarRight-subtitle {
@@ -272,7 +280,7 @@ body {
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 15px;
+  padding: 20px;
   cursor: pointer;
   width: 90%;
   font-size: var(--font-medium);
@@ -318,7 +326,7 @@ body {
   z-index: 1000000;
 }
 
-.buttonContainer {
+.createButtonContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -366,6 +374,7 @@ body {
   transition: box-shadow 0.2s ease, opacity 0.2s ease;
   overflow: hidden;
   /* Ensure no content flows outside */
+
 }
 
 .panel-content {

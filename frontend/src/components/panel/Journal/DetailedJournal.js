@@ -24,7 +24,7 @@ const DetailedJournal = (props) => {
     const commentThreadRefs = useRef({});
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
-    const { commentActionStatus, setCommentActionStatus } = useState()
+
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
