@@ -2,5 +2,7 @@
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
-    "journalEntryPlaceholder": "Edit content"
+    "journalfeed": "Journal Feed",
+    "create": "Create",
+    "characters": "Characters"
 }
