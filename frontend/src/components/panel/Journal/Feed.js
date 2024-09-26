@@ -46,9 +46,10 @@ const Feed = (props) => {
                         <motion.div
                             key={journalBook.bookInfo.uuid}
                             initial={{ opacity: 0, scale: 0.8 }}
+                            layout
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.1 }}>
+                            transition={{ duration: 0.3 }}>
                             <div key={journalBook.bookInfo.uuid} style={styles.journalEntry}>
                                 <div style={styles.entryTime}>
                                     <TimeAgo createdAt={journalBook.bookInfo.createdAt} />
