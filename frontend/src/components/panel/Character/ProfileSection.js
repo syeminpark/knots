@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const ProfileSection = (props) => {
-    const { id, imageSrc, setImageSrc, name, setName } = props;
-    const [preview, setPreview] = useState(null);
+    const { id, imageSrc, setImageSrc, name, setName, preview, setPreview } = props;
+
     const [isEditing, setIsEditing] = useState(!name); // Automatically enter edit mode if name is empty
     const [editedName, setEditedName] = useState(name || ''); // Track the edited name or default to an empty string
     const containerRef = useRef(null); // Reference for the container
@@ -37,6 +37,7 @@ const ProfileSection = (props) => {
 
             setName(editedName); // Set the new name in the parent component
         }
+
     };
 
     // Detect click outside and trigger save

@@ -14,6 +14,7 @@ const CharacterCreationPanel = (props) => {
     const [connectedCharacters, setConnectedCharacters] = useState([]);
     const [personaAttributes, setPersonaAttributes] = useState([{ name: 'Backstory', description: '' }]);
     const [imageSrc, setImageSrc] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [name, setName] = useState('');
     const { t } = useTranslation();
     const [currentCharacter, setCurrentCharacter] = useState(null);
@@ -75,10 +76,10 @@ const CharacterCreationPanel = (props) => {
     }, [createdCharacters]);  // Dependency array
 
     useEffect(() => {
-
+        console.log(imageSrc)
         const updatedObject = {
             name: name,
-            imageSrc: imageSrc,
+            imageSrc: preview,
             personaAttributes: personaAttributes,
             connectedCharacters: connectedCharacters
         }
@@ -102,6 +103,8 @@ const CharacterCreationPanel = (props) => {
                     setImageSrc={setImageSrc}
                     name={name}
                     setName={setName}
+                    preview={preview}
+                    setPreview={setPreview}
                 />
                 {/* Tabs */}
                 <TabNavigation tabs={['About', 'Connections']} activeTab={activeTab} setActiveTab={setActiveTab} />

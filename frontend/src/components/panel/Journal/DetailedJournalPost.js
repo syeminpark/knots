@@ -32,13 +32,10 @@ const DetailedJournalPost = (props) => {
                 }
             }
             setIsEditing(!isEditing);
-
         }
         else {
             alert('journal cannot be empty')
         }
-
-
     };
 
     // Handle delete logic

@@ -3,7 +3,7 @@ import Attribute from '../Attribute';
 import AddAttributeModal from '../AddAttributeModal';
 
 const AboutTab = (props) => {
-    const { personaAttributes, setPersonaAttributes } = props
+    const { personaAttributes, setPersonaAttributes, saveFunction } = props
     const [showModal, setShowModal] = useState(false);
 
     const deleteAttribute = (title) => {
@@ -15,6 +15,8 @@ const AboutTab = (props) => {
         setPersonaAttributes(personaAttributes.map(attribute =>
             attribute.name === title ? { ...attribute, description: value } : attribute
         ));
+        console.log('personaChanged')
+
     };
 
     return (

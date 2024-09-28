@@ -1,7 +1,5 @@
 const CharacterButton = (props) => {
     const { createdCharacter, iconStyle, textStyle, onlyProfileImage = false } = props;
-
-
     return (
         <div style={styles.basic}>
             <div className="character-icon" style={iconStyle} >

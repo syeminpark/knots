@@ -16,6 +16,7 @@ const CharacterProfilePanel = (props) => {
     const [personaAttributes, setPersonaAttributes] = useState(caller.personaAttributes);
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
     const [name, setName] = useState(caller.name);
+    const [preview, setPreview] = useState(null);
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
@@ -33,9 +34,7 @@ const CharacterProfilePanel = (props) => {
 
     // Effect to update local state when `createdCharacters` is updated
     useEffect(() => {
-
         const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
-        console.log(updatedCharacter)
         if (updatedCharacter) {
             setName(updatedCharacter.name);
             setPersonaAttributes(updatedCharacter.personaAttributes);
@@ -65,81 +64,80 @@ const CharacterProfilePanel = (props) => {
         }
     }, [createdCharacters, connectedCharacters]);
 
-    const saveFunction = async () => {
-        if (!name.trim()) {
-            alert("Name is required");
-            return;
-        }
-        const newPanels = panels.filter(panel => panel.id !== id);
-        setPanels(newPanels);
 
-        const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
-        const updatedData = {};
-        const connectionUpdates = [];
-
-        if (name !== existingCharacter.name) updatedData.name = name;
-        if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;
-        if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) {
-            updatedData.connectedCharacters = connectedCharacters;
-
-
-            //     connectedCharacters.forEach(connectedCharacter => {
-            //         const foundConnectedCharacter = createdCharacters.characters.find(
-            //             (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
-            //         );
-
-            //         if (foundConnectedCharacter) {
-            //             const reverseConnectionIndex = foundConnectedCharacter.connectedCharacters.findIndex(c => c.uuid === caller.uuid);
-            //             const reverseConnection = {
-            //                 uuid: caller.uuid,
-            //                 name,  
-            //                 sharedHistory: connectedCharacter.sharedHistory,  
-            //                 myPOV: connectedCharacter.theirPOV,  
-            //                 theirPOV: connectedCharacter.myPOV,
-            //             };
-            //             if (reverseConnectionIndex >= 0) {
-            //                 foundConnectedCharacter.connectedCharacters[reverseConnectionIndex] = reverseConnection;
-            //             } else {
-            //                 foundConnectedCharacter.connectedCharacters.push(reverseConnection);
-            //             }
-            //             connectionUpdates.push(apiRequest(`/updateCharacter/${foundConnectedCharacter.uuid}`, 'PUT', { connectedCharacters: foundConnectedCharacter.connectedCharacters }));
-            //         }
-            //     });
-        }
-
-        const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
-        if (!Object.keys(updatedData).length && !isImageUpdated) {
-            alert('No changes to save.');
-            return;
-        }
-
-        try {
-            if (isImageUpdated) {
-                const formData = new FormData();
-                formData.append('image', imageSrc);
-                formData.append('characterUUID', caller.uuid);
-
-                const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
-                if (uploadResponse.imageUrl) {
-                    updatedData.imageSrc = uploadResponse.imageUrl;
-                }
+    useEffect(() => {
+        const saveFunction = async () => {
+            console.log('saveFunctionTriggered')
+            if (!name.trim()) {
+                alert("Name is required");
+                return;
             }
-            // dispatchCreatedCharacters({
-            //     type: 'EDIT_CREATED_CHARACTER',
-            //     payload: { ...updatedData, uuid: characterUUID }
-            // });
-            const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
-            console.log('Character update response:', response);
+            // const newPanels = panels.filter(panel => panel.id !== id);
+            // setPanels(newPanels);
 
-            // await Promise.all(connectionUpdates);
-            // console.log('Character and connections updated successfully');
+            const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+            const updatedData = {};
+            const connectionUpdates = [];
 
-        } catch (error) {
-            console.log('Error updating character:', error);
-        }
-    };
+            if (name !== existingCharacter.name) updatedData.name = name;
+            if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;
+            if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) {
+                updatedData.connectedCharacters = connectedCharacters;
+                //     connectedCharacters.forEach(connectedCharacter => {
+                //         const foundConnectedCharacter = createdCharacters.characters.find(
+                //             (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
+                //         );
 
+                //         if (foundConnectedCharacter) {
+                //             const reverseConnectionIndex = foundConnectedCharacter.connectedCharacters.findIndex(c => c.uuid === caller.uuid);
+                //             const reverseConnection = {
+                //                 uuid: caller.uuid,
+                //                 name,  
+                //                 sharedHistory: connectedCharacter.sharedHistory,  
+                //                 myPOV: connectedCharacter.theirPOV,  
+                //                 theirPOV: connectedCharacter.myPOV,
+                //             };
+                //             if (reverseConnectionIndex >= 0) {
+                //                 foundConnectedCharacter.connectedCharacters[reverseConnectionIndex] = reverseConnection;
+                //             } else {
+                //                 foundConnectedCharacter.connectedCharacters.push(reverseConnection);
+                //             }
+                //             connectionUpdates.push(apiRequest(`/updateCharacter/${foundConnectedCharacter.uuid}`, 'PUT', { connectedCharacters: foundConnectedCharacter.connectedCharacters }));
+                //         }
+                //     });
+            }
+            const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
+            if (!Object.keys(updatedData).length && !isImageUpdated) {
 
+                return;
+            }
+            try {
+                if (isImageUpdated) {
+                    const formData = new FormData();
+                    formData.append('image', imageSrc);
+                    formData.append('characterUUID', caller.uuid);
+
+                    const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
+                    if (uploadResponse.imageUrl) {
+                        updatedData.imageSrc = uploadResponse.imageUrl;
+                    }
+                }
+                // dispatchCreatedCharacters({
+                //     type: 'EDIT_CREATED_CHARACTER',
+                //     payload: { ...updatedData, uuid: characterUUID }
+                // });
+                const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
+                console.log('Character update response:', response);
+
+                // await Promise.all(connectionUpdates);
+                // console.log('Character and connections updated successfully');
+
+            } catch (error) {
+                console.log('Error updating character:', error);
+            }
+        };
+        saveFunction()
+    }, [connectedCharacters, personaAttributes, imageSrc, name])
 
 
 
@@ -183,7 +181,6 @@ const CharacterProfilePanel = (props) => {
             panels={panels}
             setPanels={setPanels}
             title="Profile"
-            saveFunction={saveFunction}
             deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
@@ -193,6 +190,8 @@ const CharacterProfilePanel = (props) => {
                     setImageSrc={setImageSrc}
                     name={name}
                     setName={setName}
+                    preview={preview}
+                    setPreview={setPreview}
                 />
                 <TabNavigation tabs={['About', 'Connections', 'Journal History', 'Comment History']} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
@@ -201,6 +200,7 @@ const CharacterProfilePanel = (props) => {
                 <AboutTab
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
+
                 />
             ) : activeTab === 'Connections' ? (
                 <ConnectionsTab
@@ -211,6 +211,7 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                     caller={caller}
                     currentCharacter={createdCharacters.characters.find(character => character.uuid === caller.uuid)}
+
                 />
             ) : activeTab === 'Journal History' ? (
                 <JournalsTab
