@@ -94,11 +94,10 @@ const styles = {
     },
 
     content: {
-        fontSize: 'var(--font-medium)',
+        fontSize: 'var(--font-small)',
         color: '#555',
         marginTop: '10px',
         overflow: 'hidden',
-        textOverflow: 'ellipsis',
         whiteSpace: "pre-line",
 
         display: '-webkit-box',

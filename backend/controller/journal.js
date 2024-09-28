@@ -11,11 +11,11 @@ const journalController = {
      */
     createJournalBook: async (req, res) => {
         try {
-            const { uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, createdAt } = req.body;
+            const { uuid, journalBookTitle, selectedMode, selectedCharacters, createdAt } = req.body;
             const userUUID = req.user.ID; // Assuming you have user authentication
 
-            console.log(uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, createdAt)
-            if (!journalBookTitle || !selectedCharacters || !journalBookContent) {
+            // console.log(uuid, journalBookTitle, selectedMode, selectedCharacters, createdAt)
+            if (!journalBookTitle || !selectedCharacters) {
                 // console.log(journalBookTitle, selectedCharacters, journalBookContent)
                 return res.status(400).json({ error: 'Missing required fields' });
 
@@ -37,7 +37,7 @@ const journalController = {
                 journalBookUUID: uuid,
                 ownerUUID: character.uuid,
                 userUUID: userUUID,
-                content: journalBookContent,
+                content: character.content,
 
             }));
             await JournalEntry.insertMany(journalEntries);
@@ -236,6 +236,60 @@ const journalController = {
             res.status(500).json({ error: 'An error occurred while creating the comment.' });
         }
     },
+
+    createComments: async (req, res) => {
+        try {
+            const { journalEntryUUID, comments } = req.body;
+            const userUUID = req.user.ID;
+
+            // Fetch the journal entry to retrieve the journalBookUUID
+            const journalEntry = await JournalEntry.findOne({ uuid: journalEntryUUID });
+            if (!journalEntry) {
+                return res.status(404).json({ error: 'Journal entry not found.' });
+            }
+            const journalBookUUID = journalEntry.journalBookUUID;
+
+            // Process multiple comments in a batch
+            const newComments = [];
+            for (let commentData of comments) {
+                let commentThread = await CommentThread.findOne({ uuid: commentData.commentThreadUUID });
+
+                if (!commentThread) {
+                    // If the thread doesn't exist, create a new thread
+                    commentThread = new CommentThread({
+                        uuid: commentData.commentThreadUUID,
+                        journalEntryUUID,
+                        userUUID,
+                        createdAt: commentData.createdAt,
+                    });
+                    await commentThread.save();
+                }
+
+                // Create each comment
+                const newComment = new Comment({
+                    uuid: commentData.commentUUID,
+                    commentThreadUUID: commentThread.uuid,
+                    userUUID,
+                    ownerUUID: commentData.ownerUUID,
+                    content: commentData.content,
+                    selectedMode: commentData.selectedMode,
+                    createdAt: commentData.createdAt,
+                });
+
+                await newComment.save();
+                newComments.push(newComment);
+            }
+
+            // Emit the full array of new comments to clients
+            io.emit('commentsCreated', { journalEntry, newComments });
+
+            res.status(201).json({ message: 'Comments created successfully.', comments: newComments });
+        } catch (error) {
+            console.error('Error creating comments:', error);
+            res.status(500).json({ error: 'An error occurred while creating the comments.' });
+        }
+    },
+
 
 
     editComment: async (req, res) => {

@@ -128,6 +128,17 @@ const useSocketListeners = (dispatchCreatedCharacters, dispatchCreatedJournalBoo
             });
         });
 
+        socket.on('commentsCreated', ({ journalEntry, newComments }) => {
+            dispatchCreatedJournalBooks({
+                type: 'CREATE_COMMENT_BATCH',
+                payload: {
+                    journalBookUUID: journalEntry.journalBookUUID,
+                    journalEntryUUID: journalEntry.uuid,
+                    comments: newComments,
+                }
+            });
+        });
+
         // Listen for comment updates
         socket.on('commentUpdated', ({ journalEntry, comment }) => {
 
@@ -167,6 +178,7 @@ const useSocketListeners = (dispatchCreatedCharacters, dispatchCreatedJournalBoo
             socket.off('journalEntryUpdated');
             socket.off('journalEntryDeleted');
             socket.off('commentCreated');
+            socket.off('commentsCreated');
             socket.off('commentUpdated');
             socket.off('commentDeleted');
             socket.off('journalEntriesDeleted');

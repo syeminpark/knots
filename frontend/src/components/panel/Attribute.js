@@ -34,7 +34,6 @@ const Attribute = (props) => {
             setIsEditing(false); // Exit edit mode after saving
     };
 
-    // Handle clicks outside the component to trigger save
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isClickableToSave && containerRef.current && !containerRef.current.contains(event.target)) {
@@ -75,7 +74,9 @@ const Attribute = (props) => {
                 {connectedCharacter ? (
                     <div>
                         <div style={styles.characterProfiles}>
+
                             <CharacterButton createdCharacter={currentCharacter}></CharacterButton>
+
                             →
                             <button
                                 style={styles.profileButtonContainer}
@@ -100,6 +101,7 @@ const Attribute = (props) => {
                         style={styles.editButton}
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent container click from triggering
+                            handleSave()
                             setIsEditing(!isEditing); // Toggle between edit and save modes
                         }}
                     >
@@ -171,6 +173,7 @@ const styles = {
         alignItems: 'center',
         gap: '20px',
         marginBottom: '10px',
+        width: '100%',
     },
     sectionHeaderLabel: {
         color: '#6d6dff',

@@ -62,21 +62,33 @@ const CreateJournalModal = (props) => {
         } else if (selectedMode === 'System Generate' && journalBookText.title.trim() === "") {
             alert('Please write something');
         } else {
+            setShowModal(false);
             if (selectedMode === "Manual Post") {
-                content = journalBookText.content;
+                selectedCharacters.forEach(character => character.content = content)
             } else {
                 try {
-                    // const response = await apiRequest('/getLLMJournalEntry', 'GET',);
+                    const response = await apiRequest(`/createLLMJournalEntries`, 'POST', {
+                        characterUUIDs: selectedCharacters.map(character => character.uuid),
+                        journalTitle: journalBookText.title
+                    })
+                    console.log(response)
+                    response.journalEntries.forEach(object => {
+                        const character = selectedCharacters.find(character => character.uuid === object.characterUUID)
+                        if (character) {
+                            character.content = object.journalEntry
+                        }
+                    })
+                } catch (error) {
+                    console.log(error);
                 }
-                catch (error) { console.log(error) }
-            }
+            };
+
             const journalBookUUID = uuidv4()
 
             selectedCharacters.forEach(character => character.journalEntryUUID = uuidv4())
             const payload = {
                 uuid: journalBookUUID,
                 journalBookTitle: journalBookText.title,
-                journalBookContent: content,
                 selectedMode: selectedMode,
                 selectedCharacters,
                 createdAt: Date.now()
@@ -85,12 +97,10 @@ const CreateJournalModal = (props) => {
             //     type: 'CREATE_JOURNAL_BOOK',
             //     payload: payload
             // });
-            setShowModal(false);
 
             console.log(payload)
             try {
                 const response = await apiRequest('/createJournalBook', 'POST', payload);
-
                 console.log(response)
             }
             catch (error) { console.log(error) }

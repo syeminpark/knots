@@ -126,10 +126,6 @@ const journalBookReducer = (state, action) => {
             };
         }
 
-
-
-
-
         case 'CREATE_COMMENT': {
             let newComment = null;
             const ownerUUID = action.payload.ownerUUID;
@@ -212,6 +208,58 @@ const journalBookReducer = (state, action) => {
                 ...state,
                 journalBooks: updatedJournalBooks,
                 newComment, // The updated comment with commentThreadUUID
+            };
+        }
+
+        case 'CREATE_COMMENT_BATCH': {
+            const updatedJournalBooks = state.journalBooks.map((book) => {
+                if (book.bookInfo.uuid === action.payload.journalBookUUID) {
+                    return {
+                        ...book,
+                        journalEntries: book.journalEntries.map((entry) => {
+                            if (entry.uuid === action.payload.journalEntryUUID) {
+                                // Add the new batch of comments to the appropriate threads
+                                let updatedCommentThreads = entry.commentThreads;
+
+                                action.payload.comments.forEach((newComment) => {
+                                    const existingThread = updatedCommentThreads.find(thread => thread.uuid === newComment.commentThreadUUID);
+
+                                    if (existingThread) {
+                                        updatedCommentThreads = updatedCommentThreads.map((thread) => {
+                                            if (thread.uuid === newComment.commentThreadUUID) {
+                                                return {
+                                                    ...thread,
+                                                    comments: [...thread.comments, newComment],
+                                                };
+                                            }
+                                            return thread;
+                                        });
+                                    } else {
+                                        // Create a new comment thread if it doesn't exist
+                                        const newThread = {
+                                            uuid: newComment.commentThreadUUID,
+                                            createdAt: newComment.createdAt,
+                                            comments: [newComment],
+                                        };
+                                        updatedCommentThreads = [...updatedCommentThreads, newThread];
+                                    }
+                                });
+
+                                return {
+                                    ...entry,
+                                    commentThreads: updatedCommentThreads,
+                                };
+                            }
+                            return entry;
+                        }),
+                    };
+                }
+                return book;
+            });
+
+            return {
+                ...state,
+                journalBooks: updatedJournalBooks,
             };
         }
 

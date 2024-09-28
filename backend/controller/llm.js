@@ -1,98 +1,83 @@
-import openAI from "../utils/openAI.js"
-import character from "../models/character.js";
-import { getAttributesString } from "../utils/prompts.js";
+import openAI from "../utils/openAI.js";
+import CharacterModel from "../models/character.js";
+import { getAttributes, getConnections, getBasePrompt } from "../utils/prompts.js";
+import JournalModel from "../models/journal.js"
 
 const llmController = {
-
-    onCreateJournalEntry: async (req, res) => {
+    onCreateJournalEntries: async (req, res) => {
         try {
-            const { uuid } = req.params;
-            const { journalTitle } = req.body;
-
-            const character = await CharacterModel.getCharacterByUUID(uuid);
-
-            if (character) {
-                res.status(200).json(character);
-            } else {
-                res.status(404).json({ error: 'Character not found.' });
-            }
+            const { characterUUIDs, journalTitle } = req.body;
+            const journalEntries = [];
 
 
+            // Fetch characters and generate journal entries concurrently
+            const characterPromises = characterUUIDs.map(async (uuid) => {
+                try {
+                    const character = await CharacterModel.getCharacterByUUID(uuid);
+                    if (character) {
+                        console.log(character.connectedCharacters)
+                        const systemPrompt = `
+                            ${getBasePrompt(character)}
+                            ${getAttributes(character)}
+                            ${getConnections(character.name, character.connectedCharacters)},
 
-            // Define the system prompt to guide the AI's behavior
-            const systemPrompt = `
-                You are a fictional character with the following name:
-                <character_name>${character.name}</character_name
+                            Show your brillance at method acting by writing a journal with the persona and style of ${character.name}. The topic of journal will be provided within the <topic></topic> tag. The journal
+                            should be in Korean and not include dates. 
+                        `;
 
-                As ${character.name}, you have the following attributes denoted with the tag <attributes></attributes>:
-                <attributes> 
-                <attribute> 
-                 ${getAttributesString(character.personaAttributes)},
-                </attribute> 
-                </attributes> 
-            
-                As ${character.name}}, you are connected with the following characters.
-                The <attributes></attributes> tag explains the connected character's attribute.
-                The <relationship></relationship> tag explains the relationship betwee you and the connected character from your perspective. 
+                        console.log(systemPrompt)
 
-                <connected_characters> 
-                <connected_character>
-                
-                <character_name> [charcter name] </character_name> 
-                <attributes> 
-                 <attribute> 
-                   <name> [attribute name] </name> 
-                   <description> [attribute description] </description> 
-                </attribute>
-                </attributes> 
-                <relationship> 
-                <my_POV>
-                <their_POV> 
-                </relationship> 
+                        const userPrompt = `<topic> ${journalTitle}</topic>
+                        `
+                        const response = await openAI.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: userPrompt },
+                            ],
+                            model: "gpt-4o",
+                        });
+                        console.log(response)
 
-                </connected_character>
-                <connected_character>
-                </connected_character>
-                </connected_characters> 
+                        // Extract the generated journal entry
+                        const journalEntry = response.choices[0].message.content;
 
-            `;
 
-            // Define the user prompt
-            const userPrompt = `Create a journal entry for this character ${characterUUID}, with the title "${journalTitle}".`;
-
-            // Call the OpenAI Chat API
-            const response = await openAI.createChatCompletion({
-                model: "gpt-3.5-turbo", // Using a Chat Model
-                messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: userPrompt },
-                ],
-                max_tokens: 500,
-                temperature: 0.7,
+                        journalEntries.push({ characterUUID: uuid, journalEntry });
+                    } else {
+                        journalEntries.push({ characterUUID: uuid, journalEntry: 'Character not found.' });
+                    }
+                } catch (openAIError) {
+                    console.error(`Error generating entry for character ${uuid}:`, openAIError);
+                    journalEntries.push({ character: uuid, journalEntry: 'Error generating journal entry.' });
+                }
             });
 
-            // Extract the generated text from the response
-            const journalEntry = response.data.choices[0].message.content.trim();
-
-            // Send the generated journal entry back to the client
-            res.status(200).json({ success: true, journalEntry });
+            await Promise.all(characterPromises);
+            res.status(200).json({ success: true, journalEntries });
+            console.log(journalEntries)
 
         } catch (error) {
             // Handle any errors from the OpenAI API or the server
-            console.error("Error generating journal entry:", error);
-            res.status(500).json({ success: false, error: "Failed to generate journal entry." });
+            console.error("Error generating journal entries:", error);
+            res.status(500).json({ success: false, error: "Failed to generate journal entries." });
         }
     },
 
     onCreateComment: async (req, res) => {
+        const { journalEntryUUID, characterUUIDs } = req.body;
+
+        try {
+
+        }
+        catch (error) {
+            console.error("Error generating comemnts:", error);
+        }
 
     },
 
     onCreateStranger: async (req, res) => {
-
+        // Placeholder for onCreateStranger functionality
     }
-}
+};
 
-export default llmController
-
-
+export default llmController;

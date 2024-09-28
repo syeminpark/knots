@@ -15,16 +15,16 @@ const BottomActions = (props) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
-    const onSendButtonClick = () => {
+    const onSendButtonClick = async () => {
+        let comments = null;
+
         if (selectedCharacters.leng1th < 1) {
             alert('Select A Character');
         } else if (!commentValue && activeTab == "Manual Post") {
             alert('Write Something');
         } else {
-
-            selectedCharacters.forEach(async (selectedCharacter) => {
-                const payload = {
-                    journalBookUUID: bookInfo.uuid,
+            if (activeTab == "Manual Post") {
+                comments = selectedCharacters.map((selectedCharacter) => ({
                     journalEntryUUID: journalEntry.uuid,
                     ownerUUID: selectedCharacter.uuid,
                     content: commentValue,
@@ -32,22 +32,32 @@ const BottomActions = (props) => {
                     commentThreadUUID: uuidv4(),
                     commentUUID: uuidv4(),
                     createdAt: Date.now()
-                }
-                dispatchCreatedJournalBooks({
-                    type: 'CREATE_COMMENT',
-                    payload: payload
-                });
-                try {
-                    const response = await apiRequest('/createComment', 'POST', payload);
-                    console.log(response)
-                }
-                catch (error) {
-                    console.log(error)
-                }
+                }));
+            }
+            else {
+                // const response = await 
+            }
+            const payload = {
+                journalBookUUID: bookInfo.uuid,
+                journalEntryUUID: journalEntry.uuid,
+                comments,
+            };
 
-            })
-            setCommentValue('')
-        }
+            // Dispatch the batch action
+            dispatchCreatedJournalBooks({
+                type: 'CREATE_COMMENT_BATCH',
+                payload: payload,
+            });
+
+            try {
+                const response = await apiRequest('/createComments', 'POST', payload); // Use the new batch API
+                console.log(response);
+            } catch (error) {
+                console.error('Error creating comments:', error);
+            }
+
+            setCommentValue(''); // Reset comment value after submitting
+        };
     };
 
     // useEffect(() => {

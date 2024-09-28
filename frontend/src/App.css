@@ -190,7 +190,7 @@ body {
   /* border-radius: 20px; */
   position: fixed;
   margin-top: 50px;
-  width: 150px;
+  width: 180px;
   right: 0px;
   height: calc(100vh - 50px);
   /* Subtract any header or additional spacing */
