@@ -18,30 +18,27 @@ const DetailedJournalPost = (props) => {
     const isClickableToEdit = false // Set to true to allow clicking to edit
     const isClickableToSave = true; // Set to true to allow clicking outside to save
 
-    // Flag to prevent multiple save triggers at once
-    const [isSaving, setIsSaving] = useState(false);
-
     // Handle edit/save logic
     const onEditButtonClick = async () => {
-        if (isSaving) return;
 
-        setIsSaving(true); // Set the saving state to prevent further saves
-        if (isEditing && editedContent !== journalEntry.content) {
-            if (editedContent == '') {
-                alert('Content cannot be empty')
-            }
-            else {
+        if (editedContent !== '') {
+
+            if (editedContent !== journalEntry.content) {
                 try {
                     const response = await apiRequest(`/editJournalEntry/${journalEntry.uuid}`, 'PUT', { newValue: editedContent });
                     console.log(response);
                 } catch (error) {
                     console.log(error);
                 }
-                setIsEditing(!isEditing);
             }
+            setIsEditing(!isEditing);
+
+        }
+        else {
+            alert('journal cannot be empty')
         }
 
-        setIsSaving(false); // Reset the saving state
+
     };
 
     // Handle delete logic

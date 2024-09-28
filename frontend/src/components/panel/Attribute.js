@@ -30,7 +30,8 @@ const Attribute = (props) => {
         if (isEditing && editedContent !== attribute?.description) {
             onChange({ target: { value: editedContent } });
         }
-        setIsEditing(false); // Exit edit mode after saving
+        if (editedContent !== '')
+            setIsEditing(false); // Exit edit mode after saving
     };
 
     // Handle clicks outside the component to trigger save

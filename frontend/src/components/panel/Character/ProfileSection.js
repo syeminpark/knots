@@ -32,8 +32,11 @@ const ProfileSection = (props) => {
 
     // Handle save functionality
     const handleSave = () => {
-        setIsEditing(false); // Exit edit mode
-        setName(editedName); // Set the new name in the parent component
+        if (editedName !== '') {
+            setIsEditing(false); // Exit edit mode after saving
+
+            setName(editedName); // Set the new name in the parent component
+        }
     };
 
     // Detect click outside and trigger save
