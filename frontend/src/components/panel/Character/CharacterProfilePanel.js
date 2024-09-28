@@ -74,23 +74,50 @@ const CharacterProfilePanel = (props) => {
         setPanels(newPanels);
 
         const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
-        const characterUUID = caller.uuid;
         const updatedData = {};
+        const connectionUpdates = [];
 
         if (name !== existingCharacter.name) updatedData.name = name;
         if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;
-        if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) updatedData.connectedCharacters = connectedCharacters;
+        if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) {
+            updatedData.connectedCharacters = connectedCharacters;
+
+
+            //     connectedCharacters.forEach(connectedCharacter => {
+            //         const foundConnectedCharacter = createdCharacters.characters.find(
+            //             (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
+            //         );
+
+            //         if (foundConnectedCharacter) {
+            //             const reverseConnectionIndex = foundConnectedCharacter.connectedCharacters.findIndex(c => c.uuid === caller.uuid);
+            //             const reverseConnection = {
+            //                 uuid: caller.uuid,
+            //                 name,  
+            //                 sharedHistory: connectedCharacter.sharedHistory,  
+            //                 myPOV: connectedCharacter.theirPOV,  
+            //                 theirPOV: connectedCharacter.myPOV,
+            //             };
+            //             if (reverseConnectionIndex >= 0) {
+            //                 foundConnectedCharacter.connectedCharacters[reverseConnectionIndex] = reverseConnection;
+            //             } else {
+            //                 foundConnectedCharacter.connectedCharacters.push(reverseConnection);
+            //             }
+            //             connectionUpdates.push(apiRequest(`/updateCharacter/${foundConnectedCharacter.uuid}`, 'PUT', { connectedCharacters: foundConnectedCharacter.connectedCharacters }));
+            //         }
+            //     });
+        }
 
         const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
         if (!Object.keys(updatedData).length && !isImageUpdated) {
             alert('No changes to save.');
             return;
         }
+
         try {
             if (isImageUpdated) {
                 const formData = new FormData();
                 formData.append('image', imageSrc);
-                formData.append('characterUUID', characterUUID);
+                formData.append('characterUUID', caller.uuid);
 
                 const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
                 if (uploadResponse.imageUrl) {
@@ -101,23 +128,29 @@ const CharacterProfilePanel = (props) => {
             //     type: 'EDIT_CREATED_CHARACTER',
             //     payload: { ...updatedData, uuid: characterUUID }
             // });
-            const response = await apiRequest(`/updateCharacter/${characterUUID}`, 'PUT', updatedData);
+            const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
             console.log('Character update response:', response);
+
+            // await Promise.all(connectionUpdates);
+            // console.log('Character and connections updated successfully');
+
         } catch (error) {
             console.log('Error updating character:', error);
         }
     };
 
+
+
+
+
     const deleteFunction = async () => {
 
         setPanels([]);
-
         // dispatchCreatedJournalBooks({
         //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
         //     payload: { ownerUUID: caller.uuid }
 
         // })
-
         dispatchCreatedCharacters({
             type: 'DELETE_CHARACTER',
             payload: { uuid: caller.uuid }
@@ -177,6 +210,7 @@ const CharacterProfilePanel = (props) => {
                     setConnectedCharacters={setConnectedCharacters}
                     createdCharacters={createdCharacters}
                     caller={caller}
+                    currentCharacter={createdCharacters.characters.find(character => character.uuid === caller.uuid)}
                 />
             ) : activeTab === 'Journal History' ? (
                 <JournalsTab
@@ -195,7 +229,7 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                 />
             ) : null}
-            <div className="save-btn-container">
+            {/* <div className="save-btn-container">
                 <button
                     className="save-btn"
                     onClick={saveFunction}
@@ -203,7 +237,7 @@ const CharacterProfilePanel = (props) => {
                 >
                     Save
                 </button>
-            </div>
+            </div> */}
         </BasePanel>
     );
 };

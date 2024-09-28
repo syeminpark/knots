@@ -16,6 +16,7 @@ const CharacterCreationPanel = (props) => {
     const [imageSrc, setImageSrc] = useState(null);
     const [name, setName] = useState('');
     const { t } = useTranslation();
+    const [currentCharacter, setCurrentCharacter] = useState(null);
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -73,12 +74,24 @@ const CharacterCreationPanel = (props) => {
         setConnectedCharacters(updatedConnectedCharacters);
     }, [createdCharacters]);  // Dependency array
 
+    useEffect(() => {
+
+        const updatedObject = {
+            name: name,
+            imageSrc: imageSrc,
+            personaAttributes: personaAttributes,
+            connectedCharacters: connectedCharacters
+        }
+        setCurrentCharacter(updatedObject)
+        console.log('hey', currentCharacter)
+    }, [name, imageSrc, personaAttributes, connectedCharacters])
+
     return (
         <BasePanel
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title= {t('createcharacter')}
+            title={t('createcharacter')}
             saveFunction={saveFunction}
         >
             <div className="panel-header-sticky">
@@ -103,17 +116,19 @@ const CharacterCreationPanel = (props) => {
                     />
                 ) : activeTab === 'Connections' ? (
                     <ConnectionsTab
+                        panels={panels}
+                        setPanels={setPanels}
                         connectedCharacters={connectedCharacters}
                         setConnectedCharacters={setConnectedCharacters}
                         createdCharacters={createdCharacters}
-
+                        currentCharacter={currentCharacter}
                     />
                 ) : null}
             </div>
 
             <div className="save-btn-container">
                 <button className="save-btn" onClick={saveFunction}>
-                    Save
+                    Create
                 </button>
             </div>
         </BasePanel>

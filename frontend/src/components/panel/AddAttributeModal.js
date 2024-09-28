@@ -27,7 +27,7 @@ const AddAttributeModal = (props) => {
             >
                 <TextArea
                     attribute={attribute}
-                    placeholder={"Example: age, gender, nationality, hobby, personality, occupation"}
+                    placeholder={"Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, etc"}
                     onChange={(e) => setAttribute(e.target.value)}
                     styles={styles}
                 >
@@ -42,7 +42,7 @@ const styles = {
     description: {
         width: '100%',
         padding: '10px',
-        fontSize: 'var(--font-xs)',
+        fontSize: 'var(--font-small)',
         borderRadius: '5px',
         border: '1px solid black',
         marginBottom: '10px',

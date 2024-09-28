@@ -40,6 +40,7 @@ body {
   overscroll-behavior-x: none;
 }
 
+
 .homeContainer {
   display: flex;
   flex-direction: column;
@@ -48,15 +49,7 @@ body {
 
 }
 
-.mainContainer {
-  flex-direction: column;
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-}
+
 
 /* ======== Logo area ======== */
 .logoText {
@@ -265,6 +258,8 @@ body {
   margin-right: 10px;
   overflow: hidden;
   flex-shrink: 0;
+
+
 }
 
 .default-icon {
@@ -279,6 +274,7 @@ body {
   font-size: var(--font-xl);
   font-weight: bold;
   border-radius: 50%;
+
 }
 
 /* Character name styling */
@@ -531,14 +527,56 @@ body {
   /* Remove border */
 }
 
+.name-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Ensures that the button stays on the right */
+  width: 100%;
+}
+
+
+
 .name-input {
   padding: 10px;
   border: 1px solid #b8b8f3;
   border-radius: 5px;
   width: 100%;
-  background-color: var(--color-bg-grey);
+  background-color: var(--color-bg-white);
   margin-left: 20px;
   font-size: var(--font-large);
+  /* border: 1px solid #b8b8f3; */
+  border: '1px solid #b8b8f3'
+}
+
+.name-display {
+  background-color: var(--color-bg-grey);
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 20px;
+  /* border: 1px solid #b8b8f3; */
+  width: 100%;
+  font-size: var(--font-large);
+  /* Add space between input/display and button */
+}
+
+.edit-save-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  color: #333;
+}
+
+.mainContainer {
+  flex-direction: column;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  align-items: center;
+  justify-content: center;
 }
 
 .tabs {
@@ -550,6 +588,8 @@ body {
   border-radius: 6px;
   padding: 5px;
 }
+
+
 
 .tab {
   flex: 1;
@@ -651,7 +691,7 @@ body {
   /* Adds space between the icon and the title */
 }
 
-.language-switcher-container{
+.language-switcher-container {
   position: fixed;
   left: 0;
   flex-direction: column;

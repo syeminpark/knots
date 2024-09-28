@@ -4,8 +4,9 @@ import llmController from '../controller/llm.js';
 
 const router = express.Router()
 
-    .get('/getLLMJournalEntry', llmController.onGetJournalEntry)
-    .get('/getLLMComment', llmController.onGetComment)
-    .get('/getLLMStranger', llmController.onGetStranger)
+router
+    .get('/getLLMJournalEntry', auth, llmController.onCreateJournalEntry)
+    .get('/getLLMComment', auth, llmController.onCreateComment)
+    .get('/getLLMStranger', auth, llmController.onCreateStranger)
 
 export default router; 

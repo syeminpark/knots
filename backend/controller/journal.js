@@ -14,6 +14,7 @@ const journalController = {
             const { uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, createdAt } = req.body;
             const userUUID = req.user.ID; // Assuming you have user authentication
 
+            console.log(uuid, journalBookTitle, journalBookContent, selectedMode, selectedCharacters, createdAt)
             if (!journalBookTitle || !selectedCharacters || !journalBookContent) {
                 // console.log(journalBookTitle, selectedCharacters, journalBookContent)
                 return res.status(400).json({ error: 'Missing required fields' });

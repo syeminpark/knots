@@ -6,64 +6,92 @@ import ToggleButton from "../../ToggleButton"; // Import the ToggleButton
 import apiRequest from '../../../utility/apiRequest';
 
 const DetailedJournalPost = (props) => {
-    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props
+    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props;
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
     const [showDelete, setShowDelete] = useState(false);
+    const journalTextRef = useRef(null); // Reference for the journal text container
+    const textAreaRef = useRef(null); // Ref for the TextArea to focus when editing starts
 
+    // Constants to control functionality
+    const isClickableToEdit = false // Set to true to allow clicking to edit
+    const isClickableToSave = true; // Set to true to allow clicking outside to save
+
+    // Flag to prevent multiple save triggers at once
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Handle edit/save logic
     const onEditButtonClick = async () => {
+        if (isSaving) return;
 
-        if (isEditing) {
-            if (editedContent !== journalEntry.content) {
-                // dispatchCreatedJournalBooks({
-                //     type: 'EDIT_JOURNAL_ENTRY',
-                //     payload: {
-                //         journalBookUUID: bookInfo.uuid,
-                //         journalEntryUUID: journalEntry.uuid,
-                //         newValue: editedContent
-                //     }
-                // })
+        setIsSaving(true); // Set the saving state to prevent further saves
+        if (isEditing && editedContent !== journalEntry.content) {
+            if (editedContent == '') {
+                alert('Content cannot be empty')
+            }
+            else {
                 try {
                     const response = await apiRequest(`/editJournalEntry/${journalEntry.uuid}`, 'PUT', { newValue: editedContent });
-                    console.log(response)
+                    console.log(response);
+                } catch (error) {
+                    console.log(error);
                 }
-                catch (error) {
-                    console.log(error)
-                }
+                setIsEditing(!isEditing);
             }
         }
-        setIsEditing(!isEditing);
+
+        setIsSaving(false); // Reset the saving state
     };
 
-    const toggleDeleteButton = () => {
-        setShowDelete(prev => !prev);
-    };
-
+    // Handle delete logic
     const onDeleteButtonClick = async () => {
-        // dispatchCreatedJournalBooks({
-        //     type: 'DELETE_JOURNAL_ENTRY', payload: {
-        //         journalBookUUID: bookInfo.uuid,
-        //         journalEntryUUID: journalEntry.uuid
-        //     }
-        // })
         setSelectedBookAndJournalEntry(null);
         try {
             const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');
-            console.log(response)
+            console.log(response);
+        } catch (error) {
+            console.log(error);
         }
-        catch (error) {
-            console.log(error)
-        }
-    }
+    };
 
     const onReturnClick = () => {
         setSelectedBookAndJournalEntry(null);
     };
 
+    // Auto-focus TextArea when entering edit mode
+    useEffect(() => {
+        if (isEditing && textAreaRef.current) {
+            textAreaRef.current.focus();
+        }
+    }, [isEditing]);
+
+    // Handle click outside to save the journal entry
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (journalTextRef.current && !journalTextRef.current.contains(event.target)) {
+                if (isClickableToSave && isEditing) {
+                    setTimeout(() => {
+                        onEditButtonClick(); // Delay the save to ensure state has updated
+                    }, 100); // Short delay to ensure state synchronization
+                }
+            }
+        };
+
+        if (isClickableToSave) {
+            document.addEventListener('mousedown', handleClickOutside); // Attach the event listener
+        }
+
+        return () => {
+            if (isClickableToSave) {
+                document.removeEventListener('mousedown', handleClickOutside); // Clean up on component unmount
+            }
+        };
+    }, [isClickableToSave, isEditing, editedContent]);
+
     return (
         <>
-            < div style={styles.characterSection} >
+            <div style={styles.characterSection}>
                 <div style={styles.toggleButtonContainer}>
                     <ToggleButton
                         expandable={false}
@@ -80,14 +108,12 @@ const DetailedJournalPost = (props) => {
                         openNewPanel(panels, setPanels, "character-profile", createdCharacter);
                     }}
                 >
-
                     <CharacterButton
                         panels={panels}
                         setPanels={setPanels}
                         createdCharacter={createdCharacter}
                         isButton={true}
                         onClick={() => { openNewPanel(panels, setPanels, "character-profile", createdCharacter) }}
-
                     />
                 </button>
 
@@ -96,8 +122,8 @@ const DetailedJournalPost = (props) => {
                     {isEditing ? "💾" : "✎"}
                 </button>
 
-                {/* more button */}
-                <button style={styles.moreButton} onClick={toggleDeleteButton}>
+                {/* More button */}
+                <button style={styles.moreButton} onClick={() => setShowDelete(!showDelete)}>
                     ...
                 </button>
 
@@ -107,12 +133,20 @@ const DetailedJournalPost = (props) => {
                         Delete
                     </button>
                 )}
+            </div>
 
-            </div >
-
-            <div style={styles.journalText}>
+            <div
+                ref={journalTextRef}  // Attach the reference to the journal text container
+                style={styles.journalText}
+                onClick={() => {
+                    if (isClickableToEdit && !isEditing) {
+                        setIsEditing(true);  // Enable editing when clicking on the journal text
+                    }
+                }}
+            >
                 {isEditing ? (
                     <TextArea
+                        ref={textAreaRef} // Attach the ref to the TextArea
                         attribute={{ description: editedContent }}
                         placeholder="Edit content"
                         onChange={(e) => setEditedContent(e.target.value)}
@@ -124,17 +158,16 @@ const DetailedJournalPost = (props) => {
                     </div>
                 )}
             </div>
-
         </>
-    )
+    );
 }
+
 const styles = {
     characterSection: {
         padding: '10px 15px',
         display: 'flex',
         alignItems: 'center',
         marginTop: '10px',
-
     },
     toggleButtonContainer: {
         marginRight: '10px',
@@ -183,6 +216,7 @@ const styles = {
         textAlign: 'left',
         whiteSpace: "pre-line",
         wordBreak: "break-word",
+        cursor: 'pointer'  // Indicate that the text is clickable
     },
     textArea: {
         width: '100%',
@@ -191,5 +225,6 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #ccc',
     },
-}
+};
+
 export default DetailedJournalPost;

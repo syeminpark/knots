@@ -3,7 +3,7 @@ const CharacterButton = (props) => {
 
 
     return (
-        <>
+        <div style={styles.basic}>
             <div className="character-icon" style={iconStyle} >
                 {createdCharacter.imageSrc ? (
                     <img src={createdCharacter.imageSrc} alt="Character" className="profile-image-preview" />
@@ -16,8 +16,19 @@ const CharacterButton = (props) => {
                     {createdCharacter.name || 'Unnamed Character'}
                 </span>
             ) : null}
-        </>
+        </div>
     );
 };
 
+
 export default CharacterButton;
+
+const styles = {
+    basic: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row'
+
+    }
+}

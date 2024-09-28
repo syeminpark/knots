@@ -38,10 +38,12 @@ const CreateJournalModal = (props) => {
 
     useEffect(() => {
         if (selectedCharacters.length > 0) {
+
             const characterNames = selectedCharacters
                 .map(character => `'${character.name}'`) // Add single quotes around each name
                 .join(', ');
-            setContentPlaceholder(`What is ${characterNames} thinking about?`)
+            setContentPlaceholder(characterNames)
+
         }
 
     }, [selectedCharacters])
@@ -63,7 +65,10 @@ const CreateJournalModal = (props) => {
             if (selectedMode === "Manual Post") {
                 content = journalBookText.content;
             } else {
-                console.log("Perform API call for system generation");
+                try {
+                    // const response = await apiRequest('/getLLMJournalEntry', 'GET',);
+                }
+                catch (error) { console.log(error) }
             }
             const journalBookUUID = uuidv4()
 
@@ -82,9 +87,10 @@ const CreateJournalModal = (props) => {
             // });
             setShowModal(false);
 
+            console.log(payload)
             try {
                 const response = await apiRequest('/createJournalBook', 'POST', payload);
-                console.log(payload)
+
                 console.log(response)
             }
             catch (error) { console.log(error) }
@@ -142,7 +148,11 @@ const CreateJournalModal = (props) => {
                                     {/* {journalBookText.title !== " null" && ( */}
                                     <TextArea
                                         attribute={journalBookText.content}
-                                        placeholder={contentPlaceholder}
+                                        placeholder={
+                                            selectedCharacters.length === 1
+                                                ? `What is ${contentPlaceholder} thinking about?`
+                                                : `What are ${contentPlaceholder} thinking about?`
+                                        }
                                         onChange={(event) => onChangeContent(event.target.value)}
                                         styles={styles}
 
@@ -179,7 +189,8 @@ const CreateJournalModal = (props) => {
                                     </div>
                                     <TextArea
                                         attribute={journalBookText.title}
-                                        placeholder={"What should the characters write about?"}
+                                        placeholder={`What topic should ${contentPlaceholder} write about?`}
+
                                         onChange={(event) => onChangeTitle(event.target.value)}
                                         styles={styles}
                                     />

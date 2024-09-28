@@ -8,7 +8,7 @@ import userRouter from "./routers/user.js"
 import characterRouter from "./routers/character.js"
 import journalRouter from "./routers/journal.js"
 import imageRouter from "./routers/image.js"
-// import llmRouter from './routers/llm.js'
+import llmRouter from './routers/llm.js'
 
 const PORT = 3000;
 const app = express();
@@ -37,7 +37,7 @@ app.use(userRouter);
 app.use(characterRouter);
 app.use(journalRouter)
 app.use(imageRouter)
-// app.use(llmRouter)
+app.use(llmRouter)
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT} and on your local network at http://192.168.0.19:${PORT}`);

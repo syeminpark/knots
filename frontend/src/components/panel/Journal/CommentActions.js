@@ -34,7 +34,7 @@ const CommentActions = (props) => {
                         ) : (
                             <div style={styles.commentActions}>
                                 <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span>
-                                <span style={styles.commentAction} onClick={onDelete}>Delete</span>
+                                {/* <span style={styles.commentAction} onClick={onDelete}>Delete</span> */}
                             </div>
                         )
                     ) : (

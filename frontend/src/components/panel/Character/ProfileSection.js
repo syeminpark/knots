@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
 const ProfileSection = (props) => {
-    const { id, imageSrc, setImageSrc, name, setName } = props
-    const [preview, setPreview] = useState(null)
+    const { id, imageSrc, setImageSrc, name, setName } = props;
+    const [preview, setPreview] = useState(null);
+    const [isEditing, setIsEditing] = useState(!name); // Automatically enter edit mode if name is empty
+    const [editedName, setEditedName] = useState(name || ''); // Track the edited name or default to an empty string
+    const containerRef = useRef(null); // Reference for the container
+    const inputRef = useRef(null); // Reference for the input field
+
+    // Constants to control the behavior
+    const isClickableToEdit = true; // Set to true to enable clicking to edit
+    const isClickableToSave = true; // Set to true to enable auto-save when clicking outside
 
     // Handle image upload
     const handleImageUpload = (e) => {
@@ -9,8 +18,8 @@ const ProfileSection = (props) => {
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImageSrc(file)
-                setPreview(reader.result)
+                setImageSrc(file);
+                setPreview(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -18,26 +27,74 @@ const ProfileSection = (props) => {
 
     // Handle name change
     const handleNameChange = (e) => {
-        setName(e.target.value);  // Update the name in the parent via setName
+        setEditedName(e.target.value); // Update the local edited name
     };
 
+    // Handle save functionality
+    const handleSave = () => {
+        setIsEditing(false); // Exit edit mode
+        setName(editedName); // Set the new name in the parent component
+    };
+
+    // Detect click outside and trigger save
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (isClickableToSave && containerRef.current && !containerRef.current.contains(event.target)) {
+                if (isEditing) {
+                    handleSave(); // Auto-save when clicking outside
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside); // Attach the event listener
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside); // Clean up the event listener
+        };
+    }, [isClickableToSave, isEditing, editedName]); // Only run when constants, isEditing, or editedName changes
+
+    // Automatically set to edit mode if no name is present
+    useEffect(() => {
+        if (!name) {
+            setIsEditing(true); // Auto-edit mode when name is empty
+        }
+    }, [name]);
+
+    // Focus input field when entering edit mode
+    useEffect(() => {
+        if (isEditing && inputRef.current) {
+            inputRef.current.focus(); // Automatically focus the input when editing starts
+        }
+    }, [isEditing]);
+
     return (
-        < div className="profile-section" >
+        <div
+            ref={containerRef}
+            className="profile-section"
+            onClick={() => {
+                if (isClickableToEdit && !isEditing) {
+                    setIsEditing(true); // Enter edit mode when clicking inside if allowed
+                    setTimeout(() => {
+                        if (inputRef.current) {
+                            inputRef.current.focus(); // Focus the input after state update
+                        }
+                    }, 0);
+                }
+            }}
+        >
             <label htmlFor={`image-upload-${id}`} className="profile-image-label">
                 {imageSrc ? (
                     preview !== null ? (
                         <div className="profile-image-container">
-                            <img src={preview
-                            } alt="Uploaded" className="profile-image-preview" />
-                        </div>) : (
+                            <img src={preview} alt="Uploaded" className="profile-image-preview" />
+                        </div>
+                    ) : (
                         <div className="profile-image-container">
-                            <img src={imageSrc
-                            } alt="Uploaded" className="profile-image-preview" />
-                        </div>)
-                )
-                    : (
-                        <div className="profile-image-placeholder">Upload Image</div>
-                    )}
+                            <img src={imageSrc} alt="Uploaded" className="profile-image-preview" />
+                        </div>
+                    )
+                ) : (
+                    <div className="profile-image-placeholder">Upload Image</div>
+                )}
             </label>
             <input
                 id={`image-upload-${id}`}
@@ -47,15 +104,33 @@ const ProfileSection = (props) => {
                 onChange={handleImageUpload}
                 style={{ display: 'none' }}
             />
-            <input
-                type="text"
-                className="name-input"
-                placeholder="Name"
-                value={name}             // Set the current name value
-                onChange={handleNameChange} // Call handleNameChange on input change
-            />
-        </div >
-    )
-}
 
-export default ProfileSection
+            <div className="name-input-container">
+                {isEditing ? (
+                    <input
+                        ref={inputRef} // Attach the ref to the input
+                        type="text"
+                        className="name-input"
+                        placeholder="Enter Name"
+                        value={editedName}             // Set the current edited name value
+                        onChange={handleNameChange}     // Call handleNameChange on input change
+                    />
+                ) : (
+                    <div className="name-display">{name || 'Enter Name'}</div>  // Show 'Enter Name' if name is blank
+                )}
+
+                <button
+                    className="edit-save-button"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent the container click from triggering
+                        isEditing ? handleSave() : setIsEditing(true);
+                    }}
+                >
+                    {isEditing ? "💾" : "✎"} {/* Toggle between save and edit icon */}
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default ProfileSection;
