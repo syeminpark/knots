@@ -30,7 +30,7 @@ const DetailedJournal = (props) => {
     const lastCommentRef = useRef(null);
     const bottomRef = useRef(null);
     const previousCommentLength = useRef(journalEntry.commentThreads.length);  // Track previous length of comment threads
-
+    const previousThreadLength = useRef(0);
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
@@ -50,17 +50,19 @@ const DetailedJournal = (props) => {
     }, [trackingCommentThread]);
 
     // Scroll to the bottom when a new comment is added, but ensure it's scoped to this panel
-    useEffect(() => {
-        if (journalEntry.commentThreads.length > previousCommentLength.current) {
-            // Scroll to bottom when a new comment is added for this panel
-            if (bottomRef.current) {
-                bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        }
+    // useEffect(() => {
+    //     if (journalEntry.commentThreads.length > previousCommentLength.current) {
+    //         console.log()
+    //         // Scroll to bottom when a new comment is added for this panel
+    //         if (bottomRef.current) {
+    //             bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    //         }
+    //     }
 
-        // Update previous comment length after checking
-        previousCommentLength.current = journalEntry.commentThreads.length;
-    }, [journalEntry.commentThreads.length, panelId]);  // Also track panelId to scope it to this panel
+    //     // Update previous comment length after checking
+    //     previousCommentLength.current = journalEntry.commentThreads.length;
+    // }, [journalEntry.commentThreads.length, panelId]);  // Also track panelId to scope it to this panel
+
 
     return (
         <div style={styles.container}>
@@ -101,8 +103,10 @@ const DetailedJournal = (props) => {
                             {thread.comments.map((comment, index) => {
 
                                 const isLastThread = threadIndex === journalEntry.commentThreads.length - 1;
+                                const isFirstCommentInThread = index === 0; // First comment in this thread
                                 const isLastCommentInThread = index === thread.comments.length - 1;
                                 const isLastCommentOverall = isLastThread && isLastCommentInThread;
+                                const isFirstInLastThread = isLastThread && isFirstCommentInThread; // New flag
 
                                 const previousCharacterUUID = index === 0
                                     ? journalEntry.ownerUUID
@@ -124,6 +128,7 @@ const DetailedJournal = (props) => {
                                             firstInTheThread={index === 0}
                                             repliedTo={index < thread.comments.length - 1}
                                             isLastComment={isLastCommentOverall}
+                                            isFirstInLastThread={isFirstInLastThread}
                                         />
                                         {isLastCommentOverall && (
                                             <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
@@ -135,7 +140,7 @@ const DetailedJournal = (props) => {
                     ))}
 
                 </div>
-                <div ref={bottomRef} />
+
             </div>
 
             {/* Bottom Section with Character Selection and Comment Input */}

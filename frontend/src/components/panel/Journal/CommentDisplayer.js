@@ -1,6 +1,6 @@
 // CommentDisplayer.js
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import WriteCommentInput from './WriteCommentInput';
 import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
@@ -22,8 +22,10 @@ const CommentDisplayer = (props) => {
         repliedTo,
         firstInTheThread,
         previousCharacter,
-        isLastComment // New prop
+        isLastComment,
+        isFirstInLastThread
     } = props;
+
 
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(content);
@@ -32,18 +34,26 @@ const CommentDisplayer = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
     const replyInputRef = useRef(null); // Ref for the reply input
-
-    useEffect(() => {
+    const firstCommentInLastThreadRef = useRef(null); // Ref for the first comment in the last thread
+    // Set the manual reply state
+    useLayoutEffect(() => {
         setIsManualReplying(false);
     }, [editContent]);
 
-    useEffect(() => {
+    // Scroll to the reply input if it's the last comment and manual reply is open
+    useLayoutEffect(() => {
         if (isManualReplying && replyInputRef.current && isLastComment) {
             replyInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
         }
     }, [isManualReplying, isLastComment]);
 
+    useLayoutEffect(() => {
+        if (isFirstInLastThread && firstCommentInLastThreadRef.current) {
+            setTimeout(() => {
+                firstCommentInLastThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }, [isFirstInLastThread]);
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
             alert('Please write something before submitting your reply.');
@@ -125,7 +135,9 @@ const CommentDisplayer = (props) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.1 }}
-                    transition={{ duration: 0.1 }}>
+                    transition={{ duration: 0.1 }}
+                    ref={firstInTheThread && isFirstInLastThread ? firstCommentInLastThreadRef : null}
+                >
 
                     {/* Render the Comment */}
                     {firstInTheThread ? (
