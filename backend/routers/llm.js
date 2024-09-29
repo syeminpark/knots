@@ -6,7 +6,7 @@ const router = express.Router()
 
 router
     .post('/createLLMJournalEntries', auth, llmController.onCreateJournalEntries)
-    .post('/createLLMComment', auth, llmController.onCreateComment)
+    .post('/createLLMComments', auth, llmController.onCreateComments)
     .post('/createLLMStranger', auth, llmController.onCreateStranger)
 
 export default router; 

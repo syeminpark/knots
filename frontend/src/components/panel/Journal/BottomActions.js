@@ -5,6 +5,7 @@ import ToggleButton from "../../ToggleButton"
 import WriteCommentInput from "./WriteCommentInput";
 import apiRequest from "../../../utility/apiRequest";
 import { v4 as uuidv4 } from 'uuid';
+import { getJournalsByCharacterUUID } from "./journalBookReducer";
 
 const BottomActions = (props) => {
     const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry } = props
@@ -16,32 +17,57 @@ const BottomActions = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
     const onSendButtonClick = async () => {
-        let comments = null;
+        let content = null;
 
-        if (selectedCharacters.leng1th < 1) {
+        if (selectedCharacters.length < 1) {
             alert('Select A Character');
         } else if (!commentValue && activeTab == "Manual Post") {
             alert('Write Something');
         } else {
             if (activeTab == "Manual Post") {
-                comments = selectedCharacters.map((selectedCharacter) => ({
-                    journalEntryUUID: journalEntry.uuid,
-                    ownerUUID: selectedCharacter.uuid,
-                    content: commentValue,
-                    selectedMode: activeTab,
-                    commentThreadUUID: uuidv4(),
-                    commentUUID: uuidv4(),
-                    createdAt: Date.now()
-                }));
+                selectedCharacters.forEach(selectedCharacter =>
+                    selectedCharacter.content = commentValue
+                )
             }
             else {
-                // const response = await 
+                try {
+                    const response = await apiRequest('/createLLMComments', 'POST', {
+                        journalEntryUUID: journalEntry.uuid,
+                        characterUUIDs: selectedCharacters.map(character => character.uuid)
+                    });
+                    console.log(response, selectedCharacters, selectedCharacters.map(character => character.uuid))
+                    response.comments.forEach(object => {
+                        const character = selectedCharacters.find(selectedCharacter =>
+                            selectedCharacter.uuid === object.characterUUID
+                        )
+                        if (character) {
+                            console.log(character)
+                            character.content = object.generation
+                        }
+                    })
+                }
+                catch (error) {
+                    console.log(error)
+                }
             }
+
+            const comments = selectedCharacters.map((selectedCharacter) => ({
+                journalEntryUUID: journalEntry.uuid,
+                ownerUUID: selectedCharacter.uuid,
+                content: selectedCharacter.content,
+                selectedMode: activeTab,
+                commentThreadUUID: uuidv4(),
+                commentUUID: uuidv4(),
+                createdAt: Date.now()
+            }));
+
+
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
                 comments,
             };
+            console.log(comments)
 
             // Dispatch the batch action
             dispatchCreatedJournalBooks({
@@ -50,12 +76,11 @@ const BottomActions = (props) => {
             });
 
             try {
-                const response = await apiRequest('/createComments', 'POST', payload); // Use the new batch API
+                const response = await apiRequest('/createComments', 'POST', payload);
                 console.log(response);
             } catch (error) {
                 console.error('Error creating comments:', error);
             }
-
             setCommentValue(''); // Reset comment value after submitting
         };
     };

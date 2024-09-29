@@ -1,5 +1,5 @@
 
-
+import CharacterModel from "../models/character.js";
 
 export const getBasePrompt = (character) => {
     return `You are a professional actor, brilliant at method acting. You have mastered and fully internalized the role of a fictional character with the following name:
@@ -159,3 +159,5 @@ export const getSpecificConnection = (characterName, connectedCharacters, connec
             ${attributesString}
         </connected_character>`;
 };
+
+

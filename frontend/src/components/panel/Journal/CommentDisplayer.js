@@ -221,7 +221,7 @@ const CommentDisplayer = (props) => {
 
 const styles = {
     comment: {
-        backgroundColor: 'var(--color-bg-grey)',
+        backgroundColor: 'var(--color-bg-darkgrey)',
         borderRadius: '8px',
         padding: '10px 10px',
         marginBottom: '10px',

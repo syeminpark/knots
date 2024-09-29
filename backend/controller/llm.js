@@ -1,6 +1,6 @@
 import openAI from "../utils/openAI.js";
 import CharacterModel from "../models/character.js";
-import { getAttributes, getConnections, getBasePrompt } from "../utils/prompts.js";
+import { getAttributes, getConnections, getBasePrompt } from "../utils/xmlPrompts.js";
 import { JournalEntry } from "../models/journal.js";
 
 const llmController = {
@@ -18,16 +18,17 @@ const llmController = {
                         console.log(character.connectedCharacters)
                         // ${getConnections(character.name, character.connectedCharacters)},
                         const systemPrompt = `
-                            ${getBasePrompt(character)}
-                            ${getAttributes(character)}
-
-                            Show your brillance at method acting by writing a journal with the persona and style of ${character.name}. 
-                            The topic of journal will be provided within the <topic></topic> tag The journal should be written in Korean and not include dates. 
+                       너는 메소드 연기를 완벽하게 구사할 수 있는 배우야. 특히나 ${character.name}이라는 이름을 가진 이의 역할을 완벽하게 연기할 수 있어.
+                       ${character.name}은 다음과 같은 특성들을 가지고 있어: 
+                       ${JSON.stringify(character.personaAttributes)}
+                    
+                       ${character.name}의 페르소나와 스타일로 저널을 적어, 너의 메소드 연기 실력을 보여줘. 
+                       저널은 한국어로 작성해주고 '날짜'는 제외해줘. 저널의 주제는 밑에 <저널_주제></저널_주제>에서 제공될 거야. 
                         `;
 
                         console.log(systemPrompt)
 
-                        const userPrompt = `<topic> ${journalTitle}</topic>
+                        const userPrompt = `<저널_주제> ${journalTitle}</저널_주제>
                         `
                         const response = await openAI.chat.completions.create({
                             messages: [
@@ -42,13 +43,13 @@ const llmController = {
                         const journalEntry = response.choices[0].message.content;
 
 
-                        journalEntries.push({ characterUUID: uuid, journalEntry });
+                        journalEntries.push({ characterUUID: uuid, generation });
                     } else {
-                        journalEntries.push({ characterUUID: uuid, journalEntry: 'Character not found.' });
+                        journalEntries.push({ characterUUID: uuid, generation: 'Character not found.' });
                     }
                 } catch (openAIError) {
                     console.error(`Error generating entry for character ${uuid}:`, openAIError);
-                    journalEntries.push({ character: uuid, journalEntry: 'Error generating journal entry.' });
+                    journalEntries.push({ character: uuid, generation: 'Error generating journal entry.' });
                 }
             });
 
@@ -65,7 +66,7 @@ const llmController = {
 
 
 
-    onCreateComment: async (req, res) => {
+    onCreateComments: async (req, res) => {
         const { journalEntryUUID, characterUUIDs } = req.body;
 
         try {
@@ -75,45 +76,65 @@ const llmController = {
                 return res.status(404).json({ error: 'Journal entry not found.' });
             }
 
+
             const generatedComments = [];
 
             // Step 2: Fetch characters and generate comments concurrently
-            const characterPromises = characterUUIDs.map(async (uuid) => {
+            const characterPromises = characterUUIDs.map(async (characterUUID) => {
                 try {
-                    const character = await CharacterModel.getCharacterByUUID(uuid);
+                    const character = await CharacterModel.getCharacterByUUID(characterUUID);
                     if (character) {
-                        const systemPrompt = `
-                            ${getBasePrompt(character)}
-                            ${getAttributes(character)}
-                            ${getConnections(character.name, character.connectedCharacters)},
-                            
-                            You are ${character.name}, and you're responding to a journal entry. 
-                            Please write a comment from the perspective of ${character.name}, expressing thoughts on the entry provided. The comment should be in the style of ${character.name}.
-                        `;
+                        const connectedCharacter = character.connectedCharacters.find(
+                            connectedCharacter => connectedCharacter.uuid === journalEntry.ownerUUID
+                        );
 
-                        // Step 4: Create the user prompt
-                        const userPrompt = `Journal Entry: ${journalEntry.content}`;
+                        if (connectedCharacter) {
+                            const { uuid, ...connectedCharacterWithoutUUID } = connectedCharacter;
 
-                        // Step 5: Get the LLM response for the comment
-                        const response = await openAI.createChatCompletion({
-                            messages: [
-                                { role: "system", content: systemPrompt },
-                                { role: "user", content: userPrompt },
-                            ],
-                            model: "gpt-4",
-                        });
+                            const personaAttributesString = Object.entries(character.personaAttributes)
+                                .map(([key, value]) => `${key}: ${value}`)
+                                .join(', ');
 
-                        // Extract the generated comment
-                        const commentContent = response.data.choices[0].message.content.trim();
+                            const systemPrompt = `
+                            너는 메소드 연기를 완벽하게 구사할 수 있는 배우야. 특히나 ${character.name}이라는 이름을 가진 이의 역할을 완벽하게 연기할 수 있어.
+                            ${character.name}은 다음과 같은 특성들을 가지고 있어: 
+                            ${personaAttributesString}
+    
+                            ${character.name} 입장에서는 ${connectedCharacterWithoutUUID.name}와 다음과 같은 관계를 가지고 있어.
+                            ${JSON.stringify(connectedCharacterWithoutUUID)}
+    
+                            ${character.name}의 페르소나와 스타일로 답변을 작성해, 너의 메소드 연기 실력을 보여줘. 
+                            `;
+                            console.log(systemPrompt);
 
-                        // Push the generated comment into the result array
-                        generatedComments.push({
-                            characterUUID: uuid,
-                            comment: commentContent,
-                        });
 
-                    } else {
-                        generatedComments.push({ characterUUID: uuid, comment: 'Character not found.' });
+
+                            const userPrompt = `${connectedCharacterWithoutUUID.name}이 작성한 저널의 주제는 ${journalEntry.title}이고, 
+                            그 내용은 다음과 같아: ${journalEntry.content}`;
+
+                            // Step 5: Get the LLM response for the comment
+                            const response = await openAI.chat.completions.create({
+                                messages: [
+                                    { role: "system", content: systemPrompt },
+                                    { role: "user", content: userPrompt },
+                                ],
+                                model: "gpt-4o",
+                            });
+                            console.log(response)
+
+                            // Extract the generated comment
+                            const generation = response.choices[0].message.content.trim();
+                            console.log(generation)
+
+                            // Push the generated comment into the result array
+                            generatedComments.push({
+                                characterUUID: characterUUID,
+                                generation: generation
+                            });
+
+                        } else {
+                            console.error(`No connected character found for character ${character.name}`);
+                        }
                     }
                 } catch (openAIError) {
                     console.error(`Error generating comment for character ${uuid}:`, openAIError);

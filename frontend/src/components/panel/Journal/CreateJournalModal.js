@@ -13,7 +13,7 @@ const CreateJournalModal = (props) => {
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const [journalBookText, setJournalBookText] = useState({ title: "", content: "" });
     const [contentPlaceholder, setContentPlaceholder] = useState("");
-    let content = '';
+
 
     const nextButtonClick = () => {
         if (selectedMode) {
@@ -64,7 +64,8 @@ const CreateJournalModal = (props) => {
         } else {
             setShowModal(false);
             if (selectedMode === "Manual Post") {
-                selectedCharacters.forEach(character => character.content = content)
+                selectedCharacters.forEach(character => character.content = journalBookText.content)
+
             } else {
                 try {
                     const response = await apiRequest(`/createLLMJournalEntries`, 'POST', {
@@ -75,7 +76,7 @@ const CreateJournalModal = (props) => {
                     response.journalEntries.forEach(object => {
                         const character = selectedCharacters.find(character => character.uuid === object.characterUUID)
                         if (character) {
-                            character.content = object.journalEntry
+                            character.content = object.generation
                         }
                     })
                 } catch (error) {

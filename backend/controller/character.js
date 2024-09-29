@@ -77,6 +77,8 @@ export default {
             const updateData = req.body;
             const { uuid } = req.params
 
+            console.log(updateData, uuid)
+
             const character = await CharacterModel.updateCharacter(uuid, updateData);
             if (character) {
                 io.emit('characterUpdated', character);
@@ -184,4 +186,5 @@ export default {
         }
 
     }
+
 }

@@ -108,7 +108,6 @@ const CharacterProfilePanel = (props) => {
             }
             const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
             if (!Object.keys(updatedData).length && !isImageUpdated) {
-
                 return;
             }
             try {

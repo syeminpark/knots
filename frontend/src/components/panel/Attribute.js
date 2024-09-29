@@ -7,6 +7,7 @@ const Attribute = (props) => {
     const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter } = props;
     const attribute = list.find(attr => attr.name === title);
 
+
     const [isEditing, setIsEditing] = useState(!attribute?.description); // Set to edit mode if description is empty
     const [editedContent, setEditedContent] = useState(attribute ? attribute.description : ""); // Track the edited content
     const [showDelete, setShowDelete] = useState(false); // Track if the delete button should be shown
@@ -83,7 +84,9 @@ const Attribute = (props) => {
                                 key={connectedCharacter.uuid}
                                 onClick={(e) => {
                                     e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
+
                                     openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
+
                                 }}
                             >
                                 <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>

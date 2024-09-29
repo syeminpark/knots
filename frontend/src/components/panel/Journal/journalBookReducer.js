@@ -227,10 +227,15 @@ const journalBookReducer = (state, action) => {
                                     if (existingThread) {
                                         updatedCommentThreads = updatedCommentThreads.map((thread) => {
                                             if (thread.uuid === newComment.commentThreadUUID) {
-                                                return {
-                                                    ...thread,
-                                                    comments: [...thread.comments, newComment],
-                                                };
+                                                // Check if the comment already exists
+                                                const commentExists = thread.comments.some(comment => comment.uuid === newComment.commentUUID);
+
+                                                if (!commentExists) {
+                                                    return {
+                                                        ...thread,
+                                                        comments: [...thread.comments, newComment],
+                                                    };
+                                                }
                                             }
                                             return thread;
                                         });
