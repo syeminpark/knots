@@ -17,6 +17,9 @@
     "describeDetails": "내용을 작성하세요.",
     "adddescription": "설명 추가",
     "addattributes": "+ 속성 추가",
-    
-    "addconnections": "+ 커넥션 추가"
+    "addconnections": "+ 커넥션 추가",
+
+    "addnewAttribute": "속성 추가",
+    "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
+    "done": "완료"
 }

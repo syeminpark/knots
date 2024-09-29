@@ -138,7 +138,7 @@ const CharacterCreationPanel = (props) => {
 
             <div className="save-btn-container">
                 <button className="save-btn" onClick={saveFunction}>
-                    Create
+                    {t('create')}
                 </button>
             </div>
         </BasePanel>

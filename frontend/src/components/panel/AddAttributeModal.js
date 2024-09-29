@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import TextArea from '../TextArea';
+import { useTranslation } from 'react-i18next';
+
 const AddAttributeModal = (props) => {
+    const { t } = useTranslation();
     const { setShowModal, personaAttributes, setPersonaAttributes } = props
     const [attribute, setAttribute] = useState('');
 
@@ -20,14 +23,14 @@ const AddAttributeModal = (props) => {
     return (
         <div>
             <ModalOverlay
-                title="Add New Attribute"
+                title={t('addnewAttribute')}
                 setShowModal={setShowModal}
-                footerButtonLabel="Done"
+                footerButtonLabel={t('done')}
                 onFooterButtonClick={handleAddAttribute}
             >
                 <TextArea
                     attribute={attribute}
-                    placeholder={"Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc"}
+                    placeholder={t('example')}
                     onChange={(e) => setAttribute(e.target.value)}
                     styles={styles}
                 >

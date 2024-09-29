@@ -2,8 +2,10 @@ import React from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const BasePanel = (props) => {
+    const { t } = useTranslation();
     const { id, panels, setPanels, children, title, saveFunction, deleteFunction } = props;
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
 
@@ -49,7 +51,7 @@ const BasePanel = (props) => {
                     <button className="more-btn" onClick={toggleDeleteButton}>...</button>
                 )}
                 {showDelete && deleteFunction && (
-                    <button className="delete-btn" onClick={deleteFunction}>Delete</button>
+                    <button className="delete-btn" onClick={deleteFunction}>{t('delete')}</button>
                 )}
                 <button className="close-btn" onClick={onCloseButtonClick}>✖</button>
             </div>

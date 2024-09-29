@@ -17,6 +17,9 @@
     "describeDetails": "Describe details",
     "adddescription": "Add description",
     "addattributes": "+ Add Attributes",
+    "addconnections": "+ Add Connections",
 
-    "addconnections": "+ Add Connections"
+    "addnewAttribute": "Add New Attribute",
+    "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
+    "done": "Done"
 }
