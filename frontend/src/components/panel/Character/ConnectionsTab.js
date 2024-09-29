@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import RelationshipAttribute from './RelationshipAttribute';
 import AddConnectionModal from '../AddConnectionModal';
 import Attribute from '../Attribute';
 
+
 const ConnectionsTab = (props) => {
-    const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter, personaAttributes } = props;
+    const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter } = props;
     const [showModal, setShowModal] = useState(false);
 
     let currentCharacterName = "this character";
@@ -17,6 +18,7 @@ const ConnectionsTab = (props) => {
         setConnectedCharacters(newConnections);
     };
 
+
     // // Updated onChange to handle specific fields
     // const handleChange = (title, field, value) => {
     //     console.log(title, field, value)
@@ -25,11 +27,35 @@ const ConnectionsTab = (props) => {
     //     ));
     // };
 
-    const onChange = (title, value) => {
+    // useEffect(() => {
+    //     // Loop over connected characters and update the currentCharacter's knowledge field
+    //     const updatedKnowledge = connectedCharacters.map(connection => {
+    //         return {
+    //             name: connection.name,
+    //             description: connection.description || "", // Or any other logic to extract knowledge
+    //         };
+    //     });
+
+    //     // Update the currentCharacter's knowledge about the connected characters
+    //     setConnectedCharacters(prev => prev.map(char => {
+    //         if (char.uuid === currentCharacter.uuid) {
+    //             return { ...char, knowledge: updatedKnowledge };
+    //         }
+    //         return char;
+    //     }));
+
+    // }, [connectedCharacters]);
+
+    const onChange = (title, field, value) => {
         setConnectedCharacters(connectedCharacters.map(child =>
-            child.name === title ? { ...child, description: value } : child
+            child.name === title
+                ? { ...child, [field]: value }
+                : child
         ));
+        console.log(connectedCharacters);
     };
+
+
 
     return (
         <div style={styles.connectionsTabWrapper}>
@@ -50,11 +76,10 @@ const ConnectionsTab = (props) => {
                     deleteFunction={deleteConnection}
                     list={connectedCharacters}
                     setter={setConnectedCharacters}
-                    onChange={(event) => { onChange(child.name, event.target.value) }}
+                    onChange={(field, event) => { onChange(child.name, field, event.target.value) }}
                     connectedCharacter={createdCharacters.characters.find(character => character.uuid === child.uuid)}
                     currentCharacter={currentCharacter}
                     isConnectionsTab={true}
-                    personaAttributes={personaAttributes}
                 />
 
             ))}

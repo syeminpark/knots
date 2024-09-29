@@ -21,6 +21,8 @@ const CharacterProfilePanel = (props) => {
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
+
+
     // enabling save button 
     useEffect(() => {
         const hasChanges =
@@ -77,7 +79,7 @@ const CharacterProfilePanel = (props) => {
 
             const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
             const updatedData = {};
-            const connectionUpdates = [];
+            // const connectionUpdates = [];
 
             if (name !== existingCharacter.name) updatedData.name = name;
             if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;

@@ -31,11 +31,13 @@ const BottomActions = (props) => {
             }
             else {
                 try {
+                    const uuids = selectedCharacters.map(character => character.uuid)
+                    console.log(journalEntry.uuid, uuids)
                     const response = await apiRequest('/createLLMComments', 'POST', {
                         journalEntryUUID: journalEntry.uuid,
-                        characterUUIDs: selectedCharacters.map(character => character.uuid)
+                        characterUUIDs: uuids
                     });
-                    console.log(response, selectedCharacters, selectedCharacters.map(character => character.uuid))
+
                     response.comments.forEach(object => {
                         const character = selectedCharacters.find(selectedCharacter =>
                             selectedCharacter.uuid === object.characterUUID
@@ -69,11 +71,11 @@ const BottomActions = (props) => {
             };
             console.log(comments)
 
-            // Dispatch the batch action
-            dispatchCreatedJournalBooks({
-                type: 'CREATE_COMMENT_BATCH',
-                payload: payload,
-            });
+            // // Dispatch the batch action
+            // dispatchCreatedJournalBooks({
+            //     type: 'CREATE_COMMENT_BATCH',
+            //     payload: payload,
+            // });
 
             try {
                 const response = await apiRequest('/createComments', 'POST', payload);

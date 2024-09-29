@@ -31,8 +31,8 @@ io.on('connection', (socket) => {
 
 
 app.use(cors());
-app.use(express.json()); // Parses JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parses URL-encoded bodies
+app.use(express.json({ limit: '50mb' })); // Increase the JSON payload size limit to 50MB
+app.use(express.urlencoded({ limit: '50mb', extended: true })); // Increase URL-encoded payload size limit
 app.use(userRouter);
 app.use(characterRouter);
 app.use(journalRouter)

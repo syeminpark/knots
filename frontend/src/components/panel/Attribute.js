@@ -4,47 +4,67 @@ import CharacterButton from '../CharacterButton';
 import openNewPanel from '../openNewPanel';
 
 const Attribute = (props) => {
-    const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter, isConnectionsTab, personaAttributes } = props;
-    const attribute = list.find(attr => attr.name === title);
+    const { panels,
+        setPanels,
+        title,
+        placeholder,
+        deleteFunction,
+        list, setter,
+        onChange,
+        connectedCharacter,
+        currentCharacter, isConnectionsTab } = props;
+
+    const attribute = list.find(attr => attr.name === title)
 
 
-    const [isEditing, setIsEditing] = useState(!attribute?.description); // Set to edit mode if description is empty
-    const [editedContent, setEditedContent] = useState(attribute ? attribute.description : ""); // Track the edited content
-    const [showDelete, setShowDelete] = useState(false); // Track if the delete button should be shown
-    const [selectedChips, setSelectedChips] = useState([]);
 
-    const [showAboutAttributes, setShowAboutAttributes] = useState(false); // 'about' 속성 표시 여부를 추적하는 상태
+    const [isEditing, setIsEditing] = useState(!attribute?.description);
+    const [editedContent, setEditedContent] = useState(attribute ? attribute.description : "");
+    const [showDelete, setShowDelete] = useState(false);
+    const [selectedChips, setSelectedChips] = useState(() => {
+        return attribute && attribute.knowledge ? attribute.knowledge.map(item => item.name) : [];
+    });
 
-    const containerRef = useRef(null); // Create a ref for the container
-    const textAreaRef = useRef(null); // Create a ref for the TextArea
 
-    // Constants to toggle functionality
-    const isClickableToEdit = true; // Set to true to enable clicking to edit
-    const isClickableToSave = true; // Set to true to enable auto-save when clicking outside
+    const containerRef = useRef(null);
+    const textAreaRef = useRef(null);
+    const isClickableToEdit = true;
+    const isClickableToSave = true;
 
-    // Automatically set to edit mode if description is empty (on component mount)
+
+
     useEffect(() => {
         if (!attribute || !attribute.description) {
             setIsEditing(true);
         }
     }, [attribute]);
 
-    // Save function that updates the description and exits edit mode
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
-            onChange({ target: { value: editedContent } });
+            if (!isConnectionsTab) {
+                onChange({ target: { value: editedContent } });
+            }
+            else {
+                onChange('description', { target: { value: editedContent } });
+            }
         }
         if (editedContent !== '')
             setIsEditing(false); // Exit edit mode after saving
     };
 
     const handleChipClick = (name, e) => {
-        e.stopPropagation(); // Prevent triggering edit mode when clicking on chips
-        setSelectedChips((prevSelected) =>
-            prevSelected.includes(name)
-                ? prevSelected.filter((chip) => chip !== name)
-                : [...prevSelected, name]
-        );
+        e.stopPropagation();
+        const updatedKnowledge = selectedChips.includes(name)
+            ? selectedChips.filter(chip => chip !== name)
+            : [...selectedChips, name];
+
+        const selectedChipsData = updatedKnowledge.map(chip => {
+            const description = '';
+            return { name: chip, description: description };
+        });
+
+        onChange('knowledge', { target: { value: selectedChipsData } });
+        setSelectedChips(updatedKnowledge);
     };
 
 
@@ -165,19 +185,30 @@ const Attribute = (props) => {
 
             {isConnectionsTab && (
                 <>
-                    <button
+                    {/* <button
                         style={styles.addKnowledgeButton}
                         onClick={(e) => {
                             e.stopPropagation();
                             setShowAboutAttributes(!showAboutAttributes);
                         }}
                     >
-                        + Add Knowledge
-                    </button>
+                        Knowledge
+                    </button> */}
 
-                    {showAboutAttributes && (
+                    {/* 
+                    {showAboutAttributes && ( */}
+                    <>
+                        <br></br>
+                        <div style={styles.sectionHeaderLabel}>
+                            Knowledge
+                        </div>
+                        <div style={styles.knowledgeExplanation}>
+                            {currentCharacter.name} knows about {connectedCharacter.name}'s
+
+                        </div>
                         <div style={styles.chipsContainer}>
-                            {personaAttributes.map((attr, index) => (
+
+                            {connectedCharacter.personaAttributes.map((attr, index) => (
                                 <div
                                     key={index}
                                     style={{
@@ -191,7 +222,8 @@ const Attribute = (props) => {
                             ))}
 
                         </div>
-                    )}
+                    </>
+                    {/* )} */}
                 </>
             )}
         </div>
@@ -255,7 +287,7 @@ const styles = {
     },
     description: {
         width: '100%',
-        minHeight: '100px', // Start with a base height
+        minHeight: '70px', // Start with a base height
         padding: '10px',
         borderRadius: '5px',
         backgroundColor: 'white', // Default background for edit mode
@@ -301,6 +333,11 @@ const styles = {
         borderWidth: '1px',
         borderStyle: 'solid',
     },
+    knowledgeExplanation: {
+        padding: '5px 0px',
+        color: '#333',
+        fontSize: 'var(--font-xs)'
+    }
 };
 
 export default Attribute;
