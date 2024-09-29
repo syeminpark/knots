@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TextArea = forwardRef((props, forwardedRef) => {
+    const { t } = useTranslation();
     const { attribute, placeholder, onChange, styles } = props;
     const textareaRef = useRef(null); // Internal ref for the autoGrow functionality
 
@@ -34,7 +36,7 @@ const TextArea = forwardRef((props, forwardedRef) => {
         <textarea
             ref={combinedRef} // Attach both refs
             style={styles.description}
-            placeholder={placeholder || "Describe details"}
+            placeholder={placeholder || t('describeDetails')}
             onChange={(e) => {
                 onChange(e); // Handle change event
                 autoGrow();  // Adjust the height when text changes

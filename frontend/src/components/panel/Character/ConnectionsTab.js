@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 // import RelationshipAttribute from './RelationshipAttribute';
 import AddConnectionModal from '../AddConnectionModal';
 import Attribute from '../Attribute';
+import { useTranslation } from 'react-i18next';
 
 const ConnectionsTab = (props) => {
+    const { t } = useTranslation();
     const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter, personaAttributes } = props;
     const [showModal, setShowModal] = useState(false);
 
@@ -59,7 +61,7 @@ const ConnectionsTab = (props) => {
 
             ))}
             <button className="create-new-btn" onClick={() => setShowModal(true)}>
-                + Add Connections
+                {t('addconnections')}
             </button>
             {showModal && (
                 <AddConnectionModal

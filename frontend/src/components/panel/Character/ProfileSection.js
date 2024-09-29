@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ProfileSection = (props) => {
+    const { t } = useTranslation();
     const { id, imageSrc, setImageSrc, name, setName, preview, setPreview } = props;
 
     const [isEditing, setIsEditing] = useState(!name); // Automatically enter edit mode if name is empty
@@ -97,7 +99,7 @@ const ProfileSection = (props) => {
                         </div>
                     )
                 ) : (
-                    <div className="profile-image-placeholder">Upload Image</div>
+                    <div className="profile-image-placeholder">{t('uploadimage')}</div>
                 )}
             </label>
             <input
@@ -115,7 +117,7 @@ const ProfileSection = (props) => {
                         ref={inputRef} // Attach the ref to the input
                         type="text"
                         className="name-input"
-                        placeholder="Enter Name"
+                        placeholder= {t('entername')}
                         value={editedName}             // Set the current edited name value
                         onChange={handleNameChange}     // Call handleNameChange on input change
                     />

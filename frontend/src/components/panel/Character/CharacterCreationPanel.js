@@ -10,14 +10,15 @@ import { useTranslation } from 'react-i18next';
 
 const CharacterCreationPanel = (props) => {
     const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
-    const [activeTab, setActiveTab] = useState('About');
+    const { t } = useTranslation();
+    const [activeTab, setActiveTab] = useState('');
     const [connectedCharacters, setConnectedCharacters] = useState([]);
-    const [personaAttributes, setPersonaAttributes] = useState([{ name: 'Backstory', description: '' }]);
+    const [personaAttributes, setPersonaAttributes] = useState([{ name: t('backstory'), description: '' }]);
     const [imageSrc, setImageSrc] = useState(null);
     const [preview, setPreview] = useState(null);
     const [name, setName] = useState('');
-    const { t } = useTranslation();
     const [currentCharacter, setCurrentCharacter] = useState(null);
+
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -58,6 +59,10 @@ const CharacterCreationPanel = (props) => {
             console.log('Error:', error);
         }
     }
+
+    useEffect(() => {
+        setActiveTab(t('about'));
+    }, [t]);
 
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
@@ -107,17 +112,17 @@ const CharacterCreationPanel = (props) => {
                     setPreview={setPreview}
                 />
                 {/* Tabs */}
-                <TabNavigation tabs={['About', 'Connections']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavigation tabs={[t('about'), t('connections')]} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
 
             {/* Conditionally render the appropriate panel based on activeTab */}
             <div className="panel-content">
-                {activeTab === 'About' ? (
+                {activeTab === t('about') ? (
                     <AboutTab
                         personaAttributes={personaAttributes}
                         setPersonaAttributes={setPersonaAttributes}
                     />
-                ) : activeTab === 'Connections' ? (
+                ) : activeTab === t('connections') ? (
                     <ConnectionsTab
                         panels={panels}
                         setPanels={setPanels}

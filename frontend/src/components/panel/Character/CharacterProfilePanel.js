@@ -7,11 +7,12 @@ import ProfileSection from './ProfileSection';
 import JournalsTab from './JournalsTab';
 import CommentsTab from './CommentsTab';
 import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
+import { useTranslation } from 'react-i18next';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
-
-    const [activeTab, setActiveTab] = useState('About');
+    const { t } = useTranslation();
+    const [activeTab, setActiveTab] = useState('');
     const [connectedCharacters, setConnectedCharacters] = useState(caller.connectedCharacters);
     const [personaAttributes, setPersonaAttributes] = useState(caller.personaAttributes);
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
@@ -20,6 +21,10 @@ const CharacterProfilePanel = (props) => {
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
+
+    useEffect(() => {
+        setActiveTab(t('about'));
+    }, [t]);
 
     // enabling save button 
     useEffect(() => {
@@ -192,16 +197,16 @@ const CharacterProfilePanel = (props) => {
                     preview={preview}
                     setPreview={setPreview}
                 />
-                <TabNavigation tabs={['About', 'Connections', 'Journal History', 'Comment History']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavigation tabs={[t('about'), t('connections'), t('journalhistory'), t('commenthistory')]} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
-            {activeTab === 'About' ? (
+            {activeTab === t('about') ? (
                 <AboutTab
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
 
                 />
-            ) : activeTab === 'Connections' ? (
+            ) : activeTab === t('connections') ? (
                 <ConnectionsTab
                     panels={panels}
                     setPanels={setPanels}
@@ -214,7 +219,7 @@ const CharacterProfilePanel = (props) => {
                     setPersonaAttributes={setPersonaAttributes}
 
                 />
-            ) : activeTab === 'Journal History' ? (
+            ) : activeTab === t('journalhistory') ? (
                 <JournalsTab
                     caller={caller}
                     createdJournalBooks={createdJournalBooks}
@@ -222,7 +227,7 @@ const CharacterProfilePanel = (props) => {
                     panels={panels}
                     setPanels={setPanels}
                 />
-            ) : activeTab === 'Comment History' ? (
+            ) : activeTab === t('commenthistory') ? (
                 <CommentsTab
                     panels={panels}
                     setPanels={setPanels}
