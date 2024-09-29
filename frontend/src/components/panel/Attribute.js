@@ -4,12 +4,15 @@ import CharacterButton from '../CharacterButton';
 import openNewPanel from '../openNewPanel';
 
 const Attribute = (props) => {
-    const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter } = props;
+    const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter, isConnectionsTab, personaAttributes} = props;
     const attribute = list.find(attr => attr.name === title);
 
     const [isEditing, setIsEditing] = useState(!attribute?.description); // Set to edit mode if description is empty
     const [editedContent, setEditedContent] = useState(attribute ? attribute.description : ""); // Track the edited content
     const [showDelete, setShowDelete] = useState(false); // Track if the delete button should be shown
+    const [selectedChips, setSelectedChips] = useState([]);
+
+    const [showAboutAttributes, setShowAboutAttributes] = useState(false); // 'about' 속성 표시 여부를 추적하는 상태
 
     const containerRef = useRef(null); // Create a ref for the container
     const textAreaRef = useRef(null); // Create a ref for the TextArea
@@ -34,6 +37,16 @@ const Attribute = (props) => {
             setIsEditing(false); // Exit edit mode after saving
     };
 
+    const handleChipClick = (name, e) => {
+        e.stopPropagation(); // Prevent triggering edit mode when clicking on chips
+        setSelectedChips((prevSelected) =>
+            prevSelected.includes(name)
+                ? prevSelected.filter((chip) => chip !== name)
+                : [...prevSelected, name]
+        );
+    };
+    
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isClickableToSave && containerRef.current && !containerRef.current.contains(event.target)) {
@@ -69,88 +82,121 @@ const Attribute = (props) => {
     };
 
     return (
-        <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>
-            <div style={styles.sectionHeader}>
-                {connectedCharacter ? (
-                    <div>
-                        <div style={styles.characterProfiles}>
+    <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>
+        <div style={styles.sectionHeader}>
+            {connectedCharacter ? (
+                <div>
+                    <div style={styles.characterProfiles}>
 
-                            <CharacterButton createdCharacter={currentCharacter}></CharacterButton>
+                        <CharacterButton createdCharacter={currentCharacter}></CharacterButton>
 
-                            →
-                            <button
-                                style={styles.profileButtonContainer}
-                                key={connectedCharacter.uuid}
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
-                                    openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
-                                }}
-                            >
-                                <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
-                            </button>
-                        </div>
-                        <label style={styles.sectionHeaderLabel}>{'Relationship'}</label>
-                    </div>
-                ) : (
-                    <label style={styles.sectionHeaderLabel}>{title}</label>
-                )}
-
-                {/* Edit and Toggle Button */}
-                <div style={styles.buttonsContainer}>
-                    <button
-                        style={styles.editButton}
-                        onClick={(e) => {
-                            e.stopPropagation(); // Prevent container click from triggering
-                            handleSave()
-                            setIsEditing(!isEditing); // Toggle between edit and save modes
-                        }}
-                    >
-                        {isEditing ? "💾" : "✎"}
-                    </button>
-
-                    {/* More Options Button */}
-                    <button style={styles.moreButton} onClick={toggleDeleteButton}>
-                        ...
-                    </button>
-
-                    {/* Conditionally Render Delete Button */}
-                    {showDelete && (
+                        →
                         <button
-                            style={styles.deleteButton}
+                            style={styles.profileButtonContainer}
+                            key={connectedCharacter.uuid}
                             onClick={(e) => {
-                                e.stopPropagation(); // Prevent container click from triggering
-                                deleteFunction(title, list, setter);
+                                e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
+                                openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
                             }}
                         >
-                            Delete
+                            <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
                         </button>
-                    )}
+                    </div>
+                    <label style={styles.sectionHeaderLabel}>{'Relationship'}</label>
                 </div>
-            </div>
-
-            {/* Text Area or static text depending on edit mode */}
-            {isEditing ? (
-                <TextArea
-                    ref={textAreaRef} // Attach the ref to the TextArea
-                    attribute={{ description: editedContent }}
-                    placeholder={placeholder}
-                    onChange={(e) => setEditedContent(e.target.value)} // Update local state
-                    styles={styles}
-                />
             ) : (
-                <div
-                    style={{
-                        ...styles.description,
-                        backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
-                        border: 'none', // Remove border when not editing
+                <label style={styles.sectionHeaderLabel}>{title}</label>
+            )}
+
+            {/* Edit and Toggle Button */}
+            <div style={styles.buttonsContainer}>
+                <button
+                    style={styles.editButton}
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent container click from triggering
+                        handleSave()
+                        setIsEditing(!isEditing); // Toggle between edit and save modes
                     }}
                 >
-                    {attribute ? attribute.description : placeholder}
-                </div>
+                    {isEditing ? "💾" : "✎"}
+                </button>
+
+                {/* More Options Button */}
+                <button style={styles.moreButton} onClick={toggleDeleteButton}>
+                    ...
+                </button>
+
+                {/* Conditionally Render Delete Button */}
+                {showDelete && (
+                    <button
+                        style={styles.deleteButton}
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent container click from triggering
+                            deleteFunction(title, list, setter);
+                        }}
+                    >
+                        Delete
+                    </button>
+                )}
+            </div>
+        </div>
+
+        {/* Text Area or static text depending on edit mode */}
+        {isEditing ? (
+            <TextArea
+                ref={textAreaRef} // Attach the ref to the TextArea
+                attribute={{ description: editedContent }}
+                placeholder={placeholder}
+                onChange={(e) => setEditedContent(e.target.value)} // Update local state
+                styles={styles}
+            />
+        ) : (
+            <div
+                style={{
+                    ...styles.description,
+                    backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
+                    border: 'none', // Remove border when not editing
+                }}
+            >
+                {attribute ? attribute.description : placeholder}
+            </div>
+        )}
+
+{isConnectionsTab && (
+                <>
+                    <button
+                        style={styles.addKnowledgeButton}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowAboutAttributes(!showAboutAttributes);
+                        }}
+                    >
+                        + Add Knowledge
+                    </button>
+
+                    {showAboutAttributes && (
+                        <div style={styles.chipsContainer}>
+                            {personaAttributes.map((attr, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        ...styles.chip,
+                                        ...(selectedChips.includes(attr.name) ? styles.selectedChip : {}),
+                                    }}
+                                    onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
+                                >
+                                    {selectedChips.includes(attr.name) ? '✔ ' : ''}{attr.name}
+                                </div>
+                            ))}
+
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
 };
+
 
 const styles = {
     attributeContainer: {
@@ -224,6 +270,35 @@ const styles = {
         cursor: 'pointer',
         backgroundColor: 'transparent',
         border: 'none',
+    },
+    addKnowledgeButton: {
+        backgroundColor: '#6d6dff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '6px 10px',
+        cursor: 'pointer',
+        marginTop: '10px',
+    },
+    chipsContainer: {
+        marginTop: '10px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '10px',
+    },
+    chip: {
+        backgroundColor: '#f0f0f0',
+        color: '#333',
+        padding: '5px 10px',
+        borderRadius: '15px',
+        fontSize: '14px',
+        cursor: 'pointer',
+    },
+    selectedChip: {
+        backgroundColor: '#f0eaff',
+        borderColor: 'var(--color-secondary)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
     },
 };
 
