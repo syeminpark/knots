@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import RelationshipAttribute from './RelationshipAttribute';
 import AddConnectionModal from '../AddConnectionModal';
+import DiscoverCharacterModal from '../DiscoverCharacterModal';
 import Attribute from '../Attribute';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +10,7 @@ const ConnectionsTab = (props) => {
     const { t } = useTranslation();
     const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter, personaAttributes } = props;
     const [showModal, setShowModal] = useState(false);
+    const [showDiscoverModal, setShowDiscoverModal] = useState(false);
 
     let currentCharacterName = "this character";
     if (caller) {
@@ -57,6 +59,10 @@ const ConnectionsTab = (props) => {
         console.log(connectedCharacters);
     };
 
+    const handleDiscover = (data) => {
+        console.log("Discovered new character:", data);
+    };
+
 
 
     return (
@@ -88,6 +94,10 @@ const ConnectionsTab = (props) => {
             <button className="create-new-btn" onClick={() => setShowModal(true)}>
                 {t('addconnections')}
             </button>
+            <button className="discover-btn" onClick={() => setShowDiscoverModal(true)}>
+                Discover Character
+            </button>
+
             {showModal && (
                 <AddConnectionModal
                     setShowModal={setShowModal}
@@ -95,6 +105,13 @@ const ConnectionsTab = (props) => {
                     setConnectedCharacters={setConnectedCharacters}
                     createdCharacters={createdCharacters}
                     caller={caller}
+                />
+            )}
+
+            {showDiscoverModal && (
+                <DiscoverCharacterModal
+                    setShowModal={setShowDiscoverModal}
+                    onDiscover={handleDiscover}
                 />
             )}
         </div>

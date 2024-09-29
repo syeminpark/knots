@@ -629,6 +629,18 @@ body {
   cursor: pointer;
 }
 
+.discover-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: var(--font-medium);
+  margin-top: 6px;
+  cursor: pointer;
+}
+
 /* save */
 .save-btn {
   padding: 10px 20px;
