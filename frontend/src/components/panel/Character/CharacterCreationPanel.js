@@ -125,6 +125,8 @@ const CharacterCreationPanel = (props) => {
                         setConnectedCharacters={setConnectedCharacters}
                         createdCharacters={createdCharacters}
                         currentCharacter={currentCharacter}
+                        personaAttributes={personaAttributes}
+                        setPersonaAttributes={setPersonaAttributes}
                     />
                 ) : null}
             </div>

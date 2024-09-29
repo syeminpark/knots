@@ -210,6 +210,8 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                     caller={caller}
                     currentCharacter={createdCharacters.characters.find(character => character.uuid === caller.uuid)}
+                    personaAttributes={personaAttributes}
+                    setPersonaAttributes={setPersonaAttributes}
 
                 />
             ) : activeTab === 'Journal History' ? (

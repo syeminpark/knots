@@ -4,7 +4,7 @@ import AddConnectionModal from '../AddConnectionModal';
 import Attribute from '../Attribute';
 
 const ConnectionsTab = (props) => {
-    const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter } = props;
+    const { panels, setPanels, connectedCharacters, setConnectedCharacters, createdCharacters, caller, currentCharacter, personaAttributes } = props;
     const [showModal, setShowModal] = useState(false);
 
     let currentCharacterName = "this character";
@@ -32,7 +32,7 @@ const ConnectionsTab = (props) => {
     };
 
     return (
-        <>
+        <div style={styles.connectionsTabWrapper}>
             <div>
                 {connectedCharacters.length < 2
                     ? `${connectedCharacters.length} Connection`
@@ -53,6 +53,8 @@ const ConnectionsTab = (props) => {
                     onChange={(event) => { onChange(child.name, event.target.value) }}
                     connectedCharacter={createdCharacters.characters.find(character => character.uuid === child.uuid)}
                     currentCharacter={currentCharacter}
+                    isConnectionsTab={true}
+                    personaAttributes={personaAttributes}
                 />
 
             ))}
@@ -68,8 +70,15 @@ const ConnectionsTab = (props) => {
                     caller={caller}
                 />
             )}
-        </>
+        </div>
     );
+};
+
+const styles = {
+    connectionsTabWrapper: {
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 400px)', // 이 높이를 원하는 대로 조정하세요.
+    },
 };
 
 export default ConnectionsTab;

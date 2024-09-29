@@ -4,13 +4,16 @@ import CharacterButton from '../CharacterButton';
 import openNewPanel from '../openNewPanel';
 
 const Attribute = (props) => {
-    const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter } = props;
+    const { panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange, connectedCharacter, currentCharacter, isConnectionsTab, personaAttributes } = props;
     const attribute = list.find(attr => attr.name === title);
 
 
     const [isEditing, setIsEditing] = useState(!attribute?.description); // Set to edit mode if description is empty
     const [editedContent, setEditedContent] = useState(attribute ? attribute.description : ""); // Track the edited content
     const [showDelete, setShowDelete] = useState(false); // Track if the delete button should be shown
+    const [selectedChips, setSelectedChips] = useState([]);
+
+    const [showAboutAttributes, setShowAboutAttributes] = useState(false); // 'about' 속성 표시 여부를 추적하는 상태
 
     const containerRef = useRef(null); // Create a ref for the container
     const textAreaRef = useRef(null); // Create a ref for the TextArea
@@ -34,6 +37,16 @@ const Attribute = (props) => {
         if (editedContent !== '')
             setIsEditing(false); // Exit edit mode after saving
     };
+
+    const handleChipClick = (name, e) => {
+        e.stopPropagation(); // Prevent triggering edit mode when clicking on chips
+        setSelectedChips((prevSelected) =>
+            prevSelected.includes(name)
+                ? prevSelected.filter((chip) => chip !== name)
+                : [...prevSelected, name]
+        );
+    };
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -84,9 +97,7 @@ const Attribute = (props) => {
                                 key={connectedCharacter.uuid}
                                 onClick={(e) => {
                                     e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
-
                                     openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
-
                                 }}
                             >
                                 <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
@@ -151,9 +162,42 @@ const Attribute = (props) => {
                     {attribute ? attribute.description : placeholder}
                 </div>
             )}
+
+            {isConnectionsTab && (
+                <>
+                    <button
+                        style={styles.addKnowledgeButton}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowAboutAttributes(!showAboutAttributes);
+                        }}
+                    >
+                        + Add Knowledge
+                    </button>
+
+                    {showAboutAttributes && (
+                        <div style={styles.chipsContainer}>
+                            {personaAttributes.map((attr, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        ...styles.chip,
+                                        ...(selectedChips.includes(attr.name) ? styles.selectedChip : {}),
+                                    }}
+                                    onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
+                                >
+                                    {selectedChips.includes(attr.name) ? '✔ ' : ''}{attr.name}
+                                </div>
+                            ))}
+
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 };
+
 
 const styles = {
     attributeContainer: {
@@ -227,6 +271,35 @@ const styles = {
         cursor: 'pointer',
         backgroundColor: 'transparent',
         border: 'none',
+    },
+    addKnowledgeButton: {
+        backgroundColor: '#6d6dff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '6px 10px',
+        cursor: 'pointer',
+        marginTop: '10px',
+    },
+    chipsContainer: {
+        marginTop: '10px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '10px',
+    },
+    chip: {
+        backgroundColor: '#f0f0f0',
+        color: '#333',
+        padding: '5px 10px',
+        borderRadius: '15px',
+        fontSize: '14px',
+        cursor: 'pointer',
+    },
+    selectedChip: {
+        backgroundColor: '#f0eaff',
+        borderColor: 'var(--color-secondary)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
     },
 };
 
