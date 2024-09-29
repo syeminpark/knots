@@ -25,6 +25,7 @@ const styles = {
     basic: {
         display: 'flex',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flexGrow: 1
     }
 }

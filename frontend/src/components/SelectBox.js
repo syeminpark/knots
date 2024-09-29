@@ -63,31 +63,31 @@ const SelectBox = (props) => {
                     <div style={styles.dropdownList}>
                         {availableCharacters.length > 0 ? (
                             availableCharacters
-                            .filter((character) => !character.deleted)
-                            .map((character) => (
-                                <div
-                                    key={character.uuid}
-                                    style={{
-                                        ...styles.dropdownItem,
-                                        backgroundColor: selectedCharacters.some((c) => c.uuid === character.uuid)
-                                            ? '#E0E0FF' // selected color
-                                            : 'transparent',
-                                    }}
-                                    onClick={() => handleSelectCharacter(character)}
-                                >
-                                    <CharacterButton
-                                        createdCharacter={character}
-                                        iconStyle={styles.dropdownIcon}
-                                        textStyle={styles.dropdownText}
-                                    />
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
-                                        onChange={() => handleSelectCharacter(character)}
-                                        style={styles.checkbox}
-                                    />
-                                </div>
-                            ))
+                                .filter((character) => !character.deleted)
+                                .map((character) => (
+                                    <div
+                                        key={character.uuid}
+                                        style={{
+                                            ...styles.dropdownItem,
+                                            backgroundColor: selectedCharacters.some((c) => c.uuid === character.uuid)
+                                                ? '#E0E0FF' // selected color
+                                                : 'transparent',
+                                        }}
+                                        onClick={() => handleSelectCharacter(character)}
+                                    >
+                                        <CharacterButton
+                                            createdCharacter={character}
+                                            iconStyle={styles.dropdownIcon}
+                                            textStyle={styles.dropdownText}
+                                        />
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
+                                            onChange={() => handleSelectCharacter(character)}
+                                            style={styles.checkbox}
+                                        />
+                                    </div>
+                                ))
                         ) : (
                             <div style={styles.noCharactersMessage}>
                                 No characters available.
@@ -137,6 +137,7 @@ const styles = {
         padding: '0',
         maxHeight: '200px',
         overflowY: 'auto',
+
     },
     dropdownItem: {
         display: 'flex',
@@ -144,6 +145,9 @@ const styles = {
         padding: '10px 15px',
         cursor: 'pointer',
         transition: 'background-color 0.2s ease',
+
+
+
     },
     checkbox: {
         marginLeft: 'auto',
