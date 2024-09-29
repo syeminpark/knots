@@ -5,11 +5,21 @@
     "journalfeed": "저널",
     "create": "만들기",
     "characters": "캐릭터 목록",
+
     "createcharacter": "캐릭터 만들기",
     "about": "정보",
     "connections": "커넥션",
+    "journalhistory": "저널 기록",
+    "commenthistory": "댓글 기록",
     "uploadimage": "이미지 업로드",
+    "entername": "이름",
     "backstory": "배경",
-    "addattributes": "속성 추가",
-    "adddescription": "설명 추가"
+    "describeDetails": "내용을 작성하세요.",
+    "adddescription": "설명 추가",
+    "addattributes": "+ 속성 추가",
+    "addconnections": "+ 커넥션 추가",
+
+    "addnewAttribute": "속성 추가",
+    "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
+    "done": "완료"
 }

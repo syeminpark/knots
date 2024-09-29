@@ -4,8 +4,10 @@ import CreateJournalModal from './CreateJournalModal';
 import Feed from './Feed';
 import DetailedJournal from './DetailedJournal';
 import { getJournalBookInfoAndEntryByIds } from './journalBookReducer';
+import { useTranslation } from 'react-i18next';
 
 const JournalPanel = (props) => {
+    const { t } = useTranslation();
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks, reference } = props;
     const [showModal, setShowModal] = useState(false);
     const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)

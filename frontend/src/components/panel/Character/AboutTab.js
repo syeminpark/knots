@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Attribute from '../Attribute';
 import AddAttributeModal from '../AddAttributeModal';
+import { useTranslation } from 'react-i18next';
 
 const AboutTab = (props) => {
+    const { t } = useTranslation();
     const { personaAttributes, setPersonaAttributes, saveFunction } = props
     const [showModal, setShowModal] = useState(false);
 
@@ -32,7 +34,7 @@ const AboutTab = (props) => {
                 />
             ))}
             <button className="create-new-btn" onClick={() => setShowModal(true)}>
-                + Add Attributes
+                {t('addattributes')}
             </button>
             {showModal && (
                 <AddAttributeModal

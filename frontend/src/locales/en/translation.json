@@ -5,11 +5,21 @@
     "journalfeed": "Journal Feed",
     "create": "Create",
     "characters": "Characters",
+
     "createcharacter": "Create Character",
     "about": "About",
     "connections": "Connections",
+    "journalhistory": "Journal History",
+    "commenthistory": "Comment History",
     "uploadimage": "Upload Image",
+    "entername": "Enter Name",
     "backstory": "Backstory",
-    "addattributes": "Add Attributes",
-    "adddescription": "Add description"
+    "describeDetails": "Describe details",
+    "adddescription": "Add description",
+    "addattributes": "+ Add Attributes",
+    "addconnections": "+ Add Connections",
+
+    "addnewAttribute": "Add New Attribute",
+    "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
+    "done": "Done"
 }
