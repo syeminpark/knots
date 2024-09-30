@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
-import TextArea from '../TextArea'; 
+import TextArea from '../TextArea';
+import CharacterButton from '../CharacterButton'; // Import CharacterButton
 
-const DiscoverCharacterModal = ({ setShowModal, onDiscover }) => {
-    const [textDescription, setTextDescription] = useState(''); 
-    const [results, setResults] = useState([]); 
+const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) => {
+    const [textDescription, setTextDescription] = useState('');
+    const [results, setResults] = useState(null);
 
     const handleDiscover = () => {
         onDiscover({ description: textDescription });
-        // setShowModal(false);
-        // result test
-        setResults([
-            { name: 'Snape' },
-            { name: 'Dobby' },
-            { name: 'Luna' },
-            { name: 'Dumbledore' }
-        ]);
+        setResults({
+            fromCharacter: currentCharacter,
+            toCharacter: {
+                name: '?',
+                profilePicture: null, // Will render default purple circle
+            },
+        });
     };
 
     return (
@@ -28,24 +28,20 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover }) => {
             <TextArea
                 attribute={{ description: textDescription }}
                 placeholder="Relationships"
-                onChange={(e) => setTextDescription(e.target.value)} 
+                onChange={(e) => setTextDescription(e.target.value)}
                 styles={styles}
             />
-        {results.length > 0 && (
-        <div style={styles.resultsContainer}>
-            <h3>Results</h3>
-            <ul style={styles.resultList}>
-                {results.map((result, index) => (
-                    <li key={index} style={styles.resultItem}>
-                        <div style={styles.resultContent}>
-                            <div style={styles.icon}></div>
-                            <span style={styles.resultText}>{result.name}</span>
+            {results && (
+                <div style={styles.resultsContainer}>
+                    <div style={styles.resultBox}>
+                        <div style={styles.characterProfiles}>
+                            <CharacterButton createdCharacter={results.fromCharacter} />
+                            <span style={styles.arrow}>→</span>
+                            <CharacterButton createdCharacter={results.toCharacter} />
                         </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    )}
+                    </div>
+                </div>
+            )}
         </ModalOverlay>
     );
 };
@@ -61,41 +57,29 @@ const styles = {
         resize: 'vertical',
         overflow: 'hidden',
         whiteSpace: 'pre-wrap',
-        border: '1px solid #b8b8f3'
+        border: '1px solid #b8b8f3',
     },
     resultsContainer: {
         marginTop: '20px',
     },
-    resultList: {
-        listStyleType: 'none',
-        padding: 0,
-    },
-    resultItem: {
+    characterProfiles: {
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
+        gap: '20px',
+    },
+    arrow: {
+        fontSize: '24px',
+        color: '#333',
+        marginLeft: '-300px', // Negative margin to move the arrow left
+        marginRight: '5px',  // Adjust as needed
+    },
+
+    resultBox: {
+        border: '1px solid #ccc', // Gray border
+        borderRadius: '6px',
         padding: '10px',
-        marginBottom: '10px',
     },
-    resultContent: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    resultText: {
-        fontFamily: 'var(--font-secondary)',
-        fontSize: 'var(--font-small)', 
-        fontWeight: 'var(--font-semibold)',
-        color: '#333', 
-    },
-    icon: {
-        width: '30px',
-        height: '30px',
-        backgroundColor: 'var(--color-primary)',
-        borderRadius: '50%',
-        marginRight: '10px',
-    }
+    
 };
 
 export default DiscoverCharacterModal;
