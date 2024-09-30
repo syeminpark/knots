@@ -70,7 +70,7 @@ const styles = {
     arrow: {
         fontSize: '24px',
         color: '#333',
-        marginLeft: '-300px', // Negative margin to move the arrow left
+        marginLeft: '-200px', // Negative margin to move the arrow left
         marginRight: '5px',  // Adjust as needed
     },
 
