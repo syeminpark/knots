@@ -3,8 +3,10 @@ import openNewPanel from "../../openNewPanel";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import ToggleButton from "../../ToggleButton";
 import React, { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const JournalContent = forwardRef((props, ref) => {
+    const { t } = useTranslation();
     const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks, setTrackingJournalEntry } = props;
 
     const onMoreButtonClick = () => {
@@ -49,7 +51,7 @@ const JournalContent = forwardRef((props, ref) => {
                     size="small"       // You can change the size to small, medium, or large
                     onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
                     icon={'💬'}
-                    text='See Comments'
+                    text={t('seeComments')}
                 />
             </div>
         </div >

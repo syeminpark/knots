@@ -5,8 +5,10 @@ import SelectBox from "../../SelectBox";
 import TextArea from "../../TextArea";
 import apiRequest from "../../../utility/apiRequest";
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
 
 const CreateJournalModal = (props) => {
+    const { t } = useTranslation();
     const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, dispatchCreatedCharacters } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
@@ -20,7 +22,7 @@ const CreateJournalModal = (props) => {
             //console.log(`Selected mode: ${selectedMode}`);
             setStage(1);
         } else {
-            alert('Please select a mode');
+            alert(t('pleaseSelectMode'));
         }
     };
 
@@ -52,15 +54,15 @@ const CreateJournalModal = (props) => {
         const characters = createdCharacters?.characters || [];
 
         if (characters.length === 0) {
-            alert('Create a character first');
+            alert(t('createCharacterFirst'));
         } else if (selectedCharacters.length === 0) {
-            alert('Please select a character');
+            alert(t('pleaseSelectCharacter'));
         } else if (selectedMode === 'Manual Post' && journalBookText.title.trim() === "") {
-            alert('Please write a title');
+            alert(t('pleaseWriteTitle'));
         } else if (selectedMode === 'Manual Post' && journalBookText.content.trim() === "") {
-            alert('Please write something');
+            alert(t('pleaseWriteContent'));
         } else if (selectedMode === 'System Generate' && journalBookText.title.trim() === "") {
-            alert('Please write something');
+            alert(t('pleaseWriteContent'));
         } else {
             setShowModal(false);
             if (selectedMode === "Manual Post") {
@@ -111,13 +113,13 @@ const CreateJournalModal = (props) => {
     return (
         stage === 0 ? (
             <ModalOverlay
-                title="Create New Journal"
+                title={t('createNewJournalModal')}
                 setShowModal={setShowModal}
-                footerButtonLabel="Next"
+                footerButtonLabel={t('next')}
                 onFooterButtonClick={nextButtonClick}
             >
                 <div style={styles.subtitleContainer}>
-                    <h3 style={styles.subtitle}>Select a Mode</h3>
+                    <h3 style={styles.subtitle}>{t('selectMode')}</h3>
                 </div>
 
                 <ModeSelection
@@ -129,14 +131,14 @@ const CreateJournalModal = (props) => {
             selectedMode === "Manual Post" ? (
                 <div>
                     <ModalOverlay
-                        title="Create New Journal"
+                        title={t('createNewJournalModal')}
                         setShowModal={setShowModal}
                         showBackArrow={true}
                         onBackArrowClick={backArrowClick}
-                        footerButtonLabel="Post"
+                        footerButtonLabel={t('post')}
                         onFooterButtonClick={onAnyPostButtonClick}
                     >
-                        <h3 style={styles.subtitle}>📝 {selectedMode} Mode</h3>
+                        <h3 style={styles.subtitle}>📝 {t('manualpost')} {t('mode')}</h3>
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}
@@ -152,7 +154,7 @@ const CreateJournalModal = (props) => {
                                     </div>
                                     <TextArea
                                         attribute={journalBookText.title}
-                                        placeholder={"Title"}
+                                        placeholder={t('title')}
                                         onChange={(event) => onChangeTitle(event.target.value)}
                                         styles={styles}
                                     />
@@ -178,14 +180,14 @@ const CreateJournalModal = (props) => {
             ) : (
                 <div>
                     <ModalOverlay
-                        title="Create New Journal"
+                        title={t('createNewJournalModal')}
                         setShowModal={setShowModal}
                         footerButtonLabel="Generate"
                         showBackArrow={true}
                         onBackArrowClick={backArrowClick}
                         onFooterButtonClick={onAnyPostButtonClick}
                     >
-                        <h3 style={styles.subtitle}>🌟 {selectedMode} Mode</h3>
+                        <h3 style={styles.subtitle}>🌟 {t('systemgenerate')} {t('mode')}</h3>
                         <SelectBox
                             selectedCharacters={selectedCharacters}
                             setSelectedCharacters={setSelectedCharacters}

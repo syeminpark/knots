@@ -6,8 +6,10 @@ import WriteCommentInput from "./WriteCommentInput";
 import apiRequest from "../../../utility/apiRequest";
 import { v4 as uuidv4 } from 'uuid';
 import { getJournalsByCharacterUUID } from "./journalBookReducer";
+import { useTranslation } from 'react-i18next';
 
 const BottomActions = (props) => {
+    const { t } = useTranslation();
     const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry } = props
     const [commentValue, setCommentValue] = useState("");
     const [activeTab, setActiveTab] = useState('System Generate');
@@ -96,6 +98,10 @@ const BottomActions = (props) => {
     // }, [activeTab]);
 
     useEffect(() => {
+        setActiveTab(t('systemgenerate'));
+    }, [t]);
+
+    useEffect(() => {
         if (selectedCharacters.length > 0) {
             const characterNames = selectedCharacters
                 .map(character => `'${character.name}'`) // Add single quotes around each name
@@ -114,7 +120,7 @@ const BottomActions = (props) => {
             {/* Clickable Header */}
             <div style={styles.headerContainer} onClick={toggleExpand}>
                 <div style={styles.commentTitle}>
-                    + Create New Comment Thread
+                    {t('newCommentThread')}
                 </div>
                 <ToggleButton
                     expandable={true}
@@ -128,7 +134,7 @@ const BottomActions = (props) => {
             {isExpanded && (
                 <>
                     {/* Tab Navigation */}
-                    <TabNavigation tabs={['System Generate', 'Manual Post']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <TabNavigation tabs={[t('systemgenerate'), t('manualpost')]} activeTab={activeTab} setActiveTab={setActiveTab} />
 
                     {/* Character Select - Always visible */}
                     <div style={styles.characterSelect}>
@@ -144,14 +150,14 @@ const BottomActions = (props) => {
                     {selectedCharacters.length > 0 && (
                         <>
                             {/* Generate Mode */}
-                            {activeTab === "System Generate" && (
+                            {activeTab === t('systemgenerate') && (
                                 <div style={styles.generateButtonContainer}>
-                                    <button style={styles.generateButton} onClick={onSendButtonClick}>✨ Generate</button>
+                                    <button style={styles.generateButton} onClick={onSendButtonClick}>✨ {t('generate')}</button>
                                 </div>
                             )}
 
                             {/* Manual Mode */}
-                            {activeTab === "Manual Post" && (
+                            {activeTab === t('manualpost') && (
                                 <div style={styles.commentInputContainer}>
                                     <WriteCommentInput
                                         placeholder={commentPlaceholder}

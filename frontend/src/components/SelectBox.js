@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import CharacterButton from './CharacterButton';
+import { useTranslation } from 'react-i18next';
 
 const SelectBox = (props) => {
+    const { t } = useTranslation();
     const { selectedCharacters, setSelectedCharacters, availableCharacters = [], multipleSelect = true } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -54,7 +56,7 @@ const SelectBox = (props) => {
                         {selectedCharacters.length > 0
                             ?
                             selectedCharacters.map((char) => char.name).join(', ')
-                            : multipleSelect ? 'Select Characters' : "Select Character"}
+                            : multipleSelect ? t('selectCharacters') : t('selectCharacter')}
                     </span>
                     <span>{dropdownOpen ? '▲' : '▼'}</span>
                 </div>

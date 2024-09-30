@@ -2,9 +2,11 @@
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
-    "journalfeed": "Journal Feed",
     "create": "Create",
+    "generate": "Generate",
     "characters": "Characters",
+    "next": "Next",
+    "post": "Post",
 
     "createcharacter": "Create Character",
     "about": "About",
@@ -21,5 +23,28 @@
 
     "addnewAttribute": "Add New Attribute",
     "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
-    "done": "Done"
+    "done": "Done",
+
+    "journalfeed": "Journal Feed",
+    "journalPanel": "📑 Journal Feed",
+    "createNewJournal": "+ Create New Journal",
+    "feed": "Feed",
+
+    "createNewJournalModal": "Create New Journal",
+    "systemgenerate": "System Generate",
+    "manualpost": "Manual Post",
+    "selectMode": "Select a Mode",
+    "mode": "Mode",
+    "title": "Title",
+    "selectCharacters": "Select Characters",
+    "selectCharacter": "Select Character",
+    "seeComments": "See Comments",
+    "newCommentThread": "+ Create New Comment Thread",
+
+    "pleaseSelectMode": "Please select a mode",
+    "createCharacterFirst": "Create a character first",
+    "pleaseSelectCharacter": "Please select a character",
+    "pleaseWriteTitle": "Please write a title",
+    "pleaseWriteContent": "Please write something"
+
 }

@@ -4,8 +4,10 @@ import TimeAgo from '../../TimeAgo';
 import ToggleButton from '../../ToggleButton';
 import EntryTag from '../../EntryTag';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const Feed = (props) => {
+    const { t } = useTranslation();
     const {
         createdJournalBooks,
         createdCharacters,
@@ -35,7 +37,7 @@ const Feed = (props) => {
 
     return (
         <>
-            <h2 style={styles.feedHeader}>Feed</h2>
+            <h2 style={styles.feedHeader}>{t('feed')}</h2>
 
             <div style={styles.journalFeedWrapper}>
                 {createdJournalBooks.journalBooks.length === 0 && (

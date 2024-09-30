@@ -1,5 +1,7 @@
+import { useTranslation } from 'react-i18next';
 
 const ModeSelection = (props) => {
+    const { t } = useTranslation();
     const { selectedMode, setSelectedMode } = props
 
     const handleModeSelect = (mode) => {
@@ -23,7 +25,7 @@ const ModeSelection = (props) => {
                     <div style={styles.iconContainer}>
                         <span className="icon">✨</span>
                     </div>
-                    <span style={styles.modeLabel}>System Generate</span>
+                    <span style={styles.modeLabel}>{t('systemgenerate')}</span>
                 </div>
                 <div
                     style={{
@@ -36,7 +38,7 @@ const ModeSelection = (props) => {
                         <span className="icon"> 📝
                         </span>
                     </div>
-                    <span style={styles.modeLabel}>Manual Post</span>
+                    <span style={styles.modeLabel}>{t('manualpost')}</span>
                 </div>
             </div>
         </div>
@@ -82,6 +84,7 @@ const styles = {
     },
     modeLabel: {
         fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-semibold)',
         color: "#333",
     },
 };

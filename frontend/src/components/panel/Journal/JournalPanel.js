@@ -34,7 +34,7 @@ const JournalPanel = (props) => {
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="📑 Journal Feed"
+            title={t('journalPanel')}
             iconStyles="journal-icon"
         >
             {showModal && (
@@ -51,7 +51,7 @@ const JournalPanel = (props) => {
                     {/* Create New Journal Book Button */}
                     <div style={styles.stickyButtonContainer}>
                         <button className="create-new-btn" onClick={() => setShowModal(true)}>
-                            + Create New Journal
+                        {t('createNewJournal')}
                         </button>
                     </div>
 

@@ -2,9 +2,11 @@
     "edit": "수정",
     "save": "저장",
     "delete": "삭제",
-    "journalfeed": "저널",
     "create": "만들기",
+    "generate": "생성하기",
     "characters": "캐릭터 목록",
+    "next": "다음",
+    "post": "올리기",
 
     "createcharacter": "캐릭터 만들기",
     "about": "정보",
@@ -21,5 +23,27 @@
 
     "addnewAttribute": "속성 추가",
     "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
-    "done": "완료"
+    "done": "완료",
+
+    "journalfeed": "저널",
+    "journalPanel": "📑 저널",
+    "createNewJournal": "+ 새 저널 만들기",
+    "feed": "피드",
+
+    "createNewJournalModal": "새 저널 만들기",
+    "systemgenerate": "자동 생성하기",
+    "manualpost": "직접 작성하기",
+    "selectMode": "모드 선택",
+    "mode": "모드",
+    "title": "제목",
+    "selectCharacters": "캐릭터(들) 선택",
+    "selectCharacter": "캐릭터 선택",
+    "seeComments": "댓글 보기",
+    "newCommentThread": "+ 새로운 댓글 쓰레드",
+
+    "pleaseSelectMode": "모드를 선택하세요.",
+    "createCharacterFirst": "캐릭터를 먼저 생성하세요.",
+    "pleaseSelectCharacter": "캐릭터를 선택하세요.",
+    "pleaseWriteTitle": "제목을 작성하세요.",
+    "pleaseWriteContent": "내용을 작성하세요."
 }
