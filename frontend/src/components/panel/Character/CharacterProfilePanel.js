@@ -184,7 +184,7 @@ const CharacterProfilePanel = (props) => {
             id={id}
             panels={panels}
             setPanels={setPanels}
-            title="Profile"
+            title={t('profile')}
             deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
