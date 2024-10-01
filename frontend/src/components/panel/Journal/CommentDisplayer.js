@@ -55,11 +55,19 @@ const CommentDisplayer = (props) => {
             }, 100);
         }
     }, [isFirstInLastThread]);
+
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
             alert('Please write something before submitting your reply.');
         } else {
-            setLoading(true)
+
+            if (selectedReplyMode === "Manual Post") {
+
+            }
+            else {
+                setLoading(true)
+            }
+
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,

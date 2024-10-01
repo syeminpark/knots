@@ -21,14 +21,13 @@ const BottomActions = (props) => {
 
 
     const onSendButtonClick = async () => {
-        console.log("Button clicked");
-        console.log(commentValue, activeTab)
+
         if (selectedCharacters.length < 1) {
             alert('Select A Character');
         } else if (!commentValue && activeTab === "Manual Post") {
             alert('Write Something');
         } else {
-            setLoading(true)
+
             if (activeTab == "Manual Post") {
                 selectedCharacters.forEach(selectedCharacter =>
                     selectedCharacter.content = commentValue
@@ -36,6 +35,7 @@ const BottomActions = (props) => {
             }
             else {
                 try {
+                    setLoading(true)
                     const uuids = selectedCharacters.map(character => character.uuid)
                     console.log(journalEntry.uuid, uuids)
                     const response = await apiRequest('/createLLMComments', 'POST', {

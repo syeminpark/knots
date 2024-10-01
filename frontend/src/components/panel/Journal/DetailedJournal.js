@@ -6,6 +6,7 @@ import DetailedJournalPost from "./DetailedJournalPost";
 import EntryTag from "../../EntryTag";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import { useTranslation } from 'react-i18next';
+import Loading from "../../Loading";
 
 const DetailedJournal = (props) => {
     const { t } = useTranslation();
@@ -53,114 +54,112 @@ const DetailedJournal = (props) => {
         }
     }, [trackingCommentThread]);
 
-    // Scroll to the bottom when a new comment is added, but ensure it's scoped to this panel
-    // useEffect(() => {
-    //     if (journalEntry.commentThreads.length > previousCommentLength.current) {
-    //         console.log()
-    //         // Scroll to bottom when a new comment is added for this panel
-    //         if (bottomRef.current) {
-    //             bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    //         }
-    //     }
 
-    //     // Update previous comment length after checking
-    //     previousCommentLength.current = journalEntry.commentThreads.length;
-    // }, [journalEntry.commentThreads.length, panelId]);  // Also track panelId to scope it to this panel
+
 
 
     return (
-        <div style={styles.container}>
-            {/* Scrollable Content Container */}
-            <div style={styles.scrollableContent}>
-                {/* Journal Entry Section */}
-                <div style={styles.journalEntry}>
-                    <div style={styles.entryHeader}>
-                        <div>
-                            <strong style={styles.entryTitle}>{bookInfo.title}</strong>
-                            <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
+        <>
+            {loading && (
+                <div className="loading-overlay">
+                    <div className="spinner"></div>
+                    <p className="loading-text">{t("loadingText")}</p>
+                </div>
+            )}
+            <div style={styles.container}>
+                {/* Scrollable Content Container */}
+                <div style={styles.scrollableContent}>
+                    {/* Journal Entry Section */}
+                    <div style={styles.journalEntry}>
+                        <div style={styles.entryHeader}>
+                            <div>
+                                <strong style={styles.entryTitle}>{bookInfo.title}</strong>
+                                <span style={styles.entryTime}><TimeAgo createdAt={bookInfo.createdAt} /></span>
+                            </div>
+                            <div>
+                                <EntryTag selectedMode={bookInfo.selectedMode} size='large'> </EntryTag>
+                            </div>
                         </div>
-                        <div>
-                            <EntryTag selectedMode={bookInfo.selectedMode} size='large'> </EntryTag>
+
+                        <DetailedJournalPost
+                            panels={panels}
+                            setPanels={setPanels}
+                            createdCharacter={createdCharacter}
+                            selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                            setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                            dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                        />
+
+                        <div style={styles.commentIcon}>
+                            <p> 💬 {t('comments')}</p>
                         </div>
                     </div>
 
-                    <DetailedJournalPost
-                        panels={panels}
-                        setPanels={setPanels}
-                        createdCharacter={createdCharacter}
-                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                        setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                    {/* Render comments */}
+                    <div style={styles.commentContainer}>
+                        {journalEntry.commentThreads.map((thread, threadIndex) => (
+                            <div key={thread.uuid} style={styles.commentThread} ref={(el) => {
+                                commentThreadRefs.current[thread.uuid] = el;
+                            }}>
+                                {thread.comments.map((comment, index) => {
+
+                                    const isLastThread = threadIndex === journalEntry.commentThreads.length - 1;
+                                    const isFirstCommentInThread = index === 0; // First comment in this thread
+                                    const isLastCommentInThread = index === thread.comments.length - 1;
+                                    const isLastCommentOverall = isLastThread && isLastCommentInThread;
+                                    const isFirstInLastThread = isLastThread && isFirstCommentInThread; // New flag
+
+                                    const previousCharacterUUID = index === 0
+                                        ? journalEntry.ownerUUID
+                                        : thread.comments[index - 1].ownerUUID;
+                                    return (
+                                        <div key={comment.uuid}>
+                                            <CommentDisplayer
+                                                panels={panels}
+                                                setPanels={setPanels}
+                                                createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
+                                                content={comment.content}
+                                                createdAt={comment.createdAt}
+                                                selectedMode={comment.selectedMode}
+                                                selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                                                commentUUID={comment.uuid}
+                                                commentThreadUUID={thread.uuid}
+                                                dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                                                previousCharacter={createdCharacters.characters.find(character => character.uuid === previousCharacterUUID)}
+                                                firstInTheThread={index === 0}
+                                                repliedTo={index < thread.comments.length - 1}
+                                                isLastComment={isLastCommentOverall}
+                                                isFirstInLastThread={isFirstInLastThread}
+                                                setLoading={setLoading}
+                                            />
+                                            {isLastCommentOverall && (
+                                                <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        ))}
+
+                    </div>
+
+                </div>
+
+                {/* Bottom Section with Character Selection and Comment Input */}
+                <div style={styles.bottom}>
+                    <BottomActions
+                        selectedCharacters={selectedCharacters}
+                        setSelectedCharacters={setSelectedCharacters}
+                        createdCharacters={createdCharacters}
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
+                        selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                        setLoading={setLoading}
                     />
-
-                    <div style={styles.commentIcon}>
-                        <p> 💬 {t('comments')}</p>
-                    </div>
                 </div>
-
-                {/* Render comments */}
-                <div style={styles.commentContainer}>
-                    {journalEntry.commentThreads.map((thread, threadIndex) => (
-                        <div key={thread.uuid} style={styles.commentThread} ref={(el) => {
-                            commentThreadRefs.current[thread.uuid] = el;
-                        }}>
-                            {thread.comments.map((comment, index) => {
-
-                                const isLastThread = threadIndex === journalEntry.commentThreads.length - 1;
-                                const isFirstCommentInThread = index === 0; // First comment in this thread
-                                const isLastCommentInThread = index === thread.comments.length - 1;
-                                const isLastCommentOverall = isLastThread && isLastCommentInThread;
-                                const isFirstInLastThread = isLastThread && isFirstCommentInThread; // New flag
-
-                                const previousCharacterUUID = index === 0
-                                    ? journalEntry.ownerUUID
-                                    : thread.comments[index - 1].ownerUUID;
-                                return (
-                                    <div key={comment.uuid}>
-                                        <CommentDisplayer
-                                            panels={panels}
-                                            setPanels={setPanels}
-                                            createdCharacter={createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID)}
-                                            content={comment.content}
-                                            createdAt={comment.createdAt}
-                                            selectedMode={comment.selectedMode}
-                                            selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                                            commentUUID={comment.uuid}
-                                            commentThreadUUID={thread.uuid}
-                                            dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-                                            previousCharacter={createdCharacters.characters.find(character => character.uuid === previousCharacterUUID)}
-                                            firstInTheThread={index === 0}
-                                            repliedTo={index < thread.comments.length - 1}
-                                            isLastComment={isLastCommentOverall}
-                                            isFirstInLastThread={isFirstInLastThread}
-                                            setLoading={setLoading}
-                                        />
-                                        {isLastCommentOverall && (
-                                            <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
-                                        )}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    ))}
-
-                </div>
-
             </div>
-
-            {/* Bottom Section with Character Selection and Comment Input */}
-            <div style={styles.bottom}>
-                <BottomActions
-                    selectedCharacters={selectedCharacters}
-                    setSelectedCharacters={setSelectedCharacters}
-                    createdCharacters={createdCharacters}
-                    dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
-                    selectedBookAndJournalEntry={selectedBookAndJournalEntry}
-                    setLoading={setLoading}
-                />
-            </div>
-        </div>
+        </>
     );
+
 };
 
 const styles = {
