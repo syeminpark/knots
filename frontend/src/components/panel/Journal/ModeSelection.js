@@ -25,7 +25,7 @@ const ModeSelection = (props) => {
                     <div style={styles.iconContainer}>
                         <span className="icon">✨</span>
                     </div>
-                    <span style={styles.modeLabel}>{t('systemgenerate')}</span>
+                    <span style={styles.modeLabel}>System Generate</span>
                 </div>
                 <div
                     style={{
@@ -38,7 +38,7 @@ const ModeSelection = (props) => {
                         <span className="icon"> 📝
                         </span>
                     </div>
-                    <span style={styles.modeLabel}>{t('manualpost')}</span>
+                    <span style={styles.modeLabel}>Manual Post</span>
                 </div>
             </div>
         </div>

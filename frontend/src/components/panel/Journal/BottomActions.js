@@ -18,12 +18,14 @@ const BottomActions = (props) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
-    const onSendButtonClick = async () => {
-        let content = null;
 
+
+    const onSendButtonClick = async () => {
+        console.log("Button clicked");
+        console.log(commentValue, activeTab)
         if (selectedCharacters.length < 1) {
             alert('Select A Character');
-        } else if (!commentValue && activeTab == "Manual Post") {
+        } else if (!commentValue && activeTab === "Manual Post") {
             alert('Write Something');
         } else {
             setLoading(true)
@@ -102,9 +104,9 @@ const BottomActions = (props) => {
     //     }
     // }, [activeTab]);
 
-    useEffect(() => {
-        setActiveTab(t('systemgenerate'));
-    }, [t]);
+    // useEffect(() => {
+    //     setActiveTab(t('systemgenerate'));
+    // }, [t]);
 
     useEffect(() => {
         if (selectedCharacters.length > 0) {
@@ -139,7 +141,7 @@ const BottomActions = (props) => {
             {isExpanded && (
                 <>
                     {/* Tab Navigation */}
-                    <TabNavigation tabs={[t('systemgenerate'), t('manualpost')]} activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <TabNavigation tabs={['System Generate', 'Manual Post']} activeTab={activeTab} setActiveTab={setActiveTab} />
 
                     {/* Character Select - Always visible */}
                     <div style={styles.characterSelect}>
@@ -155,14 +157,14 @@ const BottomActions = (props) => {
                     {selectedCharacters.length > 0 && (
                         <>
                             {/* Generate Mode */}
-                            {activeTab === t('systemgenerate') && (
+                            {activeTab === 'System Generate' && (
                                 <div style={styles.generateButtonContainer}>
                                     <button style={styles.generateButton} onClick={onSendButtonClick}>✨ {t('generate')}</button>
                                 </div>
                             )}
 
                             {/* Manual Mode */}
-                            {activeTab === t('manualpost') && (
+                            {activeTab === 'Manual Post' && (
                                 <div style={styles.commentInputContainer}>
                                     <WriteCommentInput
                                         placeholder={commentPlaceholder}

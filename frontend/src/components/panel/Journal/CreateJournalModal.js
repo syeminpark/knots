@@ -138,7 +138,7 @@ const CreateJournalModal = (props) => {
                             footerButtonLabel={t('post')}
                             onFooterButtonClick={onAnyPostButtonClick}
                         >
-                            <h3 style={styles.subtitle}>📝 {t('manualpost')} {t('mode')}</h3>
+                            <h3 style={styles.subtitle}>📝 Manual Post</h3>
                             <SelectBox
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}
@@ -182,7 +182,7 @@ const CreateJournalModal = (props) => {
                             onBackArrowClick={backArrowClick}
                             onFooterButtonClick={onAnyPostButtonClick}
                         >
-                            <h3 style={styles.subtitle}>🌟 {t('systemgenerate')} {t('mode')}</h3>
+                            <h3 style={styles.subtitle}>🌟System Generate</h3>
                             <SelectBox
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}
