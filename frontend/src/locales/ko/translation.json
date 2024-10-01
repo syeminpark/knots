@@ -55,7 +55,6 @@
     "confirmDeletion": "삭제",
     "areYouSureDelete": "삭제할까요?",
     "closeAllPanels": "삭제하시면 모든 창이 닫힙니다",
-    "areYouSureDelete": "삭제할까요?",
 
     "commentsWithCharacter": "{{count}}명의 캐릭터와의 댓글",
     "commentsWithCharacter_plural": "{{count}}명의 캐릭터와의 댓글",
