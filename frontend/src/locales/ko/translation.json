@@ -26,9 +26,9 @@
     "adddescription": "설명 추가",
     "addattributes": "+ 속성 추가",
     "addconnections": "+ 만든 캐릭터와 연결하기",
-    "addnewconnection": "만든 캐릭터와 연결하기",
-    "discoverCharacter": "+ 연관된 캐릭터 발견하기",
-    "relationships": "새 캐릭터와의 관계",
+    "addnewconnection": "📝만든 캐릭터와 연결하기",
+    "discoverCharacter": "✨ 연관된 캐릭터 발견하기",
+    "relationships": "(선택적 입력) 두 캐릭터는 어떤 식으로 연관되어있습니까?",
     "relationshipsAttribute": "캐릭터와의 관계",
     "knowledge": "지식",
     "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
@@ -57,7 +57,7 @@
     "pleaseWriteContent": "내용을 작성하세요.",
     "confirmDeletion": "삭제",
     "areYouSureDelete": "삭제할까요?",
-    "closeAllPanels": "삭제하시면 모든 창이 닫힙니다",
+    "close": "닫기",
     "loadingText": "작성 중...",
     "commentsWithCharacter": "{{count}}명의 캐릭터와의 댓글",
     "commentsWithCharacter_plural": "{{count}}명의 캐릭터와의 댓글",
@@ -82,5 +82,7 @@
     "journalempty": "저널 내용을 작성하세요.",
     "writeReply": "내용을 작성하세요.",
     "nameRequired": "이름을 작성하세요.",
-    "attributeExist": "같은 속성이 있습니다."
+    "attributeExist": "같은 속성이 있습니다.",
+    "association": "연관성",
+    "findAgain": "다시 찾기"
 }

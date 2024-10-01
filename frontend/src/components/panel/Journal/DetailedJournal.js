@@ -16,12 +16,12 @@ const DetailedJournal = (props) => {
         selectedBookAndJournalEntry,
         setSelectedBookAndJournalEntry,
         createdCharacters,
-        dispatchCreatedCharacters,
+
         createdJournalBooks,
         dispatchCreatedJournalBooks,
         trackingCommentThread,
         setTrackingCommentThread,
-        panelId  // Adding a unique identifier for each panel
+
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -40,9 +40,12 @@ const DetailedJournal = (props) => {
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
         const NewJournalBookInfoandEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, bookInfo.uuid, journalEntry.uuid);
-        if (NewJournalBookInfoandEntry.journalEntry) {
+        if (NewJournalBookInfoandEntry?.journalEntry) {
             //update old selectedBookAndJournalEntry
             setSelectedBookAndJournalEntry(NewJournalBookInfoandEntry);
+        }
+        else {
+            setSelectedBookAndJournalEntry(null)
         }
     }, [createdJournalBooks]);
 
@@ -131,6 +134,7 @@ const DetailedJournal = (props) => {
                                                 isLastComment={isLastCommentOverall}
                                                 isFirstInLastThread={isFirstInLastThread}
                                                 setLoading={setLoading}
+                                                setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                                             />
                                             {isLastCommentOverall && (
                                                 <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container

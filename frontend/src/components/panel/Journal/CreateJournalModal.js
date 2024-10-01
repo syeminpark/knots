@@ -61,11 +61,11 @@ const CreateJournalModal = (props) => {
             alert(t('pleaseWriteContent'));
         } else {
 
-            setLoading(true);
             if (selectedMode === "Manual Post") {
                 selectedCharacters.forEach(character => character.content = journalBookText.content)
             } else {
                 try {
+                    setLoading(true);
                     const response = await apiRequest(`/createLLMJournalEntries`, 'POST', {
                         characterUUIDs: selectedCharacters.map(character => character.uuid),
                         journalTitle: journalBookText.title

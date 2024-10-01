@@ -20,8 +20,9 @@ const CommentsTab = (props) => {
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
 
+    console.log(interactedCharacters)
 
-    console.log('hey')
+
 
     const commentsLimitShow = 100;
     const threadsLimitShow = 100;
@@ -29,7 +30,7 @@ const CommentsTab = (props) => {
     const onClickCharacter = (clickedOnCharacter) => {
         setSelectedCharacter(clickedOnCharacter);
         setStage(1);
-        const commentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, clickedOnCharacter.uuid);
+        const commentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, clickedOnCharacter?.uuid);
         setCommentExchangeHistory(commentHistory);
         console.log(commentHistory, 'please')
     };
@@ -77,7 +78,7 @@ const CommentsTab = (props) => {
                     <div style={styles.profileList}>
                         {interactedCharacterList.map((interactedCharacter, index) => {
                             // console.log(caller, interactedCharacter)
-                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter.uuid)
+                            const commentCount = getCommentExchangeCount(createdJournalBooks, caller.uuid, interactedCharacter?.uuid)
                             return (
                                 <div key={index} style={styles.profileItem}>
                                     <button

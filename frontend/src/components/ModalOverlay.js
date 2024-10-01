@@ -1,7 +1,15 @@
 import ToggleButton
     from "./ToggleButton";
 const ModalOverlay = (props) => {
-    const { title, children, setShowModal, footerButtonLabel, onFooterButtonClick, onBackArrowClick, showBackArrow } = props;
+    const {
+        title,
+        children,
+        setShowModal,
+        footerButtonLabel,
+        onFooterButtonClick,
+        onBackArrowClick,
+        showBackArrow,
+    } = props;
 
     return (
         <div style={styles.modalOverlay}>
@@ -12,21 +20,32 @@ const ModalOverlay = (props) => {
                         <ToggleButton
                             onClick={onBackArrowClick}
                             direction="left"
-                        ></ToggleButton>
+                        />
                     )}
                     <h2 className="header-title">{title}</h2>
-                </div>
-                <div className="x-more-button-container">
-                    <button className="close-btn" onClick={() => setShowModal(false)}>✖</button>
-                </div>
-                {/* Modal Content */}
-                <div style={styles.modalContent}>{children}</div>
-                {/* Modal Footer */}
-                <div style={styles.modalFooter}>
-                    <button style={styles.modalDoneBtn} onClick={onFooterButtonClick}>
-                        {footerButtonLabel}
+                    <button
+                        className="close-btn"
+                        onClick={() => setShowModal(false)}
+                        style={styles.closeButton}
+                    >
+                        ✖
                     </button>
                 </div>
+
+                {/* Modal Content */}
+                <div style={styles.modalContent}>{children}</div>
+
+                {/* Modal Footer */}
+                {footerButtonLabel && onFooterButtonClick && (
+                    <div style={styles.modalFooter}>
+                        <button
+                            style={styles.modalDoneBtn}
+                            onClick={onFooterButtonClick}
+                        >
+                            {footerButtonLabel}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

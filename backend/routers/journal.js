@@ -9,7 +9,7 @@ router
     .post('/createJournalBook', auth, journalController.createJournalBook)
     .post('/createComment', auth, journalController.createComment)
     .post('/createComments', auth, journalController.createComments)
-    .put('/editJournalEntry', auth, journalController.editJournalEntry)
+    .put('/editJournalEntry/:journalEntryUUID', auth, journalController.editJournalEntry)
     .put('/editComment/:commentUUID', auth, journalController.editComment)
     .delete('/deleteComment/:commentUUID', auth, journalController.deleteComment)
     .delete('/deleteJournalEntry/:journalEntryUUID', auth, journalController.deleteJournalEntry)

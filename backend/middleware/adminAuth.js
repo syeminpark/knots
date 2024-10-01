@@ -1,4 +1,4 @@
-import { USER_AUTH_TYPES } from "../constants.js";
+import { USER_AUTH_TYPES } from '../utils/constants.js';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 

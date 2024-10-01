@@ -3,8 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 const TextArea = forwardRef((props, forwardedRef) => {
     const { t } = useTranslation();
-    const { attribute, placeholder, onChange, styles } = props;
-    const textareaRef = useRef(null); // Internal ref for the autoGrow functionality
+    const {
+        attribute,
+        placeholder,
+        onChange,
+        styles,
+        label,
+        readOnly, // Accept the readOnly prop
+    } = props;
+    const textareaRef = useRef(null);
 
     // Function to adjust the height of the text area
     const autoGrow = () => {
@@ -22,27 +29,33 @@ const TextArea = forwardRef((props, forwardedRef) => {
 
     // Use both refs: the forwarded ref for focus, and the internal ref for height adjustment
     const combinedRef = (element) => {
-        textareaRef.current = element; // Assign to internal ref
+        textareaRef.current = element;
         if (forwardedRef) {
             if (typeof forwardedRef === 'function') {
-                forwardedRef(element); // Support callback refs
+                forwardedRef(element);
             } else {
-                forwardedRef.current = element; // Support object refs
+                forwardedRef.current = element;
             }
         }
     };
 
     return (
-        <textarea
-            ref={combinedRef} // Attach both refs
-            style={styles.description}
-            placeholder={placeholder || t('describeDetails')}
-            onChange={(e) => {
-                onChange(e); // Handle change event
-                autoGrow();  // Adjust the height when text changes
-            }}
-            value={attribute ? attribute.description : ""}
-        />
+        <div style={styles.textAreaContainer}>
+            {label && <label style={styles.textAreaLabel}>{label}</label>}
+            <textarea
+                ref={combinedRef}
+                style={styles.description}
+                placeholder={placeholder || t('describeDetails')}
+                onChange={(e) => {
+                    if (onChange) {
+                        onChange(e);
+                    }
+                    autoGrow();
+                }}
+                value={attribute ? attribute.description : ''}
+                readOnly={readOnly} // Pass the readOnly prop to the textarea
+            />
+        </div>
     );
 });
 

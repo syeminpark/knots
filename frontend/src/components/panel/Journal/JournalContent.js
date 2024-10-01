@@ -20,7 +20,7 @@ const JournalContent = forwardRef((props, ref) => {
             <div style={styles.expandedHeader}>
                 <button
                     style={styles.profileButtonContainer}
-                    key={createdCharacter.uuid}
+                    key={createdCharacter?.uuid}
                     onClick={() => {
                         openNewPanel(panels, setPanels, "character-profile", createdCharacter);
                     }}

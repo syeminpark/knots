@@ -17,7 +17,7 @@ const Comment = (props) => {
                     {/* Use CharacterButton here */}
                     <button
                         style={styles.profileButtonContainer}
-                        key={createdCharacter.uuid}
+                        key={createdCharacter?.uuid}
                         onClick={() => {
                             openNewPanel(panels, setPanels, "character-profile", createdCharacter);
                         }}

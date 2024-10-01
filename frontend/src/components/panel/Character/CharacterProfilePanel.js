@@ -24,9 +24,18 @@ const CharacterProfilePanel = (props) => {
     const [showDelete, setShowDelete] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
+
+
     useEffect(() => {
         setActiveTab(t('about'));
     }, [t]);
+
+    useEffect(() => {
+        if (!createdCharacters.characters.find(character => character.uuid === caller.uuid)) {
+            setPanels(prevPanels => prevPanels.filter(panel => panel.id !== id));
+        }
+    }, [createdCharacters]);
+
 
     // enabling save button 
     useEffect(() => {
@@ -153,7 +162,7 @@ const CharacterProfilePanel = (props) => {
 
     const confirmDelete = async () => {
 
-        setPanels([]);
+        // setPanels([]);
         // dispatchCreatedJournalBooks({
         //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
         //     payload: { ownerUUID: caller.uuid }
@@ -260,7 +269,7 @@ const CharacterProfilePanel = (props) => {
                     <p style={{ marginBottom: '20px' }}>
                         {t('areYouSureDelete')}
                         <br></br>
-                        {t('closeAllPanels')}
+
                     </p>
 
                     <div style={styles.modalButtonContainer}>

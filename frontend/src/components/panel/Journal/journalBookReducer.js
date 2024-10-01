@@ -77,6 +77,7 @@ const journalBookReducer = (state, action) => {
 
         case 'DELETE_JOURNAL_ENTRY_OWNER_UUID': {
             const ownerUUID = action.payload.ownerUUID;
+            console.log(ownerUUID, 'yyyyyyyyyyyyy')
 
             // Process the journal books and entries
             const updatedJournalBooks = state.journalBooks.map((book) => {

@@ -26,7 +26,8 @@ const CommentDisplayer = (props) => {
         previousCharacter,
         isLastComment,
         isFirstInLastThread,
-        setLoading
+        setLoading,
+        setSelectedBookAndJournalEntry
     } = props;
 
 
@@ -51,12 +52,13 @@ const CommentDisplayer = (props) => {
     }, [isManualReplying, isLastComment]);
 
     useLayoutEffect(() => {
-        if (isFirstInLastThread && firstCommentInLastThreadRef.current) {
+        if (isFirstInLastThread && firstCommentInLastThreadRef?.current) {
             setTimeout(() => {
-                firstCommentInLastThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                firstCommentInLastThreadRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         }
     }, [isFirstInLastThread]);
+
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {

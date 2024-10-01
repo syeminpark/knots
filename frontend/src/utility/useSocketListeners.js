@@ -44,7 +44,7 @@ const useSocketListeners = (dispatchCreatedCharacters, dispatchCreatedJournalBoo
 
         // Listen for character deletion
         socket.on('characterDeleted', ({ uuid }) => {
-            setPanels([])
+            // setPanels([])
             dispatchCreatedCharacters({
                 type: 'DELETE_CHARACTER',
                 payload: { uuid },
@@ -95,7 +95,7 @@ const useSocketListeners = (dispatchCreatedCharacters, dispatchCreatedJournalBoo
 
         // Listen for journal entry deletion
         socket.on('journalEntryDeleted', ({ journalEntryUUID, journalBookUUID }) => {
-            setPanels([])
+            // setPanels([])
             dispatchCreatedJournalBooks({
                 type: 'DELETE_JOURNAL_ENTRY',
                 payload: { journalEntryUUID, journalBookUUID }
@@ -103,8 +103,8 @@ const useSocketListeners = (dispatchCreatedCharacters, dispatchCreatedJournalBoo
         });
 
         socket.on('journalEntriesDeleted', ({ ownerUUID }) => {
-            setPanels([])
-
+            // setPanels([])
+            console.log('wonerUUID', ownerUUID)
             dispatchCreatedJournalBooks({
                 type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
                 payload: { ownerUUID }

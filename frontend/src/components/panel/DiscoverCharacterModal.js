@@ -1,26 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import TextArea from '../TextArea';
-import CharacterButton from '../CharacterButton'; // Import CharacterButton
+import CharacterButton from '../CharacterButton';
 import { useTranslation } from 'react-i18next';
 import ToggleButton from '../ToggleButton';
 
 const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) => {
     const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
-    const [stage, setStage] = useState(0); // Stage controls the flow
+    const [stage, setStage] = useState(0);
 
     const handleDiscover = () => {
         onDiscover({ description: textDescription });
-        setStage(1); // Move to stage 1 after the discovery process
+        setStage(1);
     };
 
     const backArrowClick = () => {
         setStage(0);
     };
 
-    const footerButtonLabel = stage === 0 ? t('find') : t('close');
-    const onFooterButtonClick = stage === 0 ? handleDiscover : () => setShowModal(false)
+    const footerButtonLabel = stage === 0 ? t('find') : null;
+    const onFooterButtonClick = stage === 0 ? handleDiscover : () => setShowModal(false);
 
     return (
         <ModalOverlay
@@ -29,46 +29,98 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) 
             footerButtonLabel={footerButtonLabel}
             onFooterButtonClick={onFooterButtonClick}
         >
-            {/* Control what is displayed based on the stage */}
             {stage === 0 && (
-
-                <TextArea
-                    attribute={{ description: textDescription }}
-                    placeholder={t('relationships')}
-                    onChange={(e) => setTextDescription(e.target.value)}
-                    styles={styles}
-                />
-
+                <>
+                    <div style={styles.resultsContainer}>
+                        <div style={styles.characterProfiles}>
+                            <div>
+                                <CharacterButton createdCharacter={currentCharacter} />
+                            </div>
+                            <div>
+                                <span style={styles.arrow}>⇄</span>
+                            </div>
+                            <div>
+                                <CharacterButton
+                                    createdCharacter={{
+                                        name: '?',
+                                        profilePicture: null,
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <TextArea
+                        attribute={{ description: textDescription }}
+                        placeholder={t('relationships')}
+                        onChange={(e) => setTextDescription(e.target.value)}
+                        styles={styles}
+                        label={t('association')}
+                    />
+                </>
             )}
 
             {stage === 1 && (
                 <>
-                    <ToggleButton direction='left' onClick={backArrowClick}></ToggleButton>
+                    {/* <ToggleButton direction="left" onClick={backArrowClick} /> */}
                     <div style={styles.resultsContainer}>
-                        <div style={styles.resultBox}>
-                            <div style={styles.characterProfiles}>
-                                <div>
-                                    <CharacterButton createdCharacter={currentCharacter} />
-                                </div>
-                                <div>
-                                    <span style={styles.arrow}>⇄</span>
-                                </div>
-                                <div>
-                                    <CharacterButton
-                                        createdCharacter={{
-                                            name: '?',
-                                            profilePicture: null, // Will render default purple circle
-                                        }}
-                                    />
-                                </div>
+                        <div style={styles.characterProfiles}>
+                            <div>
+                                <CharacterButton createdCharacter={currentCharacter} />
+                            </div>
+                            <div>
+                                <span style={styles.arrow}>⇄</span>
+                            </div>
+                            <div>
+                                <CharacterButton
+                                    createdCharacter={{
+                                        name: '?',
+                                        profilePicture: null,
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
+                    <TextArea
+                        attribute={{ description: textDescription }}
+                        placeholder={t('relationships')}
+                        onChange={(e) => setTextDescription(e.target.value)}
+                        styles={styles}
+                        label={t('association')}
+                    />
+
+                    {/* Move the button inside the container */}
+                    <div style={styles.regenerateButtonContainer}>
+                        <button style={styles.regenerateButton}>
+                            {t('findAgain')}
+                        </button>
+                    </div>
+
+                    {/* <div style={styles.resultBox}>
+                        <TextArea
+                            attribute={{ description: `` }}
+                            placeholder={t('relationships')}
+                            onChange={(e) => setTextDescription(e.target.value)}
+                            styles={styles}
+                        />
+                        <TextArea
+                            attribute={{ description: textDescription }}
+                            placeholder={t('relationships')}
+                            onChange={(e) => setTextDescription(e.target.value)}
+                            styles={styles}
+                        />
+                        <TextArea
+                            attribute={{ description: textDescription }}
+                            placeholder={t('relationships')}
+                            onChange={(e) => setTextDescription(e.target.value)}
+                            styles={styles}
+                        />
+                    </div> */}
                 </>
             )}
         </ModalOverlay>
     );
 };
+
 const styles = {
     description: {
         width: '100%',
@@ -84,27 +136,50 @@ const styles = {
     },
     resultsContainer: {
         marginTop: '20px',
+        marginBottom: '20px',
     },
     characterProfiles: {
         display: 'flex',
-        alignItems: 'center',  // Vertically center the buttons and the arrow
-        justifyContent: 'center',  // Horizontally center the buttons and the arrow
-        gap: '20px',  // Space between buttons and arrow
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '20px',
     },
     arrow: {
         fontSize: '24px',
         color: '#333',
-        // Removed the negative margin
-        marginRight: '5px', // Adjust as needed for the arrow spacing
+        marginRight: '5px',
     },
-
     resultBox: {
-        border: '1px solid #ccc', // Gray border
+        marginTop: '20px',
+        border: '1px solid #ccc',
         borderRadius: '6px',
         padding: '10px',
-        textAlign: 'center',  // Center the content within the box
+        textAlign: 'center',
+    },
+    textAreaContainer: {},
+    textAreaLabel: {
+        display: 'block',
+        color: '#6d6dff',
+        fontSize: 'var(--font-medium)',
+        fontWeight: 'var(--font-bold)',
+        marginBottom: '10px',
+    },
+    regenerateButtonContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '20px', // Optional: Add margin to separate from other elements
+    },
+    regenerateButton: {
+        // backgroundColor: 'var(--color-secondary)',
+        backgroundColor: 'black',
+        color: 'white',
+        padding: '10px 20px',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: 'var(--font-medium)',
     },
 };
-
 
 export default DiscoverCharacterModal;

@@ -56,7 +56,7 @@ const DetailedJournalPost = (props) => {
             console.log(error);
         }
     };
-    
+
 
     const onReturnClick = () => {
         setSelectedBookAndJournalEntry(null);
@@ -106,7 +106,7 @@ const DetailedJournalPost = (props) => {
                 </div>
                 <button
                     style={styles.profileButtonContainer}
-                    key={createdCharacter.uuid}
+                    key={createdCharacter?.uuid}
                     onClick={() => {
                         openNewPanel(panels, setPanels, "character-profile", createdCharacter);
                     }}
@@ -137,22 +137,22 @@ const DetailedJournalPost = (props) => {
                     </button>
                 )}
 
-{showDeleteConfirmation && (
-            <DeleteConfirmationModal
-                title={t('confirmDeletion')}
-                setShowModal={setShowDeleteConfirmation}
-            >
-                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
-                <div style={styles.modalButtonContainer}>
-                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-                        {t('cancel')}
-                    </button>
-                    <button onClick={confirmDelete} style={styles.deleteButton}>
-                        {t('delete')}
-                    </button>
-                </div>
-            </DeleteConfirmationModal>
-        )}
+                {showDeleteConfirmation && (
+                    <DeleteConfirmationModal
+                        title={t('confirmDeletion')}
+                        setShowModal={setShowDeleteConfirmation}
+                    >
+                        <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                        <div style={styles.modalButtonContainer}>
+                            <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                                {t('cancel')}
+                            </button>
+                            <button onClick={confirmDelete} style={styles.deleteButton}>
+                                {t('delete')}
+                            </button>
+                        </div>
+                    </DeleteConfirmationModal>
+                )}
             </div>
 
             <div
@@ -247,7 +247,7 @@ const styles = {
     },
     modalButtonContainer: {
         display: 'flex',
-        justifyContent: 'center', 
+        justifyContent: 'center',
         gap: '10px',
         marginTop: '20px',
     },

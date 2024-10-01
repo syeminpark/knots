@@ -206,13 +206,13 @@ const Attribute = (props) => {
                         </div>
                         <div style={styles.knowledgeExplanation}>
                             {t('knowsAbout', {
-                                currentCharacterName: currentCharacter.name,
-                                connectedCharacterName: connectedCharacter.name,
+                                currentCharacterName: currentCharacter?.name,
+                                connectedCharacterName: connectedCharacter?.name,
                             })}
                         </div>
                         <div style={styles.chipsContainer}>
 
-                            {connectedCharacter.personaAttributes.map((attr, index) => (
+                            {connectedCharacter?.personaAttributes.map((attr, index) => (
                                 <div
                                     key={index}
                                     style={{

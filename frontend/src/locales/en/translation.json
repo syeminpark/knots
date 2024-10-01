@@ -30,6 +30,7 @@
     "addnewconnection": "Discover New Connection",
     "discoverCharacter": "Discover Character",
     "relationships": "Relationships",
+    "close": "close",
     "relationshipsAttribute": "Relationships",
     "knowledge": "Knowledge",
     "knowsAbout": "{{currentCharacterName}} knows about {{connectedCharacterName}}'s",
@@ -82,5 +83,7 @@
     "journalempty": "Journal cannot be empty",
     "writeReply": "Please write something before submitting your reply.",
     "nameRequired": "Name is required",
-    "attributeExist": "Attribute already exists"
+    "attributeExist": "Attribute already exists",
+    "association": "Association",
+    "findAgain": "Find Again"
 }

@@ -149,7 +149,7 @@ const journalController = {
                 const commentThreadUUIDs = commentThreads.map(thread => thread.uuid);
                 await Comment.updateMany({ commentThreadUUID: { $in: commentThreadUUIDs } }, { isDeleted: true });
 
-                io.emit('journalEntriesDeleted', { ownerUUID });
+
 
                 // Step 5: Check if any journal books associated with the journal entries should also be soft deleted
                 const journalBooks = await JournalBook.find({ uuid: { $in: journalEntries.map(entry => entry.journalBookUUID) }, isDeleted: false });
@@ -167,6 +167,8 @@ const journalController = {
 
             // Step 4: Soft delete all comments authored by the ownerUUID (character) across all threads
             await Comment.updateMany({ ownerUUID: ownerUUID }, { isDeleted: true });
+
+            io.emit('journalEntriesDeleted', { ownerUUID });
 
             res.status(200).json({ message: 'All journal entries, comments authored by the character, related comments, and empty journal books soft deleted successfully.' });
         } catch (error) {
