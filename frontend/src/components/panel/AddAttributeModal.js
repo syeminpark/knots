@@ -11,7 +11,7 @@ const AddAttributeModal = (props) => {
     const handleAddAttribute = () => {
         if (attribute) {
             if (personaAttributes.find(personaAttribute => personaAttribute.name.toLowerCase() === attribute.toLowerCase())) {
-                alert('Attribute already exists')
+                alert(t('attributeExist'))
             }
             else {
                 console.log(`Adding attribute: ${attribute}`);

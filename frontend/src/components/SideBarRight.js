@@ -125,7 +125,7 @@ const SidebarRight = (props) => {
             <h3 className="sidebarRight-title">{t('characters')}</h3>
 
             <span className="sidebarRight-subtitle">
-                Online - {createdCharacters.characters.length}
+                {t('online')} - {createdCharacters.characters.length}
             </span>
 
             <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

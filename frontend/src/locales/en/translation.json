@@ -1,6 +1,8 @@
 {
     "login": "Log in",
     "logout": "Log out",
+    "wronglogin": "Wrong user name or password",
+    "invalidpassword": "Invalid password",
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
@@ -11,6 +13,7 @@
     "next": "Next",
     "post": "Post",
     "find": "Find",
+    "online": "Online",
     "createcharacter": "Create Character",
     "profile": "Profile",
     "about": "About",
@@ -74,5 +77,9 @@
     "whatThinking_singular": "What is {{name}} thinking about?",
     "whatThinking_plural": "What are {{name}} thinking about?",
     "selectACharacter": "Select a character",
-    "writeCommentAs": "Write comment as {{characterNames}}"
+    "writeCommentAs": "Write comment as {{characterNames}}",
+    "journalempty": "Journal cannot be empty",
+    "writeReply": "Please write something before submitting your reply.",
+    "nameRequired": "Name is required",
+    "attributeExist": "Attribute already exists"
 }

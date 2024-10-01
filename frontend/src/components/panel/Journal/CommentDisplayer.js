@@ -6,8 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
 import CommentActions from './CommentActions';
 import apiRequest from '../../../utility/apiRequest';
+import { useTranslation } from 'react-i18next';
 
 const CommentDisplayer = (props) => {
+    const { t } = useTranslation();
     const {
         createdCharacter,
         content,
@@ -57,7 +59,7 @@ const CommentDisplayer = (props) => {
     }, [isFirstInLastThread]);
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
-            alert('Please write something before submitting your reply.');
+            alert(t('writeReply'));
         } else {
             setLoading(true)
             const payload = {

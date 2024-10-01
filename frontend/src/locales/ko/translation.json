@@ -1,6 +1,7 @@
 {
     "login": "로그인",
     "logout": "로그아웃",
+    "wronglogin": "user name 또는 password가 틀렸습니다.",
     "edit": "수정",
     "save": "저장",
     "delete": "삭제",
@@ -11,6 +12,7 @@
     "next": "다음",
     "post": "올리기",
     "find": "찾기",
+    "online": "Online",
     "createcharacter": "캐릭터 만들기",
     "profile": "프로필",
     "about": "정보",
@@ -76,5 +78,9 @@
     "whatThinking_singular": "{{name}}은(는) 어떤 생각을 하고 있나요?",
     "whatThinking_plural": "{{name}}은(는) 어떤 생각을 하고 있나요?",
     "selectACharacter": "캐릭터를 선택하세요",
-    "writeCommentAs": "{{characterNames}}로 댓글 작성"
+    "writeCommentAs": "{{characterNames}}로 댓글 작성",
+    "journalempty": "저널 내용을 작성하세요.",
+    "writeReply": "내용을 작성하세요.",
+    "nameRequired": "이름을 작성하세요.",
+    "attributeExist": "같은 속성이 있습니다."
 }
