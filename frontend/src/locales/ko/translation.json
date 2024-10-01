@@ -2,7 +2,7 @@
     "login": "로그인",
     "logout": "로그아웃",
     "wronglogin": "user name 또는 password가 틀렸습니다.",
-    "edit": "수정",
+    "edit": "편집",
     "save": "저장",
     "delete": "삭제",
     "cancel": "취소",
@@ -83,4 +83,5 @@
     "writeReply": "내용을 작성하세요.",
     "nameRequired": "이름을 작성하세요.",
     "attributeExist": "같은 속성이 있습니다."
+
 }

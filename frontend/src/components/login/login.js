@@ -45,7 +45,7 @@ const Login = (props) => {
     setUserNameError('')
     setPasswordError('')
     if ('' === userName) {
-      setUserNameError('Please enter your userName')
+      setUserNameError('Please enter your user name')
       return
     }
     if ('' === password) {
@@ -64,7 +64,7 @@ const Login = (props) => {
       <div className={'inputContainer'}>
         <input
           value={userName}
-          placeholder="Enter your userName here"
+          placeholder="Enter your user name here"
           onChange={(ev) => setUserName(ev.target.value)}
           className={'inputBox'}
         />

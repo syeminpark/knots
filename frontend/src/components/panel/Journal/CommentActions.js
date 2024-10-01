@@ -1,6 +1,10 @@
+import React, { useState } from 'react';
+import DeleteConfirmationModal from '../../DeleteConfirmationModal';
+import { useTranslation } from 'react-i18next';
 
 const CommentActions = (props) => {
 
+    const { t } = useTranslation();
     const { isManualReplying, setIsManualReplying, onReplySend, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal", previousCharacter
     } = props
 
@@ -13,6 +17,18 @@ const CommentActions = (props) => {
             setIsManualReplying(true); // Enter manual reply mode
         }
     };
+
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+    const onDeleteClick = () => {
+        setShowDeleteConfirmation(true);
+    };
+
+    const confirmDelete = () => {
+        setShowDeleteConfirmation(false);
+        onDelete();
+    };
+    
 
 
     return (
@@ -28,7 +44,8 @@ const CommentActions = (props) => {
                                         Manual Reply
                                     </span>
                                     <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span>
-                                    <span style={styles.commentAction} onClick={onDelete}>Delete</span>
+                                    <span style={styles.commentAction} onClick={onDeleteClick}>Delete</span>
+                                    {/* <span style={styles.commentAction} onClick={onDelete}>Delete</span> */}
                                 </div>
                             </>
                         ) : (
@@ -52,6 +69,23 @@ const CommentActions = (props) => {
                     </span>
                 </div>
             )}
+
+        {showDeleteConfirmation && (
+            <DeleteConfirmationModal
+            title={t('confirmDeletion')}
+                setShowModal={setShowDeleteConfirmation}
+            >
+                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                <div style={styles.modalButtonContainer}>
+                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                        {t('cancel')}
+                    </button>
+                    <button onClick={confirmDelete} style={styles.deleteButton}>
+                        {t('delete')}
+                    </button>
+                </div>
+            </DeleteConfirmationModal>
+        )}
         </>
     );
 }
@@ -74,5 +108,26 @@ const styles = {
         fontSize: 'var(--font-xs)',
         color: '#9b9b9b',
         fontWeight: 'var(--font-semibold)',
+    },
+    modalButtonContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10px',
+        marginTop: '20px',
+    },
+    cancelButton: {
+        padding: '8px 16px',
+        backgroundColor: '#ccc',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+    },
+    deleteButton: {
+        padding: '8px 16px',
+        backgroundColor: '#f44336',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
     },
 }
