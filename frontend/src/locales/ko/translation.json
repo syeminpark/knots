@@ -56,5 +56,17 @@
     "commentsWithCharacter": "{{count}}명의 캐릭터와의 댓글",
     "commentsWithCharacter_plural": "{{count}}명의 캐릭터와의 댓글",
     "journalOf": "{{name}}의 저널",
-    "totalComments": "전체 댓글: {{count}}"
+    "totalComments": "전체 댓글: {{count}}",
+    "connection_singular": "{{count}}개의 커넥션",
+    "connection_plural": "{{count}}개의 커넥션",
+    "journalCount_singular": "{{count}}개의 저널",
+    "journalCount_plural": "{{count}}개의 저널",
+
+    "timeAgo": {
+        "day": "{{count}}일",
+        "days": "{{count}}일",
+        "hour": "{{count}}시간",
+        "minute": "{{count}}분",
+        "now": "지금"
+    }
 }

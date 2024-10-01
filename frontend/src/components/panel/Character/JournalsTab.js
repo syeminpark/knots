@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { getJournalsByCharacterUUID } from '../Journal/journalBookReducer';
 import JournalCard from '../Journal/JournalCard';
 import openNewPanel from '../../openNewPanel';
+import { useTranslation } from 'react-i18next';
 
 const JournalsTab = (props) => {
+    const { t } = useTranslation();
     const { panels, setPanels, caller, createdJournalBooks } = props;
     const [journalData, setJournalData] = useState([]); // Update to handle an array of journals
 
@@ -23,11 +25,12 @@ const JournalsTab = (props) => {
 
     return (
         <>
-            {journalData.length < 2 ? (
-                <div>{`${journalData.length} Journal`}</div>
-            ) : (
-                <div>{`${journalData.length} Journals`}</div>
-            )}
+            {t(
+                    journalData.length === 1
+                        ? 'journalCount_singular'
+                        : 'journalCount_plural',
+                    { count: journalData.length }
+                )}
 
             <br></br>
             <div style={styles.journalsTabWrapper}>

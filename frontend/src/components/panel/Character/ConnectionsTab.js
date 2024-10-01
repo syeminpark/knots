@@ -46,9 +46,12 @@ const ConnectionsTab = (props) => {
     return (
         <div style={styles.connectionsTabWrapper}>
             <div>
-                {connectedCharacters.length === 1
-                    ? `${connectedCharacters.length} Connection`
-                    : `${connectedCharacters.length} Connections`}
+                {t(
+                    connectedCharacters.length === 1
+                        ? 'connection_singular'
+                        : 'connection_plural',
+                    { count: connectedCharacters.length }
+                )}
             </div>
             <br />
             {connectedCharacters.map((child) => (

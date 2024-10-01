@@ -55,5 +55,16 @@
     "commentsWithCharacter": "Comments with {{count}} character",
     "commentsWithCharacter_plural": "Comments with {{count}} characters",
     "journalOf": "{{name}}'s Journal",
-    "totalComments": "Total: {{count}}"
+    "totalComments": "Total: {{count}}",
+    "connection_singular": "{{count}} Connection",
+    "connection_plural": "{{count}} Connections",
+    "journalCount_singular": "{{count}} Journal",
+    "journalCount_plural": "{{count}} Journals",
+    "timeAgo": {
+        "day": "{{count}} day",
+        "days": "{{count}} days",
+        "hour": "{{count}}h",
+        "minute": "{{count}}m",
+        "now": "now"
+    }
 }

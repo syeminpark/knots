@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TimeAgo = ({ createdAt }) => {
+    const { t } = useTranslation();
     const [timeAgo, setTimeAgo] = useState('');
 
     useEffect(() => {
@@ -14,13 +16,14 @@ const TimeAgo = ({ createdAt }) => {
             const days = Math.floor(hours / 24);
 
             if (days > 0) {
-                setTimeAgo(`${days} day${days > 1 ? 's' : ''}`);
+                const key = days === 1 ? 'timeAgo.day' : 'timeAgo.days';
+                setTimeAgo(t(key, { count: days }));
             } else if (hours > 0) {
-                setTimeAgo(`${hours}h`);
+                setTimeAgo(t('timeAgo.hour', { count: hours }));
             } else if (minutes > 0) {
-                setTimeAgo(`${minutes}m`);
+                setTimeAgo(t('timeAgo.minute', { count: minutes }));
             } else {
-                setTimeAgo(`now`);
+                setTimeAgo(t('timeAgo.now'));
             }
         };
 
