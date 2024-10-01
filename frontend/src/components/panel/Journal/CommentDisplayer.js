@@ -68,7 +68,7 @@ const CommentDisplayer = (props) => {
                 content = replyContent.trim()
             }
             else {
-                setLoading()
+                setLoading(true)
                 console.log('uuid', commentThreadUUID)
                 const response = await apiRequest('/createLLMComments', 'POST', {
                     journalEntryUUID: journalEntry.uuid,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddConnectionModal from '../AddConnectionModal';
 import DiscoverCharacterModal from '../DiscoverCharacterModal';
 import Attribute from '../Attribute';
@@ -15,12 +15,16 @@ const ConnectionsTab = (props) => {
         createdCharacters,
         caller,
         currentCharacter,
-
     } = props;
+
     const [showModal, setShowModal] = useState(false);
     const [showDiscoverModal, setShowDiscoverModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [selectedConnectionToDelete, setSelectedConnectionToDelete] = useState(null);
+
+    useEffect(() => {
+        console.log(currentCharacter)
+    }, [currentCharacter])
 
     let currentCharacterName = "this character";
     if (caller) {
@@ -51,6 +55,16 @@ const ConnectionsTab = (props) => {
 
     const handleDiscover = (data) => {
         console.log("Discovered new character:", data);
+    };
+
+    const handleOpenAddModal = () => {
+        setShowDiscoverModal(false); // Close the discover modal if it's open
+        setShowModal(true);
+    };
+
+    const handleOpenDiscoverModal = () => {
+        setShowModal(false); // Close the add connection modal if it's open
+        setShowDiscoverModal(true);
     };
 
     return (
@@ -87,13 +101,12 @@ const ConnectionsTab = (props) => {
                     isConnectionsTab={true}
                 />
             ))}
-
-            <button className="create-new-btn" onClick={() => setShowModal(true)}>
+            <button className="create-new-btn" onClick={handleOpenAddModal}>
                 {t('addconnections')}
             </button>
             <button
                 className="discover-btn"
-                onClick={() => setShowDiscoverModal(true)}
+                onClick={handleOpenDiscoverModal}
             >
                 {t('discoverCharacter')}
             </button>

@@ -1,20 +1,20 @@
-//BrowserRouter wraps the entire application to enable routing. 
-
-//Routes defines all possible routes in the application.
-//Route define specific routes
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import Home from './components/home'
-import Login from './components/login/login'
-import Admin from './components/login/admin'
-import './App.css'
-import { useEffect, useState } from 'react'
-import apiRequest from './utility/apiRequest'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import Home from './components/home';
+import Login from './components/login/login';
+import Admin from './components/login/admin';
+import SidebarLeft from './components/SideBarLeft'; // Import SidebarLeft
+import './App.css';
+import { useEffect, useState } from 'react';
+import apiRequest from './utility/apiRequest';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [userName, setUserName] = useState('')
-  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
-  const [initialData, setInitialData] = useState({ characters: [], journalBooks: [] })
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [initialData, setInitialData] = useState({ characters: [], journalBooks: [] });
+  const [panels, setPanels] = useState([]); // Move panels state to App.js
+
+  // ... your existing initializeData and useEffect functions
 
   const initializeData = async () => {
     try {
@@ -53,7 +53,7 @@ function App() {
       }
       try {
         const result = await apiRequest('/verifyAdmin', 'POST',)
-        setIsAdmin(result.isAdmin)
+        // setIsAdmin(result.isAdmin)
       }
       catch (error) {
         console.log(error)
@@ -63,29 +63,32 @@ function App() {
     verifyToken();
   }, [loggedIn]);
 
-
-
   return (
     <div className="App">
+      {/* <SidebarLeft panels={panels} setPanels={setPanels} loggedIn={loggedIn} /> */}
       <BrowserRouter>
         <Routes>
           <Route
             path="/login"
             element={
               loggedIn ? (
-                <Navigate to="/" replace /> // Redirect to /home if logged in
+                <Navigate to="/" replace />
               ) : (
-                <Login setLoggedIn={setLoggedIn} setUserName={setUserName} setIsAdmin={setIsAdmin} />
+                <Login
+                  setLoggedIn={setLoggedIn}
+                  setUserName={setUserName}
+                  setIsAdmin={setIsAdmin}
+                />
               )
             }
           />
           <Route
             path="/admin"
             element={
-              loggedIn && isAdmin ? ( // Check if the user is logged in and is an admin
+              loggedIn && isAdmin ? (
                 <Admin />
               ) : (
-                <Navigate to="/login" replace /> // Redirect to login if not admin or not logged in
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -93,9 +96,16 @@ function App() {
             path="/"
             element={
               loggedIn ? (
-                <Home userName={userName} loggedIn={loggedIn} setLoggedIn={setLoggedIn} initialData={initialData} />
+                <Home
+                  userName={userName}
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  initialData={initialData}
+                  panels={panels}
+                  setPanels={setPanels}
+                />
               ) : (
-                <Navigate to="/login" replace /> // Redirect to login if not logged in
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -104,5 +114,5 @@ function App() {
     </div>
   );
 }
-export default App
 
+export default App;

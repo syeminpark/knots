@@ -23,7 +23,7 @@ const AboutTab = (props) => {
         setShowDeleteConfirmation(false);
         setSelectedAttributeToDelete(null);
     };
-    
+
 
     const onChange = (title, value) => {
         setPersonaAttributes(personaAttributes.map(attribute =>
@@ -56,21 +56,21 @@ const AboutTab = (props) => {
                 />
             )}
             {showDeleteConfirmation && (
-            <DeleteConfirmationModal
-                title={t('confirmDeletion')}
-                setShowModal={setShowDeleteConfirmation}
-            >
-                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
-                <div style={styles.modalButtonContainer}>
-                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-                        {t('cancel')}
-                    </button>
-                    <button onClick={confirmDeleteAttribute} style={styles.deleteButton}>
-                        {t('delete')}
-                    </button>
-                </div>
-            </DeleteConfirmationModal>
-        )}
+                <DeleteConfirmationModal
+                    title={t('confirmDeletion')}
+                    setShowModal={setShowDeleteConfirmation}
+                >
+                    <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                    <div style={styles.modalButtonContainer}>
+                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                            {t('cancel')}
+                        </button>
+                        <button onClick={confirmDeleteAttribute} style={styles.deleteButton}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </DeleteConfirmationModal>
+            )}
         </div>
     );
 };

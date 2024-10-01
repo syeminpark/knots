@@ -43,7 +43,7 @@ const Attribute = (props) => {
 
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
-            if (!isConnectionsTab) {
+            if (!isConnectionsTab && editedContent != '') {
                 onChange({ target: { value: editedContent } });
             }
             else {
