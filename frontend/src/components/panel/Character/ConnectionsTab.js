@@ -15,7 +15,7 @@ const ConnectionsTab = (props) => {
         createdCharacters,
         caller,
         currentCharacter,
-        personaAttributes
+
     } = props;
     const [showModal, setShowModal] = useState(false);
     const [showDiscoverModal, setShowDiscoverModal] = useState(false);
@@ -87,6 +87,7 @@ const ConnectionsTab = (props) => {
                     isConnectionsTab={true}
                 />
             ))}
+
             <button className="create-new-btn" onClick={() => setShowModal(true)}>
                 {t('addconnections')}
             </button>

@@ -639,6 +639,7 @@ body {
   font-size: var(--font-medium);
   margin-top: 6px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 /* save */

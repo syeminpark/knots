@@ -81,7 +81,7 @@ const styles = {
         borderRadius: '6px',
         padding: '10px',
     },
-    
+
 };
 
 export default DiscoverCharacterModal;

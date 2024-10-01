@@ -205,10 +205,10 @@ const Attribute = (props) => {
                             {t('knowledge')}
                         </div>
                         <div style={styles.knowledgeExplanation}>
-                        {t('knowsAbout', {
-                            currentCharacterName: currentCharacter.name,
-                            connectedCharacterName: connectedCharacter.name,
-                        })}
+                            {t('knowsAbout', {
+                                currentCharacterName: currentCharacter.name,
+                                connectedCharacterName: connectedCharacter.name,
+                            })}
                         </div>
                         <div style={styles.chipsContainer}>
 

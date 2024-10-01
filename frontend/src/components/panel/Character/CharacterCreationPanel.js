@@ -112,7 +112,8 @@ const CharacterCreationPanel = (props) => {
                     setPreview={setPreview}
                 />
                 {/* Tabs */}
-                <TabNavigation tabs={[t('about'), t('connections')]} activeTab={activeTab} setActiveTab={setActiveTab} />
+                {/* <TabNavigation tabs={[t('about'), t('connections')]} activeTab={activeTab} setActiveTab={setActiveTab} /> */}
+                <TabNavigation tabs={[t('about')]} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
 
             {/* Conditionally render the appropriate panel based on activeTab */}

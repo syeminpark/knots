@@ -25,8 +25,8 @@
     "describeDetails": "내용을 작성하세요.",
     "adddescription": "설명 추가",
     "addattributes": "+ 속성 추가",
-    "addconnections": "+ 커넥션 추가",
-    "discoverCharacter": "캐릭터 발견하기",
+    "addconnections": "+ 만든 캐릭터와 연결하기",
+    "discoverCharacter": "+ 주변 캐릭터 발견하기",
     "relationships": "새 캐릭터와의 관계",
     "relationshipsAttribute": "캐릭터와의 관계",
     "knowledge": "지식",
@@ -67,7 +67,6 @@
     "connectionPlaceholder": "{{currentCharacterName}}은(는) {{childName}}에 대해 어떻게 느끼고, 생각하고, 행동하며, 그 이유는 무엇인가요? {{currentCharacterName}}의 관점에서 그들 사이에 어떤 일이 있었나요?",
     "journalCount_singular": "{{count}}개의 저널",
     "journalCount_plural": "{{count}}개의 저널",
-
     "timeAgo": {
         "day": "{{count}}일",
         "days": "{{count}}일",
@@ -83,5 +82,4 @@
     "writeReply": "내용을 작성하세요.",
     "nameRequired": "이름을 작성하세요.",
     "attributeExist": "같은 속성이 있습니다."
-
 }
