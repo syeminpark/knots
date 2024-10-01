@@ -1,4 +1,7 @@
 {
+    "login": "로그인",
+    "logout": "로그아웃",
+
     "edit": "수정",
     "save": "저장",
     "delete": "삭제",
@@ -8,6 +11,7 @@
     "characters": "캐릭터 목록",
     "next": "다음",
     "post": "올리기",
+    "find": "찾기",
 
     "createcharacter": "캐릭터 만들기",
     "profile": "프로필",
@@ -22,6 +26,8 @@
     "adddescription": "설명 추가",
     "addattributes": "+ 속성 추가",
     "addconnections": "+ 커넥션 추가",
+    "discoverCharacter": "캐릭터 발견하기",
+    "relationships": "새 캐릭터와의 관계",
 
     "addnewAttribute": "속성 추가",
     "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
@@ -51,5 +57,11 @@
     "pleaseWriteContent": "내용을 작성하세요.",
 
     "confirmDeletion": "삭제",
-    "areYouSureDelete": "삭제할까요?"
+    "areYouSureDelete": "삭제할까요?",
+
+    "commentsWithCharacter": "{{count}}명의 캐릭터와의 댓글",
+    "commentsWithCharacter_plural": "{{count}}명의 캐릭터와의 댓글",
+
+    "journalOf": "{{name}}의 저널",
+    "totalComments": "전체 댓글: {{count}}"
 }

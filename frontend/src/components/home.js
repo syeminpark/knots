@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'; // i18n 가져오기
 import '../i18n.js'; // i18n 설정 파일 가져오기
 
 const Home = (props) => {
+  const { t } = useTranslation();
   const { loggedIn, userName, initialData } = props;
   const { i18n } = useTranslation(); // useTranslation 추가
   const [panels, setPanels] = useState([]);
@@ -135,7 +136,7 @@ const Home = (props) => {
           className="inputButton"
           type="button"
           onClick={onButtonClick}
-          value={loggedIn ? 'Log out' : 'Log in'}
+          value={loggedIn ? "Log out" : "Log in" } // t('logout') : t('login')
         />
       </div>
 

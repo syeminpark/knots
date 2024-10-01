@@ -78,7 +78,7 @@ const ConnectionsTab = (props) => {
                 className="discover-btn"
                 onClick={() => setShowDiscoverModal(true)}
             >
-                Discover Character
+                {t('discoverCharacter')}
             </button>
 
             {showModal && (

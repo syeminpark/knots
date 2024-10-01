@@ -3,8 +3,10 @@ import { getInteractedCharactersWithPosts, getCommentsBetweenCharacters, getComm
 import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import ToggleButton from "../../ToggleButton";
+import { useTranslation } from 'react-i18next';
 
 const CommentsTab = (props) => {
+    const { t } = useTranslation();
 
     const { panels, setPanels, caller, createdJournalBooks, createdCharacters } = props;
     const [stage, setStage] = useState(0);
@@ -64,9 +66,9 @@ const CommentsTab = (props) => {
         stage === 0 ? (
             <>
                 {interactedCharacterList.length < 2 ? (
-                    <div>{`Comments with ${interactedCharacterList.length} character `}</div>
+                    <div>{t('commentsWithCharacter', { count: interactedCharacterList.length })}</div>
                 ) : (
-                    <div>{`Comments with ${interactedCharacterList.length} characters `}</div>
+                    <div>{t('commentsWithCharacter_plural', { count: interactedCharacterList.length })}</div>
                 )}
 
                 <div style={styles.profileContainer}>
@@ -92,7 +94,7 @@ const CommentsTab = (props) => {
                                         {/* {` ${commentCount.receivedComments.length} `} ⇅   {` ${commentCount.sentComments.length} `} */}
                                         {/* {` ${commentCount.receivedComments.length} `}  ⬇    {` ${commentCount.sentComments.length} `} */}
 
-                                        {` Total: ${commentCount.receivedComments.length + commentCount.sentComments.length} `} ⇵
+                                        {t('totalComments', { count: commentCount.receivedComments.length + commentCount.sentComments.length })} ⇵
                                     </div>
                                     <ToggleButton
                                         onClick={() => onClickCharacter(interactedCharacter)}
@@ -149,7 +151,7 @@ const CommentsTab = (props) => {
                         .map((journalEntryItem, journalEntryIndex) => (
                             <div key={journalEntryIndex} style={styles.journalEntry}>
                                 <div style={styles.journalHeader}>
-                                    {profileOwner.name}'s Journal
+                                    {t('journalOf', { name: profileOwner.name })}
                                 </div>
 
                                 {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (
