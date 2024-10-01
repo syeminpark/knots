@@ -26,6 +26,9 @@
     "addconnections": "+ Add Connections",
     "discoverCharacter": "Discover Character",
     "relationships": "Relationships",
+    "relationshipsAttribute": "Relationships",
+    "knowledge": "Knowledge",
+    "knowsAbout": "{{currentCharacterName}} knows about {{connectedCharacterName}}'s",
     "addnewAttribute": "Add New Attribute",
     "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
     "done": "Done",
@@ -67,5 +70,9 @@
         "hour": "{{count}}h",
         "minute": "{{count}}m",
         "now": "now"
-    }
+    },
+    "whatThinking_singular": "What is {{name}} thinking about?",
+    "whatThinking_plural": "What are {{name}} thinking about?",
+    "selectACharacter": "Select a character",
+    "writeCommentAs": "Write comment as {{characterNames}}"
 }

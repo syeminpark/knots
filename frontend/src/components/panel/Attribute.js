@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import TextArea from '../TextArea';
 import CharacterButton from '../CharacterButton';
 import openNewPanel from '../openNewPanel';
+import { useTranslation } from 'react-i18next';
 
 const Attribute = (props) => {
+    const { t } = useTranslation();
     const { panels,
         setPanels,
         title,
@@ -123,7 +125,7 @@ const Attribute = (props) => {
                                 <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
                             </button>
                         </div>
-                        <label style={styles.sectionHeaderLabel}>{'Relationship'}</label>
+                        <label style={styles.sectionHeaderLabel}>{t('relationshipsAttribute')}</label>
                     </div>
                 ) : (
                     <label style={styles.sectionHeaderLabel}>{title}</label>
@@ -200,11 +202,13 @@ const Attribute = (props) => {
                     <>
                         <br></br>
                         <div style={styles.sectionHeaderLabel}>
-                            Knowledge
+                            {t('knowledge')}
                         </div>
                         <div style={styles.knowledgeExplanation}>
-                            {currentCharacter.name} knows about {connectedCharacter.name}'s
-
+                        {t('knowsAbout', {
+                            currentCharacterName: currentCharacter.name,
+                            connectedCharacterName: connectedCharacter.name,
+                        })}
                         </div>
                         <div style={styles.chipsContainer}>
 

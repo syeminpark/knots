@@ -26,6 +26,9 @@
     "addconnections": "+ 커넥션 추가",
     "discoverCharacter": "캐릭터 발견하기",
     "relationships": "새 캐릭터와의 관계",
+    "relationshipsAttribute": "캐릭터와의 관계",
+    "knowledge": "지식",
+    "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
     "addnewAttribute": "속성 추가",
     "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
     "done": "완료",
@@ -69,5 +72,9 @@
         "hour": "{{count}}시간",
         "minute": "{{count}}분",
         "now": "지금"
-    }
+    },
+    "whatThinking_singular": "{{name}}은(는) 어떤 생각을 하고 있나요?",
+    "whatThinking_plural": "{{name}}은(는) 어떤 생각을 하고 있나요?",
+    "selectACharacter": "캐릭터를 선택하세요",
+    "writeCommentAs": "{{characterNames}}로 댓글 작성"
 }

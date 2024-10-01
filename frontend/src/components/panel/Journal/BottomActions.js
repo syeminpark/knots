@@ -24,9 +24,9 @@ const BottomActions = (props) => {
         console.log("Button clicked");
         console.log(commentValue, activeTab)
         if (selectedCharacters.length < 1) {
-            alert('Select A Character');
+            alert(t('selectACharacter'));
         } else if (!commentValue && activeTab === "Manual Post") {
-            alert('Write Something');
+            alert(t('pleaseWriteContent'));
         } else {
             setLoading(true)
             if (activeTab == "Manual Post") {
@@ -113,7 +113,7 @@ const BottomActions = (props) => {
             const characterNames = selectedCharacters
                 .map(character => `'${character.name}'`) // Add single quotes around each name
                 .join(', ');
-            setCommentPlaceholder(`Write comment as ${characterNames}`);
+            setCommentPlaceholder(t('writeCommentAs', { characterNames }));
         }
 
     }, [selectedCharacters]);

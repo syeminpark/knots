@@ -159,11 +159,12 @@ const CreateJournalModal = (props) => {
                                         />
                                         <TextArea
                                             attribute={journalBookText.content}
-                                            placeholder={
+                                            placeholder={t(
                                                 selectedCharacters.length === 1
-                                                    ? `What is ${contentPlaceholder} thinking about?`
-                                                    : `What are ${contentPlaceholder} thinking about?`
-                                            }
+                                                    ? 'whatThinking_singular'
+                                                    : 'whatThinking_plural',
+                                                { name: contentPlaceholder }
+                                            )}
                                             onChange={(event) => onChangeContent(event.target.value)}
                                             styles={styles}
                                         />
