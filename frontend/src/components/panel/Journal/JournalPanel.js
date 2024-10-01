@@ -5,12 +5,13 @@ import Feed from './Feed';
 import DetailedJournal from './DetailedJournal';
 import { getJournalBookInfoAndEntryByIds } from './journalBookReducer';
 import { useTranslation } from 'react-i18next';
+import Loading from '../../Loading'; // Import the Loading component
 
 const JournalPanel = (props) => {
     const { t } = useTranslation();
     const { id, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks, reference } = props;
     const [showModal, setShowModal] = useState(false);
-    const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null)
+    const [selectedBookAndJournalEntry, setSelectedBookAndJournalEntry] = useState(null);
     const [expandedGroup, setExpandedGroup] = useState({});
     const [trackingJournalEntry, setTrackingJournalEntry] = useState(null);
     const [trackingCommentThread, setTrackingCommentThread] = useState(null);
@@ -18,15 +19,14 @@ const JournalPanel = (props) => {
     useEffect(() => {
         if (reference) {
             setTrackingJournalEntry(reference.entryUUID);
-            setExpandedGroup({ [reference.bookUUID]: true })
-            setTrackingCommentThread(reference.commentThreadUUID)
+            setExpandedGroup({ [reference.bookUUID]: true });
+            setTrackingCommentThread(reference.commentThreadUUID);
 
-            if (reference.type == 'comment') {
+            if (reference.type === 'comment') {
                 setSelectedBookAndJournalEntry(getJournalBookInfoAndEntryByIds
-                    (createdJournalBooks, reference.bookUUID, reference.entryUUID))
+                    (createdJournalBooks, reference.bookUUID, reference.entryUUID));
             }
         }
-
     }, [reference]);
 
     return (
@@ -37,6 +37,7 @@ const JournalPanel = (props) => {
             title={t('journalPanel')}
             iconStyles="journal-icon"
         >
+            {/* CreateJournalModal component to show the modal when showModal is true */}
             {showModal && (
                 <CreateJournalModal
                     setShowModal={setShowModal}
@@ -44,17 +45,22 @@ const JournalPanel = (props) => {
                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     createdCharacters={createdCharacters}
                     dispatchCreatedCharacters={dispatchCreatedCharacters}
+
                 />
             )}
+
+
+            {/* Render content conditionally based on selectedBookAndJournalEntry */}
             {selectedBookAndJournalEntry === null ? (
                 <>
                     {/* Create New Journal Book Button */}
                     <div style={styles.stickyButtonContainer}>
                         <button className="create-new-btn" onClick={() => setShowModal(true)}>
-                        {t('createNewJournal')}
+                            {t('createNewJournal')}
                         </button>
                     </div>
 
+                    {/* Feed component */}
                     <Feed
                         createdJournalBooks={createdJournalBooks}
                         createdCharacters={createdCharacters}
@@ -65,10 +71,11 @@ const JournalPanel = (props) => {
                         setExpandedGroup={setExpandedGroup}
                         trackingJournalEntry={trackingJournalEntry}  // Pass the selected UUID
                         setTrackingJournalEntry={setTrackingJournalEntry}
-                    ></Feed>
+                    />
                 </>
             ) : (
                 <>
+                    {/* Detailed Journal View */}
                     <DetailedJournal
                         key={0}
                         panelID={id}
@@ -82,23 +89,22 @@ const JournalPanel = (props) => {
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                         trackingCommentThread={trackingCommentThread}
                         setTrackingCommentThread={setTrackingCommentThread}
-                    >
-                    </DetailedJournal>
+                    />
                 </>
-
-            )
-            }
-        </BasePanel >
+            )}
+        </BasePanel>
     );
 };
-
 
 const styles = {
     stickyButtonContainer: {
         position: 'sticky',
+        top: 0,
         zIndex: 10,
         backgroundColor: 'white',
-    }
+        padding: '10px',
+    },
+
 };
 
 export default JournalPanel;

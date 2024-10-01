@@ -34,6 +34,8 @@ const DetailedJournal = (props) => {
     const previousCommentLength = useRef(journalEntry.commentThreads.length);  // Track previous length of comment threads
     const previousThreadLength = useRef(0);
 
+    const [loading, setLoading] = useState(false);
+
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
         const NewJournalBookInfoandEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, bookInfo.uuid, journalEntry.uuid);
@@ -131,6 +133,7 @@ const DetailedJournal = (props) => {
                                             repliedTo={index < thread.comments.length - 1}
                                             isLastComment={isLastCommentOverall}
                                             isFirstInLastThread={isFirstInLastThread}
+                                            setLoading={setLoading}
                                         />
                                         {isLastCommentOverall && (
                                             <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
@@ -153,6 +156,7 @@ const DetailedJournal = (props) => {
                     createdCharacters={createdCharacters}
                     dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                     selectedBookAndJournalEntry={selectedBookAndJournalEntry}
+                    setLoading={setLoading}
                 />
             </div>
         </div>

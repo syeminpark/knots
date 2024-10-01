@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 const BottomActions = (props) => {
     const { t } = useTranslation();
-    const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry } = props
+    const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry, setLoading } = props
     const [commentValue, setCommentValue] = useState("");
     const [activeTab, setActiveTab] = useState('System Generate');
     const [isMultipleSelect, setIsMultipleSelect] = useState(true);
@@ -26,6 +26,7 @@ const BottomActions = (props) => {
         } else if (!commentValue && activeTab == "Manual Post") {
             alert('Write Something');
         } else {
+            setLoading(true)
             if (activeTab == "Manual Post") {
                 selectedCharacters.forEach(selectedCharacter =>
                     selectedCharacter.content = commentValue
@@ -85,7 +86,11 @@ const BottomActions = (props) => {
             } catch (error) {
                 console.error('Error creating comments:', error);
             }
-            setCommentValue(''); // Reset comment value after submitting
+            finally {
+                setCommentValue(''); // Reset comment value after submitting
+                setLoading(false)
+            }
+
         };
     };
 

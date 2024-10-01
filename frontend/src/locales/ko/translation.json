@@ -46,5 +46,6 @@
     "pleaseWriteContent": "내용을 작성하세요.",
     "confirmDeletion": "삭제",
     "areYouSureDelete": "삭제할까요?",
-    "closeAllPanels": "삭제하시면 모든 창이 닫힙니다"
+    "closeAllPanels": "삭제하시면 모든 창이 닫힙니다",
+    "loadingText": "작성 중..."
 }

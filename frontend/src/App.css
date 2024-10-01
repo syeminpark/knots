@@ -733,3 +733,44 @@ body {
   background-color: #464646;
   color: white;
 }
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Stack items vertically */
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 10000000;
+}
+
+.spinner {
+  border: 16px solid #000000;
+  border-top: 16px solid #9c9c9c;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: var(--font-bold);
+  color: #333;
+}

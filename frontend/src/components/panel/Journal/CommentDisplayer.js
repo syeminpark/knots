@@ -23,7 +23,8 @@ const CommentDisplayer = (props) => {
         firstInTheThread,
         previousCharacter,
         isLastComment,
-        isFirstInLastThread
+        isFirstInLastThread,
+        setLoading
     } = props;
 
 
@@ -58,6 +59,7 @@ const CommentDisplayer = (props) => {
         if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
             alert('Please write something before submitting your reply.');
         } else {
+            setLoading(true)
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
@@ -81,6 +83,9 @@ const CommentDisplayer = (props) => {
                 console.log(response);
             } catch (error) {
                 console.error('Error creating comment:', error);
+            }
+            finally {
+                setLoading(false)
             }
         }
     };
