@@ -4,8 +4,11 @@ import openNewPanel from "../../openNewPanel";
 import TextArea from "../../TextArea";
 import ToggleButton from "../../ToggleButton"; // Import the ToggleButton
 import apiRequest from '../../../utility/apiRequest';
+import { useTranslation } from 'react-i18next';
+import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const DetailedJournalPost = (props) => {
+    const { t } = useTranslation();
     const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props;
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
@@ -13,6 +16,7 @@ const DetailedJournalPost = (props) => {
     const [showDelete, setShowDelete] = useState(false);
     const journalTextRef = useRef(null); // Reference for the journal text container
     const textAreaRef = useRef(null); // Ref for the TextArea to focus when editing starts
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     // Constants to control functionality
     const isClickableToEdit = false // Set to true to allow clicking to edit
@@ -40,6 +44,10 @@ const DetailedJournalPost = (props) => {
 
     // Handle delete logic
     const onDeleteButtonClick = async () => {
+        setShowDeleteConfirmation(true);
+    };
+
+    const confirmDelete = async () => {
         setSelectedBookAndJournalEntry(null);
         try {
             const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');
@@ -48,6 +56,7 @@ const DetailedJournalPost = (props) => {
             console.log(error);
         }
     };
+    
 
     const onReturnClick = () => {
         setSelectedBookAndJournalEntry(null);
@@ -124,9 +133,26 @@ const DetailedJournalPost = (props) => {
                 {/* Conditionally show delete button */}
                 {showDelete && (
                     <button style={styles.deleteButton} onClick={onDeleteButtonClick}>
-                        Delete
+                        {t('delete')}
                     </button>
                 )}
+
+{showDeleteConfirmation && (
+            <DeleteConfirmationModal
+                title={t('confirmDeletion')}
+                setShowModal={setShowDeleteConfirmation}
+            >
+                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                <div style={styles.modalButtonContainer}>
+                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                        {t('cancel')}
+                    </button>
+                    <button onClick={confirmDelete} style={styles.deleteButton}>
+                        {t('delete')}
+                    </button>
+                </div>
+            </DeleteConfirmationModal>
+        )}
             </div>
 
             <div
@@ -218,6 +244,27 @@ const styles = {
         fontSize: 'var(--font-small)',
         borderRadius: '8px',
         border: '1px solid #ccc',
+    },
+    modalButtonContainer: {
+        display: 'flex',
+        justifyContent: 'center', 
+        gap: '10px',
+        marginTop: '20px',
+    },
+    cancelButton: {
+        padding: '8px 16px',
+        backgroundColor: '#ccc',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+    },
+    deleteButton: {
+        padding: '8px 16px',
+        backgroundColor: '#f44336',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
     },
 };
 

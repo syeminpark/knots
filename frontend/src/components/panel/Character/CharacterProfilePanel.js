@@ -8,6 +8,7 @@ import JournalsTab from './JournalsTab';
 import CommentsTab from './CommentsTab';
 import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
 import { useTranslation } from 'react-i18next';
+import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
@@ -21,6 +22,7 @@ const CharacterProfilePanel = (props) => {
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     useEffect(() => {
         setActiveTab(t('about'));
@@ -146,7 +148,11 @@ const CharacterProfilePanel = (props) => {
 
 
     const deleteFunction = async () => {
+        setShowDeleteConfirmation(true);
+    };
 
+    const confirmDelete = async () => {
+        
         setPanels([]);
         // dispatchCreatedJournalBooks({
         //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
@@ -174,6 +180,7 @@ const CharacterProfilePanel = (props) => {
             console.log('Error deleting character:', error);
         }
     };
+    
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
@@ -245,6 +252,23 @@ const CharacterProfilePanel = (props) => {
                     Save
                 </button>
             </div> */}
+        {showDeleteConfirmation && (
+            <DeleteConfirmationModal
+                title={t('confirmDeletion')}
+                setShowModal={setShowDeleteConfirmation}
+            >
+                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                <div style={styles.modalButtonContainer}>
+                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                        {t('cancel')}
+                    </button>
+                    <button onClick={confirmDelete} style={styles.deleteButton}>
+                        {t('delete')}
+                    </button>
+                </div>
+            </DeleteConfirmationModal>
+        )}
+
         </BasePanel>
     );
 };
@@ -256,6 +280,28 @@ const styles = {
         zIndex: 10,
         backgroundColor: 'white',
         paddingBottom: '10px',
+    },
+
+    modalButtonContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10px',
+        marginTop: '20px',
+    },
+    cancelButton: {
+        padding: '8px 16px',
+        backgroundColor: '#ccc',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+    },
+    deleteButton: {
+        padding: '8px 16px',
+        backgroundColor: '#f44336',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
     },
 };
 

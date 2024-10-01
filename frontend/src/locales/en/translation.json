@@ -2,6 +2,7 @@
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
+    "cancel": "Cancel",
     "create": "Create",
     "generate": "Generate",
     "characters": "Characters",
@@ -41,11 +42,15 @@
     "selectCharacter": "Select Character",
     "seeComments": "See Comments",
     "newCommentThread": "+ Create New Comment Thread",
+    "comments": "Comments",
 
     "pleaseSelectMode": "Please select a mode",
     "createCharacterFirst": "Create a character first",
     "pleaseSelectCharacter": "Please select a character",
     "pleaseWriteTitle": "Please write a title",
-    "pleaseWriteContent": "Please write something"
+    "pleaseWriteContent": "Please write something",
+
+    "confirmDeletion": "Delete",
+    "areYouSureDelete": "Are you sure you want to delete?"
 
 }

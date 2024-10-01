@@ -5,8 +5,10 @@ import BottomActions from "./BottomActions";
 import DetailedJournalPost from "./DetailedJournalPost";
 import EntryTag from "../../EntryTag";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
+import { useTranslation } from 'react-i18next';
 
 const DetailedJournal = (props) => {
+    const { t } = useTranslation();
     const {
         panels,
         setPanels,
@@ -90,7 +92,7 @@ const DetailedJournal = (props) => {
                     />
 
                     <div style={styles.commentIcon}>
-                        <p> 💬 Comments</p>
+                        <p> 💬 {t('comments')}</p>
                     </div>
                 </div>
 
