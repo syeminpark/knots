@@ -3,6 +3,7 @@ import AddConnectionModal from '../AddConnectionModal';
 import DiscoverCharacterModal from '../DiscoverCharacterModal';
 import Attribute from '../Attribute';
 import { useTranslation } from 'react-i18next';
+import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const ConnectionsTab = (props) => {
     const { t } = useTranslation();
@@ -18,6 +19,8 @@ const ConnectionsTab = (props) => {
     } = props;
     const [showModal, setShowModal] = useState(false);
     const [showDiscoverModal, setShowDiscoverModal] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [selectedConnectionToDelete, setSelectedConnectionToDelete] = useState(null);
 
     let currentCharacterName = "this character";
     if (caller) {
@@ -25,10 +28,17 @@ const ConnectionsTab = (props) => {
     }
 
     const deleteConnection = (name) => {
+        setSelectedConnectionToDelete(name);
+        setShowDeleteConfirmation(true);
+    };
+
+    const confirmDeleteConnection = () => {
         const newConnections = connectedCharacters.filter(
-            (character) => character.name !== name
+            (character) => character.name !== selectedConnectionToDelete
         );
         setConnectedCharacters(newConnections);
+        setShowDeleteConfirmation(false);
+        setSelectedConnectionToDelete(null);
     };
 
     const onChange = (title, field, value) => {
@@ -60,7 +70,10 @@ const ConnectionsTab = (props) => {
                     setPanels={setPanels}
                     key={child.name}
                     title={child.name}
-                    placeholder={`How does ${currentCharacterName} feel, think, behave towards ${child.name} and why? What has happened between them from ${currentCharacterName}'s perspective? `}
+                    placeholder={t('connectionPlaceholder', {
+                        currentCharacterName,
+                        childName: child.name,
+                    })}
                     deleteFunction={deleteConnection}
                     list={connectedCharacters}
                     setter={setConnectedCharacters}
@@ -101,6 +114,23 @@ const ConnectionsTab = (props) => {
                     currentCharacter={currentCharacter}
                 />
             )}
+
+            {showDeleteConfirmation && (
+                <DeleteConfirmationModal
+                    title={t('confirmDeletion')}
+                    setShowModal={setShowDeleteConfirmation}
+                >
+                    <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                    <div style={styles.modalButtonContainer}>
+                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                            {t('cancel')}
+                        </button>
+                        <button onClick={confirmDeleteConnection} style={styles.deleteButton}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </DeleteConfirmationModal>
+            )}
         </div>
     );
 };
@@ -109,6 +139,27 @@ const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 400px)',
+    },
+    modalButtonContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10px',
+        marginTop: '20px',
+    },
+    cancelButton: {
+        padding: '8px 16px',
+        backgroundColor: '#ccc',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+    },
+    deleteButton: {
+        padding: '8px 16px',
+        backgroundColor: '#f44336',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
     },
 };
 

@@ -58,6 +58,7 @@
     "totalComments": "Total: {{count}}",
     "connection_singular": "{{count}} Connection",
     "connection_plural": "{{count}} Connections",
+    "connectionPlaceholder": "How does {{currentCharacterName}} feel, think, behave towards {{childName}} and why? What has happened between them from {{currentCharacterName}}'s perspective?",
     "journalCount_singular": "{{count}} Journal",
     "journalCount_plural": "{{count}} Journals",
     "timeAgo": {

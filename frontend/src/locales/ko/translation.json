@@ -59,6 +59,7 @@
     "totalComments": "전체 댓글: {{count}}",
     "connection_singular": "{{count}}개의 커넥션",
     "connection_plural": "{{count}}개의 커넥션",
+    "connectionPlaceholder": "{{currentCharacterName}}은(는) {{childName}}에 대해 어떻게 느끼고, 생각하고, 행동하며, 그 이유는 무엇인가요? {{currentCharacterName}}의 관점에서 그들 사이에 어떤 일이 있었나요?",
     "journalCount_singular": "{{count}}개의 저널",
     "journalCount_plural": "{{count}}개의 저널",
 
