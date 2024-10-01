@@ -61,18 +61,29 @@ const CommentDisplayer = (props) => {
             alert('Please write something before submitting your reply.');
         } else {
 
+            let content
             if (selectedReplyMode === "Manual Post") {
-
+                content = replyContent.trim()
             }
             else {
-                setLoading(true)
+                setLoading()
+                console.log('uuid', commentThreadUUID)
+                const response = await apiRequest('/createLLMComments', 'POST', {
+                    journalEntryUUID: journalEntry.uuid,
+                    characterUUIDs: [character.uuid],
+                    commentThreadUUID: commentThreadUUID
+
+                });
+                console.log(response)
+                content = response.comments[0].generation
+
             }
 
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
                 ownerUUID: character.uuid,
-                content: replyContent.trim(),
+                content: content,
                 selectedMode: selectedReplyMode,
                 commentThreadUUID: commentThreadUUID,
                 commentUUID: uuidv4(),
