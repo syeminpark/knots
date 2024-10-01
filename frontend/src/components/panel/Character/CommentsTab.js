@@ -18,8 +18,8 @@ const CommentsTab = (props) => {
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
 
-    console.log(createdJournalBooks)
 
+    console.log('hey')
 
     const commentsLimitShow = 100;
     const threadsLimitShow = 100;
@@ -29,6 +29,7 @@ const CommentsTab = (props) => {
         setStage(1);
         const commentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, clickedOnCharacter.uuid);
         setCommentExchangeHistory(commentHistory);
+        console.log(commentHistory, 'please')
     };
 
     const onBack = () => {
@@ -57,6 +58,7 @@ const CommentsTab = (props) => {
         if (selectedCharacter) {
             const updatedCommentHistory = getCommentsBetweenCharacters(createdJournalBooks, caller.uuid, selectedCharacter.uuid);
             setCommentExchangeHistory(updatedCommentHistory);
+
         }
     }, [createdJournalBooks]);
 
@@ -149,7 +151,7 @@ const CommentsTab = (props) => {
                         .map((journalEntryItem, journalEntryIndex) => (
                             <div key={journalEntryIndex} style={styles.journalEntry}>
                                 <div style={styles.journalHeader}>
-                                    {profileOwner.name}'s Journal
+                                    {createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name}'s Journal
                                 </div>
 
                                 {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (

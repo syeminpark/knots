@@ -152,7 +152,7 @@ const CharacterProfilePanel = (props) => {
     };
 
     const confirmDelete = async () => {
-        
+
         setPanels([]);
         // dispatchCreatedJournalBooks({
         //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
@@ -180,7 +180,7 @@ const CharacterProfilePanel = (props) => {
             console.log('Error deleting character:', error);
         }
     };
-    
+
 
     const toggleDeleteButton = () => {
         setShowDelete(prev => !prev);
@@ -252,22 +252,27 @@ const CharacterProfilePanel = (props) => {
                     Save
                 </button>
             </div> */}
-        {showDeleteConfirmation && (
-            <DeleteConfirmationModal
-                title={t('confirmDeletion')}
-                setShowModal={setShowDeleteConfirmation}
-            >
-                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
-                <div style={styles.modalButtonContainer}>
-                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-                        {t('cancel')}
-                    </button>
-                    <button onClick={confirmDelete} style={styles.deleteButton}>
-                        {t('delete')}
-                    </button>
-                </div>
-            </DeleteConfirmationModal>
-        )}
+            {showDeleteConfirmation && (
+                <DeleteConfirmationModal
+                    title={t('confirmDeletion')}
+                    setShowModal={setShowDeleteConfirmation}
+                >
+                    <p style={{ marginBottom: '20px' }}>
+                        {t('areYouSureDelete')}
+                        <br></br>
+                        {t('closeAllPanels')}
+                    </p>
+
+                    <div style={styles.modalButtonContainer}>
+                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                            {t('cancel')}
+                        </button>
+                        <button onClick={confirmDelete} style={styles.deleteButton}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </DeleteConfirmationModal>
+            )}
 
         </BasePanel>
     );
