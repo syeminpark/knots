@@ -140,7 +140,7 @@ const Home = (props) => {
         />
       </div>
 
-      <div className="language-switcher-container">
+      {/* <div className="language-switcher-container">
         <div className="language-switcher">
           <button
             className={i18n.resolvedLanguage === 'en' ? 'selected' : ''}
@@ -155,7 +155,7 @@ const Home = (props) => {
             KR
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
 
   );

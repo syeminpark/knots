@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import SelectBox from '../SelectBox';
+import { useTranslation } from 'react-i18next';
 
 const AddConnectionModal = (props) => {
+    const { t } = useTranslation();
     const { setShowModal, connectedCharacters, setConnectedCharacters, createdCharacters, caller } = props;
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     console.log('caller', caller, createdCharacters)
@@ -21,7 +23,7 @@ const AddConnectionModal = (props) => {
     return (
 
         <ModalOverlay
-            title="Add New Connection"
+            title={t("addnewconnection")}
             setShowModal={setShowModal}
             footerButtonLabel="Add"
             onFooterButtonClick={handleAddConnection}
