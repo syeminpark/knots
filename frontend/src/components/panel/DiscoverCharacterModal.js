@@ -2,8 +2,10 @@ import { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import TextArea from '../TextArea';
 import CharacterButton from '../CharacterButton'; // Import CharacterButton
+import { useTranslation } from 'react-i18next';
 
 const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) => {
+    const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
     const [results, setResults] = useState(null);
 
@@ -20,14 +22,14 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) 
 
     return (
         <ModalOverlay
-            title="Discover Character"
+            title={t('discoverCharacter')}
             setShowModal={setShowModal}
-            footerButtonLabel="Find"
+            footerButtonLabel={t('find')}
             onFooterButtonClick={handleDiscover}
         >
             <TextArea
                 attribute={{ description: textDescription }}
-                placeholder="Relationships"
+                placeholder={t('relationships')}
                 onChange={(e) => setTextDescription(e.target.value)}
                 styles={styles}
             />

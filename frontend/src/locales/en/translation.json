@@ -1,4 +1,6 @@
 {
+    "login": "Log in",
+    "logout": "Log out",
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
@@ -8,6 +10,7 @@
     "characters": "Characters",
     "next": "Next",
     "post": "Post",
+    "find": "Find",
     "createcharacter": "Create Character",
     "profile": "Profile",
     "about": "About",
@@ -21,6 +24,8 @@
     "adddescription": "Add description",
     "addattributes": "+ Add Attributes",
     "addconnections": "+ Add Connections",
+    "discoverCharacter": "Discover Character",
+    "relationships": "Relationships",
     "addnewAttribute": "Add New Attribute",
     "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
     "done": "Done",
@@ -46,5 +51,9 @@
     "pleaseWriteContent": "Please write something",
     "confirmDeletion": "Delete",
     "areYouSureDelete": "Are you sure you want to delete?",
-    "loadingText": "System is generating..."
+    "loadingText": "System is generating...",
+    "commentsWithCharacter": "Comments with {{count}} character",
+    "commentsWithCharacter_plural": "Comments with {{count}} characters",
+    "journalOf": "{{name}}'s Journal",
+    "totalComments": "Total: {{count}}"
 }

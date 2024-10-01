@@ -177,7 +177,7 @@ const CreateJournalModal = (props) => {
                         <ModalOverlay
                             title={t('createNewJournalModal')}
                             setShowModal={setShowModal}
-                            footerButtonLabel="Generate"
+                            footerButtonLabel={t('generate')}
                             showBackArrow={true}
                             onBackArrowClick={backArrowClick}
                             onFooterButtonClick={onAnyPostButtonClick}
