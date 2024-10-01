@@ -77,27 +77,19 @@ const journalBookReducer = (state, action) => {
 
         case 'DELETE_JOURNAL_ENTRY_OWNER_UUID': {
             const ownerUUID = action.payload.ownerUUID;
-            console.log(ownerUUID, 'yyyyyyyyyyyyy')
 
-            // Process the journal books and entries
             const updatedJournalBooks = state.journalBooks.map((book) => {
                 const updatedJournalEntries = book.journalEntries.map((entry) => {
-                    // Filter out comments where the ownerUUID matches the character
-                    const updatedCommentThreads = entry.commentThreads.map((thread) => {
-                        const updatedComments = thread.comments.filter(
-                            (comment) => comment.ownerUUID !== ownerUUID
+                    // Remove commentThreads where the ownerUUID participated
+                    const updatedCommentThreads = entry.commentThreads.filter((thread) => {
+                        // Check if the ownerUUID participated in this thread
+                        const ownerParticipated = thread.comments.some(
+                            (comment) => comment.ownerUUID === ownerUUID
                         );
 
-                        // If no comments remain in the thread, remove the thread
-                        if (updatedComments.length === 0) {
-                            return null; // Mark this thread for removal
-                        }
-
-                        return {
-                            ...thread,
-                            comments: updatedComments,
-                        };
-                    }).filter(thread => thread !== null); // Remove threads that are null
+                        // Include the thread only if the owner did not participate
+                        return !ownerParticipated;
+                    });
 
                     // If the journal entry itself belongs to the ownerUUID, remove the entry
                     if (entry.ownerUUID === ownerUUID) {
@@ -126,6 +118,7 @@ const journalBookReducer = (state, action) => {
                 journalBooks: updatedJournalBooks,
             };
         }
+
 
         case 'CREATE_COMMENT': {
             let newComment = null;

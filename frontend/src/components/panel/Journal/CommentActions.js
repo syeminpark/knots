@@ -28,7 +28,7 @@ const CommentActions = (props) => {
         setShowDeleteConfirmation(false);
         onDelete();
     };
-    
+
 
 
     return (
@@ -50,7 +50,7 @@ const CommentActions = (props) => {
                             </>
                         ) : (
                             <div style={styles.commentActions}>
-                                <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span>
+                                {/* <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span> */}
                                 {/* <span style={styles.commentAction} onClick={onDelete}>Delete</span> */}
                             </div>
                         )
@@ -70,22 +70,22 @@ const CommentActions = (props) => {
                 </div>
             )}
 
-        {showDeleteConfirmation && (
-            <DeleteConfirmationModal
-            title={t('confirmDeletion')}
-                setShowModal={setShowDeleteConfirmation}
-            >
-                <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
-                <div style={styles.modalButtonContainer}>
-                    <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-                        {t('cancel')}
-                    </button>
-                    <button onClick={confirmDelete} style={styles.deleteButton}>
-                        {t('delete')}
-                    </button>
-                </div>
-            </DeleteConfirmationModal>
-        )}
+            {showDeleteConfirmation && (
+                <DeleteConfirmationModal
+                    title={t('confirmDeletion')}
+                    setShowModal={setShowDeleteConfirmation}
+                >
+                    <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                    <div style={styles.modalButtonContainer}>
+                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                            {t('cancel')}
+                        </button>
+                        <button onClick={confirmDelete} style={styles.deleteButton}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </DeleteConfirmationModal>
+            )}
         </>
     );
 }
