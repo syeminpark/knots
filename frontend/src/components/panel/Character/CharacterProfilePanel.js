@@ -76,7 +76,7 @@ const CharacterProfilePanel = (props) => {
         const saveFunction = async () => {
             console.log('saveFunctionTriggered')
             if (!name.trim()) {
-                alert("Name is required");
+                alert(t("nameRequired"));
                 return;
             }
             // const newPanels = panels.filter(panel => panel.id !== id);

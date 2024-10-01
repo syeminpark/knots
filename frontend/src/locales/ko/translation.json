@@ -1,7 +1,8 @@
 {
     "login": "로그인",
     "logout": "로그아웃",
-    "edit": "수정",
+    "wronglogin": "user name 또는 password가 틀렸습니다.",
+    "edit": "편집",
     "save": "저장",
     "delete": "삭제",
     "cancel": "취소",
@@ -11,6 +12,7 @@
     "next": "다음",
     "post": "올리기",
     "find": "찾기",
+    "online": "Online",
     "createcharacter": "캐릭터 만들기",
     "profile": "프로필",
     "about": "정보",
@@ -26,6 +28,9 @@
     "addconnections": "+ 커넥션 추가",
     "discoverCharacter": "캐릭터 발견하기",
     "relationships": "새 캐릭터와의 관계",
+    "relationshipsAttribute": "캐릭터와의 관계",
+    "knowledge": "지식",
+    "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
     "addnewAttribute": "속성 추가",
     "example": "예시: 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 외모 등",
     "done": "완료",
@@ -56,5 +61,27 @@
     "commentsWithCharacter": "{{count}}명의 캐릭터와의 댓글",
     "commentsWithCharacter_plural": "{{count}}명의 캐릭터와의 댓글",
     "journalOf": "{{name}}의 저널",
-    "totalComments": "전체 댓글: {{count}}"
+    "totalComments": "전체 댓글: {{count}}",
+    "connection_singular": "{{count}}개의 커넥션",
+    "connection_plural": "{{count}}개의 커넥션",
+    "connectionPlaceholder": "{{currentCharacterName}}은(는) {{childName}}에 대해 어떻게 느끼고, 생각하고, 행동하며, 그 이유는 무엇인가요? {{currentCharacterName}}의 관점에서 그들 사이에 어떤 일이 있었나요?",
+    "journalCount_singular": "{{count}}개의 저널",
+    "journalCount_plural": "{{count}}개의 저널",
+
+    "timeAgo": {
+        "day": "{{count}}일",
+        "days": "{{count}}일",
+        "hour": "{{count}}시간",
+        "minute": "{{count}}분",
+        "now": "지금"
+    },
+    "whatThinking_singular": "{{name}}은(는) 어떤 생각을 하고 있나요?",
+    "whatThinking_plural": "{{name}}은(는) 어떤 생각을 하고 있나요?",
+    "selectACharacter": "캐릭터를 선택하세요",
+    "writeCommentAs": "{{characterNames}}로 댓글 작성",
+    "journalempty": "저널 내용을 작성하세요.",
+    "writeReply": "내용을 작성하세요.",
+    "nameRequired": "이름을 작성하세요.",
+    "attributeExist": "같은 속성이 있습니다."
+
 }

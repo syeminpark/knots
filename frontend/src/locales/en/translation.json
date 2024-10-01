@@ -1,6 +1,8 @@
 {
     "login": "Log in",
     "logout": "Log out",
+    "wronglogin": "Wrong user name or password",
+    "invalidpassword": "Invalid password",
     "edit": "Edit",
     "save": "Save",
     "delete": "Delete",
@@ -11,6 +13,7 @@
     "next": "Next",
     "post": "Post",
     "find": "Find",
+    "online": "Online",
     "createcharacter": "Create Character",
     "profile": "Profile",
     "about": "About",
@@ -26,6 +29,9 @@
     "addconnections": "+ Add Connections",
     "discoverCharacter": "Discover Character",
     "relationships": "Relationships",
+    "relationshipsAttribute": "Relationships",
+    "knowledge": "Knowledge",
+    "knowsAbout": "{{currentCharacterName}} knows about {{connectedCharacterName}}'s",
     "addnewAttribute": "Add New Attribute",
     "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
     "done": "Done",
@@ -55,5 +61,25 @@
     "commentsWithCharacter": "Comments with {{count}} character",
     "commentsWithCharacter_plural": "Comments with {{count}} characters",
     "journalOf": "{{name}}'s Journal",
-    "totalComments": "Total: {{count}}"
+    "totalComments": "Total: {{count}}",
+    "connection_singular": "{{count}} Connection",
+    "connection_plural": "{{count}} Connections",
+    "connectionPlaceholder": "How does {{currentCharacterName}} feel, think, behave towards {{childName}} and why? What has happened between them from {{currentCharacterName}}'s perspective?",
+    "journalCount_singular": "{{count}} Journal",
+    "journalCount_plural": "{{count}} Journals",
+    "timeAgo": {
+        "day": "{{count}} day",
+        "days": "{{count}} days",
+        "hour": "{{count}}h",
+        "minute": "{{count}}m",
+        "now": "now"
+    },
+    "whatThinking_singular": "What is {{name}} thinking about?",
+    "whatThinking_plural": "What are {{name}} thinking about?",
+    "selectACharacter": "Select a character",
+    "writeCommentAs": "Write comment as {{characterNames}}",
+    "journalempty": "Journal cannot be empty",
+    "writeReply": "Please write something before submitting your reply.",
+    "nameRequired": "Name is required",
+    "attributeExist": "Attribute already exists"
 }
