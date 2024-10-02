@@ -11,7 +11,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
     const [stage, setStage] = useState(0);
-    const [loading, setLoading] = useState(false);
     const [generatedCharacters, setGeneratedCharacters] = useState([]); 
     const [personaAttributes, setPersonaAttributes] = useState([]);
 
@@ -47,7 +46,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     console.log(currentCharacter)
 
     const handleDiscover = async () => {
-        setLoading(true);
         setStage(1);
         let tempConnectedCharacters = [];
 
@@ -97,7 +95,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
         } catch (error) {
             console.log(error);
         } finally {
-            setLoading(false);
         }
     };
 
@@ -189,7 +186,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
 
 
 
-            {loading && <Loading />}
         </ModalOverlay>
     );
 };
