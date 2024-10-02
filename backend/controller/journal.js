@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { JournalBook, JournalEntry, CommentThread, Comment } from '../models/journal.js';
-import { io } from '../app.js';
+// import { io } from '../app.js';
 
 
 const journalController = {
@@ -42,7 +42,7 @@ const journalController = {
             }));
             await JournalEntry.insertMany(journalEntries);
 
-            io.emit('journalBookCreated', { journalBook, journalEntries });
+            // io.emit('journalBookCreated', { journalBook, journalEntries });
 
             res.status(201).json({ message: 'Journal book created successfully', journalBook });
         } catch (error) {
@@ -75,7 +75,7 @@ const journalController = {
             journalEntry.content = newValue;
             await journalEntry.save();
 
-            io.emit('journalEntryUpdated', journalEntry);
+            // io.emit('journalEntryUpdated', journalEntry);
 
             res.status(200).json({ message: 'Journal entry updated successfully.', journalEntry });
         } catch (error) {
@@ -116,7 +116,7 @@ const journalController = {
                 );
             }
 
-            io.emit('journalEntryDeleted', { journalEntryUUID, journalBookUUID });
+            // io.emit('journalEntryDeleted', { journalEntryUUID, journalBookUUID });
 
             res.status(200).json({ message: 'Journal entry, related comments, and possibly journal book soft deleted successfully.' });
         } catch (error) {
@@ -176,7 +176,7 @@ const journalController = {
                 await Comment.updateMany({ commentThreadUUID: { $in: commentThreadUUIDsFromComments } }, { isDeleted: true });
             }
 
-            io.emit('journalEntriesDeleted', { ownerUUID });
+            // io.emit('journalEntriesDeleted', { ownerUUID });
 
             res.status(200).json({ message: 'All journal entries, comments authored by the character, related comment threads, and empty journal books soft deleted successfully.' });
         } catch (error) {
@@ -238,7 +238,7 @@ const journalController = {
             // If a new thread was created, emit the thread along with the comment
 
             // Emit the full commentThread object along with the new comment
-            io.emit('commentCreated', { journalEntry, newComment });
+            // io.emit('commentCreated', { journalEntry, newComment });
 
 
             res.status(201).json({ message: 'Comment created successfully.', comment: newComment });
@@ -292,7 +292,7 @@ const journalController = {
             }
 
             // Emit the full array of new comments to clients
-            io.emit('commentsCreated', { journalEntry, newComments });
+            // io.emit('commentsCreated', { journalEntry, newComments });
 
             res.status(201).json({ message: 'Comments created successfully.', comments: newComments });
         } catch (error) {
@@ -329,7 +329,7 @@ const journalController = {
             const commentThread = await CommentThread.findOne({ uuid: comment.commentThreadUUID });
             const journalEntry = await JournalEntry.findOne({ uuid: commentThread.journalEntryUUID });
 
-            io.emit('commentUpdated', { journalEntry, comment });
+            // io.emit('commentUpdated', { journalEntry, comment });
 
             res.status(200).json({ message: 'Comment updated successfully.', comment });
         } catch (error) {
@@ -359,7 +359,7 @@ const journalController = {
             const commentThread = await CommentThread.findOne({ uuid: comment.commentThreadUUID });
             const journalEntry = await JournalEntry.findOne({ uuid: commentThread.journalEntryUUID });
 
-            io.emit('commentDeleted', { journalEntry, comment });
+            // io.emit('commentDeleted', { journalEntry, comment });
 
             // Check if the thread has any other comments that are not soft-deleted
             const remainingComments = await Comment.find({ commentThreadUUID: comment.commentThreadUUID, isDeleted: false });

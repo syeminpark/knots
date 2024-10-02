@@ -7,9 +7,10 @@ import apiRequest from "../../../utility/apiRequest";
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 
+
 const CreateJournalModal = (props) => {
     const { t } = useTranslation();
-    const { setShowModal, createdCharacters, } = props;
+    const { setShowModal, createdCharacters, dispatchCreatedJournalBooks } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -61,6 +62,7 @@ const CreateJournalModal = (props) => {
             alert(t('pleaseWriteContent'));
         } else {
 
+
             if (selectedMode === "Manual Post") {
                 selectedCharacters.forEach(character => character.content = journalBookText.content)
             } else {
@@ -81,24 +83,30 @@ const CreateJournalModal = (props) => {
                 }
             }
 
-            const journalBookUUID = uuidv4();
-            selectedCharacters.forEach(character => character.journalEntryUUID = uuidv4());
-            const payload = {
-                uuid: journalBookUUID,
-                journalBookTitle: journalBookText.title,
-                selectedMode: selectedMode,
-                selectedCharacters,
-                createdAt: Date.now()
-            };
+            if (selectedCharacters[0]?.content) {
+                const journalBookUUID = uuidv4();
+                selectedCharacters.forEach(character => character.journalEntryUUID = uuidv4());
+                const payload = {
+                    uuid: journalBookUUID,
+                    journalBookTitle: journalBookText?.title,
+                    selectedMode: selectedMode,
+                    selectedCharacters,
+                    createdAt: Date.now()
+                };
 
-            try {
-                const response = await apiRequest('/createJournalBook', 'POST', payload);
-                console.log(response);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-                setShowModal(false);
+                dispatchCreatedJournalBooks({
+                    type: 'CREATE_JOURNAL_BOOK',
+                    payload: payload
+                });
+                try {
+                    const response = await apiRequest('/createJournalBook', 'POST', payload);
+                    console.log(response);
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    setLoading(false);
+                    setShowModal(false);
+                }
             }
         }
     };

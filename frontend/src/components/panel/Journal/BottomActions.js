@@ -76,11 +76,11 @@ const BottomActions = (props) => {
             };
             console.log(comments)
 
-            // // Dispatch the batch action
-            // dispatchCreatedJournalBooks({
-            //     type: 'CREATE_COMMENT_BATCH',
-            //     payload: payload,
-            // });
+            // Dispatch the batch action
+            dispatchCreatedJournalBooks({
+                type: 'CREATE_COMMENT_BATCH',
+                payload: payload,
+            });
 
             try {
                 const response = await apiRequest('/createComments', 'POST', payload);

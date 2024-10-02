@@ -31,6 +31,7 @@ const DetailedJournal = (props) => {
     const lastCommentRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
+    const [scrollDown, setScrollDwon] = useState(false);
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
@@ -38,10 +39,12 @@ const DetailedJournal = (props) => {
         if (NewJournalBookInfoandEntry?.journalEntry) {
             //update old selectedBookAndJournalEntry
             setSelectedBookAndJournalEntry(NewJournalBookInfoandEntry);
+            setScrollDwon(true)
         }
         else {
             setSelectedBookAndJournalEntry(null)
         }
+        console.log('hey')
     }, [createdJournalBooks]);
 
     // Scroll to the specific comment thread being tracked, unique to this panel
@@ -130,6 +133,8 @@ const DetailedJournal = (props) => {
                                                 isFirstInLastThread={isFirstInLastThread}
                                                 setLoading={setLoading}
                                                 setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
+                                                scrollDown={scrollDown}
+                                                setScrollDown={setScrollDwon}
                                             />
                                             {isLastCommentOverall && (
                                                 <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container

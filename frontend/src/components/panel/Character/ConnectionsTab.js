@@ -22,9 +22,9 @@ const ConnectionsTab = (props) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [selectedConnectionToDelete, setSelectedConnectionToDelete] = useState(null);
 
-    useEffect(() => {
-        console.log(currentCharacter)
-    }, [currentCharacter])
+    // useEffect(() => {
+    //     console.log(currentCharacter)
+    // }, [currentCharacter])
 
     let currentCharacterName = "this character";
     if (caller) {

@@ -27,6 +27,10 @@ const Attribute = (props) => {
         return attribute && attribute.knowledge ? attribute.knowledge.map(item => item.name) : [];
     });
 
+    useEffect(() => {
+        setEditedContent(attribute.description)
+        setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map(item => item?.name) : []); // Update selectedChips when attribute changes
+    }, [attribute]);
 
     const containerRef = useRef(null);
     const textAreaRef = useRef(null);

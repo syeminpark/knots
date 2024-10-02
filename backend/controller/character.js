@@ -1,7 +1,7 @@
 // controllers/characterController.js
 
 import CharacterModel from '../models/character.js';
-import { io } from '../app.js';
+// import { io } from '../app.js';
 
 export default {
 
@@ -60,7 +60,7 @@ export default {
                 nextOrderValue,
             );
 
-            io.emit('characterCreated', character);
+            // io.emit('characterCreated', character);
 
             res.status(201).json(character);
         } catch (error) {
@@ -81,7 +81,7 @@ export default {
 
             const character = await CharacterModel.updateCharacter(uuid, updateData);
             if (character) {
-                io.emit('characterUpdated', character);
+                // io.emit('characterUpdated', character);
                 res.status(200).json(character);
             } else {
                 res.status(404).json({ error: 'Character not found.' });
@@ -128,12 +128,12 @@ export default {
                 await CharacterModel.reorderCharacters(remainingCharacters.map(char => char.uuid));
 
                 // Emit character deleted and characters reordered events
-                io.emit('characterDeleted', { uuid });
-                io.emit('charactersReordered', { characters: remainingCharacters });
+                // io.emit('characterDeleted', { uuid });
+                // io.emit('charactersReordered', { characters: remainingCharacters });
 
                 // Emit character updated events for each character whose connectedCharacters were modified
                 updatedCharacters.forEach((updatedChar) => {
-                    io.emit('characterUpdated', updatedChar);
+                    // io.emit('characterUpdated', updatedChar);
                 });
 
                 res.status(200).json({ message: 'Character deleted, connected characters updated, and reordered successfully.' });
@@ -154,7 +154,7 @@ export default {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
             await CharacterModel.deleteAllCharactersByUserUUID(userUUID); // Delete characters by userUUID
 
-            io.emit('allCharactersDeleted', { userUUID });
+            // io.emit('allCharactersDeleted', { userUUID });
 
             res.status(200).json({ message: 'All characters for the user deleted successfully.' });
 
@@ -175,8 +175,8 @@ export default {
             // Call the model to reorder characters and get the updated characters
             const newCharacters = await CharacterModel.reorderCharacters(characters);
 
-            // Emit the updated characters to all connected clients
-            io.emit('charactersReordered', { characters: newCharacters });
+            // // Emit the updated characters to all connected clients
+            // io.emit('charactersReordered', { characters: newCharacters });
 
             // Respond with the updated characters to the client that made the request
             res.status(200).json({ message: 'Characters reordered successfully.' });

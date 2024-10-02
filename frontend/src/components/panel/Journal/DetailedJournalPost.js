@@ -9,10 +9,10 @@ import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const DetailedJournalPost = (props) => {
     const { t } = useTranslation();
-    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry } = props;
+    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props;
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
-    const { journalEntry } = selectedBookAndJournalEntry;
+    const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
     const [showDelete, setShowDelete] = useState(false);
     const journalTextRef = useRef(null); // Reference for the journal text container
     const textAreaRef = useRef(null); // Ref for the TextArea to focus when editing starts
@@ -29,8 +29,18 @@ const DetailedJournalPost = (props) => {
 
             if (editedContent !== journalEntry.content) {
                 try {
+                    dispatchCreatedJournalBooks({
+                        type: 'EDIT_JOURNAL_ENTRY',
+                        payload: {
+                            journalBookUUID: selectedBookAndJournalEntry.bookInfo.uuid,
+                            journalEntryUUID: journalEntry.uuid,
+                            newValue: editedContent
+                        }
+                    })
                     const response = await apiRequest(`/editJournalEntry/${journalEntry.uuid}`, 'PUT', { newValue: editedContent });
                     console.log(response);
+
+
                 } catch (error) {
                     console.log(error);
                 }
@@ -49,9 +59,16 @@ const DetailedJournalPost = (props) => {
 
     const confirmDelete = async () => {
         setSelectedBookAndJournalEntry(null);
+
         try {
             const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');
             console.log(response);
+            dispatchCreatedJournalBooks({
+                type: 'DELETE_JOURNAL_ENTRY', payload: {
+                    journalBookUUID: bookInfo.uuid,
+                    journalEntryUUID: journalEntry.uuid
+                }
+            })
         } catch (error) {
             console.log(error);
         }

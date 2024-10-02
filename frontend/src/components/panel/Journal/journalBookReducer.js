@@ -15,12 +15,18 @@ const journalBookReducer = (state, action) => {
                     selectedMode: action.payload.selectedMode,
                     createdAt: action.payload.createdAt,
                 },
-                journalEntries: action.payload.journalEntries.map(journalEntry => ({
-                    uuid: journalEntry.uuid,
-                    ownerUUID: journalEntry.ownerUUID,
-                    content: journalEntry.content,
+                journalEntries: action.payload.selectedCharacters.map(character => ({
+                    uuid: character.journalEntryUUID,
+                    ownerUUID: character.uuid,
+                    content: character.content,
                     commentThreads: [],
                 })),
+                // journalEntries: action.payload.journalEntries.map(journalEntry => ({
+                //     uuid: journalEntry.uuid,
+                //     ownerUUID: journalEntry.ownerUUID,
+                //     content: journalEntry.content,
+                //     commentThreads: [],
+                // })),
             };
             return {
                 ...state,

@@ -1,6 +1,6 @@
 // CommentDisplayer.js
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import WriteCommentInput from './WriteCommentInput';
 import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
@@ -27,6 +27,8 @@ const CommentDisplayer = (props) => {
         isLastComment,
         isFirstInLastThread,
         setLoading,
+        scrollDown,
+        setScrollDown
     } = props;
 
 
@@ -35,6 +37,7 @@ const CommentDisplayer = (props) => {
     const [isManualReplying, setIsManualReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
+    const [hasMounted, setHasMounted] = useState(false);
 
     const replyInputRef = useRef(null); // Ref for the reply input
     const firstCommentInLastThreadRef = useRef(null); // Ref for the first comment in the last thread
@@ -51,12 +54,13 @@ const CommentDisplayer = (props) => {
     }, [isManualReplying, isLastComment]);
 
     useLayoutEffect(() => {
-        if (isFirstInLastThread && firstCommentInLastThreadRef?.current) {
+        if (isFirstInLastThread && firstCommentInLastThreadRef?.current && scrollDown) {
             setTimeout(() => {
                 firstCommentInLastThreadRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+                setScrollDown(false)
+            }, 500);
         }
-    }, [isFirstInLastThread]);
+    }, [isFirstInLastThread,]);
 
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {

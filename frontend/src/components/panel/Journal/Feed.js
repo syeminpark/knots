@@ -24,7 +24,7 @@ const Feed = (props) => {
 
     useEffect(() => {
         if (trackingJournalEntry && journalEntryRefs.current[trackingJournalEntry]) {
-            journalEntryRefs.current[trackingJournalEntry].scrollIntoView({ behavior: 'instant' });
+            journalEntryRefs.current[trackingJournalEntry].scrollIntoView({ behavior: 'instant', block: 'center', });
         }
     }, [trackingJournalEntry]);
 

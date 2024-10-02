@@ -77,7 +77,7 @@ const DraggableCharacterItem = ({ character, panels, setPanels }) => {
                 }}
                 onPointerDown={(event) => event.stopPropagation()}
             >
-                <CharacterButton createdCharacter={character} />
+                <CharacterButton createdCharacter={character} textStyle={styles.textStyle} />
             </button>
         </div>
     );
@@ -162,6 +162,14 @@ const SidebarRight = (props) => {
     );
 };
 
+const styles = {
+    textStyle: {
+        wordWrap: 'break-word',       // Allows long words to break and wrap
+        wordBreak: 'break-word',      // Forces words to break if necessary
+        whiteSpace: 'normal',         // Ensures the text wraps within its container
+        overflowWrap: 'break-word',   // E
+    }
+}
 
 
 export default SidebarRight;

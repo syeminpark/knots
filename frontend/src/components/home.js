@@ -8,7 +8,7 @@ import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 import ScrollAndDrag from './ScrollAndDrag.js';
-import useSocketListeners from '../utility/useSocketListeners.js';
+// import useSocketListeners from '../utility/useSocketListeners.js';
 import { useTranslation } from 'react-i18next'; // i18n 가져오기
 import '../i18n.js'; // i18n 설정 파일 가져오기
 
@@ -57,7 +57,7 @@ const Home = (props) => {
   }, [initialData]);
 
   // Use the custom hook to handle socket events
-  useSocketListeners(dispatchCreatedCharacters, dispatchCreatedJournalBooks, setPanels);
+  // useSocketListeners(dispatchCreatedCharacters, dispatchCreatedJournalBooks, setPanels);
 
   const renderPanel = (panel) => {
     switch (panel.type) {
@@ -136,7 +136,7 @@ const Home = (props) => {
           className="inputButton"
           type="button"
           onClick={onButtonClick}
-          value={loggedIn ? "Log out" : "Log in" } // t('logout') : t('login')
+          value={loggedIn ? "Log out" : "Log in"} // t('logout') : t('login')
         />
       </div>
 

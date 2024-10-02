@@ -37,12 +37,12 @@ const AboutTab = (props) => {
         <div style={styles.abouttabWrapper}>
             {personaAttributes.map(attribute => (
                 <Attribute
-                    key={attribute.name}
-                    title={attribute.name}
+                    key={attribute?.name}
+                    title={attribute?.name}
                     deleteFunction={deleteAttribute}
                     list={personaAttributes}
                     setter={setPersonaAttributes}
-                    onChange={(event) => { onChange(attribute.name, event.target.value) }}
+                    onChange={(event) => { onChange(attribute?.name, event?.target?.value) }}
                 />
             ))}
             <button className="create-new-btn" onClick={() => setShowModal(true)}>

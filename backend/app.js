@@ -13,21 +13,21 @@ import llmRouter from './routers/llm.js'
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: '*', // Allow any origin
-  },
-  maxHttpBufferSize: 1e6,  // Increase the buffer size to 1 MB (default is 1 MB)
-  transports: ['websocket', 'polling'],  // Enable both WebSocket and polling
-});
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: '*', // Allow any origin
+//   },
+//   maxHttpBufferSize: 1e6,  // Increase the buffer size to 1 MB (default is 1 MB)
+//   transports: ['websocket', 'polling'],  // Enable both WebSocket and polling
+// });
 
-io.on('connection', (socket) => {
-  console.log('A user connected: ' + socket.id);
-  socket.on('disconnect', () => {
-    console.log('User disconnected: ' + socket.id);
-  });
-});
+// io.on('connection', (socket) => {
+//   console.log('A user connected: ' + socket.id);
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected: ' + socket.id);
+//   });
+// });
 
 
 
@@ -40,8 +40,12 @@ app.use(journalRouter)
 app.use(imageRouter)
 app.use(llmRouter)
 
-server.listen(PORT, () => {
+// server.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT} and on your local network at http://192.168.0.19:${PORT}`);
+// });
+
+app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT} and on your local network at http://192.168.0.19:${PORT}`);
 });
 
-export { io };
+// export { io };
