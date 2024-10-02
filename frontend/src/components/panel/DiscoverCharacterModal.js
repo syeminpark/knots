@@ -6,36 +6,95 @@ import { useTranslation } from 'react-i18next';
 import ToggleButton from '../ToggleButton';
 import apiRequest from '../../utility/apiRequest';
 import Loading from '../Loading';
+import { v4 as uuidv4 } from 'uuid';
+import { connected } from 'process';
 
-const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) => {
+const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, setConnectedCharacters }) => {
     const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
     const [stage, setStage] = useState(0);
     const [loading, setLoading] = useState(false)
 
+
+    const transformToAttributes = (character) => {
+        const personaAttributes = [];
+        const connectedCharacters = []
+        let your_relationship
+
+        for (const attribute in character?.attributes) {
+            const attrValue = character.attributes[attribute];
+
+            if (attrValue && typeof attrValue === 'object' && attrValue?.description) {
+                if (attribute === "my_relationship") {
+                    connectedCharacters.push({
+                        name: currentCharacter.name,
+                        description: attrValue.description,
+                        uuid: currentCharacter.uuid
+                    });
+                } else if (attribute === "your_relationship") {
+                    your_relationship = attrValue.description;
+                    // You may want to use this `your_relationship` to create the relationship
+                } else {
+                    personaAttributes.push({
+                        name: attribute,
+                        description: attrValue.description
+                    });
+                }
+            }
+        }
+
+
+        return { personaAttributes, connectedCharacters, your_relationship }
+    };
+    console.log(currentCharacter)
+
     const handleDiscover = async () => {
-        // onDiscover({ description: textDescription });
-        // setStage(1);
+        setLoading(true);
+        let tempConnectedCharacters = [];
 
-        setLoading(true)
-
-
-        const payload = {
-            characterUUID: currentCharacter?.uuid,
-            content: textDescription
-        }
         try {
-            const response = await apiRequest("/createLLMStranger", 'POST', payload)
-            console.log(response)
-        }
-        catch (error) {
-            console.log(error)
-        }
-        finally {
-            setShowModal(false)
-            setLoading(false)
+            const payload = {
+                characterUUID: currentCharacter?.uuid,
+                content: textDescription
+            };
+
+            const LLMResponse = await apiRequest("/createLLMStranger", 'POST', payload);
+            const characterObject = JSON.parse(LLMResponse?.generation);
+
+            // Use Promise.all to wait for all async operations to complete
+            await Promise.all(characterObject?.characters?.map(async (character) => {
+                const { personaAttributes, connectedCharacters, your_relationship } = transformToAttributes(character);
+                const uuid = uuidv4();
+
+                const createPayload = {
+                    uuid: uuid,
+                    name: character?.name,
+                    personaAttributes: personaAttributes,
+                    connectedCharacters: connectedCharacters
+                };
+
+                await apiRequest("/createCharacter", 'POST', createPayload);
+
+                // Collect connected characters
+                if (your_relationship) {
+                    tempConnectedCharacters.push({
+                        name: character?.name,
+                        description: your_relationship,
+                        uuid: uuid
+                    });
+                }
+            }));
+
+            // Update connected characters once all async operations are done
+            setConnectedCharacters((prevCharacters) => [...prevCharacters, ...tempConnectedCharacters]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setShowModal(false);
+            setLoading(false);
         }
     };
+
 
     const backArrowClick = () => {
         setStage(0);

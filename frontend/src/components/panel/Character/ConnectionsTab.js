@@ -126,6 +126,7 @@ const ConnectionsTab = (props) => {
                     setShowModal={setShowDiscoverModal}
                     onDiscover={handleDiscover}
                     currentCharacter={currentCharacter}
+                    setConnectedCharacters={setConnectedCharacters}
                 />
             )}
 

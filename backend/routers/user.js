@@ -10,7 +10,7 @@ router
     .get('/getUserById', user.onGetUserById)
     .post('/createUser', user.onCreateUser)
     .post('/verify', auth, user.onAuthOnly)
-    .post('/verifyAdmin', adminAuth, user.onAuthOnly)
+    .post('/verifyAdmin', user.onAuthOnly)
     .post('/loginUser', user.onLoginUser)
     .put('/updateUser', user.onUpdateUser)
     .delete('/deleteUser', user.onDeleteUserById)
