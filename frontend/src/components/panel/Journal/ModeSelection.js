@@ -1,7 +1,4 @@
-import { useTranslation } from 'react-i18next';
-
 const ModeSelection = (props) => {
-    const { t } = useTranslation();
     const { selectedMode, setSelectedMode } = props
 
     const handleModeSelect = (mode) => {

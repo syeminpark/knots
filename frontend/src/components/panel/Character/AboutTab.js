@@ -6,7 +6,7 @@ import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const AboutTab = (props) => {
     const { t } = useTranslation();
-    const { personaAttributes, setPersonaAttributes, saveFunction } = props
+    const { personaAttributes, setPersonaAttributes } = props
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [selectedAttributeToDelete, setSelectedAttributeToDelete] = useState(null);

@@ -6,7 +6,6 @@ import DetailedJournalPost from "./DetailedJournalPost";
 import EntryTag from "../../EntryTag";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import { useTranslation } from 'react-i18next';
-import Loading from "../../Loading";
 
 const DetailedJournal = (props) => {
     const { t } = useTranslation();
@@ -16,7 +15,6 @@ const DetailedJournal = (props) => {
         selectedBookAndJournalEntry,
         setSelectedBookAndJournalEntry,
         createdCharacters,
-
         createdJournalBooks,
         dispatchCreatedJournalBooks,
         trackingCommentThread,
@@ -31,9 +29,6 @@ const DetailedJournal = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
     const lastCommentRef = useRef(null);
-    const bottomRef = useRef(null);
-    const previousCommentLength = useRef(journalEntry.commentThreads.length);  // Track previous length of comment threads
-    const previousThreadLength = useRef(0);
 
     const [loading, setLoading] = useState(false);
 

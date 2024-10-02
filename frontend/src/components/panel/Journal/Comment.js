@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import CharacterButton from "../../CharacterButton";
 import TimeAgo from '../../TimeAgo';
 import openNewPanel from '../../openNewPanel';

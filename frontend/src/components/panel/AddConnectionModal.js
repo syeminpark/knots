@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import SelectBox from '../SelectBox';
 import { useTranslation } from 'react-i18next';

@@ -5,9 +5,7 @@ import CharacterButton from '../CharacterButton';
 import { useTranslation } from 'react-i18next';
 import ToggleButton from '../ToggleButton';
 import apiRequest from '../../utility/apiRequest';
-import Loading from '../Loading';
 import { v4 as uuidv4 } from 'uuid';
-import { connected } from 'process';
 
 const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, setConnectedCharacters }) => {
     const { t } = useTranslation();

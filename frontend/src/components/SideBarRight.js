@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import CharacterButton from './CharacterButton';

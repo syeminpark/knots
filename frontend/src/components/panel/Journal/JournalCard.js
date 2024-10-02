@@ -1,6 +1,5 @@
 import React from 'react';
 import TimeAgo from '../../TimeAgo';
-import ToggleButton from '../../ToggleButton';
 import EntryTag from '../../EntryTag';
 
 const JournalCard = ({ title, content, createdAt, entryTag, onClick }) => {

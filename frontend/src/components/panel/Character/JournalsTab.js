@@ -21,7 +21,6 @@ const JournalsTab = (props) => {
         openNewPanel(panels, setPanels, 'journal', null, { type: "journal", bookUUID: bookUUID, entryUUID: entryUUID })
     }
 
-    const limitShow = 1000
 
     return (
         <>

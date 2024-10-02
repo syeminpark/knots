@@ -39,13 +39,13 @@ const SelectBox = (props) => {
         if (hasChanges) {
             setSelectedCharacters(updatedSelectedCharacters);
         }
-    }, [availableCharacters]);
+    }, [availableCharacters, selectedCharacters, setSelectedCharacters]);
 
     useEffect(() => {
         if (selectedCharacters.length > 1 && !multipleSelect) {
             setSelectedCharacters([])
         }
-    }, [multipleSelect])
+    }, [multipleSelect, selectedCharacters.length, setSelectedCharacters])
 
     return (
         <div style={styles.modalBody}>
