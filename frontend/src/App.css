@@ -737,7 +737,7 @@ body {
 }
 
 .loading-overlay {
-  position: fixed;
+  position: absolute;
   /* Use fixed so it doesn't scroll with the content */
   top: 0;
   left: 0;

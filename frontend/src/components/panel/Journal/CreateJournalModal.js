@@ -198,7 +198,7 @@ const CreateJournalModal = (props) => {
                                         </div>
                                         <TextArea
                                             attribute={journalBookText.title}
-                                            placeholder={`What topic should ${contentPlaceholder} write about?`}
+                                            placeholder={t('writeTopicPrompt', { contentPlaceholder })}
                                             onChange={(event) => onChangeTitle(event.target.value)}
                                             styles={styles}
                                         />

@@ -85,5 +85,6 @@
     "nameRequired": "이름을 작성하세요.",
     "attributeExist": "같은 속성이 있습니다.",
     "association": "연관성",
-    "findAgain": "다시 찾기"
+    "findAgain": "다시 찾기",
+    "writeTopicPrompt": "{{contentPlaceholder}}은(는) 어떤 주제에 대해 글을 써야 할까요?"
 }
