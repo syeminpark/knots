@@ -18,7 +18,7 @@ const DeleteConfirmationModal = ({ title, children, setShowModal }) => {
 
 const styles = {
     modalOverlay: {
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
