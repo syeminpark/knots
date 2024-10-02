@@ -154,7 +154,10 @@ const CommentsTab = (props) => {
                         .map((journalEntryItem, journalEntryIndex) => (
                             <div key={journalEntryIndex} style={styles.journalEntry}>
                                 <div style={styles.journalHeader}>
-                                    {createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name}'s Journal
+                                    {t('journalOf', {
+                                        name: createdCharacters.characters.find(
+                                            createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name
+                                        })}
                                 </div>
 
                                 {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (
