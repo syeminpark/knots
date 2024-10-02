@@ -5,12 +5,15 @@ import CharacterButton from '../CharacterButton';
 import { useTranslation } from 'react-i18next';
 import ToggleButton from '../ToggleButton';
 import apiRequest from '../../utility/apiRequest';
+import Loading from '../Loading';
 import { v4 as uuidv4 } from 'uuid';
+import { connected } from 'process';
 
 const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, setConnectedCharacters }) => {
     const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
     const [stage, setStage] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [generatedCharacters, setGeneratedCharacters] = useState([]); 
     const [personaAttributes, setPersonaAttributes] = useState([]);
 
@@ -46,6 +49,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     console.log(currentCharacter)
 
     const handleDiscover = async () => {
+        setLoading(true);
         setStage(1);
         let tempConnectedCharacters = [];
 
@@ -95,6 +99,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
         } catch (error) {
             console.log(error);
         } finally {
+            setLoading(false);
         }
     };
 
@@ -186,6 +191,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
 
 
 
+            {loading && <Loading />}
         </ModalOverlay>
     );
 };
