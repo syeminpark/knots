@@ -109,7 +109,8 @@ const CommentsTab = (props) => {
                 </div >
             </>
         ) : stage === 1 && selectedCharacter ? (
-            <>
+
+            <div >
                 <div style={styles.header}>
                     <div style={styles.leftToggleButtonContainer}>
                         <ToggleButton
@@ -157,7 +158,7 @@ const CommentsTab = (props) => {
                                     {t('journalOf', {
                                         name: createdCharacters.characters.find(
                                             createdCharacter => createdCharacter.uuid === journalEntryItem.journalEntry.ownerUUID).name
-                                        })}
+                                    })}
                                 </div>
 
                                 {journalEntryItem.commentThreads.slice(0, threadsLimitShow).map((commentThread, commentThreadIndex) => (
@@ -204,7 +205,7 @@ const CommentsTab = (props) => {
                             </div>
                         ))}
                 </div >
-            </>
+            </div>
         ) : null
     );
 };
@@ -216,6 +217,11 @@ const styles = {
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Arial, sans-serif',
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        overflow: 'auto',
+        maxHeight: 'calc(100vh - 400px)',
     },
     characterButtonIconStyle: {
         width: '50px',
@@ -259,14 +265,14 @@ const styles = {
         marginBottom: '30px',
         height: '80px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+        position: 'relative', // Add this line
     },
     commentThreadContent: {
         flex: 1,
-
     },
     commentCount: {
         position: 'absolute',
-        width: '80%',
+        width: '85%',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -295,9 +301,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
-        height: '80%',
-        overflowY: 'scroll',
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 450px)',
         width: '100%',
+        flexGrow: 1,
 
     },
     journalEntry: {

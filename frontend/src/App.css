@@ -390,6 +390,7 @@ body {
   overflow: hidden;
   /* Ensure no content flows outside */
   flex-shrink: 0;
+
 }
 
 .panel-content {

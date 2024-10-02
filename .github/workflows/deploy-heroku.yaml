@@ -1,0 +1,45 @@
+name: Deploy Backend to Heroku
+
+on:
+  push:
+    branches:
+      - main  # Replace with your default branch if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for git subtree
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.10.0'  # Use the Node.js version your backend requires
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build  # If you have a build script
+
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: your-heroku-app-name
+          HEROKU_EMAIL: your-heroku-email@example.com
+        run: |
+          heroku login --apikey $HEROKU_API_KEY
+          git config user.email "$HEROKU_EMAIL"
+          git config user.name "GitHub Actions"
+          git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
+          git subtree push --prefix backend heroku main
