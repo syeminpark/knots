@@ -86,5 +86,6 @@
     "nameRequired": "Name is required",
     "attributeExist": "Attribute already exists",
     "association": "Association",
-    "findAgain": "Find Again"
+    "findAgain": "Find Again",
+    "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?"
 }
