@@ -10,7 +10,7 @@ import journalRouter from "./routers/journal.js"
 import imageRouter from "./routers/image.js"
 import llmRouter from './routers/llm.js'
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 const server = http.createServer(app);
@@ -39,7 +39,7 @@ app.use(journalRouter)
 app.use(imageRouter)
 app.use(llmRouter)
 
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT} and on your local network at http://192.168.0.19:${PORT}`);
 });
 
