@@ -232,47 +232,15 @@ const llmController = {
 
 Objective 
 
-Create three characters that are clearly distinct from each other. Most importantly, each character must be associated with ${character.name} acording to the following: ${content}.
+Create three characters that are clearly distinct from each other. Most importantly, each character has the association with ${character.name} acording to the following: ${content}.
 However this should manifest through the new characters in diverse ways to ensure each character is fresh and compelling. 
 
 Rules For Formatting. 
+1.  Each Character should have a name, introduction, a backstory and the relationship with  ${character.name}
+2.  Make the character's name, introdcution, backstory, and relationship into a json object with the keys, "name", "introduction", "backstory" and "relationship". 
+    For example {"name":  "", "introduction": "",  "backstory": "",  "relationship":""} 
+3.  The outcome should just be the characters.
 
-1. Structure:
-Each character should be structured as a JSON object under the key "characters".
-Each character object must include a "name" key with the character's name as its value.
-Each character object must also include an "attributes" key containing various attribute objects.
-
-2. Attributes:
-Each "attributes" key must include the following attributes: ${Object.keys(extractedValues)}, my_relationship, your_relationship. 
-The "my_relationship" key should describes how the new character views ${character.name} and the events that happened between them from the new character's perspective. 
-The "your_relationship" key describes how ${character.name} views the perspective and the events that happened between them from Bingu's perspective. 
-
-3. Descriptions:
-Each attribute must include a "description" with rich, descriptive text about the character. 
-
-4. Languages
-All keys and descriptions for attributes ${Object.keys(extractedValues)} must be written in Korean. 
-The key "characters" should be in English. The key "name" itself should be in English but its value, the "Character Name" should be in Korean. 
-Lastly, the keys for "my_relationship" and "your_relationship"  should remain in English (but their descriptions must be in Korean). 
-
-5. Consistency:
-Follow a consistent structure in the JSON format for each character.
-Ensure all keys are properly nested and formatted. This is an example structure
-
-{
-  "characters": [
-    {
-      "name": "Character Name",
-      "attributes": {
-        "attribute": { "description": "..." },
-        "attribute": { "description": "..." }
-      }
-    }
-  ]
-}
-
-6. No need to explain your thoughts. 
-             
             `;
             console.log('userPrompt', userPrompt)
 
