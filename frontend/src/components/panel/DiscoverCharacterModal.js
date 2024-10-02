@@ -50,6 +50,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
 
     const handleDiscover = async () => {
         setLoading(true);
+        setStage(1)
         let tempConnectedCharacters = [];
 
         try {
@@ -95,7 +96,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
         }
     };
 
-
     const backArrowClick = () => {
         setStage(0);
     };
@@ -110,6 +110,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
             footerButtonLabel={footerButtonLabel}
             onFooterButtonClick={onFooterButtonClick}
         >
+
             {stage === 0 && (
                 <>
                     <div style={styles.resultsContainer}>
@@ -142,7 +143,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
 
             {stage === 1 && (
                 <>
-                    {/* <ToggleButton direction="left" onClick={backArrowClick} />
+                    <ToggleButton direction="left" onClick={backArrowClick} />
                     <div style={styles.resultsContainer}>
                         <div style={styles.characterProfiles}>
                             <div>
@@ -167,35 +168,15 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                         onChange={(e) => setTextDescription(e.target.value)}
                         styles={styles}
                         label={t('association')}
-                    /> */}
+                    />
 
-                    {/* Move the button inside the container */}
-                    {/* <div style={styles.regenerateButtonContainer}>
+                    <div style={styles.regenerateButtonContainer}>
                         <button style={styles.regenerateButton}>
                             {t('findAgain')}
                         </button>
-                    </div> */}
+                    </div>
 
-                    {/* <div style={styles.resultBox}>
-                        <TextArea
-                            attribute={{ description: `` }}
-                            placeholder={t('relationships')}
-                            onChange={(e) => setTextDescription(e.target.value)}
-                            styles={styles}
-                        />
-                        <TextArea
-                            attribute={{ description: textDescription }}
-                            placeholder={t('relationships')}
-                            onChange={(e) => setTextDescription(e.target.value)}
-                            styles={styles}
-                        />
-                        <TextArea
-                            attribute={{ description: textDescription }}
-                            placeholder={t('relationships')}
-                            onChange={(e) => setTextDescription(e.target.value)}
-                            styles={styles}
-                        />
-                    </div> */}
+
                 </>
             )}
         </ModalOverlay>
