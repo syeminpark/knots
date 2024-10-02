@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 const CreateJournalModal = (props) => {
     const { t } = useTranslation();
-    const { setShowModal, createdJournalBooks, dispatchCreatedJournalBooks, createdCharacters, dispatchCreatedCharacters } = props;
+    const { setShowModal, createdCharacters, } = props;
     const [selectedMode, setSelectedMode] = useState(null); // Keep track of the selected mode
     const [stage, setStage] = useState(0); // Keep track of the selected mode
     const [selectedCharacters, setSelectedCharacters] = useState([]);

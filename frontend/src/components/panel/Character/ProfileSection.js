@@ -56,7 +56,7 @@ const ProfileSection = (props) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside); // Clean up the event listener
         };
-    }, [isClickableToSave, isEditing, editedName]); // Only run when constants, isEditing, or editedName changes
+    }, [isClickableToSave, isEditing, editedName, handleSave]); // Only run when constants, isEditing, or editedName changes
 
     // Automatically set to edit mode if no name is present
     useEffect(() => {
@@ -117,7 +117,7 @@ const ProfileSection = (props) => {
                         ref={inputRef} // Attach the ref to the input
                         type="text"
                         className="name-input"
-                        placeholder= {t('entername')}
+                        placeholder={t('entername')}
                         value={editedName}             // Set the current edited name value
                         onChange={handleNameChange}     // Call handleNameChange on input change
                     />

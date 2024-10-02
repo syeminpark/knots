@@ -1,6 +1,6 @@
 // CommentDisplayer.js
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import WriteCommentInput from './WriteCommentInput';
 import { v4 as uuidv4 } from 'uuid';
 import Comment from './Comment';
@@ -27,7 +27,6 @@ const CommentDisplayer = (props) => {
         isLastComment,
         isFirstInLastThread,
         setLoading,
-        setSelectedBookAndJournalEntry
     } = props;
 
 

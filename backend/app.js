@@ -18,6 +18,7 @@ const io = new Server(server, {
   cors: {
     origin: '*', // Allow any origin
   },
+  maxHttpBufferSize: 1e6,  // Increase the buffer size to 1 MB (default is 1 MB)
   transports: ['websocket', 'polling'],  // Enable both WebSocket and polling
 });
 

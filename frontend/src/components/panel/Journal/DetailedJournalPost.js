@@ -9,7 +9,7 @@ import DeleteConfirmationModal from '../../DeleteConfirmationModal';
 
 const DetailedJournalPost = (props) => {
     const { t } = useTranslation();
-    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props;
+    const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry } = props;
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
     const { journalEntry } = selectedBookAndJournalEntry;
