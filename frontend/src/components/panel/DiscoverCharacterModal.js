@@ -4,15 +4,37 @@ import TextArea from '../TextArea';
 import CharacterButton from '../CharacterButton';
 import { useTranslation } from 'react-i18next';
 import ToggleButton from '../ToggleButton';
+import apiRequest from '../../utility/apiRequest';
+import Loading from '../Loading';
 
 const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) => {
     const { t } = useTranslation();
     const [textDescription, setTextDescription] = useState('');
     const [stage, setStage] = useState(0);
+    const [loading, setLoading] = useState(false)
 
-    const handleDiscover = () => {
-        onDiscover({ description: textDescription });
-        setStage(1);
+    const handleDiscover = async () => {
+        // onDiscover({ description: textDescription });
+        // setStage(1);
+
+        setLoading(true)
+
+
+        const payload = {
+            characterUUID: currentCharacter?.uuid,
+            content: textDescription
+        }
+        try {
+            const response = await apiRequest("/createLLMStranger", 'POST', payload)
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
+        finally {
+            setShowModal(false)
+            setLoading(false)
+        }
     };
 
     const backArrowClick = () => {
@@ -61,7 +83,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) 
 
             {stage === 1 && (
                 <>
-                    {/* <ToggleButton direction="left" onClick={backArrowClick} /> */}
+                    {/* <ToggleButton direction="left" onClick={backArrowClick} />
                     <div style={styles.resultsContainer}>
                         <div style={styles.characterProfiles}>
                             <div>
@@ -86,14 +108,14 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter }) 
                         onChange={(e) => setTextDescription(e.target.value)}
                         styles={styles}
                         label={t('association')}
-                    />
+                    /> */}
 
                     {/* Move the button inside the container */}
-                    <div style={styles.regenerateButtonContainer}>
+                    {/* <div style={styles.regenerateButtonContainer}>
                         <button style={styles.regenerateButton}>
                             {t('findAgain')}
                         </button>
-                    </div>
+                    </div> */}
 
                     {/* <div style={styles.resultBox}>
                         <TextArea

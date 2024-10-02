@@ -26,13 +26,13 @@ const JournalsTab = (props) => {
     return (
         <>
             {t(
-                    journalData.length === 1
-                        ? 'journalCount_singular'
-                        : 'journalCount_plural',
-                    { count: journalData.length }
-                )}
+                journalData.length === 1
+                    ? 'journalCount_singular'
+                    : 'journalCount_plural',
+                { count: journalData.length }
+            )}
 
-            <br></br>
+
             <div style={styles.journalsTabWrapper}>
                 {journalData.length > 0 && sortByLatest(journalData).map((journal) => (
                     <JournalCard
@@ -54,6 +54,7 @@ const styles = {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 400px)',
         width: '100%',
+        marginTop: '20px'
     },
 }
 

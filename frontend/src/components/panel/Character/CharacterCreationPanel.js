@@ -13,7 +13,7 @@ const CharacterCreationPanel = (props) => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('');
     const [connectedCharacters, setConnectedCharacters] = useState([]);
-    const [personaAttributes, setPersonaAttributes] = useState([{ name: t('backstory'), description: '' }]);
+    const [personaAttributes, setPersonaAttributes] = useState([{ name: t('description'), description: '' }]);
     const [imageSrc, setImageSrc] = useState(null);
     const [preview, setPreview] = useState(null);
     const [name, setName] = useState('');

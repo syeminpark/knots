@@ -199,7 +199,55 @@ const llmController = {
 
 
     onCreateStranger: async (req, res) => {
-        // Placeholder for onCreateStranger functionality
+        const { characterUUID, content } = req.body;
+        try {
+            const character = await CharacterModel.getCharacterByUUID(characterUUID);
+            console.log(character.personaAttributes)
+
+            let systemPrompt = `You are a creative story writer, brilliant at creating unique and orignal characters.`
+
+            let userPrompt = `
+
+            This is ${character.name}. 
+            ${JSON.stringify(character.personaAttributes)}
+
+
+            Creatively brainstorm 3 charcters that are associated with ${character.name} in the following way: 
+            ${content}.  
+
+
+            1. Creatively brainstorm 3 characters that are clearly unique, orginal, and distinct from each other but most importantly, are all associated with Bingu as [적대적인 관계]. 
+2. Structure each character as a JSON object with detailed descriptions for each key, such as:
+"Character1": { "name": "value", "key1": { "description": "..." }, "key2": { "description": "..." } }
+3. Each key should include a detailed description object with rich, descriptive text for the new character. 
+4. Use the following keys for each character: 백스토리, 나이, 목표, 성격, 직업, myPOV_relationship, yourPOV_relationship.
+5. The my_relationship key describethe relationship between the new character’ and Bingu from the new character's perspective, while the your_relationship key describes the relationship betwen them from Bingu's perspective. The rest of the keys should  reflect  the new character's perspective. 
+6. Write the character descriptions in Korean only.
+7. Follow a consistent structure in JSON format for each character, making sure all keys are properly nested.
+    
+
+             
+            `;
+
+
+            const response = await openAI.chat.completions.create({
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userPrompt },
+                ],
+                model: "gpt-4o",
+                response_format: { "type": "json_object" }
+            });
+            console.log(response);
+
+            const generation = response.choices[0].message.content.trim();
+            console.log(generation);
+
+            res.status(200).json({ success: true, generation: generation });
+        }
+        catch (openAIError) {
+            console.error(`Error generating new character`, openAIError);
+        }
     }
 };
 
