@@ -6,12 +6,11 @@ import Attribute from '../Attribute';
 const ConnectionAttribute = (props) => {
     const {
         panels, setPanels, title, placeholder, deleteFunction, list, setter, onChange,
-        connectedCharacter, currentCharacter, isConnectionsTab, personaAttributes
+        connectedCharacter, currentCharacter, personaAttributes
     } = props;
 
     const attribute = list.find(attr => attr.name === title);
     const [selectedChips, setSelectedChips] = useState([]);
-    const [showAboutAttributes, setShowAboutAttributes] = useState(false);
 
     const handleChipClick = (name, e) => {
         e.stopPropagation(); // Prevent triggering edit mode when clicking on chips

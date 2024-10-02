@@ -16,17 +16,17 @@ const BasePanel = (props) => {
         setShowDelete(prev => !prev);
     };
 
-    const getPanelClass = () => {
-        let panelClass = '';
-        if (panels.length === 1) {
-            panelClass = 'panel-large';
-        } else if (panels.length === 2) {
-            panelClass = 'panel-medium';
-        } else {
-            panelClass = 'panel-small';
-        }
-        return panelClass
-    }
+    // const getPanelClass = () => {
+    //     let panelClass = '';
+    //     if (panels.length === 1) {
+    //         panelClass = 'panel-large';
+    //     } else if (panels.length === 2) {
+    //         panelClass = 'panel-medium';
+    //     } else {
+    //         panelClass = 'panel-small';
+    //     }
+    //     return panelClass
+    // }
 
     const panelStyle = {
         transform: CSS.Transform.toString(transform),

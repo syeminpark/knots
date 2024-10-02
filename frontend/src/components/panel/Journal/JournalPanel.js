@@ -5,7 +5,7 @@ import Feed from './Feed';
 import DetailedJournal from './DetailedJournal';
 import { getJournalBookInfoAndEntryByIds } from './journalBookReducer';
 import { useTranslation } from 'react-i18next';
-import Loading from '../../Loading'; // Import the Loading component
+
 
 const JournalPanel = (props) => {
     const { t } = useTranslation();
@@ -27,7 +27,7 @@ const JournalPanel = (props) => {
                     (createdJournalBooks, reference.bookUUID, reference.entryUUID));
             }
         }
-    }, [reference]);
+    }, [createdJournalBooks, reference]);
 
     return (
         <BasePanel

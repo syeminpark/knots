@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 const journalBookReducer = (state, action) => {
     switch (action.type) {
 

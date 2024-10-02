@@ -12,7 +12,7 @@ const DetailedJournalPost = (props) => {
     const { panels, setPanels, createdCharacter, selectedBookAndJournalEntry, setSelectedBookAndJournalEntry, dispatchCreatedJournalBooks } = props;
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(selectedBookAndJournalEntry.journalEntry.content);
-    const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
+    const { journalEntry } = selectedBookAndJournalEntry;
     const [showDelete, setShowDelete] = useState(false);
     const journalTextRef = useRef(null); // Reference for the journal text container
     const textAreaRef = useRef(null); // Ref for the TextArea to focus when editing starts

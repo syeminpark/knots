@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/home';
 import Login from './components/login/login';
 import Admin from './components/login/admin';
-import SidebarLeft from './components/SideBarLeft'; // Import SidebarLeft
 import './App.css';
 import { useEffect, useState } from 'react';
 import apiRequest from './utility/apiRequest';
@@ -52,7 +51,7 @@ function App() {
         setLoggedIn(false)
       }
       try {
-        const result = await apiRequest('/verifyAdmin', 'POST',)
+        await apiRequest('/verifyAdmin', 'POST',)
         // setIsAdmin(result.isAdmin)
       }
       catch (error) {
