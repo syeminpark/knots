@@ -163,11 +163,11 @@ const CharacterProfilePanel = (props) => {
     const confirmDelete = async () => {
 
         // setPanels([]);
-        // dispatchCreatedJournalBooks({
-        //     type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
-        //     payload: { ownerUUID: caller.uuid }
+        dispatchCreatedJournalBooks({
+            type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
+            payload: { ownerUUID: caller.uuid }
 
-        // })
+        })
         dispatchCreatedCharacters({
             type: 'DELETE_CHARACTER',
             payload: { uuid: caller.uuid }
