@@ -1,7 +1,9 @@
+import React from 'react';
+
 const TabNavigation = ({ tabs, activeTab, setActiveTab }) => {
 
     const getSliderPosition = () => {
-        return activeTab === tabs[0].key ? 'translateX(0%)' : 'translateX(100%)';
+        return activeTab === tabs[0] ? 'translateX(0%)' : 'translateX(100%)';
     };
 
     return (
@@ -13,14 +15,14 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab }) => {
             ></div>
 
             {/* Tab buttons */}
-            {tabs.map(({ key, label }) => (
+            {tabs.map((tab) => (
                 <button
-                    key={key}
-                    className={`tab ${activeTab === key ? 'active' : ''}`}
-                    onClick={() => setActiveTab(key)}
+                    key={tab}
+                    className={`tab ${activeTab === tab ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab)}
                 >
                     <div style={styles.tabTitle}>
-                        {label}
+                        {tab}
                     </div>
                 </button>
             ))}
@@ -32,6 +34,6 @@ const styles = {
     tabTitle: {
         fontSize: 'var(--font-small)',
     }
-};
+}
 
 export default TabNavigation;
