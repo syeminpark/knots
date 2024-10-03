@@ -171,7 +171,7 @@ const journalBookReducer = (state, action) => {
                                         // Create a new comment thread
                                         const newThreadUUID = action.payload.commentThreadUUID;
                                         const newThread = {
-                                            uuid: newThreadUUID,
+                                            uuid: neewThreadUUID,
                                             createdAt: action.payload.createdAt,
                                             comments: [
                                                 {

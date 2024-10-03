@@ -21,23 +21,19 @@ const BottomActions = (props) => {
 
 
     const onSendButtonClick = async () => {
-
         if (selectedCharacters.length < 1) {
             alert(t('selectACharacter'));
         } else if (!commentValue && activeTab === "Manual Post") {
             alert(t('pleaseWriteContent'));
         } else {
-
-            if (activeTab == "Manual Post") {
+            if (activeTab === "Manual Post") {
                 selectedCharacters.forEach(selectedCharacter =>
                     selectedCharacter.content = commentValue
-                )
-            }
-            else {
+                );
+            } else {
                 try {
-                    setLoading(true)
-                    const uuids = selectedCharacters.map(character => character.uuid)
-                    console.log(journalEntry.uuid, uuids)
+                    setLoading(true);
+                    const uuids = selectedCharacters.map(character => character.uuid);
                     const response = await apiRequest('/createLLMComments', 'POST', {
                         journalEntryUUID: journalEntry.uuid,
                         characterUUIDs: uuids
@@ -46,18 +42,17 @@ const BottomActions = (props) => {
                     response.comments.forEach(object => {
                         const character = selectedCharacters.find(selectedCharacter =>
                             selectedCharacter.uuid === object.characterUUID
-                        )
+                        );
                         if (character) {
-                            console.log(character)
-                            character.content = object.generation
+                            character.content = object.generation;
                         }
-                    })
-                }
-                catch (error) {
-                    console.log(error)
+                    });
+                } catch (error) {
+                    console.log(error);
                 }
             }
 
+            // Prepare the payload for the API request
             const comments = selectedCharacters.map((selectedCharacter) => ({
                 journalEntryUUID: journalEntry.uuid,
                 ownerUUID: selectedCharacter.uuid,
@@ -68,33 +63,39 @@ const BottomActions = (props) => {
                 createdAt: Date.now()
             }));
 
+            // Dispatch each comment individually
+            comments.forEach((newComment) => {
+                console.log(newComment, bookInfo.uuid);
 
+                // Dispatch individual comment action
+                dispatchCreatedJournalBooks({
+                    type: 'CREATE_COMMENT',
+                    payload: {
+                        ...newComment,
+                        journalBookUUID: bookInfo.uuid,
+                    },
+                });
+            });
+
+            // Now send the API request with the constructed payload
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
-                comments,
+                comments
             };
-            console.log(comments)
-
-            // Dispatch the batch action
-            dispatchCreatedJournalBooks({
-                type: 'CREATE_COMMENT_BATCH',
-                payload: payload,
-            });
 
             try {
                 const response = await apiRequest('/createComments', 'POST', payload);
                 console.log(response);
             } catch (error) {
                 console.error('Error creating comments:', error);
-            }
-            finally {
+            } finally {
                 setCommentValue(''); // Reset comment value after submitting
-                setLoading(false)
+                setLoading(false);
             }
-
-        };
+        }
     };
+
 
     // useEffect(() => {
     //     if (activeTab === "Manual Post") {
