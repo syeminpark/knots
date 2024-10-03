@@ -25,12 +25,16 @@
     "backstory": "배경",
     "description": "설명",
     "describeDetails": "내용을 작성하세요.",
+    "add": "+ 추가",
+    "added": "✔️ 추가됨",
+    "expand": "▼ 더보기",
+    "collapse": "▲ 닫기",
     "adddescription": "설명 추가",
     "addattributes": "+ 속성 추가",
     "addconnections": "+ 만든 캐릭터와 연결하기",
     "addnewconnection": "📝만든 캐릭터와 연결하기",
     "discoverCharacter": "✨ 연관된 캐릭터 발견하기",
-    "relationships": "(선택적 입력) 두 캐릭터는 어떤 식으로 연관되어있습니까?",
+    "relationships": "두 캐릭터는 어떤 식으로 연관되어있습니까?",
     "relationshipsAttribute": "캐릭터와의 관계",
     "knowledge": "지식",
     "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
@@ -47,6 +51,7 @@
     "selectMode": "모드 선택",
     "mode": "모드",
     "title": "제목",
+    "Knots": "A Social Media For Your Story Characters",
     "selectCharacters": "캐릭터(들) 선택",
     "selectCharacter": "캐릭터 선택",
     "seeComments": "댓글 보기",
@@ -87,5 +92,6 @@
     "attributeExist": "같은 속성이 있습니다.",
     "association": "연관성",
     "findAgain": "다시 찾기",
-    "writeTopicPrompt": "{{contentPlaceholder}}은(는) 어떤 주제에 대해 글을 써야 할까요?"
+    "writeTopicPrompt": "{{contentPlaceholder}}은(는) 어떤 주제에 대해 글을 써야 할까요?",
+    "findingText": "찾는 중"
 }

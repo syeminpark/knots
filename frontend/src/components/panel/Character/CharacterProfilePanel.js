@@ -24,8 +24,6 @@ const CharacterProfilePanel = (props) => {
     const [showDelete, setShowDelete] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-
-
     useEffect(() => {
         setActiveTab(t('about'));
     }, [t]);
@@ -233,6 +231,7 @@ const CharacterProfilePanel = (props) => {
                     currentCharacter={createdCharacters.characters.find(character => character.uuid === caller.uuid)}
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
+                    dispatchCreatedCharacters={dispatchCreatedCharacters}
 
                 />
             ) : activeTab === t('journalhistory') ? (

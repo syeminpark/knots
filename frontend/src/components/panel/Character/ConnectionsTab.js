@@ -15,6 +15,7 @@ const ConnectionsTab = (props) => {
         createdCharacters,
         caller,
         currentCharacter,
+        dispatchCreatedCharacters,
     } = props;
 
     const [showModal, setShowModal] = useState(false);
@@ -77,7 +78,7 @@ const ConnectionsTab = (props) => {
                     { count: connectedCharacters.length }
                 )}
             </div>
-            <br />
+
             {connectedCharacters.map((child) => (
                 <Attribute
                     panels={panels}
@@ -127,6 +128,7 @@ const ConnectionsTab = (props) => {
                     onDiscover={handleDiscover}
                     currentCharacter={currentCharacter}
                     setConnectedCharacters={setConnectedCharacters}
+                    dispatchCreatedCharacters={dispatchCreatedCharacters}
                 />
             )}
 
@@ -153,7 +155,7 @@ const ConnectionsTab = (props) => {
 const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 400px)',
+        maxHeight: 'calc(100vh - 350px)',
     },
     modalButtonContainer: {
         display: 'flex',

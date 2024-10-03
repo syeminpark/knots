@@ -38,6 +38,18 @@ const characterSchema = new mongoose.Schema(
             default: 0,
         },
         createdAt: { type: Date, default: Date.now },
+        type: {
+            type: {
+                type: String,  // "type" field inside "type" object
+                required: true,
+                default: "Manual"
+            },
+            prompt: {
+                type: String,  // "prompt" field inside "type" object
+                required: true,
+                default: "null"
+            }
+        },
         isDeleted: {
             type: Boolean,  // New field for soft delete
             required: true,
@@ -75,7 +87,8 @@ characterSchema.statics.createCharacter = async function (
     personaAttributes,
     connectedCharacters,
     imageSrc,
-    order
+    order,
+    type,
 ) {
     try {
         const character = await this.create({
@@ -85,7 +98,8 @@ characterSchema.statics.createCharacter = async function (
             personaAttributes,
             connectedCharacters,
             imageSrc,
-            order
+            order,
+            isSuggested,
         });
         return character;
     } catch (error) {

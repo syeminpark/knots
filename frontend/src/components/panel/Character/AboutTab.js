@@ -78,7 +78,7 @@ const AboutTab = (props) => {
 const styles = {
     abouttabWrapper: {
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 400px)',
+        maxHeight: 'calc(100vh - 350px)',
     },
     modalButtonContainer: {
         display: 'flex',

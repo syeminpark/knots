@@ -232,14 +232,20 @@ const llmController = {
 
 Objective 
 
-Create three characters that are clearly distinct from each other. Most importantly, each character has the association with ${character.name} acording to the following: ${content}.
+Create 3 characters that are clearly distinct from each other. Most importantly, each character has the association with ${character.name} acording to the following: ${content}.
 However this should manifest through the new characters in diverse ways to ensure each character is fresh and compelling. 
 
 Rules For Formatting. 
-1.  Each Character should have a name, introduction, a backstory and the relationship with  ${character.name}
-2.  Make the character's name, introdcution, backstory, and relationship into a json object with the keys, "name", "introduction", "backstory" and "relationship". 
-    For example {"name":  "", "introduction": "",  "backstory": "",  "relationship":""} 
-3.  The outcome should just be the characters.
+1.  Each of the 3 characters should have a name, introduction, a backstory and a relationship with ${character.name}. The relationship should be
+split into my_relationship which is the relationship from the new character's perspective and your_relationship which is the relationship from ${character.name}'s perspective. 
+2.  Make the character's name, introduction, backstory, and my_relationship, your_relationship into JSON with the keys, "name", "introduction", "backstory" and "my_relationship", "your_relationship".
+    For example {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""}
+3. The final JSON should contain each character's JSON within the key "characters".
+    For example {"characters": [{"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""},
+    {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""},
+    {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""}]}
+4. The keys should be in Englsish and their values should be in Korean.  
+5.  The outcome should just be the final JSON object only.
 
             `;
             console.log('userPrompt', userPrompt)

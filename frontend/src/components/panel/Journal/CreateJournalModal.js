@@ -6,6 +6,7 @@ import TextArea from "../../TextArea";
 import apiRequest from "../../../utility/apiRequest";
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
+import Loading from "../../Loading";
 
 
 const CreateJournalModal = (props) => {
@@ -104,8 +105,9 @@ const CreateJournalModal = (props) => {
                 } catch (error) {
                     console.log(error);
                 } finally {
-                    setLoading(false);
                     setShowModal(false);
+                    setLoading(false);
+
                 }
             }
         }
@@ -114,10 +116,7 @@ const CreateJournalModal = (props) => {
     return (
         <div>
             {loading && (
-                <div className="loading-overlay">
-                    <div className="spinner"></div>
-                    <p className="loading-text">{t("loadingText")}</p>
-                </div>
+                <Loading text={t("loadingText")}></Loading>
             )}
             {stage === 0 ? (
                 <ModalOverlay

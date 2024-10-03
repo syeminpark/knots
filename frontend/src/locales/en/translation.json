@@ -26,6 +26,10 @@
     "backstory": "Backstory",
     "description": "Descripton",
     "describeDetails": "Describe details",
+    "expand": "▼ Expand",
+    "collapse": "▲ Collapse",
+    "add": "+ add",
+    "added": "✔️ added",
     "adddescription": "Add description",
     "addattributes": "+ Add Attributes",
     "addconnections": "+ Add Connections",
@@ -49,6 +53,7 @@
     "selectMode": "Select a Mode",
     "mode": "Mode",
     "title": "Title",
+    "knots": "Knots: A Social Media For Your Story Characters",
     "selectCharacters": "Select Characters",
     "selectCharacter": "Select Character",
     "seeComments": "See Comments",
@@ -86,7 +91,8 @@
     "writeReply": "Please write something before submitting your reply.",
     "nameRequired": "Name is required",
     "attributeExist": "Attribute already exists",
-    "association": "Association",
+    "association": "How are the two characters associated?",
     "findAgain": "Find Again",
-    "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?"
+    "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?",
+    "findingText": "finding"
 }

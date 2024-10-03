@@ -44,13 +44,17 @@ export default {
     onCreateCharacter: async (req, res) => {
         try {
             const userUUID = req.user.ID; // Get userUUID from the authenticated user
-            const { uuid, name, personaAttributes, connectedCharacters, imageSrc } = req.body;
+            const { uuid, name, personaAttributes, connectedCharacters, imageSrc, type } = req.body;
+
+            const characterType = type && type.type && type.prompt ? type : {
+                type: "Manual", // Default type
+                prompt: "null"  // Default prompt
+            };
 
             const existingCharacters = await CharacterModel.getAllCharactersByUserUUID(userUUID);
             const nextOrderValue = existingCharacters.length; // New character should be at the end of the list
 
             const character = await CharacterModel.createCharacter(
-
                 userUUID, // Associate the character with the user
                 uuid,
                 name,
@@ -58,6 +62,7 @@ export default {
                 connectedCharacters,
                 imageSrc,
                 nextOrderValue,
+                characterType
             );
 
             // io.emit('characterCreated', character);

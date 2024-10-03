@@ -41,7 +41,7 @@ const CharacterCreationPanel = (props) => {
                     imageUrl = uploadResponse.imageUrl;
                 }
             }
-            const characterData = {
+            const payload = {
                 name: name,
                 personaAttributes: personaAttributes,
                 connectedCharacters: connectedCharacters,
@@ -50,9 +50,9 @@ const CharacterCreationPanel = (props) => {
             };
             dispatchCreatedCharacters({
                 type: 'CREATE_CHARACTER',
-                payload: characterData,
+                payload: payload,
             });
-            const createCharacterResponse = await apiRequest('/createCharacter', 'POST', characterData);
+            const createCharacterResponse = await apiRequest('/createCharacter', 'POST', payload);
             console.log('Character creation response:', createCharacterResponse);
 
         } catch (error) {
