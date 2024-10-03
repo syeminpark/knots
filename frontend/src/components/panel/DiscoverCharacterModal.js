@@ -16,6 +16,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     const [loading, setLoading] = useState(false);
     const [generatedCharacters, setGeneratedCharacters] = useState([]);
     const [personaAttributes, setPersonaAttributes] = useState([]);
+    const [addedCharacters, setAddedCharacters] = useState({}); 
 
     const transformToAttributes = (character) => {
         const personaAttributes = [];
@@ -68,40 +69,41 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
             // Persona Attributes 상태 업데이트
             const { personaAttributes } = transformToAttributes(characterObject?.characters?.[0]);
             setPersonaAttributes(personaAttributes);
-
-            await Promise.all(
-                characterObject?.characters?.map(async (character) => {
-                    const { connectedCharacters, your_relationship } = transformToAttributes(character);
-                    const uuid = uuidv4();
-
-                    const createPayload = {
-                        uuid: uuid,
-                        name: character?.name,
-                        personaAttributes: personaAttributes,
-                        connectedCharacters: connectedCharacters,
-                    };
-
-                    await apiRequest("/createCharacter", 'POST', createPayload);
-
-                    // Collect connected characters
-                    if (your_relationship) {
-                        tempConnectedCharacters.push({
-                            name: character?.name,
-                            description: your_relationship,
-                            uuid: uuid,
-                        });
-                    }
-                })
-            );
-
-            // Update connected characters once all async operations are done
-            setConnectedCharacters((prevCharacters) => [...prevCharacters, ...tempConnectedCharacters]);
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
     };
+
+const processCharacters = async (character, currentCharacter, setConnectedCharacters) => {
+    let tempConnectedCharacters = [];
+
+    const { connectedCharacters, your_relationship } = transformToAttributes(character);
+    const uuid = uuidv4();
+
+    const createPayload = {
+        uuid: uuid,
+        name: character?.name,
+        personaAttributes: personaAttributes,
+        connectedCharacters: connectedCharacters,
+    };
+
+    await apiRequest("/createCharacter", 'POST', createPayload);
+
+    // Collect connected characters
+    if (your_relationship) {
+        tempConnectedCharacters.push({
+            name: character?.name,
+            description: your_relationship,
+            uuid: uuid,
+        });
+    }
+
+    // Update connected characters
+    setConnectedCharacters((prevCharacters) => [...prevCharacters, ...tempConnectedCharacters]);
+};
+
 
     const backArrowClick = () => {
         setStage(0);
@@ -159,7 +161,8 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                                 <button
                                     style={styles.plusButton}
                                     onClick={() => {
-                                        // Add your functionality here for what happens when you add the character
+                                        processCharacters(character, currentCharacter, setConnectedCharacters);
+                                        setAddedCharacters((prev) => ({ ...prev, [character.uuid]: true }));
                                         console.log(`Character ${character.name} added`);
                                     }}
                                 >
@@ -168,19 +171,17 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                             </div>
 
                             <div style={styles.characterInfo}>
-                                {/* Persona Attributes */}
-                                {personaAttributes.length > 0 ? (
+                                {character.attributes && Object.keys(character.attributes).length > 0 ? (
                                     <ul style={styles.personaAttributesList}>
-                                        {personaAttributes.map((attr, index) => (
+                                        {Object.keys(character.attributes).map((attrKey, index) => (
                                             <li key={index} style={styles.personaAttributeItem}>
-                                                <strong>{attr.name}:</strong> {attr.description}
+                                                <strong>{attrKey}:</strong> {character.attributes[attrKey].description || 'N/A'}
                                             </li>
                                         ))}
                                     </ul>
                                 ) : (
                                     <p>{t('noAttributesFound')}</p>
                                 )}
-                                <p><strong>{t('relationship')}:</strong> {character?.attributes?.my_relationship?.description || 'N/A'}</p>
                             </div>
                         </div>
                     ))}
