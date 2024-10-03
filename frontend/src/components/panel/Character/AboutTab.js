@@ -45,9 +45,6 @@ const AboutTab = (props) => {
                     onChange={(event) => { onChange(attribute?.name, event?.target?.value) }}
                 />
             ))}
-            <button className="create-new-btn" onClick={() => setShowModal(true)}>
-                {t('addattributes')}
-            </button>
             {showModal && (
                 <AddAttributeModal
                     setShowModal={setShowModal}
@@ -71,6 +68,12 @@ const AboutTab = (props) => {
                     </div>
                 </DeleteConfirmationModal>
             )}
+
+            <div style={styles.buttonContainer}>
+            <button style={styles.createButton} onClick={() => setShowModal(true)}>
+                {t('addattributes')}
+            </button>
+            </div>
         </div>
     );
 };
@@ -79,6 +82,16 @@ const styles = {
     abouttabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 350px)',
+    },
+    buttonContainer: {
+        position: 'sticky', 
+        bottom: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '10px 0px',
+        backgroundColor: '#fff',
+        zIndex: 100,
+        gap: '10px',
     },
     modalButtonContainer: {
         display: 'flex',
@@ -101,6 +114,17 @@ const styles = {
         borderRadius: '4px',
         cursor: 'pointer',
     },
+    createButton: {
+        width: '100%',
+        padding: '10px',
+        backgroundColor: 'var(--color-secondary)',
+        border: 'none',
+        borderRadius: '6px',
+        color: 'white',
+        fontSize: 'var(--font-medium)',
+        marginTop: '6px',
+        cursor: 'pointer',
+    }
 }
 
 export default AboutTab

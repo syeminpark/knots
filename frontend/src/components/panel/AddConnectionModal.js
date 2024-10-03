@@ -25,7 +25,7 @@ const AddConnectionModal = (props) => {
         <ModalOverlay
             title={t("addnewconnection")}
             setShowModal={setShowModal}
-            footerButtonLabel="Add"
+            footerButtonLabel={t("addmodal")}
             onFooterButtonClick={handleAddConnection}
             isFooterButtonDisabled={selectedCharacters.length === 0}
         >
