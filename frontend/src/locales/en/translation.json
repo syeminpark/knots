@@ -7,6 +7,8 @@
     "save": "Save",
     "delete": "Delete",
     "cancel": "Cancel",
+    "generateReply": "Generate Reply",
+    "manualReply": "Manual Reply",
     "create": "Create",
     "generate": "Generate",
     "characters": "Characters",
@@ -49,8 +51,8 @@
     "createNewJournal": "+ Create New Journal",
     "feed": "Feed",
     "createNewJournalModal": "Create New Journal",
-    "systemgenerate": "System Generate",
-    "manualpost": "Manual Post",
+    "SYSTEMGENERATE": "System Generate",
+    "MANUALPOST": "Manual Post",
     "selectMode": "Select a Mode",
     "mode": "Mode",
     "title": "Title",
@@ -95,5 +97,6 @@
     "association": "How are the two characters associated?",
     "findAgain": "Find Again",
     "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?",
-    "findingText": "finding"
+    "findingText": "finding",
+    "noJournal": "No journals yet..."
 }

@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next'; // i18n 가져오기
+
 const ModeSelection = (props) => {
     const { selectedMode, setSelectedMode } = props
+    const { t } = useTranslation();
 
     const handleModeSelect = (mode) => {
         setSelectedMode(mode);
@@ -8,34 +11,31 @@ const ModeSelection = (props) => {
     return (
         <div style={styles.modeSelectionContainer}>
             <div style={styles.modeButtons}>
-                {/* Manual Post Mode */}
 
-
-                {/* System Generate Mode */}
                 <div
                     style={{
                         ...styles.modeButton,
-                        ...(selectedMode === "System Generate" ? styles.selectedModeButton : {}),
+                        ...(selectedMode === "SYSTEMGENERATE" ? styles.selectedModeButton : {}),
                     }}
-                    onClick={() => handleModeSelect("System Generate")}
+                    onClick={() => handleModeSelect("SYSTEMGENERATE")}
                 >
                     <div style={styles.iconContainer}>
                         <span className="icon">✨</span>
                     </div>
-                    <span style={styles.modeLabel}>System Generate</span>
+                    <span style={styles.modeLabel}>{t('SYSTEMGENERATE')}</span>
                 </div>
                 <div
                     style={{
                         ...styles.modeButton,
-                        ...(selectedMode === "Manual Post" ? styles.selectedModeButton : {}),
+                        ...(selectedMode === "MANUALPOST" ? styles.selectedModeButton : {}),
                     }}
-                    onClick={() => handleModeSelect("Manual Post")}
+                    onClick={() => handleModeSelect("MANUALPOST")}
                 >
                     <div style={styles.iconContainer}>
                         <span className="icon"> 📝
                         </span>
                     </div>
-                    <span style={styles.modeLabel}>Manual Post</span>
+                    <span style={styles.modeLabel}>{t('MANUALPOST')}</span>
                 </div>
             </div>
         </div>

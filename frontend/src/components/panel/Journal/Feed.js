@@ -41,7 +41,7 @@ const Feed = (props) => {
 
             <div style={styles.journalFeedWrapper}>
                 {createdJournalBooks.journalBooks.length === 0 && (
-                    <p>No Journals yet...</p>
+                    <p>{t('noJournal')}</p>
                 )}
                 {createdJournalBooks.journalBooks.slice().reverse().map((journalBook, index) => (
                     <AnimatePresence key={journalBook.bookInfo.uuid}>

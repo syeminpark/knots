@@ -19,6 +19,11 @@ const CharacterCreationPanel = (props) => {
     const [name, setName] = useState('');
     const [currentCharacter, setCurrentCharacter] = useState(null);
 
+    const tabs = [
+        { key: 'ABOUT', label: t('about') },
+    ];
+
+
 
     const saveFunction = async () => {
         if (!name.trim()) {
@@ -61,7 +66,7 @@ const CharacterCreationPanel = (props) => {
     }
 
     useEffect(() => {
-        setActiveTab(t('about'));
+        setActiveTab('ABOUT');
     }, [t]);
 
     useEffect(() => {
@@ -112,18 +117,18 @@ const CharacterCreationPanel = (props) => {
                     setPreview={setPreview}
                 />
                 {/* Tabs */}
-                {/* <TabNavigation tabs={[t('about'), t('connections')]} activeTab={activeTab} setActiveTab={setActiveTab} /> */}
-                <TabNavigation tabs={[t('about')]} activeTab={activeTab} setActiveTab={setActiveTab} />
+
+                <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
 
             {/* Conditionally render the appropriate panel based on activeTab */}
             <div className="panel-content">
-                {activeTab === t('about') ? (
+                {activeTab === 'ABOUT' ? (
                     <AboutTab
                         personaAttributes={personaAttributes}
                         setPersonaAttributes={setPersonaAttributes}
                     />
-                ) : activeTab === t('connections') ? (
+                ) : activeTab === 'CONNECTIONS' ? (
                     <ConnectionsTab
                         panels={panels}
                         setPanels={setPanels}

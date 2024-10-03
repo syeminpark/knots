@@ -29,7 +29,7 @@ const Comment = (props) => {
                         />
                     </button>
                     <div >
-                        <EntryTag selectedMode={selectedMode} size='small' hasBackground={false}> </EntryTag>
+                        <EntryTag selectedMode={selectedMode} size='xs' hasBackground={false}> </EntryTag>
                         {createdAt && (
                             <span style={styles.commentTime}><TimeAgo createdAt={createdAt} /></span>
                         )}
@@ -70,7 +70,8 @@ const styles = {
     commentInfo: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
+
     },
     profileButtonContainer: {
         display: 'flex', // Keep flex alignment
@@ -88,7 +89,7 @@ const styles = {
         fontWeight: 'var(--font-bold)',
         marginRight: '10px',
     }, commentTime: {
-        fontSize: '10px',
+        fontSize: 'var(--font-xs',
         color: '#9b9b9b',
         marginLeft: '10px',
     },

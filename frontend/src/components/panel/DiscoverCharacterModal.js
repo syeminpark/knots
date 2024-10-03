@@ -27,7 +27,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                 uuid: uuidv4(),
                 personaAttributes: [],
                 name: character?.name || null,
-                type: { type: "System Generate", prompt: textDescription }
+                type: { type: "SYSTEMGENERATE", prompt: textDescription }
 
             };
             const keyMap = {

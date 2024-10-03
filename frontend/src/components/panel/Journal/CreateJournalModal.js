@@ -55,16 +55,16 @@ const CreateJournalModal = (props) => {
             alert(t('createCharacterFirst'));
         } else if (selectedCharacters.length === 0) {
             alert(t('pleaseSelectCharacter'));
-        } else if (selectedMode === 'Manual Post' && journalBookText.title.trim() === "") {
+        } else if (selectedMode === 'MANUALPOST' && journalBookText.title.trim() === "") {
             alert(t('pleaseWriteTitle'));
-        } else if (selectedMode === 'Manual Post' && journalBookText.content.trim() === "") {
+        } else if (selectedMode === 'MANUALPOST' && journalBookText.content.trim() === "") {
             alert(t('pleaseWriteContent'));
-        } else if (selectedMode === 'System Generate' && journalBookText.title.trim() === "") {
+        } else if (selectedMode === 'SYSTEMGENERATE' && journalBookText.title.trim() === "") {
             alert(t('pleaseWriteContent'));
         } else {
 
 
-            if (selectedMode === "Manual Post") {
+            if (selectedMode === "MANUALPOST") {
                 selectedCharacters.forEach(character => character.content = journalBookText.content)
             } else {
                 try {
@@ -135,7 +135,7 @@ const CreateJournalModal = (props) => {
                     />
                 </ModalOverlay>
             ) : stage === 1 ? (
-                selectedMode === "Manual Post" ? (
+                selectedMode === "MANUALPOST" ? (
                     <div>
                         <ModalOverlay
                             title={t('createNewJournalModal')}
@@ -145,7 +145,7 @@ const CreateJournalModal = (props) => {
                             footerButtonLabel={t('post')}
                             onFooterButtonClick={onAnyPostButtonClick}
                         >
-                            <h3 style={styles.subtitle}>📝 Manual Post</h3>
+                            <h3 style={styles.subtitle}>📝 {t('MANUALPOST')}</h3>
                             <SelectBox
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}
@@ -190,7 +190,7 @@ const CreateJournalModal = (props) => {
                             onBackArrowClick={backArrowClick}
                             onFooterButtonClick={onAnyPostButtonClick}
                         >
-                            <h3 style={styles.subtitle}>🌟System Generate</h3>
+                            <h3 style={styles.subtitle}>🌟{t('SYSTEMGENERATE')}</h3>
                             <SelectBox
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}

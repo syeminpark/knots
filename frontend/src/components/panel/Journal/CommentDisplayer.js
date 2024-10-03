@@ -64,12 +64,12 @@ const CommentDisplayer = (props) => {
 
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
-        if (replyContent.trim() === '' && selectedReplyMode === "Manual Post") {
+        if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
             alert(t('writeReply'));
         } else {
 
             let content
-            if (selectedReplyMode === "Manual Post") {
+            if (selectedReplyMode === "MANUALPOST") {
                 content = replyContent.trim()
             }
             else {
@@ -242,7 +242,7 @@ const CommentDisplayer = (props) => {
                                                     placeholder={`Reply as ${previousCharacter.name}`}
                                                     commentValue={replyContent}
                                                     setCommentValue={setReplyContent}
-                                                    sendButtonCallback={() => { onReplySend('Manual Post', previousCharacter) }}
+                                                    sendButtonCallback={() => { onReplySend('MANUALPOST', previousCharacter) }}
                                                 />
                                             </div>
                                         </motion.div>

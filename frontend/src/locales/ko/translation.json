@@ -6,6 +6,8 @@
     "save": "저장",
     "delete": "삭제",
     "cancel": "취소",
+    "generateReply": "답변 생성",
+    "manualReply": "직접 답변",
     "create": "만들기",
     "generate": "생성하기",
     "characters": "캐릭터 목록",
@@ -47,8 +49,8 @@
     "createNewJournal": "+ 새 저널 만들기",
     "feed": "피드",
     "createNewJournalModal": "새 저널 만들기",
-    "systemgenerate": "자동 생성하기",
-    "manualpost": "직접 작성하기",
+    "SYSTEMGENERATE": "자동 생성",
+    "MANUALPOST": "직접 작성",
     "selectMode": "모드 선택",
     "mode": "모드",
     "title": "제목",
@@ -94,5 +96,6 @@
     "association": "연관성",
     "findAgain": "다시 찾기",
     "writeTopicPrompt": "{{contentPlaceholder}}은(는) 어떤 주제에 대해 글을 써야 할까요?",
-    "findingText": "찾는 중"
+    "findingText": "찾는 중",
+    "noJournal": "게시물 없음"
 }

@@ -39,12 +39,12 @@ const CommentActions = (props) => {
                         !repliedTo ? (
                             <>
                                 <div style={styles.commentActions}>
-                                    <span style={styles.commentAction} onClick={() => { onReplySend('System Generate', previousCharacter) }}>Generate Reply</span>
+                                    <span style={styles.commentAction} onClick={() => { onReplySend('SYSTEMGENERATE', previousCharacter) }}>{t('generateReply')}</span>
                                     <span style={styles.commentAction} onClick={handleManualReplyToggle}>
-                                        Manual Reply
+                                        {t('manualReply')}
                                     </span>
-                                    <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span>
-                                    <span style={styles.commentAction} onClick={onDeleteClick}>Delete</span>
+                                    <span style={styles.commentAction} onClick={() => setIsEditing(true)}>{t('edit')}</span>
+                                    <span style={styles.commentAction} onClick={onDeleteClick}>{t('delete')}</span>
                                     {/* <span style={styles.commentAction} onClick={onDelete}>Delete</span> */}
                                 </div>
                             </>
@@ -65,7 +65,7 @@ const CommentActions = (props) => {
             {type === "Replying" && (
                 <div style={styles.commentActions}>
                     <span style={styles.commentAction} onClick={handleManualReplyToggle}>
-                        Cancel
+                        {t('cancel')}
                     </span>
                 </div>
             )}

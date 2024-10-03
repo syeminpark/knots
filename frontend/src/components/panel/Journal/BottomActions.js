@@ -12,21 +12,25 @@ const BottomActions = (props) => {
     const { t } = useTranslation();
     const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry, setLoading } = props
     const [commentValue, setCommentValue] = useState("");
-    const [activeTab, setActiveTab] = useState('System Generate');
+    const [activeTab, setActiveTab] = useState('SYSTEMGENERATE');
     const [isMultipleSelect, setIsMultipleSelect] = useState(true);
     const [commentPlaceholder, setCommentPlaceholder] = useState("");
     const [isExpanded, setIsExpanded] = useState(true);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
+    const tabs = [
+        { key: 'SYSTEMGENERATE', label: t('SYSTEMGENERATE') },
+        { key: 'MANUALPOST', label: t('MANUALPOST') },
+    ];
 
 
     const onSendButtonClick = async () => {
         if (selectedCharacters.length < 1) {
             alert(t('selectACharacter'));
-        } else if (!commentValue && activeTab === "Manual Post") {
+        } else if (!commentValue && activeTab === "MANUALPOST") {
             alert(t('pleaseWriteContent'));
         } else {
-            if (activeTab === "Manual Post") {
+            if (activeTab === "MANUALPOST") {
                 selectedCharacters.forEach(selectedCharacter =>
                     selectedCharacter.content = commentValue
                 );
@@ -98,7 +102,7 @@ const BottomActions = (props) => {
 
 
     // useEffect(() => {
-    //     if (activeTab === "Manual Post") {
+    //     if (activeTab === "MANUALPOST") {
     //         setIsMultipleSelect(false);
     //     } else {
     //         setIsMultipleSelect(true);
@@ -142,7 +146,7 @@ const BottomActions = (props) => {
             {isExpanded && (
                 <>
                     {/* Tab Navigation */}
-                    <TabNavigation tabs={['System Generate', 'Manual Post']} activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
                     {/* Character Select - Always visible */}
                     <div style={styles.characterSelect}>
@@ -158,14 +162,14 @@ const BottomActions = (props) => {
                     {selectedCharacters.length > 0 && (
                         <>
                             {/* Generate Mode */}
-                            {activeTab === 'System Generate' && (
+                            {activeTab === 'SYSTEMGENERATE' && (
                                 <div style={styles.generateButtonContainer}>
                                     <button style={styles.generateButton} onClick={onSendButtonClick}>✨ {t('generate')}</button>
                                 </div>
                             )}
 
                             {/* Manual Mode */}
-                            {activeTab === 'Manual Post' && (
+                            {activeTab === 'MANUALPOST' && (
                                 <div style={styles.commentInputContainer}>
                                     <WriteCommentInput
                                         placeholder={commentPlaceholder}

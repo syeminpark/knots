@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next'; // i18n 가져오기
 const EntryTag = (props) => {
     const { selectedMode, size = 'medium', hasBackground = true } = props;
-
+    const { t } = useTranslation();
     const getSizeStyle = () => {
         switch (size) {
+            case 'xs':
+                return styles.xs
             case 'small':
                 return styles.small;
             case 'large':
@@ -17,7 +20,7 @@ const EntryTag = (props) => {
 
     return (
         <span style={{ ...styles.entryTag, ...getSizeStyle(), ...backgroundStyle }}>
-            {selectedMode}
+            {t(selectedMode)}
         </span>
     );
 };
@@ -36,13 +39,17 @@ const styles = {
         backgroundColor: 'transparent',
         padding: '0px',
     },
+    xs: {
+        fontSize: 'var(--font-xs)',
+        padding: '2px 6px',
+    },
     small: {
         padding: '3px 8px',
-        fontSize: '10px',
+        fontSize: 'var(--font-small)',
     },
     medium: {
         padding: '5px 10px',
-        fontSize: '12px',
+        fontSize: 'var(--font-medium)',
     },
     large: {
         padding: '6px 12px',

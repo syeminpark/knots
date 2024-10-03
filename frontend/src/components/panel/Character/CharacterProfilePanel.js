@@ -24,8 +24,15 @@ const CharacterProfilePanel = (props) => {
     const [showDelete, setShowDelete] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
+    const tabs = [
+        { key: 'ABOUT', label: t('about') },
+        { key: 'CONNECTIONS', label: t('connections') },
+        { key: 'JOURNALHISTORY', label: t('journalhistory') },
+        { key: 'COMMENTHISTORY', label: t('commenthistory') },
+    ];
+
     useEffect(() => {
-        setActiveTab(t('about'));
+        setActiveTab('ABOUT');
     }, [t]);
 
     useEffect(() => {
@@ -211,16 +218,16 @@ const CharacterProfilePanel = (props) => {
                     preview={preview}
                     setPreview={setPreview}
                 />
-                <TabNavigation tabs={[t('about'), t('connections'), t('journalhistory'), t('commenthistory')]} activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             {/* Conditionally render the appropriate panel based on activeTab */}
-            {activeTab === t('about') ? (
+            {activeTab === 'ABOUT' ? (
                 <AboutTab
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
 
                 />
-            ) : activeTab === t('connections') ? (
+            ) : activeTab === 'CONNECTIONS' ? (
                 <ConnectionsTab
                     panels={panels}
                     setPanels={setPanels}
@@ -234,7 +241,7 @@ const CharacterProfilePanel = (props) => {
                     dispatchCreatedCharacters={dispatchCreatedCharacters}
 
                 />
-            ) : activeTab === t('journalhistory') ? (
+            ) : activeTab === 'JOURNALHISTORY' ? (
                 <JournalsTab
                     caller={caller}
                     createdJournalBooks={createdJournalBooks}
@@ -242,7 +249,7 @@ const CharacterProfilePanel = (props) => {
                     panels={panels}
                     setPanels={setPanels}
                 />
-            ) : activeTab === t('commenthistory') ? (
+            ) : activeTab === 'COMMENTHISTORY' ? (
                 <CommentsTab
                     panels={panels}
                     setPanels={setPanels}
