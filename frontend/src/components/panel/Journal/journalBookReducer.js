@@ -536,7 +536,7 @@ export const getCommentsBetweenCharacters = (state, characterUUID1, characterUUI
             });
         });
     });
-    console.log(result)
+
     return result;
 };
 

@@ -20,8 +20,6 @@ const CommentsTab = (props) => {
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
 
-    console.log(interactedCharacters)
-
 
 
     const commentsLimitShow = 100;
