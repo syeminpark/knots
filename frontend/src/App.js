@@ -6,6 +6,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import apiRequest from './utility/apiRequest';
 
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
@@ -13,7 +14,8 @@ function App() {
   const [initialData, setInitialData] = useState({ characters: [], journalBooks: [] });
   const [panels, setPanels] = useState([]); // Move panels state to App.js
 
-  // ... your existing initializeData and useEffect functions
+
+
 
   const initializeData = async () => {
     try {

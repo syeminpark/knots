@@ -91,14 +91,14 @@ const SidebarRight = (props) => {
 
     const handleDragEnd = async ({ active, over }) => {
         if (active.id !== over?.id) {
-            const oldIndex = createdCharacters.characters.findIndex(
+            const oldIndex = createdCharacters?.characters?.findIndex(
                 (char) => char.uuid === active.id
             );
-            const newIndex = createdCharacters.characters.findIndex(
+            const newIndex = createdCharacters?.characters?.findIndex(
                 (char) => char.uuid === over?.id
             );
 
-            const newCharacters = Array.from(createdCharacters.characters);
+            const newCharacters = Array.from(createdCharacters?.characters);
             const [movedItem] = newCharacters.splice(oldIndex, 1);
             newCharacters.splice(newIndex, 0, movedItem);
             console.log('newCharacter', newCharacters)
@@ -124,19 +124,19 @@ const SidebarRight = (props) => {
             <h3 className="sidebarRight-title">{t('characters')}</h3>
 
             <span className="sidebarRight-subtitle">
-                {t('online')} - {createdCharacters.characters.length}
+                {t('online')} - {createdCharacters?.characters?.length}
             </span>
 
             <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext
-                    items={createdCharacters.characters.map((char) => char.uuid)}
+                    items={createdCharacters?.characters?.map((char) => char.uuid)}
                     strategy={verticalListSortingStrategy}
                 >
                     <div className="character-list">
-                        {createdCharacters.characters.length > 0 &&
-                            createdCharacters.characters
-                                .filter(character => !character.deleted)
-                                .map((character) => (
+                        {createdCharacters?.characters?.length > 0 &&
+                            createdCharacters?.characters
+                                ?.filter(character => !character.deleted)
+                                ?.map((character) => (
                                     <DraggableCharacterItem
                                         key={character.uuid}
                                         character={character}

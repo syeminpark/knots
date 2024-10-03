@@ -8,9 +8,9 @@ import JournalPanel from './panel/Journal/JournalPanel.js';
 import journalBookReducer from './panel/Journal/journalBookReducer.js';
 import characterReducer from './panel/Character/characterReducer.js';
 import ScrollAndDrag from './ScrollAndDrag.js';
-// import useSocketListeners from '../utility/useSocketListeners.js';
 import { useTranslation } from 'react-i18next'; // i18n 가져오기
 import '../i18n.js'; // i18n 설정 파일 가져오기
+import apiRequest from '../utility/apiRequest.js';
 
 const Home = (props) => {
   const { t } = useTranslation();
@@ -40,8 +40,9 @@ const Home = (props) => {
     navigate('/');
   };
 
+
   useEffect(() => {
-    // Initialize characters and journal books from the initial data
+    // Initialize characters and journal books from the initial data when the component mounts
     dispatchCreatedCharacters({
       type: 'INITIALIZE_CHARACTERS',
       payload: {
@@ -56,8 +57,55 @@ const Home = (props) => {
     });
   }, [initialData]);
 
-  // Use the custom hook to handle socket events
-  // useSocketListeners(dispatchCreatedCharacters, dispatchCreatedJournalBooks, setPanels);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        // Fetch latest data from the server
+        const journalData = await apiRequest('/getAllJournalBooks', 'GET',);
+
+
+        // Update local state with the latest data from the server
+        dispatchCreatedJournalBooks({
+          type: 'INITIALIZE_JOURNALBOOKS',
+          payload: {
+            journalBooks: journalData.journalBooks,
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching latest journal books:', error);
+      }
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        // Fetch latest data from the server
+        const characterData = await apiRequest('/getAllCharacters', 'GET',);
+
+        // Update local state with the latest data from the server
+
+        dispatchCreatedCharacters({
+          type: 'INITIALIZE_CHARACTERS',
+          payload: {
+            characters: characterData
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching latest journal books:', error);
+      }
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+
+
+
 
   const renderPanel = (panel) => {
     switch (panel.type) {
@@ -104,7 +152,7 @@ const Home = (props) => {
 
   return (
     <div className="homeContainer">
-      <div className="logoContainer">
+      <div className="logoContainer" >
         <span className="logoText">⩉ Knots</span>
       </div>
 
@@ -139,25 +187,7 @@ const Home = (props) => {
           value={loggedIn ? "Log out" : "Log in"} // t('logout') : t('login')
         />
       </div>
-
-      {/* <div className="language-switcher-container">
-        <div className="language-switcher">
-          <button
-            className={i18n.resolvedLanguage === 'en' ? 'selected' : ''}
-            onClick={() => changeLanguage('en')}
-          >
-            EN
-          </button>
-          <button
-            className={i18n.resolvedLanguage === 'ko' ? 'selected' : ''}
-            onClick={() => changeLanguage('ko')}
-          >
-            KR
-          </button>
-        </div>
-      </div> */}
     </div>
-
   );
 };
 

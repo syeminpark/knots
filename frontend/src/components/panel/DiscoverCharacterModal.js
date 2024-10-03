@@ -14,7 +14,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     const [textDescription, setTextDescription] = useState('');
     const [stage, setStage] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [generatedCharacters, setGeneratedCharacters] = useState([]); 
+    const [generatedCharacters, setGeneratedCharacters] = useState([]);
     const [personaAttributes, setPersonaAttributes] = useState([]);
 
     const transformToAttributes = (character) => {
@@ -83,7 +83,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
 
                     await apiRequest("/createCharacter", 'POST', createPayload);
 
-                // Collect connected characters
+                    // Collect connected characters
                     if (your_relationship) {
                         tempConnectedCharacters.push({
                             name: character?.name,
@@ -147,45 +147,45 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                 </>
             )}
 
-{stage === 1 && generatedCharacters.length > 0 && (
-    <>
-        <ToggleButton direction="left" onClick={backArrowClick} />
+            {stage === 1 && generatedCharacters?.length > 0 && (
+                <>
+                    <ToggleButton direction="left" onClick={backArrowClick} />
 
-        {generatedCharacters.map((character, index) => (
-            <div key={index} style={styles.characterCard}>
+                    {generatedCharacters?.map((character, index) => (
+                        <div key={index} style={styles.characterCard}>
 
-                <div style={styles.sectionHeader}>
-                    <CharacterButton createdCharacter={character} />
-                    <button 
-                        style={styles.plusButton} 
-                        onClick={() => {
-                            // Add your functionality here for what happens when you add the character
-                            console.log(`Character ${character.name} added`);
-                        }}
-                    >
-                        + 추가
-                    </button>
-                </div>
+                            <div style={styles.sectionHeader}>
+                                <CharacterButton createdCharacter={character} />
+                                <button
+                                    style={styles.plusButton}
+                                    onClick={() => {
+                                        // Add your functionality here for what happens when you add the character
+                                        console.log(`Character ${character.name} added`);
+                                    }}
+                                >
+                                    + 추가
+                                </button>
+                            </div>
 
-                <div style={styles.characterInfo}>
-                    {/* Persona Attributes */}
-                    {personaAttributes.length > 0 ? (
-                        <ul style={styles.personaAttributesList}>
-                            {personaAttributes.map((attr, index) => (
-                                <li key={index} style={styles.personaAttributeItem}>
-                                    <strong>{attr.name}:</strong> {attr.description}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>{t('noAttributesFound')}</p>
-                    )}
-                    <p><strong>{t('relationship')}:</strong> {character?.attributes?.my_relationship?.description || 'N/A'}</p>
-                </div>
-            </div>
-        ))}
-    </>
-)}
+                            <div style={styles.characterInfo}>
+                                {/* Persona Attributes */}
+                                {personaAttributes.length > 0 ? (
+                                    <ul style={styles.personaAttributesList}>
+                                        {personaAttributes.map((attr, index) => (
+                                            <li key={index} style={styles.personaAttributeItem}>
+                                                <strong>{attr.name}:</strong> {attr.description}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>{t('noAttributesFound')}</p>
+                                )}
+                                <p><strong>{t('relationship')}:</strong> {character?.attributes?.my_relationship?.description || 'N/A'}</p>
+                            </div>
+                        </div>
+                    ))}
+                </>
+            )}
 
 
 
