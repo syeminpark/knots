@@ -16,6 +16,10 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     const [loading, setLoading] = useState(false);
     const [generatedCharacters, setGeneratedCharacters] = useState([]);
     const [personaAttributes, setPersonaAttributes] = useState([]);
+    const [showAttributes, setShowAttributes] = useState({});
+    const [addedCharacters, setAddedCharacters] = useState({});
+
+
 
     const transformToAttributes = (character) => {
         const personaAttributes = [];
@@ -68,34 +72,6 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
             // Persona Attributes 상태 업데이트
             const { personaAttributes } = transformToAttributes(characterObject?.characters?.[0]);
             setPersonaAttributes(personaAttributes);
-
-            await Promise.all(
-                characterObject?.characters?.map(async (character) => {
-                    const { connectedCharacters, your_relationship } = transformToAttributes(character);
-                    const uuid = uuidv4();
-
-                    const createPayload = {
-                        uuid: uuid,
-                        name: character?.name,
-                        personaAttributes: personaAttributes,
-                        connectedCharacters: connectedCharacters,
-                    };
-
-                    await apiRequest("/createCharacter", 'POST', createPayload);
-
-                    // Collect connected characters
-                    if (your_relationship) {
-                        tempConnectedCharacters.push({
-                            name: character?.name,
-                            description: your_relationship,
-                            uuid: uuid,
-                        });
-                    }
-                })
-            );
-
-            // Update connected characters once all async operations are done
-            setConnectedCharacters((prevCharacters) => [...prevCharacters, ...tempConnectedCharacters]);
         } catch (error) {
             console.log(error);
         } finally {
@@ -103,21 +79,53 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
         }
     };
 
-    const backArrowClick = () => {
-        setStage(0);
+const processCharacters = async (character, currentCharacter, setConnectedCharacters) => {
+    let tempConnectedCharacters = [];
+
+    const { connectedCharacters, your_relationship } = transformToAttributes(character);
+    const uuid = uuidv4();
+
+    const createPayload = {
+        uuid: uuid,
+        name: character?.name,
+        personaAttributes: personaAttributes,
+        connectedCharacters: connectedCharacters,
     };
 
-    const footerButtonLabel = stage === 0 ? t('find') : null;
-    const onFooterButtonClick = stage === 0 ? handleDiscover : () => setShowModal(false);
+    await apiRequest("/createCharacter", 'POST', createPayload);
+
+    // Collect connected characters
+    if (your_relationship) {
+        tempConnectedCharacters.push({
+            name: character?.name,
+            description: your_relationship,
+            uuid: uuid,
+        });
+    }
+
+    // Update connected characters
+    setConnectedCharacters((prevCharacters) => [...prevCharacters, ...tempConnectedCharacters]);
+};
+
+    const toggleAttributes = (index) => {
+        setShowAttributes((prev) => ({
+            ...prev,
+            [index]: !prev[index],
+        }));
+    };
+
+
+    const footerButtonLabel = t('find');
+    const onFooterButtonClick = loading ? null : handleDiscover;
+
 
     return (
         <ModalOverlay
             title={t('discoverCharacter')}
             setShowModal={setShowModal}
-            footerButtonLabel={footerButtonLabel}
-            onFooterButtonClick={onFooterButtonClick}
         >
-            {stage === 0 && (
+            {/* TextArea 및 CharacterButton 부분 */}
+            {(stage === 0 || stage === 1) && (
                 <>
                     <div style={styles.resultsContainer}>
                         <div style={styles.characterProfiles}>
@@ -144,56 +152,88 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                         styles={styles}
                         label={t('association')}
                     />
+    
+                    <div style={styles.modalFooter}>
+                        <button
+                            style={styles.footerButton}
+                            onClick={onFooterButtonClick}
+                            disabled={loading}
+                        >
+                            {footerButtonLabel}
+                        </button>
+                    </div>
+                    
+                    <div>
+                        {loading && <Loading />}
+                    </div>
                 </>
             )}
-
+    
+            {/* 생성된 캐릭터 목록 */}
             {stage === 1 && generatedCharacters?.length > 0 && (
                 <>
-                    <ToggleButton direction="left" onClick={backArrowClick} />
+                    {generatedCharacters?.map((character, index) => {
+                    const attributeLabelMap = {
+                        Backstory: '배경',
+                        my_relationship: `${character.name} ➡️ ${currentCharacter.name}`,
+                        your_relationship: `${currentCharacter.name} ➡️ ${character.name}`,
+                    };
 
-                    {generatedCharacters?.map((character, index) => (
+                    return (
                         <div key={index} style={styles.characterCard}>
-
                             <div style={styles.sectionHeader}>
                                 <CharacterButton createdCharacter={character} />
                                 <button
-                                    style={styles.plusButton}
+                                    style={addedCharacters[index] ? styles.plusButtonDisabled : styles.plusButton} // 상태에 따라 스타일 적용
                                     onClick={() => {
-                                        // Add your functionality here for what happens when you add the character
+                                        processCharacters(character, currentCharacter, setConnectedCharacters);
+                                        setAddedCharacters((prev) => ({ ...prev, [index]: true })); // 추가 상태 업데이트
                                         console.log(`Character ${character.name} added`);
                                     }}
+                                    disabled={addedCharacters[index]} // 추가된 캐릭터라면 버튼 비활성화
                                 >
-                                    + 추가
+                                    {addedCharacters[index] ? "✔️ 추가됨" : "+ 추가"} {/* 상태에 따라 버튼 텍스트 변경 */}
                                 </button>
                             </div>
 
-                            <div style={styles.characterInfo}>
-                                {/* Persona Attributes */}
-                                {personaAttributes.length > 0 ? (
-                                    <ul style={styles.personaAttributesList}>
-                                        {personaAttributes.map((attr, index) => (
-                                            <li key={index} style={styles.personaAttributeItem}>
-                                                <strong>{attr.name}:</strong> {attr.description}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>{t('noAttributesFound')}</p>
-                                )}
-                                <p><strong>{t('relationship')}:</strong> {character?.attributes?.my_relationship?.description || 'N/A'}</p>
-                            </div>
+                            {/* 토글 버튼 */}
+                            <button
+                                style={styles.toggleButton}
+                                onClick={() => toggleAttributes(index)}
+                            >
+                                {showAttributes[index] ? "▲ 닫기" : "▼ 더보기"}
+                            </button>
+
+                            {/* 속성 리스트 */}
+                            {showAttributes[index] && (
+                                <div style={styles.characterInfo}>
+                                    {character.attributes && Object.keys(character.attributes).length > 0 ? (
+                                        <ul style={styles.personaAttributesList}>
+                                            {Object.keys(character.attributes).map((attrKey, idx) => (
+                                                <li key={idx} style={styles.personaAttributeItem}>
+                                                    <strong>
+                                                        {attributeLabelMap[attrKey] || attrKey}: {/* 매핑된 이름을 사용하거나 기본 키 사용 */}
+                                                    </strong> 
+                                                    {character.attributes[attrKey].description || 'N/A'}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>{t('noAttributesFound')}</p>
+                                    )}
+                                </div>
+                            )}
                         </div>
-                    ))}
+                    );
+                })}
+
+
                 </>
             )}
-
-
-
-
-
-            {loading && <Loading />}
         </ModalOverlay>
     );
+    
+    
 };
 
 const styles = {
@@ -305,6 +345,38 @@ const styles = {
     },
     plusButtonHover: {
         backgroundColor: '#5757d1', // Darken the color on hover
+    },
+    plusButtonDisabled: {
+        fontSize: '16px',
+        padding: '8px 16px',
+        color: 'gray',
+        backgroundColor: '#e0e0e0',
+        border: 'none',
+        borderRadius: '5px',
+        marginLeft: '10px',
+        transition: 'background-color 0.3s ease',
+    },    
+    footerButton: {
+        backgroundColor: 'black',
+        color: 'white',
+        padding: '10px 20px',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: 'var(--font-medium)',
+    },
+    modalFooter: {
+        textAlign: 'center',
+        margin: '10px',
+    },
+    toggleButton: {
+        padding: '5px 10px',
+        backgroundColor: '#333',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        marginTop: '10px',
     },
 };
 
