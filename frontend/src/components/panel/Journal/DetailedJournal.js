@@ -44,7 +44,7 @@ const DetailedJournal = (props) => {
         else {
             setSelectedBookAndJournalEntry(null)
         }
-        console.log('hey')
+
     }, [createdJournalBooks]);
 
     // Scroll to the specific comment thread being tracked, unique to this panel
