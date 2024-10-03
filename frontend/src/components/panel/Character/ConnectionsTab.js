@@ -102,15 +102,6 @@ const ConnectionsTab = (props) => {
                     isConnectionsTab={true}
                 />
             ))}
-            <button className="create-new-btn" onClick={handleOpenAddModal}>
-                {t('addconnections')}
-            </button>
-            <button
-                className="discover-btn"
-                onClick={handleOpenDiscoverModal}
-            >
-                {t('discoverCharacter')}
-            </button>
 
             {showModal && (
                 <AddConnectionModal
@@ -148,6 +139,16 @@ const ConnectionsTab = (props) => {
                     </div>
                 </DeleteConfirmationModal>
             )}
+
+            <div style={styles.buttonContainer}>
+                <button style={styles.createButton} onClick={handleOpenAddModal}>
+                    {t('addconnections')}
+                </button>
+                <button style={styles.discoverButton} onClick={handleOpenDiscoverModal}
+                >
+                    {t('discoverCharacter')}
+                </button>
+            </div>
         </div>
     );
 };
@@ -156,6 +157,16 @@ const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 350px)',
+    },
+    buttonContainer: {
+        position: 'sticky', 
+        bottom: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '10px 0px',
+        backgroundColor: '#fff',
+        zIndex: 100,
+        gap: '10px',
     },
     modalButtonContainer: {
         display: 'flex',
@@ -178,6 +189,30 @@ const styles = {
         borderRadius: '4px',
         cursor: 'pointer',
     },
+    discoverButton: {
+
+        width: '100%',
+        padding: '10px',
+        backgroundColor: 'black',
+        border: 'none',
+        borderRadius: '6px',
+        color: 'white',
+        fontSize: 'var(--font-medium)',
+        marginTop: '6px',
+        cursor: 'pointer',
+
+    },
+    createButton: {
+        width: '100%',
+        padding: '10px',
+        backgroundColor: 'var(--color-secondary)',
+        border: 'none',
+        borderRadius: '6px',
+        color: 'white',
+        fontSize: 'var(--font-medium)',
+        marginTop: '6px',
+        cursor: 'pointer',
+    }
 };
 
 export default ConnectionsTab;
