@@ -276,8 +276,7 @@ const styles = {
         marginBottom: '10px',
     },
     toggleContainer: {
-        marginLeft: '10px',
-
+        marginLeft: 'auto',
 
     },
     sectionHeaderLabel: {

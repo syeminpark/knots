@@ -12,7 +12,10 @@ const AddConnectionModal = (props) => {
         if (selectedCharacters.length > 0) {
             let temp = []
             for (let character of selectedCharacters) {
-                temp.push({ name: character.name, uuid: character.uuid })
+                temp.push({
+                    name: character.name, uuid: character.uuid, knowledge: [],
+                    includeInJournal: 'false,'
+                })
                 console.log(temp)
             }
             setConnectedCharacters([...connectedCharacters, ...temp])
