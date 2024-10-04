@@ -141,12 +141,12 @@ const ConnectionsTab = (props) => {
             )}
 
             <div style={styles.buttonContainer}>
-                <button style={styles.createButton} onClick={handleOpenAddModal}>
-                    {t('addconnections')}
-                </button>
                 <button style={styles.discoverButton} onClick={handleOpenDiscoverModal}
                 >
                     {t('discoverCharacter')}
+                </button>
+                <button style={styles.createButton} onClick={handleOpenAddModal}>
+                    {t('addconnections')}
                 </button>
             </div>
         </div>
