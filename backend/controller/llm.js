@@ -21,7 +21,12 @@ const llmController = {
                         const updatedConnectedCharacters = await updateConnectedCharacterKnowledge(character.connectedCharacters);
                         console.log(updatedConnectedCharacters)
                         const systemPrompt = `
-                       You are an actor, brilliant at method acting. Especially, you have mastered the role of the fictional story character ${character.name}.
+                       You are an actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. 
+                       
+                       Roleplaying Rules:
+                       1. Stay in character as ${character.name} throughout the writing process.
+                       2. Use the character description as a blueprint to guide your writing, but do not copy or paraphrase them directly.
+                       3. Use the information provided to inform your role, but do not break character to explain details.
                         `;
                         // console.log('systemPrompt', systemPrompt)
 
@@ -52,10 +57,6 @@ const llmController = {
                         }
 
                         userPrompt += `
-                       Rule For Roleplaying:
-                        1. Stay true to your character at all times.
-                       2. Use the character description as a blueprint to guide your writing, but should not be pharaphrased or written down directly. 
-                      
 
                        Rules For Journaling:
                       1. The content and style of the journal should be written from the perspective of fictional story charcter. 
@@ -136,8 +137,7 @@ const llmController = {
                         const updatedConnectedCharacters = await updateConnectedCharacterKnowledge(character.connectedCharacters);
 
                         // Build systemPrompt with all connected characters
-                        let systemPrompt = `You are an actor, brilliant at method acting.
-                Especially, you have mastered the role of ${character.name}. 
+                        let systemPrompt = `You are an actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. 
         
                         Character Description:
         ${JSON.stringify(character.personaAttributes)}
@@ -240,22 +240,22 @@ const llmController = {
             const { extractedValues, allKeys } = extractAllValuesAndKeys(character.personaAttributes);
             console.log(extractedValues)
 
-            let systemPrompt = `You are a professional story writer, brilliant at creating unique and orignal characters.You should never create stereotypical characters.`
+            let systemPrompt = `You are a professional story writer, brilliant at creating new characters.
+
+            Objective:
+            1. Create 3 new fictional story characters that each have a clear association with ${character.name}  based on the following theme: ${content}.
+            2. However, this association ${content} must manifest through the new characters in a wide range of ways to ensure each character is fresh and compelling.
+            3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. `
 
             let userPrompt = `
             This is ${character.name}.
             ${JSON.stringify(extractedValues)}
 
-Objective:
-1. Create 3 new fictional story characters that each have a clear association with ${character.name} according to the following: ${content}.
-2. However, this association ${content} must manifest through the new characters in diverse ways to ensure each character is fresh and compelling.
-            3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. 
-            
-            Rules for Formatting:
-    1. Each of the 3 characters should have a name, introduction, backstory, and a relationship with ${character.name}. The relationship should be split into two parts:
-- "my_relationship": which describes the relationship from the new character's perspective.
-    - "your_relationship": which describes the relationship from ${character.name} 's perspective.
-2. Format the character's name, introduction, backstory, my_relationship, and your_relationship into JSON format with the following keys: "name", "introduction", "backstory", "my_relationship", "your_relationship".
+Rules for Formatting:
+   1. Each of the 3 characters should have a name, introduction, backstory, and a relationship with ${character.name}. The relationship should be split into two parts:
+   - "my_relationship": which describes the relationship from the new character's perspective.
+   - "your_relationship": which describes the relationship from ${character.name}'s perspective
+2. Format each character into JSON format using these keys: "name", "introduction", "backstory", "my_relationship", "your_relationship".
     - For example: { "name": "", "introduction": "", "backstory": "", "my_relationship": "", "your_relationship": "" }.
 3. The decriptions for each of the keys must have be in vivid detail, and not be superficial summarizations. 
             4. Whenever applicable ensure that the descriptons are at least 5 sentences long. 
