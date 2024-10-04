@@ -130,19 +130,21 @@ const Attribute = (props) => {
 
                             {isConnectionsTab && (
                                 <div style={styles.toggleContainer}>
-                                    <button
-                                        style={{
-                                            backgroundColor: 'transparent',
-                                            border: 'none',
-                                            cursor: 'pointer',
-                                            fontSize: 'var(--font-small)',
-
-                                            color: includeInJournal ? '#4CAF50' : '#FF5722'
-                                        }}
-                                        onClick={handleToggleIncludeInJournal}
-                                    >
-                                        {includeInJournal ? '✅ 저널에 포함' : '❌ 저널에 포함'}
-                                    </button>
+                                    <label style={styles.checkboxwrapper}>
+                                        <input
+                                            type="checkbox"
+                                            checked={includeInJournal}
+                                            onChange={handleToggleIncludeInJournal}
+                                            onClick={(e) => e.stopPropagation()}
+                                            style={{
+                                                ...styles.customCheckbox,
+                                                backgroundColor: includeInJournal ? 'var(--color-secondary)' : 'white', 
+                                            }}
+                                        />
+                                        <span style={styles.checkboxLabel}>
+                                            {includeInJournal ? '저널에 포함됨' : '저널에 제외됨'}
+                                        </span>
+                                    </label>
                                 </div>
                             )}
                         </div>
@@ -370,7 +372,33 @@ const styles = {
         backgroundColor: 'transparent',
         border: 'none',
         paddingBottom: '10px', // Add some spacing for visual clarity
-    }
+    },
+    checkboxwrapper: {
+        display: 'flex', 
+        alignItems: 'center', 
+        cursor: 'pointer',
+        marginLeft: '10px',
+        backgroundColor: '#EDEDED',
+        borderRadius: '8px',
+        padding: '5px 10px 5px 5px', 
+    },
+    customCheckbox: {
+        appearance: 'none',
+        width: '18px',
+        height: '18px',
+        border: '2px solid #ccc',
+        borderRadius: '4px',
+        marginRight: '8px',
+        cursor: 'pointer',
+        position: 'relative',
+        transition: 'background-color 0.3s ease, border-color 0.3s ease',
+    },
+    checkboxLabel: {
+        fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-semibold)',
+        color: '#333',
+        whiteSpace: 'nowrap',
+    },
 };
 
 export default Attribute;
