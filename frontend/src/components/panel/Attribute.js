@@ -130,7 +130,13 @@ const Attribute = (props) => {
 
                             {isConnectionsTab && (
                                 <div style={styles.toggleContainer}>
-                                    <label style={styles.checkboxwrapper}>
+                                    <label
+                                    style={{
+                                        ...styles.checkboxwrapper,
+                                        backgroundColor: includeInJournal ? '#f0eaff' : '#EDEDED',
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    >
                                         <input
                                             type="checkbox"
                                             checked={includeInJournal}
