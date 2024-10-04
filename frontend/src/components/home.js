@@ -58,51 +58,49 @@ const Home = (props) => {
   }, [initialData]);
 
 
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     try {
-  //       // Fetch latest data from the server
-  //       const journalData = await apiRequest('/getAllJournalBooks', 'GET',);
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        // Fetch latest data from the server
+        const journalData = await apiRequest('/getAllJournalBooks', 'GET',);
 
 
-  //       // Update local state with the latest data from the server
-  //       dispatchCreatedJournalBooks({
-  //         type: 'INITIALIZE_JOURNALBOOKS',
-  //         payload: {
-  //           journalBooks: journalData.journalBooks,
-  //         },
-  //       });
-  //     } catch (error) {
-  //       console.error('Error fetching latest journal books:', error);
-  //     }
-  //   }, 5000); // Poll every 5 seconds
+        // Update local state with the latest data from the server
+        dispatchCreatedJournalBooks({
+          type: 'INITIALIZE_JOURNALBOOKS',
+          payload: {
+            journalBooks: journalData.journalBooks,
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching latest journal books:', error);
+      }
+    }, 5000); // Poll every 5 seconds
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     try {
-  //       // Fetch latest data from the server
-  //       const characterData = await apiRequest('/getAllCharacters', 'GET',);
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        // Fetch latest data from the server
+        const characterData = await apiRequest('/getAllCharacters', 'GET',);
 
-  //       // Update local state with the latest data from the server
+        // Update local state with the latest data from the server
 
-  //       dispatchCreatedCharacters({
-  //         type: 'INITIALIZE_CHARACTERS',
-  //         payload: {
-  //           characters: characterData
-  //         },
-  //       });
-  //     } catch (error) {
-  //       console.error('Error fetching latest journal books:', error);
-  //     }
-  //   }, 5000); // Poll every 5 seconds
+        dispatchCreatedCharacters({
+          type: 'INITIALIZE_CHARACTERS',
+          payload: {
+            characters: characterData
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching latest journal books:', error);
+      }
+    }, 5000); // Poll every 5 seconds
 
-  //   return () => clearInterval(interval);
-  // }, []);
-
-
+    return () => clearInterval(interval);
+  }, []);
 
 
 
