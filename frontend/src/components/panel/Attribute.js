@@ -17,17 +17,22 @@ const Attribute = (props) => {
         return attribute && attribute.knowledge ? attribute.knowledge.map(item => item.name) : [];
     });
 
-    const [includeInJournal, setIncludeInJournal] = useState(false); // State for the toggle button
-
-    useEffect(() => {
-        setEditedContent(attribute.description);
-        setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map(item => item?.name) : []); // Update selectedChips when attribute changes
-    }, [attribute]);
+    const [includeInJournal, setIncludeInJournal] = useState(attribute ? attribute.includeInJournal : false)
+    console.log(includeInJournal)
 
     const containerRef = useRef(null);
     const textAreaRef = useRef(null);
     const isClickableToEdit = true;
     const isClickableToSave = true;
+
+
+    useEffect(() => {
+        setEditedContent(attribute?.description);
+        setIncludeInJournal(attribute?.includeInJournal)
+        setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map(item => item?.name) : []); // Update selectedChips when attribute changes
+    }, [attribute]);
+
+
 
     useEffect(() => {
         if (!attribute || !attribute.description) {

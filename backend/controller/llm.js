@@ -19,7 +19,7 @@ const llmController = {
                         const { extractedValues, allKeys } = extractAllValuesAndKeys(character.personaAttributes);
                         // console.log('extractedValues', extractedValues)
                         const updatedConnectedCharacters = await updateConnectedCharacterKnowledge(character.connectedCharacters);
-
+                        console.log(updatedConnectedCharacters)
                         const systemPrompt = `
                        You are an actor, brilliant at method acting. Especially, you have mastered the role of the fictional story character ${character.name}.
                         `;
