@@ -53,7 +53,7 @@ const styles = {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 400px)',
         width: '100%',
-        marginTop: '20px'
+        marginTop: '10px'
     },
 }
 

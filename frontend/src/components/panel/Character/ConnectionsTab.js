@@ -69,16 +69,15 @@ const ConnectionsTab = (props) => {
     };
 
     return (
-        <div style={styles.connectionsTabWrapper}>
-            <div>
-                {t(
-                    connectedCharacters.length === 1
-                        ? 'connection_singular'
-                        : 'connection_plural',
-                    { count: connectedCharacters.length }
-                )}
-            </div>
+        <>
+        {t(
+            connectedCharacters.length === 1
+                ? 'connection_singular'
+                : 'connection_plural',
+            { count: connectedCharacters.length }
+        )}
 
+        <div style={styles.connectionsTabWrapper}>
             {connectedCharacters.map((child) => (
                 <Attribute
                     panels={panels}
@@ -150,6 +149,7 @@ const ConnectionsTab = (props) => {
                 </button>
             </div>
         </div>
+        </>
     );
 };
 
@@ -157,6 +157,7 @@ const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 350px)',
+        marginTop: '10px'
     },
     buttonContainer: {
         position: 'sticky', 
