@@ -28,11 +28,16 @@ const Attribute = (props) => {
 
     useEffect(() => {
         setEditedContent(attribute?.description);
+
+    }, [attribute?.description]);
+
+    useEffect(() => {
         setIncludeInJournal(attribute?.includeInJournal)
+    }, [attribute?.includeInJournal]);
+
+    useEffect(() => {
         setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map(item => item?.name) : []); // Update selectedChips when attribute changes
-    }, [attribute]);
-
-
+    }, [attribute?.knowledge]);
 
     useEffect(() => {
         if (!attribute || !attribute.description) {
@@ -109,151 +114,151 @@ const Attribute = (props) => {
 
     return (
         <>
-        {/* Move toggleContainer outside of attributeContainer */}
-        {isConnectionsTab && (
-            <div style={styles.toggleContainer}>
-                <label
-                    style={{
-                        ...styles.checkboxwrapper,
-                        backgroundColor: includeInJournal ? '#f0eaff' : 'var(--color-bg-grey)',
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <input
-                        type="checkbox"
-                        checked={includeInJournal}
-                        onChange={handleToggleIncludeInJournal}
-                        onClick={(e) => e.stopPropagation()}
+            {/* Move toggleContainer outside of attributeContainer */}
+            {isConnectionsTab && (
+                <div style={styles.toggleContainer}>
+                    <label
                         style={{
-                            ...styles.customCheckbox,
-                            backgroundColor: includeInJournal ? 'var(--color-secondary)' : 'white',
+                            ...styles.checkboxwrapper,
+                            backgroundColor: includeInJournal ? '#f0eaff' : 'var(--color-bg-grey)',
                         }}
-                    />
-                    <span style={styles.checkboxLabel}>
-                        {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
-                    </span>
-                </label>
-            </div>
-        )}
-
-        <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>           
-            <div style={styles.sectionHeader}>
-                {connectedCharacter ? (
-                    <div>
-                        <div style={styles.characterProfilesContainer}>
-                            <div style={styles.characterProfiles}>
-                                <CharacterButton createdCharacter={currentCharacter}></CharacterButton>
-                                →
-                                <button
-                                    style={styles.profileButtonContainer}
-                                    key={connectedCharacter.uuid}
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
-                                        openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
-                                    }}
-                                >
-                                    <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
-                                </button>
-                            </div>
-                        </div>
-                        <label style={styles.sectionHeaderLabel}>{t('relationshipsAttribute')}</label>
-                    </div>
-                ) : (
-                    <label style={styles.sectionHeaderLabel}>{title}</label>
-                )}
-
-                {/* Edit and More Buttons */}
-
-                <div style={styles.buttonsContainer}>
-                    <button
-                        style={styles.editButton}
-                        onClick={(e) => {
-                            e.stopPropagation(); // Prevent container click from triggering
-                            handleSave();
-                            setIsEditing(!isEditing); // Toggle between edit and save modes
-                        }}
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        {isEditing ? '💾' : '✎'}
-                    </button>
+                        <input
+                            type="checkbox"
+                            checked={includeInJournal}
+                            onChange={handleToggleIncludeInJournal}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{
+                                ...styles.customCheckbox,
+                                backgroundColor: includeInJournal ? 'var(--color-secondary)' : 'white',
+                            }}
+                        />
+                        <span style={styles.checkboxLabel}>
+                            {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
+                        </span>
+                    </label>
+                </div>
+            )}
 
-                    {/* More Options Button */}
-                    <button style={styles.moreButton} onClick={toggleDeleteButton}>
-                        ...
-                    </button>
+            <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>
+                <div style={styles.sectionHeader}>
+                    {connectedCharacter ? (
+                        <div>
+                            <div style={styles.characterProfilesContainer}>
+                                <div style={styles.characterProfiles}>
+                                    <CharacterButton createdCharacter={currentCharacter}></CharacterButton>
+                                    →
+                                    <button
+                                        style={styles.profileButtonContainer}
+                                        key={connectedCharacter.uuid}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
+                                            openNewPanel(panels, setPanels, "character-profile", connectedCharacter);
+                                        }}
+                                    >
+                                        <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
+                                    </button>
+                                </div>
+                            </div>
+                            <label style={styles.sectionHeaderLabel}>{t('relationshipsAttribute')}</label>
+                        </div>
+                    ) : (
+                        <label style={styles.sectionHeaderLabel}>{title}</label>
+                    )}
 
-                    {/* Conditionally Render Delete Button */}
-                    {showDelete && (
+                    {/* Edit and More Buttons */}
+
+                    <div style={styles.buttonsContainer}>
                         <button
-                            style={styles.deleteButton}
+                            style={styles.editButton}
                             onClick={(e) => {
                                 e.stopPropagation(); // Prevent container click from triggering
-                                deleteFunction(title, list, setter);
+                                handleSave();
+                                setIsEditing(!isEditing); // Toggle between edit and save modes
                             }}
                         >
-                            {t('delete')}
+                            {isEditing ? '💾' : '✎'}
                         </button>
-                    )}
-                </div>
 
-            </div>
-            {/* Text Area or static text depending on edit mode */}
-            {
-                isEditing ? (
-                    <TextArea
-                        ref={textAreaRef} // Attach the ref to the TextArea
-                        attribute={{ description: editedContent }}
-                        placeholder={placeholder}
-                        onChange={(e) => setEditedContent(e.target.value)} // Update local state
-                        styles={styles}
-                    />
-                ) : (
-                    <div
-                        style={{
-                            ...styles.description,
-                            backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
-                            border: 'none', // Remove border when not editing
-                        }}
-                    >
-                        {attribute ? attribute.description : placeholder}
+                        {/* More Options Button */}
+                        <button style={styles.moreButton} onClick={toggleDeleteButton}>
+                            ...
+                        </button>
+
+                        {/* Conditionally Render Delete Button */}
+                        {showDelete && (
+                            <button
+                                style={styles.deleteButton}
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent container click from triggering
+                                    deleteFunction(title, list, setter);
+                                }}
+                            >
+                                {t('delete')}
+                            </button>
+                        )}
                     </div>
-                )
-            }
 
-            {/* Additional Knowledge Section for Connections */}
-            {
-                isConnectionsTab && (
-                    <>
-                        <br />
-
-                        <div style={styles.sectionHeaderLabel}>{t('knowledge')}</div>
-                        {/* Include In Journal Button (Positioned Below Edit and More Buttons) */}
-
-
-                        <div style={styles.knowledgeExplanation}>
-                            {t('knowsAbout', {
-                                currentCharacterName: currentCharacter?.name,
-                                connectedCharacterName: connectedCharacter?.name,
-                            })}
+                </div>
+                {/* Text Area or static text depending on edit mode */}
+                {
+                    isEditing ? (
+                        <TextArea
+                            ref={textAreaRef} // Attach the ref to the TextArea
+                            attribute={{ description: editedContent }}
+                            placeholder={placeholder}
+                            onChange={(e) => setEditedContent(e.target.value)} // Update local state
+                            styles={styles}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                ...styles.description,
+                                backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
+                                border: 'none', // Remove border when not editing
+                            }}
+                        >
+                            {attribute ? attribute.description : placeholder}
                         </div>
-                        <div style={styles.chipsContainer}>
-                            {connectedCharacter?.personaAttributes.map((attr, index) => (
-                                <div
-                                    key={index}
-                                    style={{
-                                        ...styles.chip,
-                                        ...(selectedChips.includes(attr.name) ? styles.selectedChip : {}),
-                                    }}
-                                    onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
-                                >
-                                    {selectedChips.includes(attr.name) ? '✔ ' : ''}
-                                    {attr.name}
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                )
-            }
-        </div >
+                    )
+                }
+
+                {/* Additional Knowledge Section for Connections */}
+                {
+                    isConnectionsTab && (
+                        <>
+                            <br />
+
+                            <div style={styles.sectionHeaderLabel}>{t('knowledge')}</div>
+                            {/* Include In Journal Button (Positioned Below Edit and More Buttons) */}
+
+
+                            <div style={styles.knowledgeExplanation}>
+                                {t('knowsAbout', {
+                                    currentCharacterName: currentCharacter?.name,
+                                    connectedCharacterName: connectedCharacter?.name,
+                                })}
+                            </div>
+                            <div style={styles.chipsContainer}>
+                                {connectedCharacter?.personaAttributes.map((attr, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            ...styles.chip,
+                                            ...(selectedChips.includes(attr.name) ? styles.selectedChip : {}),
+                                        }}
+                                        onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
+                                    >
+                                        {selectedChips.includes(attr.name) ? '✔ ' : ''}
+                                        {attr.name}
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )
+                }
+            </div >
         </>
     );
 };
@@ -390,12 +395,12 @@ const styles = {
         paddingBottom: '10px', // Add some spacing for visual clarity
     },
     checkboxwrapper: {
-        display: 'flex', 
-        alignItems: 'center', 
+        display: 'flex',
+        alignItems: 'center',
         cursor: 'pointer',
         backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
-        padding: '5px 10px 5px 5px', 
+        padding: '5px 10px 5px 5px',
     },
     customCheckbox: {
         appearance: 'none',

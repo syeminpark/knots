@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// CharacterProfilePanel.js
+import React, { useState, useEffect, useRef } from 'react';
 import BasePanel from '../BasePanel';
 import AboutTab from './AboutTab';
 import ConnectionsTab from './ConnectionsTab';
@@ -9,6 +10,9 @@ import CommentsTab from './CommentsTab';
 import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
 import { useTranslation } from 'react-i18next';
 import DeleteConfirmationModal from '../../DeleteConfirmationModal';
+import { debounce } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import Loading from '../../Loading';
 
 const CharacterProfilePanel = (props) => {
     const { id, caller, panels, setPanels, createdCharacters, dispatchCreatedCharacters, createdJournalBooks, dispatchCreatedJournalBooks } = props;
@@ -19,10 +23,12 @@ const CharacterProfilePanel = (props) => {
     const [imageSrc, setImageSrc] = useState(caller.imageSrc);
     const [name, setName] = useState(caller.name);
     const [preview, setPreview] = useState(null);
+    const [loading, setLoading] = useState(null);
 
     const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [selectedConnectionToDelete, setSelectedConnectionToDelete] = useState(null);
 
     const tabs = [
         { key: 'ABOUT', label: t('about') },
@@ -31,18 +37,20 @@ const CharacterProfilePanel = (props) => {
         { key: 'COMMENTHISTORY', label: t('commenthistory') },
     ];
 
+
+    // Initialize active tab
     useEffect(() => {
         setActiveTab('ABOUT');
     }, [t]);
 
+    // Remove panel if character is deleted
     useEffect(() => {
         if (!createdCharacters.characters.find(character => character.uuid === caller.uuid)) {
             setPanels(prevPanels => prevPanels.filter(panel => panel.id !== id));
         }
-    }, [createdCharacters]);
+    }, [createdCharacters, caller.uuid, id, setPanels]);
 
-
-    // enabling save button 
+    // Enable save button if there are changes
     useEffect(() => {
         const hasChanges =
             name !== caller.name ||
@@ -51,9 +59,9 @@ const CharacterProfilePanel = (props) => {
             imageSrc !== caller.imageSrc;
 
         setSaveButtonEnabled(hasChanges);
-    }, [name, personaAttributes, connectedCharacters, imageSrc, caller]);
+    }, [name, personaAttributes, connectedCharacters, imageSrc, caller.name, caller.personaAttributes, caller.connectedCharacters, caller.imageSrc]);
 
-    // Effect to update local state when `createdCharacters` is updated
+    // Update local state when `createdCharacters` changes
     useEffect(() => {
         const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
         if (updatedCharacter) {
@@ -64,6 +72,7 @@ const CharacterProfilePanel = (props) => {
         }
     }, [createdCharacters, caller.uuid]);
 
+    // Synchronize connected characters names
     useEffect(() => {
         const updatedConnectedCharacters = connectedCharacters.map((connectedCharacter) => {
             const foundCharacter = createdCharacters.characters.find(
@@ -85,53 +94,44 @@ const CharacterProfilePanel = (props) => {
         }
     }, [createdCharacters, connectedCharacters]);
 
-
+    // Debounced save function inside useEffect
     useEffect(() => {
-        const saveFunction = async () => {
-            console.log('saveFunctionTriggered')
+        const debouncedSave = debounce(async () => {
+            console.log('saveFunctionTriggered');
+
             if (!name.trim()) {
                 alert(t("nameRequired"));
                 return;
             }
-            // const newPanels = panels.filter(panel => panel.id !== id);
-            // setPanels(newPanels);
 
             const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
-            const updatedData = {};
-            // const connectionUpdates = [];
-
-            if (name !== existingCharacter.name) updatedData.name = name;
-            if (JSON.stringify(personaAttributes) !== JSON.stringify(existingCharacter.personaAttributes)) updatedData.personaAttributes = personaAttributes;
-            if (JSON.stringify(connectedCharacters) !== JSON.stringify(existingCharacter.connectedCharacters)) {
-                updatedData.connectedCharacters = connectedCharacters;
-                //     connectedCharacters.forEach(connectedCharacter => {
-                //         const foundConnectedCharacter = createdCharacters.characters.find(
-                //             (createdCharacter) => createdCharacter.uuid === connectedCharacter.uuid
-                //         );
-
-                //         if (foundConnectedCharacter) {
-                //             const reverseConnectionIndex = foundConnectedCharacter.connectedCharacters.findIndex(c => c.uuid === caller.uuid);
-                //             const reverseConnection = {
-                //                 uuid: caller.uuid,
-                //                 name,  
-                //                 sharedHistory: connectedCharacter.sharedHistory,  
-                //                 myPOV: connectedCharacter.theirPOV,  
-                //                 theirPOV: connectedCharacter.myPOV,
-                //             };
-                //             if (reverseConnectionIndex >= 0) {
-                //                 foundConnectedCharacter.connectedCharacters[reverseConnectionIndex] = reverseConnection;
-                //             } else {
-                //                 foundConnectedCharacter.connectedCharacters.push(reverseConnection);
-                //             }
-                //             connectionUpdates.push(apiRequest(`/updateCharacter/${foundConnectedCharacter.uuid}`, 'PUT', { connectedCharacters: foundConnectedCharacter.connectedCharacters }));
-                //         }
-                //     });
-            }
-            const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
-            if (!Object.keys(updatedData).length && !isImageUpdated) {
+            if (!existingCharacter) {
+                console.error('Existing character not found.');
                 return;
             }
+
+            const updatedData = {};
+
+            if (name !== existingCharacter.name) {
+                updatedData.name = name;
+            }
+
+            if (!isEqual(personaAttributes, existingCharacter.personaAttributes)) {
+                updatedData.personaAttributes = personaAttributes;
+            }
+
+            if (!isEqual(connectedCharacters, existingCharacter.connectedCharacters)) {
+                updatedData.connectedCharacters = connectedCharacters;
+            }
+
+            const isImageUpdated = imageSrc !== existingCharacter.imageSrc;
+            if (!Object.keys(updatedData).length && !isImageUpdated) {
+                console.log('No changes detected. Skipping save.');
+                return;
+            }
+
             try {
+                setLoading(true)
                 if (isImageUpdated) {
                     const formData = new FormData();
                     formData.append('image', imageSrc);
@@ -140,65 +140,72 @@ const CharacterProfilePanel = (props) => {
                     const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
                     if (uploadResponse.imageUrl) {
                         updatedData.imageSrc = uploadResponse.imageUrl;
+                    } else {
+                        console.error('Image upload failed. Response:', uploadResponse);
+                        alert(t('imageUploadFailed')); // Ensure you have this translation key
+                        return;
                     }
                 }
 
-                const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
+                // Dispatch the update to the global state
                 dispatchCreatedCharacters({
                     type: 'EDIT_CREATED_CHARACTER',
                     payload: { ...updatedData, uuid: caller.uuid }
                 });
+
+                // Make the API call to update the character
+                const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
                 console.log('Character update response:', response);
 
-                // await Promise.all(connectionUpdates);
-                // console.log('Character and connections updated successfully');
+                // Optionally, provide user feedback
+                // alert(t('profileSavedSuccessfully')); // Ensure you have this translation key
 
             } catch (error) {
-                console.log('Error updating character:', error);
+                console.error('Error updating character:', error);
+                alert(t('updateFailed')); // Ensure you have this translation key
             }
+            finally {
+                setLoading(false)
+            }
+        }, 500); // 500ms debounce delay
+
+        debouncedSave();
+
+        // Cleanup function to cancel the debounced call if dependencies change before the debounce delay
+        return () => {
+            debouncedSave.cancel();
         };
-        saveFunction()
-    }, [connectedCharacters, personaAttributes, imageSrc, name])
+    }, [connectedCharacters, personaAttributes, imageSrc, name, t, caller.uuid, createdCharacters.characters, dispatchCreatedCharacters]);
 
-
-
+    // Delete function
     const deleteFunction = async () => {
         setShowDeleteConfirmation(true);
     };
 
     const confirmDelete = async () => {
-
-        // setPanels([]);
         dispatchCreatedJournalBooks({
             type: 'DELETE_JOURNAL_ENTRY_OWNER_UUID',
             payload: { ownerUUID: caller.uuid }
+        });
 
-        })
         dispatchCreatedCharacters({
             type: 'DELETE_CHARACTER',
             payload: { uuid: caller.uuid }
-        })
+        });
 
         try {
-            const response = await apiRequest(`/deleteJournalEntryByOwnerUUID/${caller.uuid}`, 'DELETE')
-            console.log('Entry delete response', response)
-        }
-        catch (error) {
+            const response = await apiRequest(`/deleteJournalEntryByOwnerUUID/${caller.uuid}`, 'DELETE');
+            console.log('Entry delete response', response);
+        } catch (error) {
             console.log('Error deleting entries:', error);
         }
 
         try {
-            const response = await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE')
-            console.log('Character Delete response: ', response)
-        }
-        catch (error) {
+            const response = await apiRequest(`/deleteCharacter/${caller.uuid}`, 'DELETE');
+            console.log('Character Delete response: ', response);
+        } catch (error) {
             console.log('Error deleting character:', error);
         }
-    };
-
-
-    const toggleDeleteButton = () => {
-        setShowDelete(prev => !prev);
     };
 
     return (
@@ -226,7 +233,6 @@ const CharacterProfilePanel = (props) => {
                 <AboutTab
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
-
                 />
             ) : activeTab === 'CONNECTIONS' ? (
                 <ConnectionsTab
@@ -240,7 +246,6 @@ const CharacterProfilePanel = (props) => {
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
                     dispatchCreatedCharacters={dispatchCreatedCharacters}
-
                 />
             ) : activeTab === 'JOURNALHISTORY' ? (
                 <JournalsTab
@@ -259,15 +264,7 @@ const CharacterProfilePanel = (props) => {
                     createdCharacters={createdCharacters}
                 />
             ) : null}
-            {/* <div className="save-btn-container">
-                <button
-                    className="save-btn"
-                    onClick={saveFunction}
-                    disabled={!saveButtonEnabled}
-                >
-                    Save
-                </button>
-            </div> */}
+            {/* Delete Confirmation Modal */}
             {showDeleteConfirmation && (
                 <DeleteConfirmationModal
                     title={t('confirmDeletion')}
@@ -275,10 +272,8 @@ const CharacterProfilePanel = (props) => {
                 >
                     <p style={{ marginBottom: '20px' }}>
                         {t('areYouSureDelete')}
-                        <br></br>
-
+                        <br />
                     </p>
-
                     <div style={styles.modalButtonContainer}>
                         <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
                             {t('cancel')}
@@ -289,7 +284,6 @@ const CharacterProfilePanel = (props) => {
                     </div>
                 </DeleteConfirmationModal>
             )}
-
         </BasePanel>
     );
 };
@@ -302,7 +296,6 @@ const styles = {
         backgroundColor: 'white',
         paddingBottom: '10px',
     },
-
     modalButtonContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -324,6 +317,7 @@ const styles = {
         borderRadius: '4px',
         cursor: 'pointer',
     },
+    // ... other styles
 };
 
 export default CharacterProfilePanel;
