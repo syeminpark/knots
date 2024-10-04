@@ -148,7 +148,7 @@ const Attribute = (props) => {
                                             }}
                                         />
                                         <span style={styles.checkboxLabel}>
-                                            {includeInJournal ? '저널에 포함됨' : '저널에 제외됨'}
+                                            {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
                                         </span>
                                     </label>
                                 </div>
@@ -273,6 +273,13 @@ const styles = {
         marginBottom: '10px',
 
     },
+    characterProfilesContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between', // This pushes the toggleContainer to the right
+        marginBottom: '10px',
+    },
     characterProfiles: {
         display: 'flex',
         justifyContent: 'flex-start',
@@ -280,13 +287,15 @@ const styles = {
         gap: '20px',
         marginBottom: '10px',
         width: '100%',
+        fontSize: '14px',
     },
-    characterProfilesContainer: {
+    profileButtonContainer: {
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
-        justifyContent: 'space-between', // This pushes the toggleContainer to the right
-        marginBottom: '10px',
+        cursor: 'pointer',
+        backgroundColor: 'transparent',
+        border: 'none',
+        fontSize: '14px',
     },
     toggleContainer: {
         marginLeft: 'auto',
@@ -301,8 +310,9 @@ const styles = {
     buttonsContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '5px', // Adjust spacing between the buttons
-        marginTop: '10px',
+        gap: '5px', // Spacing between the buttons
+        alignSelf: 'flex-end', // Moves the buttons to the bottom within their container
+        marginTop: '10px', // Adjust this to move the buttons further down
     },
 
     moreButton: {
@@ -337,13 +347,6 @@ const styles = {
         overflow: 'hidden', // Hides overflow to prevent the scroll bar
         whiteSpace: 'pre-wrap', // Preserves spaces, line breaks, and tabs
         border: '1px solid #b8b8f3'
-    },
-    profileButtonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-        border: 'none',
     },
     chipsContainer: {
         marginTop: '10px',
