@@ -38,6 +38,7 @@ const journalController = {
                 ownerUUID: character.uuid,
                 userUUID: userUUID,
                 content: character.content,
+                title: journalBookTitle,
 
             }));
             await JournalEntry.insertMany(journalEntries);

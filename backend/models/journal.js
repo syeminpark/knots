@@ -39,6 +39,7 @@ const journalEntrySchema = new mongoose.Schema({
     journalBookUUID: { type: String, required: true },
     userUUID: { type: String, required: true },
     ownerUUID: { type: String, required: true },
+    title: { type: String, required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     isDeleted: { type: Boolean, required: true, default: false },  // Add isDeleted field for soft delete
