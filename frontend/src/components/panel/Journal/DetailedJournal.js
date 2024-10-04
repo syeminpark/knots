@@ -20,10 +20,12 @@ const DetailedJournal = (props) => {
         trackingCommentThread,
         setTrackingCommentThread,
 
+
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const commentThreadRefs = useRef({});
+
 
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
@@ -32,6 +34,7 @@ const DetailedJournal = (props) => {
 
     const [loading, setLoading] = useState(false);
     const [scrollDown, setScrollDwon] = useState(false);
+    const [newComment, setNewComment] = useState(false);
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
@@ -135,6 +138,8 @@ const DetailedJournal = (props) => {
                                                 setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                                                 scrollDown={scrollDown}
                                                 setScrollDown={setScrollDwon}
+                                                setNewComment={setNewComment}
+                                                newComent={newComment}
                                             />
                                             {isLastCommentOverall && (
                                                 <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
@@ -158,6 +163,7 @@ const DetailedJournal = (props) => {
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                         selectedBookAndJournalEntry={selectedBookAndJournalEntry}
                         setLoading={setLoading}
+                        setNewComment={setNewComment}
                     />
                 </div>
             </div>
