@@ -1,4 +1,5 @@
 import CharacterModel from '../models/character.js';
+import { Comment, CommentThread } from '../models/journal.js';
 
 // turn the format {name: 백스토리. description: 모시기} intro 백스토리: 모시기
 export const extractAllValuesAndKeys = (arr) => {
@@ -96,3 +97,52 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters) => 
     return updatedConnectedCharacters; // Optionally return the updated connected characters
 };
 
+
+
+export const getCommentHistory = async (commentThreadUUID) => {
+    try {
+        // Step 1: Find the comment thread by UUID
+        const commentThread = await CommentThread.findOne({ uuid: commentThreadUUID, isDeleted: false });
+
+        if (!commentThread) {
+            return { error: 'Comment thread not found.' };
+        }
+
+        // Step 2: Find all comments associated with the comment thread, sorted by createdAt, excluding soft-deleted comments
+        const comments = await Comment.find({ commentThreadUUID, isDeleted: false }).sort({ createdAt: 1 });
+
+        if (comments.length === 0) {
+            return { error: 'No comments found for this thread.' };
+        }
+
+        // Step 3: Find the name for each comment's ownerUUID
+        const commentHistory = await Promise.all(
+            comments.map(async (comment) => {
+                // Find the character by ownerUUID (assuming it maps to a Character)
+                const character = await CharacterModel.findOne({ uuid: comment.ownerUUID });
+
+                // Return the name and content only
+                return {
+                    name: character ? character.name : 'Unknown',
+                    content: comment.content,
+                };
+            })
+        );
+
+        // Step 4: Get the last comment's ownerUUID and find their character name
+        const lastComment = comments[comments.length - 1];
+        const lastCharacter = await CharacterModel.findOne({ uuid: lastComment.ownerUUID });
+
+        // Return the comment history and the name of the character who made the last comment
+        return {
+            commentHistory,
+            previousCommentCharacterName: lastCharacter ? lastCharacter.name : 'Unknown'
+        };
+
+    } catch (error) {
+        console.error('Error fetching comment history:', error);
+        throw new Error('An error occurred while fetching comment history.');
+    }
+};
+
+export default getCommentHistory;

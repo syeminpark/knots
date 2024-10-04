@@ -1,8 +1,7 @@
 import openAI from "../utils/openAI.js";
 import CharacterModel from "../models/character.js";
 import { JournalEntry, CommentThread } from "../models/journal.js";
-import getCommentHistory from "../utils/getCommentHistory";
-import { extractAllValuesAndKeys, updateConnectedCharacterKnowledge, cleanCharacterData } from "../utils/jsonprompts.js";
+import { extractAllValuesAndKeys, updateConnectedCharacterKnowledge, cleanCharacterData, getCommentHistory } from "../utils/jsonprompts.js";
 
 const llmController = {
     onCreateJournalEntries: async (req, res) => {
