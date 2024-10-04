@@ -95,18 +95,20 @@ const CreateJournalModal = (props) => {
                     createdAt: Date.now()
                 };
 
+
                 dispatchCreatedJournalBooks({
                     type: 'CREATE_JOURNAL_BOOK',
                     payload: payload
                 });
+                setShowModal(false);
+                setLoading(false);
                 try {
                     const response = await apiRequest('/createJournalBook', 'POST', payload);
                     console.log(response);
                 } catch (error) {
                     console.log(error);
                 } finally {
-                    setShowModal(false);
-                    setLoading(false);
+
 
                 }
             }

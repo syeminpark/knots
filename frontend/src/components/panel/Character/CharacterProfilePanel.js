@@ -142,11 +142,12 @@ const CharacterProfilePanel = (props) => {
                         updatedData.imageSrc = uploadResponse.imageUrl;
                     }
                 }
+
+                const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
                 dispatchCreatedCharacters({
                     type: 'EDIT_CREATED_CHARACTER',
                     payload: { ...updatedData, uuid: caller.uuid }
                 });
-                const response = await apiRequest(`/updateCharacter/${caller.uuid}`, 'PUT', updatedData);
                 console.log('Character update response:', response);
 
                 // await Promise.all(connectionUpdates);

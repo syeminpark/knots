@@ -60,15 +60,16 @@ const DetailedJournalPost = (props) => {
     const confirmDelete = async () => {
         setSelectedBookAndJournalEntry(null);
 
+        dispatchCreatedJournalBooks({
+            type: 'DELETE_JOURNAL_ENTRY', payload: {
+                journalBookUUID: bookInfo.uuid,
+                journalEntryUUID: journalEntry.uuid
+            }
+        })
         try {
             const response = await apiRequest(`/deleteJournalEntry/${journalEntry.uuid}`, 'DELETE');
             console.log(response);
-            dispatchCreatedJournalBooks({
-                type: 'DELETE_JOURNAL_ENTRY', payload: {
-                    journalBookUUID: bookInfo.uuid,
-                    journalEntryUUID: journalEntry.uuid
-                }
-            })
+
         } catch (error) {
             console.log(error);
         }
