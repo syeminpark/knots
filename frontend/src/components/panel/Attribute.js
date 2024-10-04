@@ -108,7 +108,35 @@ const Attribute = (props) => {
     };
 
     return (
-        <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>
+        <>
+        {/* Move toggleContainer outside of attributeContainer */}
+        {isConnectionsTab && (
+            <div style={styles.toggleContainer}>
+                <label
+                    style={{
+                        ...styles.checkboxwrapper,
+                        backgroundColor: includeInJournal ? '#f0eaff' : 'var(--color-bg-grey)',
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <input
+                        type="checkbox"
+                        checked={includeInJournal}
+                        onChange={handleToggleIncludeInJournal}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            ...styles.customCheckbox,
+                            backgroundColor: includeInJournal ? 'var(--color-secondary)' : 'white',
+                        }}
+                    />
+                    <span style={styles.checkboxLabel}>
+                        {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
+                    </span>
+                </label>
+            </div>
+        )}
+
+        <div ref={containerRef} style={styles.attributeContainer} onClick={handleContainerClick}>           
             <div style={styles.sectionHeader}>
                 {connectedCharacter ? (
                     <div>
@@ -127,26 +155,6 @@ const Attribute = (props) => {
                                     <CharacterButton createdCharacter={connectedCharacter}></CharacterButton>
                                 </button>
                             </div>
-
-                            {isConnectionsTab && (
-                                <div style={styles.toggleContainer}>
-                                    <label style={styles.checkboxwrapper}>
-                                        <input
-                                            type="checkbox"
-                                            checked={includeInJournal}
-                                            onChange={handleToggleIncludeInJournal}
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{
-                                                ...styles.customCheckbox,
-                                                backgroundColor: includeInJournal ? 'var(--color-secondary)' : 'white', 
-                                            }}
-                                        />
-                                        <span style={styles.checkboxLabel}>
-                                            {includeInJournal ? '저널에 포함됨' : '저널에 제외됨'}
-                                        </span>
-                                    </label>
-                                </div>
-                            )}
                         </div>
                         <label style={styles.sectionHeaderLabel}>{t('relationshipsAttribute')}</label>
                     </div>
@@ -182,7 +190,7 @@ const Attribute = (props) => {
                                 deleteFunction(title, list, setter);
                             }}
                         >
-                            Delete
+                            {t('delete')}
                         </button>
                     )}
                 </div>
@@ -246,6 +254,7 @@ const Attribute = (props) => {
                 )
             }
         </div >
+        </>
     );
 };
 
@@ -253,10 +262,10 @@ const Attribute = (props) => {
 const styles = {
     attributeContainer: {
         backgroundColor: 'var(--color-bg-grey)',
-        padding: '15px',
+        padding: '12px',
         borderRadius: '10px',
-        marginTop: '10px',
-        marginBottom: '12px',
+        // marginTop: '10px',
+        marginBottom: '20px',
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
     },
     sectionHeader: {
@@ -267,6 +276,14 @@ const styles = {
         marginBottom: '10px',
 
     },
+    characterProfilesContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between', // This pushes the toggleContainer to the right
+        marginBottom: '10px',
+        marginLeft: '10px',
+    },
     characterProfiles: {
         display: 'flex',
         justifyContent: 'flex-start',
@@ -274,29 +291,32 @@ const styles = {
         gap: '20px',
         marginBottom: '10px',
         width: '100%',
+        fontSize: '14px',
     },
-    characterProfilesContainer: {
+    profileButtonContainer: {
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
-        justifyContent: 'space-between', // This pushes the toggleContainer to the right
-        marginBottom: '10px',
+        cursor: 'pointer',
+        backgroundColor: 'transparent',
+        border: 'none',
+        fontSize: '14px',
     },
     toggleContainer: {
-        marginLeft: 'auto',
-
+        marginBottom: '1px',
     },
     sectionHeaderLabel: {
         color: '#6d6dff',
         fontSize: 'var(--font-medium)',
         fontWeight: 'var(--font-bold)',
+        marginLeft: '10px',
 
     },
     buttonsContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '5px', // Adjust spacing between the buttons
-        marginTop: '10px',
+        gap: '5px', // Spacing between the buttons
+        alignSelf: 'flex-end', // Moves the buttons to the bottom within their container
+        marginTop: '10px', // Adjust this to move the buttons further down
     },
 
     moreButton: {
@@ -322,7 +342,7 @@ const styles = {
     },
     description: {
         width: '100%',
-        minHeight: '70px', // Start with a base height
+        minHeight: '50px', // Start with a base height
         padding: '10px',
         borderRadius: '5px',
         backgroundColor: 'white', // Default background for edit mode
@@ -332,15 +352,9 @@ const styles = {
         whiteSpace: 'pre-wrap', // Preserves spaces, line breaks, and tabs
         border: '1px solid #b8b8f3'
     },
-    profileButtonContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-        border: 'none',
-    },
     chipsContainer: {
         marginTop: '10px',
+        marginLeft: '10px',
         display: 'flex',
         flexWrap: 'wrap',
         gap: '10px',
@@ -362,7 +376,8 @@ const styles = {
     knowledgeExplanation: {
         padding: '5px 0px',
         color: '#333',
-        fontSize: 'var(--font-xs)'
+        fontSize: 'var(--font-xs)',
+        marginLeft: '10px',
     },
     knowledgeHeader: {
         display: 'flex',
@@ -371,14 +386,14 @@ const styles = {
         width: '100%',
         backgroundColor: 'transparent',
         border: 'none',
+        marginLeft: '10px',
         paddingBottom: '10px', // Add some spacing for visual clarity
     },
     checkboxwrapper: {
         display: 'flex', 
         alignItems: 'center', 
         cursor: 'pointer',
-        marginLeft: '10px',
-        backgroundColor: '#EDEDED',
+        backgroundColor: 'var(--color-bg-grey)',
         borderRadius: '8px',
         padding: '5px 10px 5px 5px', 
     },

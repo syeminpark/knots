@@ -23,9 +23,6 @@ export const cleanCharacterData = (characters) => {
     const cleanSingleCharacter = (char) => {
         const cleanedChar = { ...char }; // Create a copy of the connected character
 
-        // Remove uuid key
-        delete cleanedChar.uuid;
-
         // Remove description if it's empty
         if (!cleanedChar.description || cleanedChar.description.trim() === "") {
             delete cleanedChar.description;
@@ -50,13 +47,14 @@ export const cleanCharacterData = (characters) => {
     // If it's a single character object, clean it directly
     return cleanSingleCharacter(characters);
 };
-export const updateConnectedCharacterKnowledge = async (connectedCharacters) => {
+export const updateConnectedCharacterKnowledge = async (connectedCharacters, type = null) => {
     const updatedConnectedCharacters = [];
 
     for (let connectedCharacter of connectedCharacters) {
-        if (connectedCharacter !== '') {
-            // Check if includeInJournal is true before proceeding with knowledge update
-            if (connectedCharacter.includeInJournal) {
+        if (connectedCharacter !== '' && (connectedCharacter.knowledge?.legnth > 0 || connectedCharacter?.description)) {
+            console.log(connectedCharacter.knowledge, connectedCharacter.description)
+            // If type is "journal", proceed only with characters where includeInJournal is true
+            if (!type || (type === 'journal' && connectedCharacter.includeInJournal)) {
                 // Find the corresponding original character from createdCharacters
                 const originalCharacter = await CharacterModel.getCharacterByUUID(connectedCharacter.uuid);
 
@@ -74,7 +72,7 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters) => 
                             // If a matching attribute is found, update the knowledge with the new data
                             return {
                                 ...knowledgeItem,
-                                description: matchingAttribute.description || knowledgeItem.description,
+                                description: matchingAttribute?.description || knowledgeItem.description,
                             };
                         });
 
@@ -83,16 +81,19 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters) => 
 
                     // Save the updated connected character to the database
                     await CharacterModel.updateCharacter(connectedCharacter.uuid, { knowledge: updatedKnowledge });
-
-                    updatedConnectedCharacters.push(connectedCharacter); // Track updated characters
-                } else {
-                    updatedConnectedCharacters.push(connectedCharacter); // If no match, keep the original
                 }
+
+                // Track updated characters, cleaned based on the "journal" type
+                updatedConnectedCharacters.push(connectedCharacter);
             }
         }
     }
-
-    return updatedConnectedCharacters; // Optionally return the updated connected characters
+    if (updatedConnectedCharacters.length > 0) {
+        return updatedConnectedCharacters; // Return either filtered or all updated characters based on type
+    }
+    else {
+        return null
+    }
 };
 
 
@@ -134,7 +135,8 @@ export const getCommentHistory = async (commentThreadUUID) => {
         // Return the comment history and the name of the character who made the last comment
         return {
             commentHistory,
-            previousCommentCharacterName: lastCharacter ? lastCharacter.name : 'Unknown'
+            previousCommentCharacterName: lastCharacter ? lastCharacter.name : 'Unknown',
+            previousCommentCharacterUUID: lastCharacter ? lastCharacter.uuid : null,
         };
 
     } catch (error) {

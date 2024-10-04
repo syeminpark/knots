@@ -253,7 +253,7 @@ const styles = {
         textAlign: 'left',
         whiteSpace: "pre-line",
         wordBreak: "break-word",
-        cursor: 'pointer'  // Indicate that the text is clickable
+        // cursor: 'pointer'  // Indicate that the text is clickable
     },
     textArea: {
         width: '100%',

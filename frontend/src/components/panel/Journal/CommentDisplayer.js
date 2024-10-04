@@ -28,7 +28,9 @@ const CommentDisplayer = (props) => {
         isFirstInLastThread,
         setLoading,
         scrollDown,
-        setScrollDown
+        setScrollDown,
+        setNewComment,
+        newComment
     } = props;
 
 
@@ -41,6 +43,7 @@ const CommentDisplayer = (props) => {
 
     const replyInputRef = useRef(null); // Ref for the reply input
     const firstCommentInLastThreadRef = useRef(null); // Ref for the first comment in the last thread
+    const commentThreadRefs = useRef(null); // Ref for the first comment in the last thread
     // Set the manual reply state
     useLayoutEffect(() => {
         setIsManualReplying(false);
@@ -54,13 +57,23 @@ const CommentDisplayer = (props) => {
     }, [isManualReplying, isLastComment]);
 
     useLayoutEffect(() => {
-        if (isFirstInLastThread && firstCommentInLastThreadRef?.current && scrollDown) {
+        if (isFirstInLastThread && firstCommentInLastThreadRef?.current) {
             setTimeout(() => {
                 firstCommentInLastThreadRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setScrollDown(false)
+
             }, 500);
         }
     }, [isFirstInLastThread,]);
+
+    useLayoutEffect(() => {
+        if (newComment && commentThreadRefs?.current && newComment.commentUUID === commentUUID) {
+            // Scroll into view for the newly added comment
+            setTimeout(() => {
+                commentThreadRefs.current[newComment.commentUUID]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setScrollDown(false); // Reset scrollDown state once done
+            }, 500);
+        }
+    }, [newComment, commentUUID]); // Depend on newComment and commentUUID
 
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
@@ -102,6 +115,7 @@ const CommentDisplayer = (props) => {
                 payload: payload
             });
 
+            setNewComment(payload)
             setIsManualReplying(false);
 
             try {
