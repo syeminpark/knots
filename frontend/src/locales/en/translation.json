@@ -44,7 +44,7 @@
     "knowledge": "Knowledge",
     "knowsAbout": "{{currentCharacterName}} knows about {{connectedCharacterName}}'s",
     "addnewAttribute": "Add New Attribute",
-    "example": "Example: gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance etc",
+    "example": "Example: Backstory, gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance, education, values etc",
     "done": "Done",
     "journalfeed": "Journal Feed",
     "journalPanel": "📑 Journal Feed",

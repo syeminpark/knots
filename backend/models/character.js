@@ -99,7 +99,7 @@ characterSchema.statics.createCharacter = async function (
             connectedCharacters,
             imageSrc,
             order,
-            isSuggested,
+            type,
         });
         return character;
     } catch (error) {
