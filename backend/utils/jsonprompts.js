@@ -88,8 +88,6 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters) => 
                 } else {
                     updatedConnectedCharacters.push(connectedCharacter); // If no match, keep the original
                 }
-            } else {
-                updatedConnectedCharacters.push(connectedCharacter); // If includeInJournal is false, keep the original
             }
         }
     }

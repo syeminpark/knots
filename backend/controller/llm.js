@@ -14,6 +14,7 @@ const llmController = {
             const characterPromises = characterUUIDs.map(async (uuid) => {
                 try {
                     const character = await CharacterModel.getCharacterByUUID(uuid);
+                    console.log(JSON.stringify(character))
                     if (character) {
                         const { extractedValues, allKeys } = extractAllValuesAndKeys(character.personaAttributes);
                         // console.log('extractedValues', extractedValues)
@@ -24,26 +25,29 @@ const llmController = {
                         `;
                         // console.log('systemPrompt', systemPrompt)
 
-                        let userPrompt = `
-                       Character Description: 
-                       name: ${character.name}
+                        let userPrompt = `\nCharacter Description: 
+                      name: ${character.name}
                        ${JSON.stringify(extractedValues)}`
 
-                        if (updatedConnectedCharacters.length > 0) {
+                        if (updatedConnectedCharacters) {
                             const cleanedConnections = cleanCharacterData(updatedConnectedCharacters);
-                            userPrompt += `Character Network:`
-                            cleanedConnections.forEach(connectedCharacter => {
-                                if (connectedCharacter) {
-                                    userPrompt += `
-                                    1. Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective:
-                                    ${connectedCharacter.description}`;
+                            userPrompt += `\nCharacter Network:`
+                            cleanedConnections?.forEach((connectedCharacter, index) => {
+                                userPrompt += `\n${index += 1}.${connectedCharacter.name}`
+                                if (connectedCharacter?.description) {
+                                    userPrompt += `Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective:
+                                    ${connectedCharacter?.description}`;
+
+
                                 }
-                                if (connectedCharacter.knowledge.length > 0) {
+                                if (connectedCharacter?.knowledge) {
                                     userPrompt += `
                                      2. The Description for ${connectedCharacter.name}:
                                     ${JSON.stringify(connectedCharacter.knowledge)}
                                     `
                                 }
+
+
                             });
                         }
 
@@ -54,19 +58,18 @@ const llmController = {
                       
 
                        Rules For Journaling:
-                        1. The content and style of the journal should be written from the perspective of fictional story charcter. 
+                      1. The content and style of the journal should be written from the perspective of fictional story charcter. 
                       2. Write as if you were talking to another person. 
                       3. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
                       4. The events that occur in the journal post must be rich in diversity and explained in detail, rather than being  and superficial summarizations.The character remembers every detail. 
                       5. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your emotions, and thoughts.The character remembers every detail.
                       6. Regardless of what the theme of journal is, you must write about it. 
-                      7. Do not write about the 'Character Network' if there is no direct connection betwen them and the theme of the journal.
+                      7. Do not include any information from the 'Character Network' if there is no direct connection betwen the data in the 'Character Network' and the provided theme for the journal.
                       8. Do not write any the 'Character Description' if there is no direct connection betwen them and the theme of the journal.  
                       8. The journal must be in Korean and Korean only. 
                       9. The final format should be the journal only. 
 
-                      The theme of the journal is ${journalTitle}.
-                        `
+                      The theme of the journal is ${journalTitle}.`
                         console.log('userPrompt', userPrompt)
                         const response = await openAI.chat.completions.create({
                             messages: [
