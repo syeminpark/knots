@@ -5,7 +5,7 @@ import { JournalEntry, CommentThread } from "../models/journal.js";
 import updateConnectedCharacterKnowledge from "../utils/updateConnectedChracterKnowledge.js";
 import { cleanCharacterData } from "../utils/cleanCharacterData.js";
 import getCommentHistory from "../utils/getCommentHistory";
-import { cp } from "fs";
+import { extractAllValuesAndKeys } from "../utils/jsonprompts.js";
 
 const llmController = {
     onCreateJournalEntries: async (req, res) => {
@@ -19,22 +19,33 @@ const llmController = {
                 try {
                     const character = await CharacterModel.getCharacterByUUID(uuid);
                     if (character) {
+                        const { extractedValues, allKeys } = extractAllValuesAndKeys(character.personaAttributes);
                         console.log(character.connectedCharacters)
                         // ${getConnections(character.name, character.connectedCharacters)},
                         const systemPrompt = `
-                       너는 메소드 연기를 완벽하게 구사할 수 있는 배우야. 특히나 ${character.name}이라는 이름을 가진 이의 역할을 완벽하게 연기할 수 있어.
-                    
-                       
-                       
-                       ${character.name}은 다음과 같은 특성들을 가지고 있어: 
-                       ${JSON.stringify(character.personaAttributes)}
-                    
-                       너는 ${character.name}의 생각, 감정, 해동, 가치관, 말투, 등의 전반적인 스타일과 특성들을 더 풍부하고 개성있게 과장해서솔직하고 자세하게 저널의 형태로 적어줘.
-                       저널은 1인칭 시점으로, 대화체, 그리고 한국어로 작성해주고 '날짜'는 제외해줘. 저널의 주제는 밑에 <저널_주제></저널_주제>에서 제공될 거야. 
+                       You are an actor, brilliant at method acting. Especially, you have mastered the role of the fictional story character ${character.name}.
                         `;
                         console.log(systemPrompt)
 
-                        const userPrompt = `<저널_주제> ${journalTitle}</저널_주제>
+                        const userPrompt = `
+                       Character Description: 
+                       name: ${character.name}
+                       ${JSON.stringify(extractedValues)}
+
+                       Rule For Roleplaying: 
+                       1. Stay true to your character at all times.
+                       2. Use the character description as a blueprint to guide your writing, but should not be pharaphrased or written down directly. 
+
+
+                       Rules For Journaling: 
+                      1. The content and style of the journal should be written from the perspective of fictional story charcter. 
+                      2. Write as if you were talking to another person. 
+                      3. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
+                      4. The events that occured in the journal post must explained in detail and not be superficial summarizations. 
+                      5. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your emotions, and thoughts. 
+                      6. The journal post must be in Korean.
+
+                      The theme of the journal is ${journalTitle}.
                         `
                         const response = await openAI.chat.completions.create({
                             messages: [
@@ -104,7 +115,7 @@ const llmController = {
                         let systemPrompt = `You are an actor, brilliant at method acting. 
                         Especially, you have mastered the role of ${character.name}. 
         
-                        ${character.name} has the following attributes.
+                        Character Description: 
                         ${JSON.stringify(character.personaAttributes)}
                         `;
 
@@ -200,24 +211,6 @@ const llmController = {
 
     onCreateStranger: async (req, res) => {
         const { characterUUID, content } = req.body;
-
-        const extractAllValuesAndKeys = (arr) => {
-            const extractedValues = {};
-            const allKeys = arr
-                .filter(item => !item.deleted) // Exclude soft-deleted items
-                .map(item => item.name.trim()); // Extract all keys
-
-            arr.forEach((item) => {
-                if (!item.isDeleted) { // Exclude soft-deleted items
-                    extractedValues[item.name.trim()] = item.description; // Extract key-value pairs
-                }
-            });
-
-            return { extractedValues, allKeys };
-        };
-
-
-
         try {
             const character = await CharacterModel.getCharacterByUUID(characterUUID);
             const { extractedValues, allKeys } = extractAllValuesAndKeys(character.personaAttributes);
@@ -226,28 +219,28 @@ const llmController = {
             let systemPrompt = `You are a professional story writer, brilliant at creating unique and orignal characters. You should never create stereotypical characters.`
 
             let userPrompt = `
-
-            This is ${character.name}. 
+            This is ${character.name}.
             ${JSON.stringify(extractedValues)}
+            
+            Objective:
+            1. Create 3 new fictional story characters that each have a clear association with ${character.name} according to the following: ${content}.
+            2. However, this association ${content} must manifest through the new characters in diverse ways to ensure each character is fresh and compelling.
+            3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. 
+            
+            Rules for Formatting:
+            1. Each of the 3 characters should have a name, introduction, backstory, and a relationship with ${character.name}. The relationship should be split into two parts: 
+               - "my_relationship": which describes the relationship from the new character's perspective.
+               - "your_relationship": which describes the relationship from ${character.name}'s perspective.
+            2. Format the character's name, introduction, backstory, my_relationship, and your_relationship into JSON format with the following keys: "name", "introduction", "backstory", "my_relationship", "your_relationship".
+               - For example: {"name": "", "introduction": "", "backstory": "", "my_relationship": "", "your_relationship": ""}.
+            3. The decriptions for each of the keys must have be in vivid detail, and not be superficial summarizations. 
+            4. Whenever applicable ensure that the descriptons are at least 5 sentences long. 
+            4. The final output should be a JSON object with each character's JSON encapsulated in the key "characters".
+               - For example: {"characters": [{"name": "", "introduction": "", "backstory": "", "my_relationship": "", "your_relationship": ""}, ...]}.
+            5. The keys should be in English, but the values should be in Korean.
+            6. The output should only contain the final JSON object.`;
 
-Objective 
 
-Create 3 characters that are clearly distinct from each other. Most importantly, each character has the association with ${character.name} acording to the following: ${content}.
-However this should manifest through the new characters in diverse ways to ensure each character is fresh and compelling. 
-
-Rules For Formatting. 
-1.  Each of the 3 characters should have a name, introduction, a backstory and a relationship with ${character.name}. The relationship should be
-split into my_relationship which is the relationship from the new character's perspective and your_relationship which is the relationship from ${character.name}'s perspective. 
-2.  Make the character's name, introduction, backstory, and my_relationship, your_relationship into JSON with the keys, "name", "introduction", "backstory" and "my_relationship", "your_relationship".
-    For example {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""}
-3. The final JSON should contain each character's JSON within the key "characters".
-    For example {"characters": [{"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""},
-    {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""},
-    {"name":  "", "introduction": "",  "backstory": "",  "my_relationship":"", "your_relationship": ""}]}
-4. The keys should be in Englsish and their values should be in Korean.  
-5.  The outcome should just be the final JSON object only.
-
-            `;
             console.log('userPrompt', userPrompt)
 
             const response = await openAI.chat.completions.create({
