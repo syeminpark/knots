@@ -80,6 +80,7 @@ const BottomActions = (props) => {
                     },
                 });
             });
+            setCommentValue(''); // Reset comment value after submitting
 
             // Now send the API request with the constructed payload
             const payload = {
@@ -87,6 +88,7 @@ const BottomActions = (props) => {
                 journalEntryUUID: journalEntry.uuid,
                 comments
             };
+
 
             try {
                 const response = await apiRequest('/createComments', 'POST', payload);
