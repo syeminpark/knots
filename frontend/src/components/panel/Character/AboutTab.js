@@ -70,9 +70,9 @@ const AboutTab = (props) => {
             )}
 
             <div style={styles.buttonContainer}>
-            <button style={styles.createButton} onClick={() => setShowModal(true)}>
-                {t('addattributes')}
-            </button>
+                <button style={styles.createButton} onClick={() => setShowModal(true)}>
+                    {t('addattributes')}
+                </button>
             </div>
         </div>
     );
@@ -84,7 +84,7 @@ const styles = {
         maxHeight: 'calc(100vh - 350px)',
     },
     buttonContainer: {
-        position: 'sticky', 
+        position: 'sticky',
         bottom: 0,
         display: 'flex',
         justifyContent: 'center',

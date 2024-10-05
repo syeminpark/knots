@@ -70,85 +70,85 @@ const ConnectionsTab = (props) => {
 
     return (
         <>
-        {t(
-            connectedCharacters.length === 1
-                ? 'connection_singular'
-                : 'connection_plural',
-            { count: connectedCharacters.length }
-        )}
-
-        <div style={styles.connectionsTabWrapper}>
-            {connectedCharacters.map((child) => (
-                <Attribute
-                    panels={panels}
-                    setPanels={setPanels}
-                    key={child.name}
-                    title={child.name}
-                    placeholder={t('connectionPlaceholder', {
-                        currentCharacterName,
-                        childName: child.name,
-                    })}
-                    deleteFunction={deleteConnection}
-                    list={connectedCharacters}
-                    setter={setConnectedCharacters}
-                    onChange={(field, event) => {
-                        onChange(child.name, field, event.target.value);
-                    }}
-                    connectedCharacter={createdCharacters.characters.find(
-                        (character) => character.uuid === child.uuid
-                    )}
-                    currentCharacter={currentCharacter}
-                    isConnectionsTab={true}
-                />
-            ))}
-
-            {showModal && (
-                <AddConnectionModal
-                    setShowModal={setShowModal}
-                    connectedCharacters={connectedCharacters}
-                    setConnectedCharacters={setConnectedCharacters}
-                    createdCharacters={createdCharacters}
-                    caller={caller}
-                />
+            {t(
+                connectedCharacters.length === 1
+                    ? 'connection_singular'
+                    : 'connection_plural',
+                { count: connectedCharacters.length }
             )}
 
-            {showDiscoverModal && (
-                <DiscoverCharacterModal
-                    setShowModal={setShowDiscoverModal}
-                    onDiscover={handleDiscover}
-                    currentCharacter={currentCharacter}
-                    setConnectedCharacters={setConnectedCharacters}
-                    dispatchCreatedCharacters={dispatchCreatedCharacters}
-                />
-            )}
+            <div style={styles.connectionsTabWrapper}>
+                {connectedCharacters.map((child) => (
+                    <Attribute
+                        panels={panels}
+                        setPanels={setPanels}
+                        key={child.name}
+                        title={child.name}
+                        placeholder={t('connectionPlaceholder', {
+                            currentCharacterName,
+                            childName: child.name,
+                        })}
+                        deleteFunction={deleteConnection}
+                        list={connectedCharacters}
+                        setter={setConnectedCharacters}
+                        onChange={(field, event) => {
+                            onChange(child.name, field, event.target.value);
+                        }}
+                        connectedCharacter={createdCharacters.characters.find(
+                            (character) => character.uuid === child.uuid
+                        )}
+                        currentCharacter={currentCharacter}
+                        isConnectionsTab={true}
+                    />
+                ))}
 
-            {showDeleteConfirmation && (
-                <DeleteConfirmationModal
-                    title={t('confirmDeletion')}
-                    setShowModal={setShowDeleteConfirmation}
-                >
-                    <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
-                    <div style={styles.modalButtonContainer}>
-                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-                            {t('cancel')}
-                        </button>
-                        <button onClick={confirmDeleteConnection} style={styles.deleteButton}>
-                            {t('delete')}
-                        </button>
-                    </div>
-                </DeleteConfirmationModal>
-            )}
+                {showModal && (
+                    <AddConnectionModal
+                        setShowModal={setShowModal}
+                        connectedCharacters={connectedCharacters}
+                        setConnectedCharacters={setConnectedCharacters}
+                        createdCharacters={createdCharacters}
+                        caller={caller}
+                    />
+                )}
 
-            <div style={styles.buttonContainer}>
-                <button style={styles.discoverButton} onClick={handleOpenDiscoverModal}
-                >
-                    {t('discoverCharacter')}
-                </button>
-                <button style={styles.createButton} onClick={handleOpenAddModal}>
-                    {t('addconnections')}
-                </button>
+                {showDiscoverModal && (
+                    <DiscoverCharacterModal
+                        setShowModal={setShowDiscoverModal}
+                        onDiscover={handleDiscover}
+                        currentCharacter={currentCharacter}
+                        setConnectedCharacters={setConnectedCharacters}
+                        dispatchCreatedCharacters={dispatchCreatedCharacters}
+                    />
+                )}
+
+                {showDeleteConfirmation && (
+                    <DeleteConfirmationModal
+                        title={t('confirmDeletion')}
+                        setShowModal={setShowDeleteConfirmation}
+                    >
+                        <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
+                        <div style={styles.modalButtonContainer}>
+                            <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                                {t('cancel')}
+                            </button>
+                            <button onClick={confirmDeleteConnection} style={styles.deleteButton}>
+                                {t('delete')}
+                            </button>
+                        </div>
+                    </DeleteConfirmationModal>
+                )}
+
+                <div style={styles.buttonContainer}>
+                    <button style={styles.discoverButton} onClick={handleOpenDiscoverModal}
+                    >
+                        {t('discoverCharacter')}
+                    </button>
+                    <button style={styles.createButton} onClick={handleOpenAddModal}>
+                        {t('addconnections')}
+                    </button>
+                </div>
             </div>
-        </div>
         </>
     );
 };
@@ -156,11 +156,11 @@ const ConnectionsTab = (props) => {
 const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 350px)',
+        maxHeight: 'calc(100vh - 400px)',
         marginTop: '10px'
     },
     buttonContainer: {
-        position: 'sticky', 
+        position: 'sticky',
         bottom: 0,
         display: 'flex',
         justifyContent: 'center',
@@ -191,7 +191,6 @@ const styles = {
         cursor: 'pointer',
     },
     discoverButton: {
-
         width: '100%',
         padding: '10px',
         backgroundColor: 'black',

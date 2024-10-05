@@ -22,8 +22,8 @@ const Attribute = (props) => {
 
     const containerRef = useRef(null);
     const textAreaRef = useRef(null);
-    const isClickableToEdit = true;
-    const isClickableToSave = true;
+    const isClickableToEdit = false
+    const isClickableToSave = false;
 
 
     useEffect(() => {
@@ -39,11 +39,7 @@ const Attribute = (props) => {
         setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map(item => item?.name) : []); // Update selectedChips when attribute changes
     }, [attribute?.knowledge]);
 
-    useEffect(() => {
-        if (!attribute || !attribute.description) {
-            setIsEditing(true);
-        }
-    }, [attribute]);
+
 
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
@@ -363,6 +359,7 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
         gap: '10px',
+
     },
     chip: {
         backgroundColor: '#f0f0f0',
