@@ -96,7 +96,7 @@ const BottomActions = (props) => {
             } catch (error) {
                 console.error('Error creating comments:', error);
             } finally {
-                setCommentValue(''); // Reset comment value after submitting
+
                 setLoading(false);
             }
         }
