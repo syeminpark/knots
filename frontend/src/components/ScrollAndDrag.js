@@ -15,8 +15,8 @@ const ScrollAndDrag = (props) => {
     if (panelsEndRef.current) {
       panelsEndRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'end',
+
+        inline: 'center',
       });
     }
   };

@@ -1,4 +1,3 @@
-
 const WriteCommentInput = (props) => {
 
     const { placeholder, commentValue, setCommentValue, sendButtonCallback } = props
@@ -14,6 +13,9 @@ const WriteCommentInput = (props) => {
 
     return (
         <div style={styles.replyInputWrapper}>
+
+
+
             <input
                 type="text"
                 placeholder={placeholder}

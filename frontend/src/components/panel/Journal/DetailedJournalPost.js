@@ -20,7 +20,7 @@ const DetailedJournalPost = (props) => {
 
     // Constants to control functionality
     const isClickableToEdit = false // Set to true to allow clicking to edit
-    const isClickableToSave = true; // Set to true to allow clicking outside to save
+    const isClickableToSave = false // Set to true to allow clicking outside to save
 
     // Handle edit/save logic
     const onEditButtonClick = async () => {
@@ -259,7 +259,7 @@ const styles = {
     textArea: {
         width: '100%',
         padding: '10px',
-        fontSize: 'var(--font-small)',
+        fontSize: 'var(--font-mediunm)',
         borderRadius: '8px',
         border: '1px solid #ccc',
     },

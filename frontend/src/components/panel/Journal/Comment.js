@@ -5,6 +5,7 @@ import TimeAgo from '../../TimeAgo';
 import openNewPanel from '../../openNewPanel';
 import EntryTag from '../../EntryTag';
 import WriteCommentInput from './WriteCommentInput';
+import TextArea from '../../TextArea';
 
 const Comment = (props) => {
     const { panels, setPanels, createdCharacter, selectedMode, createdAt, isEditing, editContent, setEditContent, content, onEditSave } = props
@@ -39,11 +40,19 @@ const Comment = (props) => {
 
             {
                 isEditing ? (
-                    <WriteCommentInput
-                        commentValue={editContent}
-                        setCommentValue={setEditContent}
-                        sendButtonCallback={onEditSave}
-                    ></WriteCommentInput>
+                    // <WriteCommentInput
+                    //     commentValue={editContent}
+                    //     setCommentValue={setEditContent}
+                    //     sendButtonCallback={onEditSave}
+                    // ></WriteCommentInput>
+
+                    <TextArea
+                        attribute={{ description: editContent }}
+                        placeholder="Edit content"
+                        onChange={(e) => setEditContent(e.target.value)}
+                        styles={styles}
+                    />
+
                     // <div style={styles.commentText} >
                     //     <input
                     //         type="text"
@@ -109,5 +118,18 @@ const styles = {
         fontSize: 'var(--font-small)',
         borderRadius: '5px',
         border: '1px solid #ccc',
+    },
+
+    description: {
+        width: '100%',
+        padding: '10px',
+        fontSize: 'var(--font-mediunm)',
+        borderRadius: '5px',
+        border: '1px solid black',
+        marginBottom: '10px',
+        resize: 'vertical',  // Allow resizing vertically
+        whiteSpace: 'pre-wrap', // Make sure line breaks are supported in the text
+        overflowWrap: 'break-word', // Break long words if necessary
+        overflow: 'hidden'
     },
 }

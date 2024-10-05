@@ -10,6 +10,7 @@ const TextArea = forwardRef((props, forwardedRef) => {
         styles,
         label,
         readOnly, // Accept the readOnly prop
+        onKeyDown
     } = props;
     const textareaRef = useRef(null);
 
@@ -54,6 +55,7 @@ const TextArea = forwardRef((props, forwardedRef) => {
                 }}
                 value={attribute ? attribute.description : ''}
                 readOnly={readOnly} // Pass the readOnly prop to the textarea
+                onKeyDown={onKeyDown} // Pass the onKeyDown handler to textarea
             />
         </div>
     );
