@@ -63,7 +63,7 @@ body {
   position: fixed;
   width: 100%;
   height: 50px;
-  z-index: 100;
+  z-index: 10;
   top: 0;
   background-color: black;
   /* border: solid 2px #305077; */
@@ -140,7 +140,7 @@ body {
   left: 0px;
   height: calc(100vh - 50px);
   background-color: var(--color-bg-white-transparent);
-  z-index: 1000000000;
+  z-index: 2;
   box-shadow: -3px 10px 10px hsl(0, 0%, 78%);
   border: none;
   cursor: pointer;
@@ -197,7 +197,7 @@ body {
   /* Subtract any header or additional spacing */
   background-color: var(--color-bg-white-transparent);
   box-shadow: -1px 0px 5px hsl(0, 0%, 78%);
-  z-index: 1000000000;
+  z-index: 10;
   display: flex;
   flex-direction: column;
 }
@@ -337,7 +337,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1000000;
+  z-index: 10;
 }
 
 
@@ -712,7 +712,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1000000;
+  z-index: 10;
 }
 
 .language-switcher button {
@@ -748,7 +748,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.5);
-  z-index: 10000000000000000000000000000000000;
+  z-index: 100;
 
 }
 
