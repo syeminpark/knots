@@ -18,7 +18,7 @@ const Attribute = (props) => {
     });
 
     const [includeInJournal, setIncludeInJournal] = useState(attribute ? attribute.includeInJournal : false)
-    console.log(includeInJournal)
+    // console.log(includeInJournal)
 
     const containerRef = useRef(null);
     const textAreaRef = useRef(null);
@@ -47,7 +47,7 @@ const Attribute = (props) => {
 
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
-            if (!isConnectionsTab && editedContent !== '') {
+            if (!isConnectionsTab) {
                 onChange({ target: { value: editedContent } });
             } else {
                 onChange('description', { target: { value: editedContent } });

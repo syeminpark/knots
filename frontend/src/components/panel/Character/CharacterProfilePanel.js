@@ -162,7 +162,7 @@ const CharacterProfilePanel = (props) => {
 
             } catch (error) {
                 console.error('Error updating character:', error);
-                alert(t('updateFailed')); // Ensure you have this translation key
+                // alert(t('updateFailed')); // Ensure you have this translation key
             }
             finally {
                 setLoading(false)
