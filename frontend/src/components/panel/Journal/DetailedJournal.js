@@ -7,6 +7,7 @@ import DetailedJournalPost from "./DetailedJournalPost";
 import EntryTag from "../../EntryTag";
 import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import { useTranslation } from 'react-i18next';
+import Loading from "../../Loading";
 
 const DetailedJournal = (props) => {
     const { t } = useTranslation();
@@ -66,10 +67,7 @@ const DetailedJournal = (props) => {
     return (
         <>
             {loading && (
-                <div className="loading-overlay">
-                    <div className="spinner"></div>
-                    <p className="loading-text">{t("loadingText")}</p>
-                </div>
+                <Loading></Loading>
             )}
             <div style={styles.container}>
                 {/* Scrollable Content Container */}
