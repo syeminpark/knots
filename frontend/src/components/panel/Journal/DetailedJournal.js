@@ -67,7 +67,8 @@ const DetailedJournal = (props) => {
     return (
         <>
             {loading && (
-                <Loading></Loading>
+                <Loading
+                    text={t('loadingText')} ></Loading>
             )}
             <div style={styles.container}>
                 {/* Scrollable Content Container */}
