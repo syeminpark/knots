@@ -105,8 +105,6 @@ const Home = (props) => {
 
 
 
-
-
   const renderPanel = (panel) => {
     switch (panel.type) {
       case 'character-creation':

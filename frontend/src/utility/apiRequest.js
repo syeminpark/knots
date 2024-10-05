@@ -1,3 +1,5 @@
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const apiRequest = async (url, method, data = null) => {
     const { token } = JSON.parse(localStorage.getItem('user')) || {};
 
@@ -12,7 +14,7 @@ export const apiRequest = async (url, method, data = null) => {
 
     try {
         //console.log('Making API request to:', url, 'with options:', options); // Debugging log
-        const response = await fetch(url, options);
+        const response = await fetch(API_URL + url, options);
         if (!response.ok) {
             const errorResponse = await response.json();
             throw new Error(errorResponse.error || 'An error occurred');
@@ -40,7 +42,7 @@ export const apiRequestFormData = async (url, method, formData) => {
     };
 
     try {
-        const response = await fetch(url, options);
+        const response = await fetch(API_URL + url, options);
         if (!response.ok) {
             const errorResponse = await response.json();
             throw new Error(errorResponse.error || 'An error occurred');

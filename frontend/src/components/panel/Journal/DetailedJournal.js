@@ -1,3 +1,4 @@
+// DetailedJournal.js
 import React, { useRef, useState, useEffect } from "react";
 import TimeAgo from '../../TimeAgo';
 import CommentDisplayer from "./CommentDisplayer";
@@ -19,13 +20,10 @@ const DetailedJournal = (props) => {
         dispatchCreatedJournalBooks,
         trackingCommentThread,
         setTrackingCommentThread,
-
-
     } = props;
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const commentThreadRefs = useRef({});
-
 
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
@@ -33,19 +31,26 @@ const DetailedJournal = (props) => {
     const lastCommentRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
-    const [scrollDown, setScrollDwon] = useState(false);
-    const [newComment, setNewComment] = useState(false);
+    const [scrollDown, setScrollDown] = useState(false);
+    const isInitialMount = useRef(true); // Track initial mount
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
         const NewJournalBookInfoandEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, bookInfo.uuid, journalEntry.uuid);
         if (NewJournalBookInfoandEntry?.journalEntry) {
-            //update old selectedBookAndJournalEntry
+            // Update selectedBookAndJournalEntry
             setSelectedBookAndJournalEntry(NewJournalBookInfoandEntry);
-            setScrollDwon(true)
+
+            if (!isInitialMount.current) {
+                setScrollDown(true);
+            }
         }
         else {
-            setSelectedBookAndJournalEntry(null)
+            setSelectedBookAndJournalEntry(null);
+        }
+
+        if (isInitialMount.current) {
+            isInitialMount.current = false; // Set to false after the first render
         }
 
     }, [createdJournalBooks]);
@@ -57,10 +62,6 @@ const DetailedJournal = (props) => {
             setTrackingCommentThread(null);
         }
     }, [trackingCommentThread]);
-
-
-
-
 
     return (
         <>
@@ -135,14 +136,12 @@ const DetailedJournal = (props) => {
                                                 isLastComment={isLastCommentOverall}
                                                 isFirstInLastThread={isFirstInLastThread}
                                                 setLoading={setLoading}
-                                                setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                                                 scrollDown={scrollDown}
-                                                setScrollDown={setScrollDwon}
-                                                setNewComment={setNewComment}
-                                                newComent={newComment}
+                                                setScrollDown={setScrollDown}
+                                                isLastCommentInThread={isLastCommentInThread}
                                             />
                                             {isLastCommentOverall && (
-                                                <div ref={lastCommentRef}></div> // Attach ref to the last comment's reply container
+                                                <div ref={lastCommentRef}></div>
                                             )}
                                         </div>
                                     )
@@ -163,7 +162,6 @@ const DetailedJournal = (props) => {
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                         selectedBookAndJournalEntry={selectedBookAndJournalEntry}
                         setLoading={setLoading}
-                        setNewComment={setNewComment}
                     />
                 </div>
             </div>

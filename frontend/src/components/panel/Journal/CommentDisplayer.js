@@ -28,9 +28,7 @@ const CommentDisplayer = (props) => {
         isFirstInLastThread,
         setLoading,
         scrollDown,
-        setScrollDown,
-        setNewComment,
-        newComment
+        isLastCommentInThread
     } = props;
 
 
@@ -39,71 +37,78 @@ const CommentDisplayer = (props) => {
     const [isManualReplying, setIsManualReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
-    const [hasMounted, setHasMounted] = useState(false);
 
     const replyInputRef = useRef(null); // Ref for the reply input
     const firstCommentInLastThreadRef = useRef(null); // Ref for the first comment in the last thread
-    const commentThreadRefs = useRef(null); // Ref for the first comment in the last thread
-    // Set the manual reply state
+    const commentThreadRef = useRef(null); // Ref for the comment if it's the last in thread
+
+    const isInitialMount = useRef(true); // Track initial mount
+
+    // After initial render, set isInitialMount to false
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        }
+    }, []);
+
+    // Reset manual replying when editContent changes
     useLayoutEffect(() => {
         setIsManualReplying(false);
     }, [editContent]);
 
-    // Scroll to the reply input if it's the last comment and manual reply is open
+    // Consolidated scrolling logic
     useLayoutEffect(() => {
-        if (isManualReplying && replyInputRef.current && isLastComment) {
+        // Scroll to this comment if it's the last in thread and not initial mount
+        if (isLastCommentInThread && !isInitialMount.current && commentThreadRef.current) {
+            commentThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Scroll to the reply input if it's the last comment and manual reply is open
+        if (isLastComment && isManualReplying && replyInputRef.current) {
             replyInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, [isManualReplying, isLastComment]);
 
-    useLayoutEffect(() => {
-        if (isFirstInLastThread && firstCommentInLastThreadRef?.current) {
+        // Scroll to the first comment in the last thread if scrollDown is true
+        if (isFirstInLastThread && firstCommentInLastThreadRef.current && scrollDown) {
             setTimeout(() => {
-                firstCommentInLastThreadRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+                firstCommentInLastThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Optionally reset scrollDown here if handled outside
             }, 500);
         }
-    }, [isFirstInLastThread,]);
-
-    useLayoutEffect(() => {
-        if (newComment && commentThreadRefs?.current && newComment.commentUUID === commentUUID) {
-            // Scroll into view for the newly added comment
-            setTimeout(() => {
-                commentThreadRefs.current[newComment.commentUUID]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setScrollDown(false); // Reset scrollDown state once done
-            }, 500);
-        }
-    }, [newComment, commentUUID]); // Depend on newComment and commentUUID
-
+    }, [isLastCommentInThread, isLastComment, isManualReplying, isFirstInLastThread, scrollDown]);
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
             alert(t('writeReply'));
         } else {
 
-            let content
+            let contentToSend;
             if (selectedReplyMode === "MANUALPOST") {
-                content = replyContent.trim()
+                contentToSend = replyContent.trim();
             }
             else {
-                setLoading(true)
-                console.log('uuid', commentThreadUUID)
-                const response = await apiRequest('/createLLMComments', 'POST', {
-                    journalEntryUUID: journalEntry.uuid,
-                    characterUUIDs: [character.uuid],
-                    commentThreadUUID: commentThreadUUID
-
-                });
-                console.log(response)
-                content = response.comments[0].generation
-
+                setLoading(true);
+                console.log('uuid', commentThreadUUID);
+                try {
+                    const response = await apiRequest('/createLLMComments', 'POST', {
+                        journalEntryUUID: journalEntry.uuid,
+                        characterUUIDs: [character.uuid],
+                        commentThreadUUID: commentThreadUUID
+                    });
+                    console.log(response);
+                    contentToSend = response.comments[0].generation;
+                } catch (error) {
+                    console.error('Error creating LLM comment:', error);
+                    setLoading(false);
+                    return; // Exit early on error
+                }
             }
 
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
                 ownerUUID: character.uuid,
-                content: content,
+                content: contentToSend,
                 selectedMode: selectedReplyMode,
                 commentThreadUUID: commentThreadUUID,
                 commentUUID: uuidv4(),
@@ -115,7 +120,6 @@ const CommentDisplayer = (props) => {
                 payload: payload
             });
 
-            setNewComment(payload)
             setIsManualReplying(false);
 
             try {
@@ -125,7 +129,7 @@ const CommentDisplayer = (props) => {
                 console.error('Error creating comment:', error);
             }
             finally {
-                setLoading(false)
+                setLoading(false);
             }
         }
     };
@@ -181,7 +185,7 @@ const CommentDisplayer = (props) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.1 }}
                     transition={{ duration: 0.1 }}
-                    ref={firstInTheThread && isFirstInLastThread ? firstCommentInLastThreadRef : null}
+                    ref={isLastCommentInThread ? commentThreadRef : null} // Attach ref if last in thread
                 >
 
                     {/* Render the Comment */}
@@ -274,6 +278,7 @@ const CommentDisplayer = (props) => {
             </AnimatePresence>
         </>
     );
+
 };
 
 const styles = {
