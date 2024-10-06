@@ -153,11 +153,10 @@ characterSchema.statics.updateCharacter = async function (uuid, update) {
     }
 };
 
-
 characterSchema.statics.getCharacterByUUID = async function (uuid) {
     try {
-        // Find the character by UUID but ensure it's not soft-deleted
-        const character = await this.findOne({ uuid, isDeleted: false });
+        // Find the character by UUID, ensure it's not soft-deleted, and exclude the history field
+        const character = await this.findOne({ uuid, isDeleted: false }).select('-history');
         return character;
     } catch (error) {
         throw error;
@@ -166,8 +165,8 @@ characterSchema.statics.getCharacterByUUID = async function (uuid) {
 
 characterSchema.statics.getAllCharactersByUserUUID = async function (userUUID) {
     try {
-        // Fetch characters for the user and exclude soft-deleted characters
-        const characters = await this.find({ userUUID, isDeleted: false }).sort({ order: 1 });
+        // Fetch characters for the user, exclude soft-deleted characters and the history field
+        const characters = await this.find({ userUUID, isDeleted: false }).sort({ order: 1 }).select('-history');
         return characters;
     } catch (error) {
         throw error;
@@ -176,12 +175,12 @@ characterSchema.statics.getAllCharactersByUserUUID = async function (userUUID) {
 
 characterSchema.statics.deleteCharacterByUUID = async function (uuid) {
     try {
-        // Perform a soft delete by setting the isDeleted flag to true
+        // Perform a soft delete by setting the isDeleted flag to true and exclude the history field
         const character = await this.findOneAndUpdate(
             { uuid },
             { isDeleted: true },
             { new: true }
-        );
+        ).select('-history');
         return character;
     } catch (error) {
         throw error;
@@ -235,14 +234,14 @@ characterSchema.statics.reorderCharacters = async function (characters) {
             await this.bulkWrite(bulkOperations);
         }
 
-        // Fetch and return the newly ordered characters
-        const reorderedCharacters = await this.find({ uuid: { $in: characters }, isDeleted: false }).sort({ order: 1 });
+        // Fetch and return the newly ordered characters, excluding the history field
+        const reorderedCharacters = await this.find({ uuid: { $in: characters }, isDeleted: false })
+            .sort({ order: 1 })
+            .select('-history');
         return reorderedCharacters;
 
     } catch (error) {
         throw error;
     }
 };
-
-
 export default mongoose.model('Character', characterSchema);

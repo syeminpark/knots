@@ -19,16 +19,23 @@ function App() {
 
   const initializeData = async () => {
     try {
-      const characterData = await apiRequest('/getAllCharacters', 'GET',);
-      const journalBookData = await apiRequest('/getAllJournalBooks', 'GET',);
-      setInitialData({ characters: characterData, journalBooks: journalBookData.journalBooks })
-      console.log('!!! INITIALIZED!!')
+      // Use Promise.all to execute both API requests in parallel
+      const [characterData, journalBookData] = await Promise.all([
+        apiRequest('/getAllCharacters', 'GET'),
+        apiRequest('/getAllJournalBooks', 'GET')
+      ]);
 
+      // Update state with both data
+      setInitialData({
+        characters: characterData,
+        journalBooks: journalBookData.journalBooks
+      });
+
+      console.log('!!! INITIALIZED!!');
+    } catch (error) {
+      console.error('Error initializing data:', error);
     }
-    catch (error) {
-      console.log(error)
-    }
-  }
+  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -53,8 +60,8 @@ function App() {
         setLoggedIn(false)
       }
       try {
-        await apiRequest('/verifyAdmin', 'POST',)
-        // setIsAdmin(result.isAdmin)
+        const result = await apiRequest('/verifyAdmin', 'POST',)
+        setIsAdmin(result.isAdmin)
       }
       catch (error) {
         console.log(error)
