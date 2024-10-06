@@ -168,7 +168,7 @@ const CharacterProfilePanel = (props) => {
             finally {
                 setLoading(false)
             }
-        }, 500); // 500ms debounce delay
+        }, 1000); // 500ms debounce delay
 
         debouncedSave();
 
