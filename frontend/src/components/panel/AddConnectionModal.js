@@ -14,7 +14,7 @@ const AddConnectionModal = (props) => {
             for (let character of selectedCharacters) {
                 temp.push({
                     name: character.name, uuid: character.uuid, knowledge: [],
-                    includeInJournal: false,
+                    includeInJournal: true,
                 })
                 console.log(temp)
             }

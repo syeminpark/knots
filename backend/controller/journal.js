@@ -386,25 +386,29 @@ const journalController = {
             const userUUID = req.user.ID; // Get the user's UUID from the authentication middleware
 
             // Step 1: Fetch all JournalBooks owned by the user and not soft-deleted
-            const journalBooks = await JournalBook.find({ userUUID: userUUID, isDeleted: false });
+            const journalBooks = await JournalBook.find({ userUUID: userUUID, isDeleted: false }).lean();
 
             // Extract JournalBook UUIDs
             const journalBookUUIDs = journalBooks.map((book) => book.uuid);
 
-            // Step 2: Fetch JournalEntries related to these JournalBooks and not soft-deleted
-            const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs }, isDeleted: false });
+            // Step 2: Fetch JournalEntries related to these JournalBooks and not soft-deleted, excluding the history field
+            const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs }, isDeleted: false })
+                .select('-history')  // Exclude the history field
+                .lean();
 
             // Extract JournalEntry UUIDs
             const journalEntryUUIDs = journalEntries.map((entry) => entry.uuid);
 
             // Step 3: Fetch CommentThreads related to these JournalEntries and not soft-deleted
-            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false });
+            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false }).lean();
 
             // Extract CommentThread UUIDs
             const commentThreadUUIDs = commentThreads.map((thread) => thread.uuid);
 
-            // Step 4: Fetch Comments related to these CommentThreads and not soft-deleted
-            const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs }, isDeleted: false });
+            // Step 4: Fetch Comments related to these CommentThreads and not soft-deleted, excluding the history field
+            const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs }, isDeleted: false })
+                .select('-history')  // Exclude the history field
+                .lean();
 
             // Step 5: Organize Comments by their CommentThread UUID
             const commentsByThreadUUID = comments.reduce((acc, comment) => {
@@ -417,7 +421,7 @@ const journalController = {
 
             // Step 6: Attach Comments to their respective CommentThreads
             const threadsWithComments = commentThreads.map((thread) => ({
-                ...thread.toObject(),
+                ...thread,
                 comments: commentsByThreadUUID[thread.uuid] || [], // Attach comments to threads
             }));
 
@@ -432,7 +436,7 @@ const journalController = {
 
             // Step 8: Attach CommentThreads to their respective JournalEntries
             const entriesWithThreads = journalEntries.map((entry) => ({
-                ...entry.toObject(),
+                ...entry,
                 commentThreads: threadsByEntryUUID[entry.uuid] || [], // Attach threads to entries
             }));
 
@@ -463,8 +467,6 @@ const journalController = {
             res.status(500).json({ error: 'An error occurred while fetching data.' });
         }
     }
-
-
 };
 
 export default journalController;

@@ -40,7 +40,7 @@
     "relationships": "두 캐릭터는 어떤 식으로 연관되어있습니까?",
     "relationshipsAttribute": "캐릭터와의 관계",
     "knowledge": "지식",
-    "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
+    "knowsAbout": "{{currentCharacterName}}(이)가 {{connectedCharacterName}}에 대해 알고 있는 것",
     "addnewAttribute": "속성 추가",
     "example": "예시: 백스토리, 성별, 나이, 성격, 직업, 욕망, 가치관, 목표, 트라우마, 말투, 국적, 교육 환경, 현재 상태 등",
     "done": "완료",
