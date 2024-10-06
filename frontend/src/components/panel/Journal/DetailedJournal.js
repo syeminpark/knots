@@ -25,15 +25,11 @@ const DetailedJournal = (props) => {
 
     const [selectedCharacters, setSelectedCharacters] = useState([]);
     const commentThreadRefs = useRef({});
-
+    const commentRefs = useRef({});
     const createdCharacter = createdCharacters.characters.find(character => character.uuid === selectedBookAndJournalEntry.journalEntry.ownerUUID);
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
-
-    const lastCommentRef = useRef(null);
-
     const [loading, setLoading] = useState(false);
-    const [scrollDown, setScrollDown] = useState(false);
-    const isInitialMount = useRef(true); // Track initial mount
+    const [newCommentUUID, setNewCommentUUID] = useState(null);
 
     // Fetch comment threads from the updated journal entry
     useEffect(() => {
@@ -41,17 +37,9 @@ const DetailedJournal = (props) => {
         if (NewJournalBookInfoandEntry?.journalEntry) {
             // Update selectedBookAndJournalEntry
             setSelectedBookAndJournalEntry(NewJournalBookInfoandEntry);
-
-            if (!isInitialMount.current) {
-                setScrollDown(true);
-            }
         }
         else {
             setSelectedBookAndJournalEntry(null);
-        }
-
-        if (isInitialMount.current) {
-            isInitialMount.current = false; // Set to false after the first render
         }
 
     }, [createdJournalBooks]);
@@ -63,6 +51,30 @@ const DetailedJournal = (props) => {
             setTrackingCommentThread(null);
         }
     }, [trackingCommentThread]);
+
+    const handleNewComment = (commentUUID) => {
+        setNewCommentUUID(commentUUID);
+    };
+
+    useEffect(() => {
+        if (newCommentUUID) {
+            const element = commentRefs.current[newCommentUUID];
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setNewCommentUUID(null);
+            } else {
+                // Retry after the next DOM update
+                const timer = setTimeout(() => {
+                    const el = commentRefs.current[newCommentUUID];
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setNewCommentUUID(null);
+                    }
+                }, 100); // Adjust the delay as needed
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [newCommentUUID, journalEntry.commentThreads]);
 
     return (
         <>
@@ -117,7 +129,10 @@ const DetailedJournal = (props) => {
                                         ? journalEntry.ownerUUID
                                         : thread.comments[index - 1].ownerUUID;
                                     return (
-                                        <div key={comment.uuid}>
+                                        <div key={comment.uuid}
+                                            ref={(el) => {
+                                                commentRefs.current[comment.uuid] = el;
+                                            }}>
                                             <CommentDisplayer
                                                 panels={panels}
                                                 setPanels={setPanels}
@@ -133,15 +148,10 @@ const DetailedJournal = (props) => {
                                                 firstInTheThread={index === 0}
                                                 repliedTo={index < thread.comments.length - 1}
                                                 isLastComment={isLastCommentOverall}
-                                                isFirstInLastThread={isFirstInLastThread}
                                                 setLoading={setLoading}
-                                                scrollDown={scrollDown}
-                                                setScrollDown={setScrollDown}
-                                                isLastCommentInThread={isLastCommentInThread}
+                                                onNewComment={handleNewComment} // Pass the handler
                                             />
-                                            {isLastCommentOverall && (
-                                                <div ref={lastCommentRef}></div>
-                                            )}
+
                                         </div>
                                     )
                                 })}
@@ -161,6 +171,8 @@ const DetailedJournal = (props) => {
                         dispatchCreatedJournalBooks={dispatchCreatedJournalBooks}
                         selectedBookAndJournalEntry={selectedBookAndJournalEntry}
                         setLoading={setLoading}
+                        setNewCommentUUID={setNewCommentUUID}
+                        onNewComment={handleNewComment}
                     />
                 </div>
             </div>

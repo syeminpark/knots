@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 const BottomActions = (props) => {
     const { t } = useTranslation();
-    const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry, setLoading } = props
+    const { selectedCharacters, setSelectedCharacters, createdCharacters, dispatchCreatedJournalBooks, selectedBookAndJournalEntry, setLoading, onNewComment } = props
     const [commentValue, setCommentValue] = useState("");
     const [activeTab, setActiveTab] = useState('SYSTEMGENERATE');
     const [isMultipleSelect, setIsMultipleSelect] = useState(true);
@@ -43,7 +43,7 @@ const BottomActions = (props) => {
                         characterUUIDs: uuids
                     });
 
-                    response.comments.forEach(object => {
+                    response.comments.forEach((object, index) => {
                         const character = selectedCharacters.find(selectedCharacter =>
                             selectedCharacter.uuid === object.characterUUID
                         );
@@ -81,6 +81,10 @@ const BottomActions = (props) => {
                 });
             });
             setCommentValue(''); // Reset comment value after submitting
+            if (comments.length > 0) {
+                const lastCommentUUID = comments[comments.length - 1].commentUUID;
+                onNewComment(lastCommentUUID);
+            }
 
             // Now send the API request with the constructed payload
             const payload = {

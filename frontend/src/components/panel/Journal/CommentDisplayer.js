@@ -24,11 +24,9 @@ const CommentDisplayer = (props) => {
         repliedTo,
         firstInTheThread,
         previousCharacter,
-        isLastComment,
-        isFirstInLastThread,
         setLoading,
-        scrollDown,
-        isLastCommentInThread
+        onNewComment,
+
     } = props;
 
 
@@ -38,44 +36,20 @@ const CommentDisplayer = (props) => {
     const [replyContent, setReplyContent] = useState('');
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
 
-    const replyInputRef = useRef(null); // Ref for the reply input
-    const firstCommentInLastThreadRef = useRef(null); // Ref for the first comment in the last thread
-    const commentThreadRef = useRef(null); // Ref for the comment if it's the last in thread
+    const replyInputRef = useRef(null);
 
-    const isInitialMount = useRef(true); // Track initial mount
-
-    // After initial render, set isInitialMount to false
-    useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-        }
-    }, []);
-
-    // Reset manual replying when editContent changes
     useLayoutEffect(() => {
         setIsManualReplying(false);
     }, [editContent]);
 
     // Consolidated scrolling logic
     useLayoutEffect(() => {
-        // Scroll to this comment if it's the last in thread and not initial mount
-        if (isLastCommentInThread && !isInitialMount.current && commentThreadRef.current) {
-            commentThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
         // Scroll to the reply input if it's the last comment and manual reply is open
-        if (isLastComment && isManualReplying && replyInputRef.current) {
-            replyInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (isManualReplying && replyInputRef.current) {
+            replyInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // Scroll to the first comment in the last thread if scrollDown is true
-        if (isFirstInLastThread && firstCommentInLastThreadRef.current && scrollDown) {
-            setTimeout(() => {
-                firstCommentInLastThreadRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Optionally reset scrollDown here if handled outside
-            }, 500);
-        }
-    }, [isLastCommentInThread, isLastComment, isManualReplying, isFirstInLastThread, scrollDown]);
+    }, [isManualReplying,]);
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
@@ -104,6 +78,7 @@ const CommentDisplayer = (props) => {
                 }
             }
 
+            const commentUUID = uuidv4()
             const payload = {
                 journalBookUUID: bookInfo.uuid,
                 journalEntryUUID: journalEntry.uuid,
@@ -111,7 +86,7 @@ const CommentDisplayer = (props) => {
                 content: contentToSend,
                 selectedMode: selectedReplyMode,
                 commentThreadUUID: commentThreadUUID,
-                commentUUID: uuidv4(),
+                commentUUID: commentUUID,
                 createdAt: Date.now()
             };
 
@@ -121,6 +96,7 @@ const CommentDisplayer = (props) => {
             });
 
             setIsManualReplying(false);
+            onNewComment(commentUUID)
 
             try {
                 const response = await apiRequest('/createComment', 'POST', payload);
@@ -185,7 +161,7 @@ const CommentDisplayer = (props) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.1 }}
                     transition={{ duration: 0.1 }}
-                    ref={isLastCommentInThread ? commentThreadRef : null} // Attach ref if last in thread
+
                 >
 
                     {/* Render the Comment */}
@@ -233,6 +209,7 @@ const CommentDisplayer = (props) => {
                         onReplySend={onReplySend}
                         onDelete={onDelete}
                         repliedTo={repliedTo}
+                        onEditSave={onEditSave}
                         previousCharacter={previousCharacter}
                     />
 

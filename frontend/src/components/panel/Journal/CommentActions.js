@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 const CommentActions = (props) => {
 
     const { t } = useTranslation();
-    const { isManualReplying, setIsManualReplying, onReplySend, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal", previousCharacter
+    const { isManualReplying, setIsManualReplying, onReplySend, onDelete, isEditing, setIsEditing, repliedTo, type = "Normal",
+        onEditSave, previousCharacter
     } = props
 
 
@@ -50,13 +51,14 @@ const CommentActions = (props) => {
                             </>
                         ) : (
                             <div style={styles.commentActions}>
-                                {/* <span style={styles.commentAction} onClick={() => setIsEditing(true)}>Edit</span> */}
+                                <span style={styles.commentAction} onClick={() => setIsEditing(true)}>{t('edit')}</span>
                                 {/* <span style={styles.commentAction} onClick={onDelete}>Delete</span> */}
                             </div>
                         )
                     ) : (
                         <div style={styles.commentActions}>
-                            <span style={styles.commentAction} onClick={() => setIsEditing(false)}>Cancel</span>
+                            <span style={styles.commentAction} onClick={onEditSave}>{t('save')}</span>
+                            <span style={styles.commentAction} onClick={() => setIsEditing(false)}>{t('cancel')}</span>
                         </div>
                     )}
                 </>
