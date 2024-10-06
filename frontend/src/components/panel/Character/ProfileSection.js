@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 const ProfileSection = (props) => {
     const { t } = useTranslation();
-    const { id, imageSrc, setImageSrc, name, setName, preview, setPreview } = props;
+    const { id, imageSrc, setImageSrc, name, setName, preview, setPreview, allNames } = props;
 
     const [isEditing, setIsEditing] = useState(!name); // Automatically enter edit mode if name is empty
     const [editedName, setEditedName] = useState(name || ''); // Track the edited name or default to an empty string
@@ -36,11 +36,15 @@ const ProfileSection = (props) => {
     const handleSave = () => {
         if (editedName !== '') {
             setIsEditing(false); // Exit edit mode after saving
-
-            setName(editedName); // Set the new name in the parent component
+            setName(editedName)
         }
 
-    };
+        else {
+            alert(t('nameRequired'))
+        }
+    }
+
+
 
     // Detect click outside and trigger save
     useEffect(() => {

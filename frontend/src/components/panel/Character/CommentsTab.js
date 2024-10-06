@@ -4,6 +4,8 @@ import CharacterButton from "../../CharacterButton";
 import openNewPanel from "../../openNewPanel";
 import ToggleButton from "../../ToggleButton";
 import { useTranslation } from 'react-i18next';
+import EntryTag from "../../EntryTag";
+import TimeAgo from "../../TimeAgo";
 
 const CommentsTab = (props) => {
     const { t } = useTranslation();
@@ -19,6 +21,7 @@ const CommentsTab = (props) => {
     const interactedCharacterList = interactedCharacters.map(interactionCharacterUUID =>
         createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === interactionCharacterUUID)
     );
+
 
 
 
@@ -109,13 +112,14 @@ const CommentsTab = (props) => {
         ) : stage === 1 && selectedCharacter ? (
 
             <div >
+                <div style={styles.leftToggleButtonContainer}>
+                    <ToggleButton
+                        direction={'left'}
+                        onClick={onBack}
+                    />
+                </div>
                 <div style={styles.header}>
-                    <div style={styles.leftToggleButtonContainer}>
-                        <ToggleButton
-                            direction={'left'}
-                            onClick={onBack}
-                        />
-                    </div>
+
                     <div style={styles.characterLink}>
                         <button
                             style={styles.profileButtonContainer}
@@ -166,6 +170,7 @@ const CommentsTab = (props) => {
                                                 const currentCharacter = createdCharacters.characters.find(createdCharacter => createdCharacter.uuid === comment.ownerUUID);
                                                 return (
                                                     <div key={commentIndex} style={styles.comment}>
+
                                                         <button
                                                             style={styles.profileButtonContainer}
                                                             onClick={() => {
@@ -177,6 +182,16 @@ const CommentsTab = (props) => {
                                                                 iconStyle={styles.characterButtonIconSmallStyle}
                                                                 textStyle={styles.characterButtonTextSmallStyle}
                                                             />
+
+                                                            <EntryTag
+                                                                selectedMode={comment?.selectedMode}
+                                                                size={"xs"}
+                                                            ></EntryTag>
+                                                            <TimeAgo
+                                                                createdAt={comment.createdAt}
+                                                            >
+
+                                                            </TimeAgo>
                                                         </button>
                                                         <div style={styles.commentContent}>
                                                             <div style={styles.commentText}>{comment.content}</div>
@@ -228,10 +243,12 @@ const styles = {
     characterButtonTextSmallStyle: {
         fontSize: 'var(--font-small)',
         fontWeight: 'var(--font-semibold)',
+        marginRight: '10px',
     },
     characterButtonIconSmallStyle: {
         width: '40px',
         height: '40px',
+
     },
     characterButtonTextStyle: {
         fontSize: 'var(--font-medium)',
@@ -246,9 +263,8 @@ const styles = {
         padding: '0',
     },
     leftToggleButtonContainer: {
-        position: 'absolute',
-        left: '0',
-        transform: 'translateX(50%)',
+
+
     },
     profileList: {
         marginTop: '20px',
@@ -341,6 +357,7 @@ const styles = {
         marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
         width: '100%',
+
     },
     commentContent: {
         flexGrow: 1,
