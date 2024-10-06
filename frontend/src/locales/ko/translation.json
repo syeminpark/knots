@@ -42,7 +42,7 @@
     "knowledge": "지식",
     "knowsAbout": "{{currentCharacterName}}가 {{connectedCharacterName}}에 대해 알고 있는 것",
     "addnewAttribute": "속성 추가",
-    "example": "예시: 백스토리, 성별, 나이, 성격, 직업, 욕망, 목표, 트라우마, 취미, 말투, 사는 곳, 외모, 교육 환경, 가치관 등",
+    "example": "예시: 백스토리, 성별, 나이, 성격, 직업, 욕망, 가치관, 목표, 트라우마, 말투, 국적, 교육 환경, 현재 상태 등",
     "done": "완료",
     "journalfeed": "저널",
     "journalPanel": "📑 저널",
