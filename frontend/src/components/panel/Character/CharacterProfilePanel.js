@@ -64,6 +64,7 @@ const CharacterProfilePanel = (props) => {
     // Update local state when `createdCharacters` changes
     useEffect(() => {
         const updatedCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
+        console.log(updatedCharacter)
         if (updatedCharacter) {
             setName(updatedCharacter.name);
             setPersonaAttributes(updatedCharacter.personaAttributes);

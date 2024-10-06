@@ -128,16 +128,6 @@ characterSchema.statics.updateCharacter = async function (uuid, update) {
             }
         }
 
-        // if (update.name || update.personaAttributes) {
-        //     character.lastUpdated = Date.now(),
-        //         shouldUpdatePersonaA = true;
-        // }
-        // if (update.name || update.personaAttributes || update.connectedCharacters) {
-        //     character.lastUpdated = Date.now(),
-        //         shouldUpdatePersonaB = true;
-        // }
-
-
         // Add the changes to the character's history if there are any
         if (historyEntries.length > 0) {
             character.history.push(...historyEntries);
