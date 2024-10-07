@@ -87,6 +87,7 @@ const CharacterCreationPanel = (props) => {
 
     useEffect(() => {
         console.log(imageSrc)
+        console.log(personaAttributes)
         const updatedObject = {
             name: name,
             imageSrc: preview,
@@ -94,7 +95,7 @@ const CharacterCreationPanel = (props) => {
             connectedCharacters: connectedCharacters
         }
         setCurrentCharacter(updatedObject)
-        console.log('hey', currentCharacter)
+
     }, [name, imageSrc, personaAttributes, connectedCharacters])
 
     return (

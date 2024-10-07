@@ -27,21 +27,23 @@ const AboutTab = (props) => {
     };
 
     const onChange = (uuid, value) => {
-        setPersonaAttributes(
-            personaAttributes.map((attribute) =>
+
+        setPersonaAttributes((prevAttributes) =>
+            prevAttributes.map((attribute) =>
                 attribute.uuid === uuid ? { ...attribute, description: value } : attribute
             )
         );
-        console.log('personaChanged');
+        console.log('personaChanged', value);
     };
 
+    // Handle title changes (name of the persona attribute)
     const onTitleChange = (uuid, newTitle) => {
-
-        setPersonaAttributes(
-            personaAttributes.map((attribute) =>
+        setPersonaAttributes((prevAttributes) =>
+            prevAttributes.map((attribute) =>
                 attribute.uuid === uuid ? { ...attribute, name: newTitle } : attribute
             )
         );
+        console.log('personaChanged', newTitle);
     };
 
     const handleDragEnd = (event) => {
