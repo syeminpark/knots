@@ -98,5 +98,6 @@
     "findAgain": "Find Again",
     "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?",
     "findingText": "finding",
-    "noJournal": "No journals yet..."
+    "noJournal": "No journals yet...",
+    "noCharacters": "No characters available"
 }

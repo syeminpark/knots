@@ -92,7 +92,8 @@ const SelectBox = (props) => {
                                 ))
                         ) : (
                             <div style={styles.noCharactersMessage}>
-                                No characters available.
+                                {t('noCharacters')}
+
                             </div>
                         )}
                     </div>
