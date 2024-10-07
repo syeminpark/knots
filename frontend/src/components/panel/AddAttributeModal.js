@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ModalOverlay from '../ModalOverlay';
 import TextArea from '../TextArea';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 
 const AddAttributeModal = (props) => {
     const { t } = useTranslation();
@@ -15,7 +16,7 @@ const AddAttributeModal = (props) => {
             }
             else {
                 console.log(`Adding attribute: ${attribute}`);
-                setPersonaAttributes([...personaAttributes, { name: attribute, description: '' }])
+                setPersonaAttributes([...personaAttributes, { name: attribute, description: '', uuid: uuidv4() }])
                 setShowModal(false);
             }
         }

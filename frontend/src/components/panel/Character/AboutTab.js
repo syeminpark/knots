@@ -3,48 +3,94 @@ import Attribute from '../Attribute';
 import AddAttributeModal from '../AddAttributeModal';
 import { useTranslation } from 'react-i18next';
 import DeleteConfirmationModal from '../../DeleteConfirmationModal';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 const AboutTab = (props) => {
     const { t } = useTranslation();
-    const { personaAttributes, setPersonaAttributes } = props
+    const { personaAttributes, setPersonaAttributes } = props;
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [selectedAttributeToDelete, setSelectedAttributeToDelete] = useState(null);
 
-
-    const deleteAttribute = (title) => {
-        setSelectedAttributeToDelete(title);
+    const deleteAttribute = (uuid) => {
+        setSelectedAttributeToDelete(uuid);
         setShowDeleteConfirmation(true);
     };
 
     const confirmDeleteAttribute = () => {
-        const newAttributes = personaAttributes.filter(attr => attr.name !== selectedAttributeToDelete);
+        const newAttributes = personaAttributes.filter((attr) => attr.uuid !== selectedAttributeToDelete);
         setPersonaAttributes(newAttributes);
         setShowDeleteConfirmation(false);
         setSelectedAttributeToDelete(null);
     };
 
+    const onChange = (uuid, value) => {
+        setPersonaAttributes(
+            personaAttributes.map((attribute) =>
+                attribute.uuid === uuid ? { ...attribute, description: value } : attribute
+            )
+        );
+        console.log('personaChanged');
+    };
 
-    const onChange = (title, value) => {
-        setPersonaAttributes(personaAttributes.map(attribute =>
-            attribute.name === title ? { ...attribute, description: value } : attribute
-        ));
-        console.log('personaChanged')
+    const onTitleChange = (uuid, newTitle) => {
 
+        setPersonaAttributes(
+            personaAttributes.map((attribute) =>
+                attribute.uuid === uuid ? { ...attribute, name: newTitle } : attribute
+            )
+        );
+    };
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (active.id && over && active.id !== over.id) { // Correct
+            const oldIndex = personaAttributes.findIndex((attr) => attr.uuid === active.id);
+            const newIndex = personaAttributes.findIndex((attr) => attr.uuid === over.id);
+
+
+            if (oldIndex !== -1 && newIndex !== -1) {
+                const newAttributes = arrayMove(personaAttributes, oldIndex, newIndex);
+                setPersonaAttributes(newAttributes);
+
+            }
+        }
     };
 
     return (
         <div style={styles.abouttabWrapper}>
-            {personaAttributes.map(attribute => (
-                <Attribute
-                    key={attribute?.name}
-                    title={attribute?.name}
-                    deleteFunction={deleteAttribute}
-                    list={personaAttributes}
-                    setter={setPersonaAttributes}
-                    onChange={(event) => { onChange(attribute?.name, event?.target?.value) }}
-                />
-            ))}
+            <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                modifiers={[restrictToVerticalAxis]}
+            >
+                <SortableContext
+                    items={personaAttributes.map((attr) => attr.uuid)}
+                    strategy={verticalListSortingStrategy}
+                >
+                    {personaAttributes.map((attribute) => (
+                        <Attribute
+                            key={attribute.uuid}
+                            uuid={attribute.uuid}
+                            title={attribute.name}
+                            placeholder=""
+                            deleteFunction={deleteAttribute}
+                            list={personaAttributes}
+                            setter={setPersonaAttributes}
+                            onChange={(value) => {
+                                onChange(attribute.uuid, value);
+                            }}
+                            onTitleChange={(newTitle) => {
+                                onTitleChange(attribute.uuid, newTitle);
+                            }}
+                        />
+                    ))}
+                </SortableContext>
+            </DndContext>
+
             {showModal && (
                 <AddAttributeModal
                     setShowModal={setShowModal}
@@ -59,7 +105,10 @@ const AboutTab = (props) => {
                 >
                     <p style={{ marginBottom: '20px' }}>{t('areYouSureDelete')}</p>
                     <div style={styles.modalButtonContainer}>
-                        <button onClick={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+                        <button
+                            onClick={() => setShowDeleteConfirmation(false)}
+                            style={styles.cancelButton}
+                        >
                             {t('cancel')}
                         </button>
                         <button onClick={confirmDeleteAttribute} style={styles.deleteButton}>
@@ -82,6 +131,7 @@ const styles = {
     abouttabWrapper: {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 350px)',
+        overflowX: 'hidden',
     },
     buttonContainer: {
         position: 'sticky',
@@ -124,7 +174,7 @@ const styles = {
         fontSize: 'var(--font-medium)',
         marginTop: '6px',
         cursor: 'pointer',
-    }
-}
+    },
+};
 
-export default AboutTab
+export default AboutTab;

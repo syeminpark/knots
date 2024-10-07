@@ -93,7 +93,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              loggedIn && isAdmin ? (
+              loggedIn ? (
                 <Admin />
               ) : (
                 <Navigate to="/login" replace />

@@ -4,7 +4,8 @@ import DiscoverCharacterModal from '../DiscoverCharacterModal';
 import Attribute from '../Attribute';
 import { useTranslation } from 'react-i18next';
 import DeleteConfirmationModal from '../../DeleteConfirmationModal';
-
+import ConnectionAttribute
+    from './ConnectionAttribute';
 const ConnectionsTab = (props) => {
     const { t } = useTranslation();
     const {
@@ -79,7 +80,7 @@ const ConnectionsTab = (props) => {
 
             <div style={styles.connectionsTabWrapper}>
                 {connectedCharacters.map((child) => (
-                    <Attribute
+                    <ConnectionAttribute
                         panels={panels}
                         setPanels={setPanels}
                         key={child.name}
@@ -191,6 +192,7 @@ const styles = {
         cursor: 'pointer',
     },
     discoverButton: {
+
         width: '100%',
         padding: '10px',
         backgroundColor: 'black',
