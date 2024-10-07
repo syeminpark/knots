@@ -234,6 +234,7 @@ const CharacterProfilePanel = (props) => {
                 <AboutTab
                     personaAttributes={personaAttributes}
                     setPersonaAttributes={setPersonaAttributes}
+                    isCreationPanel={false}
                 />
             ) : activeTab === 'CONNECTIONS' ? (
                 <ConnectionsTab

@@ -9,7 +9,7 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 const AboutTab = (props) => {
     const { t } = useTranslation();
-    const { personaAttributes, setPersonaAttributes } = props;
+    const { personaAttributes, setPersonaAttributes, isCreationPanel } = props;
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [selectedAttributeToDelete, setSelectedAttributeToDelete] = useState(null);
@@ -61,7 +61,7 @@ const AboutTab = (props) => {
     };
 
     return (
-        <div style={styles.abouttabWrapper}>
+        <div style={styles.abouttabWrapper(isCreationPanel)}>
             <DndContext
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
@@ -118,21 +118,31 @@ const AboutTab = (props) => {
                 </DeleteConfirmationModal>
             )}
 
-            <div style={styles.buttonContainer}>
-                <button style={styles.createButton} onClick={() => setShowModal(true)}>
-                    {t('addattributes')}
-                </button>
-            </div>
+            {isCreationPanel && (
+                <div style={styles.buttonContainer}>
+                    <button style={styles.createButton} onClick={() => setShowModal(true)}>
+                        {t('addattributes')}
+                    </button>
+                </div>
+            )}
+
+            {!isCreationPanel && (
+                <div style={styles.buttonContainer}>
+                    <button style={styles.createButton} onClick={() => setShowModal(true)}>
+                        {t('addattributes')}
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
 
 const styles = {
-    abouttabWrapper: {
+    abouttabWrapper: (isCreationPanel) => ({
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 350px)',
+        maxHeight: isCreationPanel ? 'calc(100vh - 390px)' : 'calc(100vh - 350px)',
         overflowX: 'hidden',
-    },
+    }),
     buttonContainer: {
         position: 'sticky',
         bottom: 0,
