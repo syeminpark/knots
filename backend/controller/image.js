@@ -2,12 +2,30 @@ import { Storage } from '@google-cloud/storage';
 import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
+import fs from 'fs';
 
+
+// Define the path for the keyfile
+let keyFilename;
+
+// Check if GOOGLE_APPLICATION_CREDENTIALS exists
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    // Use the file path from the environment variable
+    keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+} else if (process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS) {
+    // Write the content to a temporary file and use it
+    const tempKeyfilePath = '/app/keyfile.json';
+    fs.writeFileSync(tempKeyfilePath, process.env.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS);
+    keyFilename = tempKeyfilePath;
+} else {
+    throw new Error('No Google Cloud credentials provided');
+}
+
+// Initialize Google Cloud Storage
 const storage = new Storage({
-    keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    keyFilename,
     projectId: process.env.GCLOUD_PROJECT_ID,
 });
-
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 export default {
