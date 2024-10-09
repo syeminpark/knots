@@ -77,3 +77,16 @@ let userPrompt = `
    6. The keys should be in English, but the values should be in Korean.
    7. The output should only contain the final JSON object.
 `;
+
+
+
+
+
+
+
+
+
+            ** Objective **:
+            1. Create 3 new fictional story characters that each have a clear association with ${character.name}  based on the following theme: ${content}.
+            2. However, this association ${content} must manifest through the new characters in a wide range of ways to ensure each character is fresh and compelling.
+            3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. `

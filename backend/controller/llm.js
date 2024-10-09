@@ -255,7 +255,7 @@ const llmController = {
             res.status(200).json({ success: true, comments: generatedComments });
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error); https://platform.openai.com/playground/chat
             res.status(500).json({ success: false, error: 'Failed to generate comments.' });
         }
     },
@@ -271,8 +271,7 @@ const llmController = {
             let systemPrompt = `You are a professional story writer, brilliant at creating new characters.
 
             ** Objective **:
-            1. Create 3 new fictional story characters that each have a clear association with ${character.name}  based on the following theme: ${content}.
-            2. However, this association ${content} must manifest through the new characters in a wide range of ways to ensure each character is fresh and compelling.
+            1. Create 3 new fictional story characters that each have a clear association with ${character.name}  based on the following theme: ${content}.2. However, this association ${content} must manifest through the new characters in a wide range of ways to ensure each character is fresh and compelling.
             3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. `
 
             let userPrompt = `

@@ -11,8 +11,8 @@ const ProfileSection = (props) => {
     const inputRef = useRef(null); // Reference for the input field
 
     // Constants to control the behavior
-    const isClickableToEdit = false
-    const isClickableToSave = false
+    const isClickableToEdit = true
+    const isClickableToSave = true
 
     // Handle image upload
     const handleImageUpload = (e) => {
