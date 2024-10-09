@@ -8,6 +8,7 @@ import ProfileSection from './ProfileSection';
 import { apiRequest, apiRequestFormData } from '../../../utility/apiRequest';
 import { useTranslation } from 'react-i18next';
 
+
 const CharacterCreationPanel = (props) => {
     const { id, type, panels, setPanels, createdCharacters, dispatchCreatedCharacters } = props;
     const { t } = useTranslation();
@@ -30,6 +31,7 @@ const CharacterCreationPanel = (props) => {
             alert(t("nameRequired"));
             return;
         }
+
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 
@@ -116,6 +118,7 @@ const CharacterCreationPanel = (props) => {
                     setName={setName}
                     preview={preview}
                     setPreview={setPreview}
+                    createdCharacters={createdCharacters}
                 />
                 {/* Tabs */}
 

@@ -15,6 +15,7 @@ const Attribute = (props) => {
         setter,
         onChange,
         onTitleChange,
+        personaAttributes
     } = props;
 
     const attribute = list.find((attr) => attr.uuid === uuid);
@@ -43,22 +44,28 @@ const Attribute = (props) => {
     };
 
     useEffect(() => {
+
         if (!isEditing) {
             setEditedContent(attribute?.description || '');
             setEditedTitle(attribute?.name || '');
         }
+
     }, [attribute?.description, attribute?.name, isEditing]);
 
     const handleSave = () => {
         if (isEditing) {
             if (editedTitle !== attribute?.name) {
+                if (personaAttributes.find(personaAttribute => personaAttribute.name.trim() === editedTitle.trim())) {
+                    alert(t('attributeExist'))
+                    if (editedContent !== attribute?.description) {
+                        onChange(editedContent); // Correct: Pass only the new content
+
+                    }
+                    return
+                }
                 onTitleChange(editedTitle); // Correct: Pass only the new title
-
             }
-            if (editedContent !== attribute?.description) {
-                onChange(editedContent); // Correct: Pass only the new content
 
-            }
         }
     };
     // Toggle delete button visibility

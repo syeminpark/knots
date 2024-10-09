@@ -19,6 +19,7 @@ const MiniProfile = (props) => {
             personaAttributes: character.personaAttributes,
             connectedCharacters: character.connectedCharacters,
             uuid: character.uuid,
+            includeInJournal: true,
         };
 
         dispatchCreatedCharacters({

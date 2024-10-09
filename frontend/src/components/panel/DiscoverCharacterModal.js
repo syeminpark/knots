@@ -27,7 +27,8 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                 uuid: uuidv4(),
                 personaAttributes: [],
                 name: character?.name || null,
-                type: { type: "SYSTEMGENERATE", prompt: textDescription }
+                type: { type: "SYSTEMGENERATE", prompt: textDescription },
+
 
             };
             const keyMap = {
@@ -40,13 +41,15 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                     if (keyMap[key]) {
                         object.personaAttributes.push({
                             name: keyMap[key],
-                            description: character[key]
+                            description: character[key],
+                            uuid: uuidv4()
                         });
                     } else if (key === "my_relationship") {
                         object.connectedCharacters.push({
                             name: currentCharacter.name,
                             uuid: currentCharacter.uuid,
-                            description: character[key]
+                            description: character[key],
+                            includeInJournal: true,
                         });
                     } else if (key === "your_relationship") {
                         setCurrentCharacterTempConnection((prev) => [
@@ -54,7 +57,8 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                             {
                                 name: object?.name,
                                 uuid: object.uuid,
-                                description: character[key]
+                                description: character[key],
+                                includeInJournal: true,
                             }
                         ]);
                     }

@@ -88,6 +88,7 @@ const AboutTab = (props) => {
                             onTitleChange={(newTitle) => {
                                 onTitleChange(attribute.uuid, newTitle);
                             }}
+                            personaAttributes={personaAttributes}
                         />
                     ))}
                 </SortableContext>

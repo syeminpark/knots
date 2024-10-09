@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 const ProfileSection = (props) => {
     const { t } = useTranslation();
-    const { id, imageSrc, setImageSrc, name, setName, preview, setPreview, allNames } = props;
+    const { id, imageSrc, setImageSrc, name, setName, preview, setPreview, createdCharacters } = props;
 
     const [isEditing, setIsEditing] = useState(!name); // Automatically enter edit mode if name is empty
     const [editedName, setEditedName] = useState(name || ''); // Track the edited name or default to an empty string
@@ -34,6 +34,11 @@ const ProfileSection = (props) => {
 
     // Handle save functionality
     const handleSave = () => {
+
+        if (createdCharacters?.characters.find(character => character.name.trim() == editedName.trim())) {
+            alert(t("nameExists"))
+            return
+        }
         if (editedName !== '') {
             setIsEditing(false); // Exit edit mode after saving
             setName(editedName)

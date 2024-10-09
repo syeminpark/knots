@@ -105,6 +105,7 @@ const CharacterProfilePanel = (props) => {
                 return;
             }
 
+
             const existingCharacter = createdCharacters.characters.find(character => character.uuid === caller.uuid);
             if (!existingCharacter) {
                 console.error('Existing character not found.');
@@ -226,6 +227,7 @@ const CharacterProfilePanel = (props) => {
                     setName={setName}
                     preview={preview}
                     setPreview={setPreview}
+                    createdCharacters={createdCharacters}
                 />
                 <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>

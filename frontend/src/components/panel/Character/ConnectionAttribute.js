@@ -146,7 +146,7 @@ const ConnectionAttribute = (props) => {
                                 →
                                 <button
                                     style={styles.profileButtonContainer}
-                                    key={connectedCharacter.uuid}
+                                    key={connectedCharacter?.uuid}
                                     onClick={(e) => {
                                         e.stopPropagation(); // Prevent triggering edit mode when clicking on buttons
                                         openNewPanel(panels, setPanels, 'character-profile', connectedCharacter);
