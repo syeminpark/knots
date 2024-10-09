@@ -57,15 +57,14 @@ const Attribute = (props) => {
             if (editedTitle !== attribute?.name) {
                 if (personaAttributes.find(personaAttribute => personaAttribute.name.trim() === editedTitle.trim())) {
                     alert(t('attributeExist'))
-                    if (editedContent !== attribute?.description) {
-                        onChange(editedContent); // Correct: Pass only the new content
-
-                    }
                     return
                 }
                 onTitleChange(editedTitle); // Correct: Pass only the new title
             }
+            if (editedContent !== attribute?.description) {
+                onChange(editedContent); // Correct: Pass only the new content
 
+            }
         }
     };
     // Toggle delete button visibility
