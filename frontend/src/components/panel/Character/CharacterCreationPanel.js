@@ -44,10 +44,12 @@ const CharacterCreationPanel = (props) => {
                 formData.append('characterUUID', uuid);
 
                 const uploadResponse = await apiRequestFormData('/uploadImage', 'POST', formData);
+                console.log(uploadResponse)
                 if (uploadResponse.imageUrl) {
                     imageUrl = uploadResponse.imageUrl;
                 }
             }
+
             const payload = {
                 name: name,
                 personaAttributes: personaAttributes,

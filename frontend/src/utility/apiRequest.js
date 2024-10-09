@@ -1,5 +1,5 @@
 const API_URL = process.env.REACT_APP_API_URL || ''; // Fallback to empty string if undefined
-
+console.log('API URL', API_URL)
 // JSON API Request Function
 export const apiRequest = async (url, method, data = null) => {
     const user = JSON.parse(localStorage.getItem('user')) || {}; // Safe access to localStorage

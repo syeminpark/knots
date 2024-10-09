@@ -57,7 +57,7 @@ export default {
                 const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
                 // // Delete old images associated with this characterUUID except the new one
-                // await deleteOldImages(characterUUID, newFileName);
+                await deleteOldImages(characterUUID, newFileName);
 
                 // Return the uploaded image URL without saving it in the database
                 res.status(200).send({
