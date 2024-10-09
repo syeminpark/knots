@@ -37,23 +37,23 @@ const ProfileSection = (props) => {
 
         const duplicateCharacter = createdCharacters?.characters.find(
             (character) =>
-              character.uuid !== currentCharacterUUID && // Exclude current character
-              character.name.trim() === editedName.trim()
-          );
+                character.uuid !== currentCharacterUUID && // Exclude current character
+                character.name.trim() === editedName.trim()
+        );
 
         if (duplicateCharacter) {
             alert(t("nameExists"));
             return;
-          }
+        }
 
         if (editedName !== '') {
             setIsEditing(false); // Exit edit mode after saving
             setName(editedName)
         }
 
-        else {
-            alert(t('nameRequired'))
-        }
+        // else {
+        //     alert(t('nameRequired'))
+        // }
     }
 
 

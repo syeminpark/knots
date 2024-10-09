@@ -33,9 +33,8 @@ const ConnectionAttribute = (props) => {
     const [includeInJournal, setIncludeInJournal] = useState(attribute ? attribute.includeInJournal : false);
 
     const containerRef = useRef(null);
-    const isClickableToEdit = false;
-    const isClickableToSave = false;
-
+    const isClickableToEdit = true;
+    const isClickableToSave = true;
     useEffect(() => {
         setEditedContent(attribute?.description);
     }, [attribute?.description]);

@@ -27,6 +27,10 @@ const Attribute = (props) => {
 
     const containerRef = useRef(null);
 
+    // Constants to control behavior
+    const isClickableToEdit = true; // Control entering edit mode on click
+    const isClickableToSave = true; // Control saving on outside click
+
     // useSortable setup
     const {
         attributes: dragAttributes,
@@ -35,43 +39,58 @@ const Attribute = (props) => {
         setNodeRef,
         transform,
         transition,
-        isDragging,
     } = useSortable({ id: uuid });
 
     const dragStyle = {
         transform: CSS.Transform.toString(transform),
         transition,
     };
-
-    useEffect(() => {
-
-        if (!isEditing) {
-            setEditedContent(attribute?.description || '');
-            setEditedTitle(attribute?.name || '');
-        }
-
-    }, [attribute?.description, attribute?.name, isEditing]);
-
-    const handleSave = () => {
-        if (isEditing) {
-            if (editedTitle !== attribute?.name) {
-                if (personaAttributes.find(personaAttribute => personaAttribute.name.trim() === editedTitle.trim())) {
-                    alert(t('attributeExist'))
-                    return
-                }
-                onTitleChange(editedTitle); // Correct: Pass only the new title
-            }
-            if (editedContent !== attribute?.description) {
-                onChange(editedContent); // Correct: Pass only the new content
-
-            }
-        }
-    };
-    // Toggle delete button visibility
     const toggleDeleteButton = (e) => {
         e.stopPropagation(); // Prevent propagation to parent click event
         setShowDelete((prevState) => !prevState);
     };
+
+    useEffect(() => {
+        if (!isEditing) {
+            setEditedContent(attribute?.description || '');
+            setEditedTitle(attribute?.name || '');
+        }
+    }, [attribute?.description, attribute?.name, isEditing]);
+
+    // Handle save functionality
+    const handleSave = () => {
+        if (isEditing) {
+            if (editedTitle !== attribute?.name) {
+                if (personaAttributes.find(personaAttribute => personaAttribute.name.trim() === editedTitle.trim())) {
+                    alert(t('attributeExist'));
+                    return;
+                }
+                onTitleChange(editedTitle); // Pass only the new title
+            }
+            if (editedContent !== attribute?.description) {
+                onChange(editedContent); // Pass only the new content
+            }
+            setIsEditing(false); // Exit edit mode after saving
+        }
+    };
+
+    // Detect click outside and trigger save
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (isClickableToSave && containerRef.current && !containerRef.current.contains(event.target)) {
+                if (isEditing) {
+                    handleSave(); // Auto-save when clicking outside
+                }
+            }
+        };
+
+        if (isEditing) {
+            document.addEventListener('mousedown', handleClickOutside); // Attach event listener
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside); // Clean up event listener
+        };
+    }, [isClickableToSave, isEditing, editedContent, editedTitle]);
 
     return (
         <div
@@ -82,6 +101,16 @@ const Attribute = (props) => {
             style={{
                 ...styles.attributeContainer,
                 ...dragStyle,
+            }}
+            onClick={() => {
+                if (isClickableToEdit && !isEditing) {
+                    setIsEditing(true); // Enter edit mode when clicking inside if allowed
+                    setTimeout(() => {
+                        if (containerRef.current) {
+                            containerRef.current.querySelector('input').focus(); // Focus the input after state update
+                        }
+                    }, 0);
+                }
             }}
         >
             <div style={styles.sectionHeader}>
@@ -104,7 +133,6 @@ const Attribute = (props) => {
                     <label style={styles.sectionHeaderLabel}>{title}</label>
                 )}
 
-                {/* Edit and More Buttons */}
                 <div style={styles.buttonsContainer}>
                     <button
                         style={styles.editButton}
@@ -145,7 +173,6 @@ const Attribute = (props) => {
                 </div>
             </div>
 
-            {/* Text Area or static text depending on edit mode */}
             {isEditing ? (
                 <TextArea
                     attribute={{ description: editedContent }}
