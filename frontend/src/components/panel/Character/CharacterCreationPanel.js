@@ -119,6 +119,7 @@ const CharacterCreationPanel = (props) => {
                     preview={preview}
                     setPreview={setPreview}
                     createdCharacters={createdCharacters}
+                    currentCharacterUUID={null}
                 />
                 {/* Tabs */}
 

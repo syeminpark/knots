@@ -228,6 +228,7 @@ const CharacterProfilePanel = (props) => {
                     preview={preview}
                     setPreview={setPreview}
                     createdCharacters={createdCharacters}
+                    currentCharacterUUID={caller.uuid}
                 />
                 <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
