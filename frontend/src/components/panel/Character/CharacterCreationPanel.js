@@ -25,13 +25,11 @@ const CharacterCreationPanel = (props) => {
     ];
 
 
-
     const saveFunction = async () => {
         if (!name.trim()) {
             alert(t("nameRequired"));
             return;
         }
-
         const newPanels = panels.filter(panel => panel.id !== id);
         setPanels(newPanels);
 

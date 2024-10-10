@@ -8,8 +8,6 @@ const llmController = {
         try {
             const { characterUUIDs, journalTitle } = req.body;
             const journalEntries = [];
-
-
             // Fetch characters and generate journal entries concurrently
             const characterPromises = characterUUIDs.map(async (uuid) => {
                 try {
@@ -25,22 +23,24 @@ const llmController = {
                        
                        **Roleplaying Rules**:
                        1. You must consistantly stay in character as ${character.name} throughout the entire process.
-                       2. Use the character description as well as as a blueprint to guide your writing, but do not copy or paraphrase them directly.
-                       3. Use the information provided to inform your role, but do not break character to explain details.
+                       2. Use your <My Character Description>  </My Character Description> to guide your writing, but do not copy or paraphrase directly. 
+                       3. Do not break character at all times.
 
                         `;
                         // console.log('systemPrompt', systemPrompt)
 
-                        let userPrompt = `\nCharacter Description: 
+                        let userPrompt = `\n<My Character Description> 
                         You are ${character.name}
-                       ${JSON.stringify(extractedValues)}`
+                       ${JSON.stringify(extractedValues)}
+                       </My Character Description> 
+                       `
 
                         if (updatedConnectedCharacters) {
                             const cleanedConnections = cleanCharacterData(updatedConnectedCharacters);
                             console.log('here!!', cleanedConnections)
-                            userPrompt += `\nCharacter Network:`
+                            userPrompt += `\n<Character Network>`
                             cleanedConnections?.forEach((connectedCharacter, index) => {
-                                userPrompt += `\n${index += 1}.${connectedCharacter.name}`
+                                userPrompt += `\n${index += 1}.${connectedCharacter.name}\n`
                                 if (connectedCharacter?.description) {
                                     userPrompt += `Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective:
                                     ${connectedCharacter?.description}`;
@@ -52,20 +52,23 @@ const llmController = {
                                     `
                                 }
                             });
+                            userPrompt += `\n</Character Network>`
                         }
 
                         userPrompt += `
 
-                      **Rules For Journaling**:
-                      1. The content and style of the journal should be written from the perspective of fictional story charcter. 
-                      2. Write as if you were talking to another person. 
-                      3. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
-                      4. The events that occur in the journal post must be rich in diversity and explained in detail, rather than being  and superficial summarizations.The character remembers every detail. 
-                      5. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your emotions, and thoughts.The character remembers every detail.
-                      6. Regardless of what the theme of journal is, you must write about it. 
-                      7. Do not include any information from the 'Character Network' if there is no direct connection betwen the data in the 'Character Network' and the provided theme for the journal.
-                      8. The journal must be in Korean and Korean only. 
-                      9. The final format should be the journal only. 
+                     **Rules For Journaling**:
+1. ${character.name} should write the content of the journal from ${character.name}'s own perspective and style.
+2. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
+3. The events that occur in the journal must be rich in diversity and explained in detail, rather than being  and superficial summarizations.The character remembers every detail. 
+4. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your own experience. The character remembers every detail.
+5. Regardless of what the theme of journal is, you must write about it. 
+6. Do not write about other characters from the <Character Network> </Character Network> if the theme of the journal has no relevance with the information within the <Character Network> </Character Network>.
+7  If other characters from the <Character Network> </Character Network> are included in the journal's content, ensure that they play a major role within the events that occur in the journal. 
+8. In addition, use <My Character Description> for acting as the character, rather than to fill up the content of the journal with unnessary details from the <My Character Description>. 
+9. The response should be written in Korean and Korean only. It should not feel like an Enlgish translation.
+10. You should not be unnwcessarily polite, or encouraging if it is not defined in your <My Character Description> </My Character Description>.
+11.The final format should be the journal only. 
 
                       The theme of the journal is ${journalTitle}.`
                         console.log('userPrompt', userPrompt)
@@ -141,31 +144,32 @@ const llmController = {
                         
                     \n<My Character Description>
                       You are ${character.name}
-                    
-                    ${JSON.stringify(extractedValues)}`;
+                    ${JSON.stringify(extractedValues)}
+                    </My Character Description>`;
 
                         // Add connected character relationships if they exist
                         if (updatedConnectedCharacters && updatedConnectedCharacters.length > 0) {
                             const cleanedConnections = cleanCharacterData(updatedConnectedCharacters);
+                            console.log('cleanedConnections!', cleanedConnections)
                             systemPrompt += `\n\n<Character Network>`;
                             cleanedConnections.forEach((connectedCharacter, index) => {
                                 systemPrompt += `\n${index + 1}. ${connectedCharacter.name}`;
-                                // if (connectedCharacter?.description) {
-                                //     systemPrompt += `\nRelationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
-                                // }
-                                // if (connectedCharacter?.knowledge) {
-                                //     systemPrompt += `\The Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}`
-                                // }
+                                if (connectedCharacter?.description) {
+                                    systemPrompt += `\nRelationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
+                                }
+                                if (connectedCharacter?.knowledge) {
+                                    systemPrompt += `\The Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}`
+                                }
                                 if (comments?.previousCommentCharacterUUID) {
                                     if (connectedCharacter.uuid === comments.previousCommentCharacterUUID) {
-                                        systemPrompt += `\nThe Knowledge ${character.name} has of ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
+                                        systemPrompt += `\nThe Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
                                         The Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                         replyingToConnection = connectedCharacter
                                     }
                                 }
                                 else if (connectedCharacter.uuid === journalWriterCharacter.uuid) {
-                                    systemPrompt += `\nThe Knowledge ${character.name} has of ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
- The Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
+                                    systemPrompt += `\nThe Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
+                                    The Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                     replyingToConnection = connectedCharacter
                                 }
 
@@ -176,14 +180,15 @@ const llmController = {
                         \n**Roleplaying Rules**:
                         1. You must consistantly stay in character as ${character.name} throughout the entire conversation.
                         2. Use your <My Character Description> and specifically the relationship and knoweldge within the <Character Network> to guide your writing, but do not copy or paraphrase directly.
-                        3. Do not break character to explain details.
+                        3. Do not break character at all times.
+
                      
                         **General Response Rules**
                         1. The response should be written in Korean and Korean only. It should not feel like an Enlgish translation.
-                        2. You should not be unnwcessarily polite, or encouraging if it is not defined in your <character description>.
+                        2. You should not be unncessarily polite, or encouraging or adhere to any well mannered social skills if it is not defined in the <My Character Description> </My Character Description>..
                         3. Your response should be always be a direct manifestation of your character ${character.name}.
-                        4. If the relationship is provided,your response should also always manifest your perspective of the relationship you have with the character you are responding to.
-                        5. You can use the knoweldge you have of the character you are responding to in order to further express the relationship you percieve to have with that character.
+                        4. If the relationship is provided between you as ${character.name} and the other character within the <Character Network> </Character Network>, your response should also always manifest ${character.name}'s perspective of their relationship.
+                        5. You can use the description of the character you are responding, defined in the <Character Network></Character Network> to further express the relationship ${character.name} percieves to have with the other character.
                         
 
                         `
@@ -193,27 +198,27 @@ const llmController = {
                         if (!commentThreadUUID) {
                             userPrompt += `
                             ** Specific Comment Rules **
-                                1. You must respond by thinking of how ${character.name} would react to this journal. 
-                                2. Rather than addressing this as a journal, adrress this the personal expression of ${character.name}.
-                                3. Think of specific parts of the journal that ${character.name} would be of most interest to ${character.name}.
+                                1. You must respond by thinking of how ${character.name} would react. 
+                                2. Rather than addressing this as a journal, adrress this as a personal expression of ${journalWriterCharacter.name} and respond accordingly.
+                                3. Think of specific parts of the journal that would be of most interest to ${character.name}.
                                 4. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
                                 5. In addition, your response should strongly reflect your relationship with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
-                                6. Do not write your own name at the end of the comment.
-                                7. The final remarks should not be encouragi
+                                6. The response should be concise, capturing the essence of the reaction.
+                                8. Do not write your own name at the end of the comment.
+                        
 `;
                         } else {
                             userPrompt +=
                                 `\n\nPast comment history: ${JSON.stringify(comments.commentHistory)} \
 
                             ** Specific Comment Rules **
-                            1. Think of specific parts of the journal and the past conversation with ${comments.previousCommentCharacterName} to respond.
-                            2. You must respond as ${character.name}, and reflect this character's unique identity. 
-                            3. Regardless of what ${comments.previousCommentCharacterName} has said in the prevous comments before, your response must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName}.
-                            4. This relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
-                            5. Do not write your own name at the end of the comment.
-                     
-
-
+                            1. You must respond by thinking of how ${character.name} would react to the last comment in the past comment history.
+                            2. Think of specific parts of the previous comment that would be of most interest to ${character.name}.
+                            3. Your response should not be superficial but strongly reflect your own unique identity as ${character.name}.
+                            4. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName}  which is ${replyingToConnection?.description}.
+                            5. This relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
+                            6. Do not write your own name at the end of the comment.
+                    
 `;
                         }
 
@@ -271,8 +276,12 @@ const llmController = {
             let systemPrompt = `You are a professional story writer, brilliant at creating new characters.
 
             ** Objective **:
-            1. Create 3 new fictional story characters that each have a clear association with ${character.name}  based on the following theme: ${content}.2. However, this association ${content} must manifest through the new characters in a wide range of ways to ensure each character is fresh and compelling.
-            3. All 3 characters must be clearly distinct from each other, and each must be unique and orginal. `
+            1. Strong, Contextual Association: All 3 new characters must have a strong, direct, and realistic association with ${character.name} based on the following: "${content}".
+2, The association should be based on shared experiences, significant past events, or plausible future situations.
+3. If the association "${content}" is a specific type of person or relationship, ensure that all the new characters follow this type of role or relationship.
+4. This association must always be "${content}".  Showcase different interpretations of the following relationship: "${content}" 
+
+ `
 
             let userPrompt = `
             This is ${character.name}.
@@ -284,12 +293,14 @@ const llmController = {
     - "your_relationship": which describes the relationship from ${character.name} 's perspective
 2. Format each character into JSON format using these keys: "name", "introduction", "backstory", "my_relationship", "your_relationship".
     - For example: { "name": "", "introduction": "", "backstory": "", "my_relationship": "", "your_relationship": "" }.
-3. The decriptions for each of the keys must have be in vivid detail, and not be superficial summarizations. 
-            4. Whenever applicable ensure that the descriptons are at least 5 sentences long. 
-            5. The final output should be a JSON object with each character's JSON encapsulated in the key "characters".
+3. The "name" should  be a name that reflects their descriptons in a memorizable way.
+4. The descriptions for each of the keys must have be in vivid detail, and not be superficial summarizations. 
+            5. Whenever applicable ensure that the descriptons are at least 5 sentences long. 
+           
+            6. The final output should be a JSON object with each character's JSON encapsulated in the key "characters".
     - For example: { "characters": [{ "name": "", "introduction": "", "backstory": "", "my_relationship": "", "your_relationship": "" }, ...] }.
-6. The keys should be in English, but the values should be in Korean.
-            7. The output should only contain the final JSON object.`;
+7. The keys should be in English, but the values should be in Korean.
+            8. The output should only contain the final JSON object.`;
 
 
             console.log('userPrompt', userPrompt)

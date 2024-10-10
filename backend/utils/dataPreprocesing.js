@@ -51,7 +51,7 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters, typ
     const updatedConnectedCharacters = [];
 
     for (let connectedCharacter of connectedCharacters) {
-        if (connectedCharacter !== '' && (connectedCharacter.knowledge?.legnth > 0 || connectedCharacter?.description)) {
+        if (connectedCharacter !== '' && (connectedCharacter.knowledge?.length > 0 || connectedCharacter?.description)) {
             console.log(connectedCharacter.knowledge, connectedCharacter.description)
             // If type is "journal", proceed only with characters where includeInJournal is true
             if (!type || (type === 'journal' && connectedCharacter.includeInJournal)) {
@@ -86,6 +86,9 @@ export const updateConnectedCharacterKnowledge = async (connectedCharacters, typ
                 // Track updated characters, cleaned based on the "journal" type
                 updatedConnectedCharacters.push(connectedCharacter);
             }
+        }
+        else {
+            console.log(connectedCharacter)
         }
     }
     if (updatedConnectedCharacters.length > 0) {
