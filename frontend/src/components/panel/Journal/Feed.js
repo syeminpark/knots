@@ -37,7 +37,7 @@ const Feed = (props) => {
 
     return (
         <>
-            <h2 style={styles.feedHeader}>{t('feed')}</h2>
+            <div style={styles.feedHeader}>{t('feed')}</div>
 
             <div style={styles.journalFeedWrapper}>
                 {createdJournalBooks.journalBooks.length === 0 && (
@@ -188,6 +188,12 @@ const styles = {
         fontWeight: 'var(--font-bold)',
         marginBottom: '10px',
     },
+    feedHeader: {
+        padding: '10px 0px',
+        fontSize: 'var(--font-xl)',
+        fontWeight: 'var(--font-bold)',
+        width: '100%',
+    }
 };
 
 export default Feed;

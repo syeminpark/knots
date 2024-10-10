@@ -93,8 +93,9 @@ const MiniProfile = (props) => {
                                         {character.personaAttributes.map(({ name, description }, idx) => (
                                             <li key={idx} style={styles.personaAttributeItem}>
                                                 <strong>
-                                                    {attributeLabelMap[name] || name}: {/* Map to label or use name */}
+                                                    {attributeLabelMap[name] || name} {/* Map to label or use name */}
                                                 </strong>
+                                                <br></br>
                                                 {description || 'N/A'}
                                             </li>
                                         ))}
@@ -106,10 +107,10 @@ const MiniProfile = (props) => {
                                 {/* Render my_relationship and your_relationship after personaAttributes */}
                                 <ul style={styles.personaAttributesList}>
                                     <li style={styles.personaAttributeItem}>
-                                        <strong>{attributeLabelMap.my_relationship}:</strong> {myRelationshipDescription}
+                                        <strong>{attributeLabelMap.my_relationship}</strong>  <br></br> {myRelationshipDescription}
                                     </li>
                                     <li style={styles.personaAttributeItem}>
-                                        <strong>{attributeLabelMap.your_relationship}:</strong> {yourRelationshipDescription}
+                                        <strong>{attributeLabelMap.your_relationship}</strong>  <br></br> {yourRelationshipDescription}
                                     </li>
                                 </ul>
                             </div>
@@ -175,6 +176,10 @@ const styles = {
     characterInfo: {
         display: 'block',
         paddingLeft: '10px',
+        fontSize: 'var(--font-small)',
+        fontWeight: 'var(--font-regular)',
+        lineHeight: 'var(--line-height)',
+
     },
     personaAttributesList: {
         listStyleType: 'none',

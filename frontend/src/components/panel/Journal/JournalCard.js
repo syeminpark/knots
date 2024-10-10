@@ -98,7 +98,8 @@ const styles = {
         marginTop: '10px',
         overflow: 'hidden',
         whiteSpace: "pre-line",
-
+        fontSize: 'var(--font-small)',
+        lineHeight: 'var(--line-height)',
         display: '-webkit-box',
         WebkitLineClamp: 5,
         WebkitBoxOrient: 'vertical',

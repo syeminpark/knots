@@ -286,6 +286,7 @@ const styles = {
         marginBottom: '10px',
         width: '100%',
         fontSize: '14px',
+
     },
     profileButtonContainer: {
         display: 'flex',
@@ -294,6 +295,10 @@ const styles = {
         backgroundColor: 'transparent',
         border: 'none',
         fontSize: '14px',
+        flexGrow: 1, // Allows the button to take up available space
+
+
+
     },
     toggleContainer: {
         marginBottom: '1px',
@@ -339,6 +344,7 @@ const styles = {
         borderRadius: '5px',
         backgroundColor: 'white', // Default background for edit mode
         fontSize: 'var(--font-small)',
+        lineHeight: 'var(--line-height)',
         resize: 'vertical', // Allows the user to manually resize vertically
         overflow: 'hidden', // Hides overflow to prevent the scroll bar
         whiteSpace: 'pre-wrap', // Preserves spaces, line breaks, and tabs

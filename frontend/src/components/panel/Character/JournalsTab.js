@@ -51,7 +51,7 @@ const JournalsTab = (props) => {
 const styles = {
     journalsTabWrapper: {
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 400px)',
+        maxHeight: 'calc(100vh - 350px)',
         width: '100%',
         marginTop: '10px'
     },

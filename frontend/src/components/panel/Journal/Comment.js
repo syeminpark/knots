@@ -111,6 +111,7 @@ const styles = {
         padding: '5px',
         whiteSpace: "pre-line",
         lineHeight: 'var(--line-height)',
+
     },
     editInput: {
         width: '100%',

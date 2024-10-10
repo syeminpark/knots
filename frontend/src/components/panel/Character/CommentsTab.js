@@ -112,13 +112,16 @@ const CommentsTab = (props) => {
         ) : stage === 1 && selectedCharacter ? (
 
             <div >
-                <div style={styles.leftToggleButtonContainer}>
-                    <ToggleButton
-                        direction={'left'}
-                        onClick={onBack}
-                    />
-                </div>
+
                 <div style={styles.header}>
+
+
+                    <div style={styles.leftToggleButtonContainer}>
+                        <ToggleButton
+                            direction={'left'}
+                            onClick={onBack}
+                        />
+                    </div>
 
                     <div style={styles.characterLink}>
                         <button
@@ -263,7 +266,9 @@ const styles = {
         padding: '0',
     },
     leftToggleButtonContainer: {
-
+        position: 'absolute',
+        left: '15px',
+        zIndex: 1, /* Keep it above other elements */
 
     },
     profileList: {
@@ -276,7 +281,7 @@ const styles = {
         padding: '10px 20px',
         backgroundColor: '#f9f9f9',
         borderRadius: '8px',
-        marginBottom: '30px',
+        marginBottom: '20px',
         height: '80px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
         position: 'relative', // Add this line
@@ -305,6 +310,9 @@ const styles = {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        maxWidth: '80%', /* Ensure the names don’t take up the full width */
+        overflow: 'hidden', /* Prevent overflow if the names get too long */
+        textOverflow: 'ellipsis', /* Add ellipsis if the text gets too long */
     },
     connectionIcon: {
         fontSize: 'var(--font-xl)',
@@ -357,6 +365,8 @@ const styles = {
         marginBottom: '10px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
         width: '100%',
+        fontSize: 'var(--font-small)',
+        lineHeight: 'var(--line-height)',
 
     },
     commentContent: {

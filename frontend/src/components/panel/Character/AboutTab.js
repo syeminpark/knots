@@ -143,7 +143,7 @@ const AboutTab = (props) => {
 const styles = {
     abouttabWrapper: (isCreationPanel) => ({
         overflowY: 'auto',
-        maxHeight: isCreationPanel ? 'calc(100vh - 400px)' : 'calc(100vh - 350px)',
+        maxHeight: isCreationPanel ? 'calc(100vh - 400px)' : 'calc(100vh - 340px)',
         overflowX: 'hidden',
     }),
     buttonContainer: {
@@ -185,7 +185,7 @@ const styles = {
         borderRadius: '6px',
         color: 'white',
         fontSize: 'var(--font-medium)',
-        marginTop: '6px',
+
         cursor: 'pointer',
     },
 };

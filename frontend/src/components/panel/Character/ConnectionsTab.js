@@ -157,8 +157,8 @@ const ConnectionsTab = (props) => {
 const styles = {
     connectionsTabWrapper: {
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 400px)',
-        marginTop: '10px'
+        maxHeight: 'calc(100vh - 370px)',
+        marginTop: '10px',
     },
     buttonContainer: {
         position: 'sticky',
@@ -200,7 +200,7 @@ const styles = {
         borderRadius: '6px',
         color: 'white',
         fontSize: 'var(--font-medium)',
-        marginTop: '6px',
+
         cursor: 'pointer',
 
     },
@@ -212,7 +212,7 @@ const styles = {
         borderRadius: '6px',
         color: 'white',
         fontSize: 'var(--font-medium)',
-        marginTop: '6px',
+
         cursor: 'pointer',
     }
 };

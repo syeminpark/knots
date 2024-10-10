@@ -39,6 +39,7 @@
 html,
 body {
   overscroll-behavior-x: none;
+
 }
 
 
@@ -191,7 +192,7 @@ body {
   /* border-radius: 20px; */
   position: fixed;
   margin-top: 50px;
-  width: 180px;
+  width: 150px;
   right: 0px;
   height: calc(100vh - 50px);
   /* Subtract any header or additional spacing */
@@ -515,7 +516,7 @@ body {
 .profile-section {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .profile-image {

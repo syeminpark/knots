@@ -201,7 +201,7 @@ const styles = {
         backgroundColor: 'var(--color-bg-grey)',
         padding: '12px',
         borderRadius: '10px',
-        marginBottom: '20px',
+        marginBottom: '10px',
         boxShadow: '0 4px 4px rgba(196, 196, 196, 0.25)',
     },
     sectionHeader: {
@@ -261,11 +261,12 @@ const styles = {
     },
     description: {
         width: '100%',
-        minHeight: '50px',
-        padding: '10px',
+        minHeight: '10px',
+        padding: '5px 10px',
         borderRadius: '5px',
         backgroundColor: 'white',
         fontSize: 'var(--font-small)',
+        lineHeight: 'var(--line-height)',
         resize: 'vertical',
         overflow: 'hidden',
         whiteSpace: 'pre-wrap',
