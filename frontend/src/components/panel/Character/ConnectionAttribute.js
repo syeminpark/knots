@@ -45,7 +45,7 @@ const ConnectionAttribute = (props) => {
 
     useEffect(() => {
         setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map((item) => item?.name) : []);
-    }, [attribute?.knowledge]);
+    }, [attribute?.knowledge, attribute]);
 
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
@@ -133,9 +133,8 @@ const ConnectionAttribute = (props) => {
             </div>
 
             <div
-                ref={containerRef}
-                style={styles.attributeContainer}
-                onClick={handleContainerClick}
+                        style={styles.attributeContainer}
+              
             >
                 <div style={styles.sectionHeader}>
                     <div>
@@ -199,6 +198,11 @@ const ConnectionAttribute = (props) => {
                 </div>
 
                 {/* Text Area or static text depending on edit mode */}
+                <div
+                  ref={containerRef}
+    
+    onClick={handleContainerClick}
+                >
                 {isEditing ? (
                     <TextArea
                         attribute={{ description: editedContent }}
@@ -217,6 +221,7 @@ const ConnectionAttribute = (props) => {
                         {attribute ? attribute.description : placeholder}
                     </div>
                 )}
+                </div>
 
                 {/* Knowledge Section */}
                 <>
