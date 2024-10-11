@@ -6,11 +6,10 @@ const SelectBox = (props) => {
     const { t } = useTranslation();
     const { selectedCharacters, setSelectedCharacters, availableCharacters = [], multipleSelect = true } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
+    const [selectAll, setSelectAll] = useState(false);
 
     const handleSelectCharacter = (character) => {
         const isSelected = selectedCharacters.some((c) => c.uuid === character.uuid);
-
         if (isSelected) {
             setSelectedCharacters(selectedCharacters.filter((c) => c.uuid !== character.uuid));
         } else {
@@ -26,26 +25,50 @@ const SelectBox = (props) => {
         setDropdownOpen(!dropdownOpen);
     };
 
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setSelectedCharacters([]); // Deselect all
+        } else {
+            setSelectedCharacters(availableCharacters); // Select all non-deleted
+        }
+        setSelectAll(!selectAll);
+    };
+
+    console.log('av',availableCharacters)
+
     useEffect(() => {
         const updatedSelectedCharacters = selectedCharacters.map((selectedCharacter) => {
+            // Check if the character still exists in availableCharacters and is not deleted
             const foundCharacter = availableCharacters.find(
-                (createdCharacter) => createdCharacter.uuid === selectedCharacter.uuid
+                (createdCharacter) => createdCharacter.uuid === selectedCharacter.uuid && !createdCharacter.deleted
             );
-            return foundCharacter ? foundCharacter : selectedCharacter;
-        });
+            return foundCharacter ? foundCharacter : null; // Return null if character doesn't exist or is deleted
+        }).filter(Boolean); // Remove null entries for characters that were deleted or no longer available
+        
         const hasChanges = updatedSelectedCharacters.some((updatedCharacter, index) => {
             return updatedCharacter.name !== selectedCharacters[index]?.name;
         });
         if (hasChanges) {
             setSelectedCharacters(updatedSelectedCharacters);
         }
+
+        
     }, [availableCharacters, selectedCharacters, setSelectedCharacters]);
+
+    
 
     useEffect(() => {
         if (selectedCharacters.length > 1 && !multipleSelect) {
-            setSelectedCharacters([])
+            setSelectedCharacters([]);
         }
-    }, [multipleSelect, selectedCharacters.length, setSelectedCharacters])
+    }, [multipleSelect, selectedCharacters.length, setSelectedCharacters]);
+
+    useEffect(() => {
+        if (selectedCharacters.length <1){
+            setSelectAll(false)
+        }
+  
+    },[selectedCharacters.length])
 
     return (
         <div style={styles.modalBody}>
@@ -54,8 +77,7 @@ const SelectBox = (props) => {
                 <div style={styles.dropdownHeader} onClick={toggleDropdown}>
                     <span>
                         {selectedCharacters.length > 0
-                            ?
-                            selectedCharacters.map((char) => char.name).join(', ')
+                            ? selectedCharacters.map((char) => char.name).join(', ')
                             : multipleSelect ? t('selectCharacters') : t('selectCharacter')}
                     </span>
                     <span>{dropdownOpen ? '▲' : '▼'}</span>
@@ -63,6 +85,27 @@ const SelectBox = (props) => {
 
                 {dropdownOpen && (
                     <div style={styles.dropdownList}>
+                        {/* Select All Option */}
+                        {(multipleSelect &&availableCharacters.length > 0) && (
+                            <div
+                                style={{
+                                    ...styles.dropdownItem,
+                                    backgroundColor: selectAll ? '#E0E0FF' : 'transparent',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                                onClick={handleSelectAll}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectAll}
+                                    onChange={handleSelectAll}
+                                    style={styles.checkboxLeft}
+                                />
+                                <span>{selectAll ? t('deselectAll') : t('selectAll')}</span>
+                            </div>
+                        )}
+
                         {availableCharacters.length > 0 ? (
                             availableCharacters
                                 .filter((character) => !character.deleted)
@@ -77,23 +120,22 @@ const SelectBox = (props) => {
                                         }}
                                         onClick={() => handleSelectCharacter(character)}
                                     >
-                                        <CharacterButton
-                                            createdCharacter={character}
-                                            iconStyle={styles.dropdownIcon}
-                                            textStyle={styles.dropdownText}
-                                        />
                                         <input
                                             type="checkbox"
                                             checked={selectedCharacters.some((c) => c.uuid === character.uuid)}
                                             onChange={() => handleSelectCharacter(character)}
-                                            style={styles.checkbox}
+                                            style={styles.checkboxLeft}
+                                        />
+                                        <CharacterButton
+                                            createdCharacter={character}
+                                            iconStyle={styles.dropdownIcon}
+                                            textStyle={styles.dropdownText}
                                         />
                                     </div>
                                 ))
                         ) : (
                             <div style={styles.noCharactersMessage}>
                                 {t('noCharacters')}
-
                             </div>
                         )}
                     </div>
@@ -140,7 +182,6 @@ const styles = {
         padding: '0',
         maxHeight: '200px',
         overflowY: 'auto',
-
     },
     dropdownItem: {
         display: 'flex',
@@ -148,12 +189,9 @@ const styles = {
         padding: '10px 15px',
         cursor: 'pointer',
         transition: 'background-color 0.2s ease',
-
-
-
     },
-    checkbox: {
-        marginLeft: 'auto',
+    checkboxLeft: {
+        marginRight: '10px', // Moves checkbox to the left
         width: '16px',
         height: '16px',
     },
@@ -166,7 +204,6 @@ const styles = {
         width: '25px',
         height: '25px',
         borderRadius: '50%',
-        // backgroundColor: 'var(--color-primary)',
         marginRight: '10px',
     },
     dropdownText: {

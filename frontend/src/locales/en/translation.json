@@ -100,5 +100,7 @@
     "writeTopicPrompt": "What topic should {{contentPlaceholder}} write about?",
     "findingText": "finding",
     "noJournal": "No journals yet...",
-    "noCharacters": "No characters available"
+    "noCharacters": "No characters available",
+    "selectAll": "Select All",
+    "deselectAll": "De-select All"
 }
