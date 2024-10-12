@@ -128,7 +128,7 @@ const ConnectionAttribute = (props) => {
                     />
                     <span style={styles.checkboxLabel}>
                     
-                        {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
+                        {includeInJournal ? '저널에 등장할 수 있음' : '저널에 등장하지 못함'}
                     </span>
                 </label>
             </div>
