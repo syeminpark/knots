@@ -71,9 +71,10 @@ const ConnectionAttribute = (props) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (isClickableToSave && containerRef.current && !containerRef.current.contains(event.target)) {
-                if (isEditing) {
-                    handleSave(); // Auto-save when clicking outside the container
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                const saveButtonClicked = event.target.closest('button')?.classList.contains('save-button');
+                if (!saveButtonClicked && isClickableToSave && isEditing) {
+                    handleSave();
                 }
             }
         };
@@ -128,18 +129,18 @@ const ConnectionAttribute = (props) => {
                     />
                     <span style={styles.checkboxLabel}>
 
-                    {connectedCharacter && (
-    includeInJournal 
-    ? `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 가능 ✔` 
-    : `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 불가능 x`
-)}
+                        {connectedCharacter && (
+                            includeInJournal
+                                ? `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 가능 ✔`
+                                : `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 불가능 x`
+                        )}
                     </span>
                 </label>
             </div>
 
             <div
-                        style={styles.attributeContainer}
-              
+                style={styles.attributeContainer}
+
             >
                 <div style={styles.sectionHeader}>
                     <div>
@@ -165,6 +166,7 @@ const ConnectionAttribute = (props) => {
                     {/* Edit and More Buttons */}
                     <div style={styles.buttonsContainer}>
                         <button
+                            className="save-button"
                             style={styles.editButton}
                             onPointerDown={(e) => e.stopPropagation()}
                             onClick={(e) => {
@@ -204,28 +206,28 @@ const ConnectionAttribute = (props) => {
 
                 {/* Text Area or static text depending on edit mode */}
                 <div
-                  ref={containerRef}
-    
-    onClick={handleContainerClick}
+                    ref={containerRef}
+
+                    onClick={handleContainerClick}
                 >
-                {isEditing ? (
-                    <TextArea
-                        attribute={{ description: editedContent }}
-                        placeholder={placeholder}
-                        onChange={(e) => setEditedContent(e.target.value)} // Update local state
-                        styles={styles}
-                    />
-                ) : (
-                    <div
-                        style={{
-                            ...styles.description,
-                            backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
-                            border: 'none', // Remove border when not editing
-                        }}
-                    >
-                        {attribute ? attribute.description : placeholder}
-                    </div>
-                )}
+                    {isEditing ? (
+                        <TextArea
+                            attribute={{ description: editedContent }}
+                            placeholder={placeholder}
+                            onChange={(e) => setEditedContent(e.target.value)} // Update local state
+                            styles={styles}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                ...styles.description,
+                                backgroundColor: 'var(--color-bg-grey)', // Set background to gray when not editing
+                                border: 'none', // Remove border when not editing
+                            }}
+                        >
+                            {attribute ? attribute.description : placeholder}
+                        </div>
+                    )}
                 </div>
 
                 {/* Knowledge Section */}
@@ -250,7 +252,7 @@ const ConnectionAttribute = (props) => {
                                 }}
                                 onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
                             >
-                               
+
                                 {attr.name}
                                 {selectedChips.includes(attr.name) ? ' ✔' : ' x'}
                             </div>
@@ -395,7 +397,7 @@ const styles = {
         backgroundColor: 'red',
         borderRadius: '8px',
         padding: '5px 10px 5px 5px',
-        
+
     },
     customCheckbox: {
         appearance: 'none',
