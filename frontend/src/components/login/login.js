@@ -14,7 +14,7 @@ const Login = (props) => {
   const logIn = async () => {
     console.log(userName, password)
     try {
-      const response = await apiRequest('/loginUser', 'POST', { userName: userName, password: password });
+      const response = await apiRequest('/loginUser', 'POST', { userName: userName.trim(), password: password.trim() });
       if (response.success) {
         localStorage.setItem('user', JSON.stringify({ userName: userName, token: response.token }))
         props.setLoggedIn(true)
