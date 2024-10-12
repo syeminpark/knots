@@ -127,8 +127,12 @@ const ConnectionAttribute = (props) => {
                         }}
                     />
                     <span style={styles.checkboxLabel}>
-                    
-                        {includeInJournal ? '저널에 등장 가능 ✔' : '저널에 등장 불가능 x'}
+
+                    {connectedCharacter && (
+    includeInJournal 
+    ? `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 가능 ✔` 
+    : `${currentCharacter.name}의 저널에 ${connectedCharacter.name} 등장 불가능 x`
+)}
                     </span>
                 </label>
             </div>
