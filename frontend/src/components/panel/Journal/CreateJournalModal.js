@@ -152,6 +152,7 @@ const CreateJournalModal = (props) => {
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}
                                 availableCharacters={createdCharacters?.characters || []}
+                                text={t('journalWriter')}
                             />
                             <br />
                             {selectedCharacters.length > 0 && (
@@ -197,6 +198,7 @@ const CreateJournalModal = (props) => {
                                 selectedCharacters={selectedCharacters}
                                 setSelectedCharacters={setSelectedCharacters}
                                 availableCharacters={createdCharacters?.characters || []}
+                                text={t('journalWriter')}
                             />
                             <br />
                             {selectedCharacters.length > 0 && (
@@ -210,6 +212,7 @@ const CreateJournalModal = (props) => {
                                             placeholder={t('writeTopicPrompt', { contentPlaceholder })}
                                             onChange={(event) => onChangeTitle(event.target.value)}
                                             styles={styles}
+                                            
                                         />
                                     </div>
                                 </div>

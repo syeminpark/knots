@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 const SelectBox = (props) => {
     const { t } = useTranslation();
-    const { selectedCharacters, setSelectedCharacters, availableCharacters = [], multipleSelect = true } = props;
+    const { selectedCharacters, setSelectedCharacters, availableCharacters = [], multipleSelect = true, text=[''] } = props;
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
+    console.log(text)
 
     const handleSelectCharacter = (character) => {
         const isSelected = selectedCharacters.some((c) => c.uuid === character.uuid);
@@ -78,7 +79,7 @@ const SelectBox = (props) => {
                     <span>
                         {selectedCharacters.length > 0
                             ? selectedCharacters.map((char) => char.name).join(', ')
-                            : multipleSelect ? t('selectCharacters') : t('selectCharacter')}
+                            : multipleSelect ? text+t('selectCharacters') : t('selectCharacter')}
                     </span>
                     <span>{dropdownOpen ? '▲' : '▼'}</span>
                 </div>
