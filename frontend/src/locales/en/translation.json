@@ -42,7 +42,7 @@
     "close": "close",
     "relationshipsAttribute": "Relationships",
     "knowledge": "Knowledge",
-    "knowsAbout": "{{currentCharacterName}} knows about {{connectedCharacterName}}'s",
+    "knowsAbout": "{{currentCharacterName}} knows the following about {{connectedCharacterName}}. (Click to select)",
     "addnewAttribute": "Add New Attribute",
     "example": "Example: Backstory, gender, age, personality, occupation, desire, goal, trauma, hobby, tone, physical appearance, education, values etc (Freely add other attributes)",
     "done": "Done",
