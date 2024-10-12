@@ -127,6 +127,7 @@ const ConnectionAttribute = (props) => {
                         }}
                     />
                     <span style={styles.checkboxLabel}>
+                    
                         {includeInJournal ? '저널에 반영됨' : '저널에 제외됨'}
                     </span>
                 </label>
@@ -245,7 +246,7 @@ const ConnectionAttribute = (props) => {
                                 }}
                                 onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
                             >
-                                {selectedChips.includes(attr.name) ? '✔ ' : ''}
+                                {selectedChips.includes(attr.name) ? '✔ ' : 'x '}
                                 {attr.name}
                             </div>
                         ))}
@@ -386,9 +387,10 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
-        backgroundColor: 'var(--color-bg-grey)',
+        backgroundColor: 'red',
         borderRadius: '8px',
         padding: '5px 10px 5px 5px',
+        
     },
     customCheckbox: {
         appearance: 'none',

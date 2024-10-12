@@ -26,6 +26,7 @@
   --color-bg-darkgrey: #e6e6e6;
   --color-bg-greypurple: #f0eaff;
   --color-bg-lightpurple: #f7f7ff;
+  --color-bg-red: rgb(255, 121, 121);
   --color-bg-white: rgba(255, 255, 255, 1);
   --color-bg-white-transparent: rgba(255, 255, 255, 0.5);
 
