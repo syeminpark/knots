@@ -128,7 +128,7 @@ const ConnectionAttribute = (props) => {
                     />
                     <span style={styles.checkboxLabel}>
                     
-                        {includeInJournal ? '저널에 등장할 수 있음' : '저널에 등장하지 못함'}
+                        {includeInJournal ? '저널에 등장 가능 ✔' : '저널에 등장 불가능 x'}
                     </span>
                 </label>
             </div>
@@ -246,8 +246,9 @@ const ConnectionAttribute = (props) => {
                                 }}
                                 onClick={(e) => handleChipClick(attr.name, e)} // Pass the event to the handler
                             >
-                                {selectedChips.includes(attr.name) ? '✔ ' : 'x '}
+                               
                                 {attr.name}
+                                {selectedChips.includes(attr.name) ? ' ✔' : ' x'}
                             </div>
                         ))}
                     </div>
