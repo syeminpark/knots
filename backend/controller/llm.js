@@ -273,15 +273,14 @@ const llmController = {
             let systemPrompt = `You are a professional story writer, brilliant at creating new characters.
 
             ** Objective **:
-            1. Strong, Contextual Association: All 3 new characters must have a strong, direct, and realistic association with ${character.name} based on the following: "${content}".
-2, The association should be based on shared experiences, significant past events, or plausible future situations.
-3. If the association "${content}" is a specific type of person or relationship, ensure that all the new characters follow this type of role or relationship.
+1. Create three distinct characters who are directly connected to ${character.name} through realistic, strong, and tangible relationships.
+2. Each character must be connected through the following relationship: "${content}", which must come from shared past experiences, significant events in their lives, or realistic future scenarios.
+3. If the association "${content}" is a specific type of relationship(friend, mother, father, sister, etc), ensure that all the new characters follow this type of relationship(friend, parent, mother, father, sister etc)
 4. This association must always be "${content}".  Showcase different interpretations of the following relationship: "${content}" 
-
  `
 
             let userPrompt = `
-            This is ${character.name}.
+            This is ${character.name}."${content}
         ${JSON.stringify(extractedValues)}
 
 ** Rules for Formatting **:

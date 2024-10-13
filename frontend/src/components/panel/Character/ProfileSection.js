@@ -140,7 +140,7 @@ const ProfileSection = (props) => {
                         onChange={handleNameChange}     // Call handleNameChange on input change
                     />
                 ) : (
-                    <div className="name-display">{name || t('entername')}</div>  // Show 'Enter Name' if name is blank
+                    <div className="name-display">{name || t('entername')}</div>  // Show '/ ' if name is blank
                 )}
 
                 <button
