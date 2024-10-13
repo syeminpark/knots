@@ -5,7 +5,7 @@ import { Comment, CommentThread } from '../models/journal.js';
 export const extractAllValuesAndKeys = (arr) => {
     const extractedValues = {};
     const allKeys = arr
-        .filter(item => !item.deleted) // Exclude soft-deleted items
+        .filter(item => !item.isDeleted) // Exclude soft-deleted items
         .map(item => item.name.trim()); // Extract all keys
 
     arr.forEach((item) => {
@@ -32,6 +32,8 @@ export const cleanCharacterData = (characters) => {
         if (Array.isArray(cleanedChar.knowledge) && cleanedChar.knowledge.length > 0) {
             const { extractedValues, allKeys } = extractAllValuesAndKeys(cleanedChar.knowledge);
             cleanedChar.knowledge = extractedValues // Replace knowledge array with processed values
+
+
         } else {
             delete cleanedChar.knowledge; // Remove knowledge if empty
         }

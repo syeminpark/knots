@@ -158,18 +158,15 @@ const llmController = {
                                     systemPrompt += `\nRelationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                 }
                                 if (connectedCharacter?.knowledge) {
-                                    systemPrompt += `\The Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}`
+                                    systemPrompt += `\The Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter?.knowledge)}`
                                 }
                                 if (comments?.previousCommentCharacterUUID) {
                                     if (connectedCharacter.uuid === comments.previousCommentCharacterUUID) {
-                                        systemPrompt += `\nThe Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
-                                        The Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
+                                        systemPrompt += `\nRelationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                         replyingToConnection = connectedCharacter
                                     }
                                 }
                                 else if (connectedCharacter.uuid === journalWriterCharacter.uuid) {
-                                    systemPrompt += `\nThe Description for ${connectedCharacter.name}:${JSON.stringify(connectedCharacter.knowledge)}
-                                    The Relationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                     replyingToConnection = connectedCharacter
                                 }
 
@@ -179,18 +176,16 @@ const llmController = {
                         systemPrompt += `
                         \n**Roleplaying Rules**:
                         1. You must consistantly stay in character as ${character.name} throughout the entire conversation.
-                        2. Use your <My Character Description> and specifically the relationship and knoweldge within the <Character Network> to guide your writing, but do not copy or paraphrase directly.
+                        2. Use your <My Character Description> </My Character Description> and specifically the relationships and descriptions within the <Character Network> to guide your writing, but do not copy or paraphrase directly.
                         3. Do not break character at all times.
 
                      
                         **General Response Rules**
-                        1. The response should be written in Korean and Korean only. It should not feel like an Enlgish translation.
-                        2. You should not be unncessarily polite, or encouraging or adhere to any well mannered social skills if it is not defined in the <My Character Description> </My Character Description>..
-                        3. Your response should be always be a direct manifestation of your character ${character.name}.
-                        4. If the relationship is provided between you as ${character.name} and the other character within the <Character Network> </Character Network>, your response should also always manifest ${character.name}'s perspective of their relationship.
-                        5. You can use the description of the character you are responding, defined in the <Character Network></Character Network> to further express the relationship ${character.name} percieves to have with the other character.
-                        
-
+                        1. The response should be written in Korean and Korean only. It should not feel like an English translation.
+                        2. You should not be unncessarily polite, or encouraging or adhere to any well mannered social skills if it is not defined in the <My Character Description> </My Character Description>.
+                        3. Your response should always be a direct manifestation of your character ${character.name} responding to ${replyingToConnection?.name}.
+                        4. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
+                        5. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
                         `
                         // Build the userPrompt with journal and comment context
                         let userPrompt = `${journalWriterCharacter.name} wrote the journal entry "${journalEntry.title}" with the following content: "${journalEntry.content}"`;
@@ -198,7 +193,7 @@ const llmController = {
                         if (!commentThreadUUID) {
                             userPrompt += `
                             ** Specific Comment Rules **
-                                1. You must respond by thinking of how ${character.name} would react. 
+                                1. You must respond by thinking of how ${character.name} would react to the journal entry.
                                 2. Rather than addressing this as a journal, adrress this as a personal expression of ${journalWriterCharacter.name} and respond accordingly.
                                 3. Think of specific parts of the journal that would be of most interest to ${character.name}.
                                 4. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
