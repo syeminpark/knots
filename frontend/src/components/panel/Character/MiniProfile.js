@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import apiRequest from "../../../utility/apiRequest";
 
+
+
 const MiniProfile = (props) => {
     const { generatedCharacters, setGeneratedCharacters, currentCharacter, setConnectedCharacters, currentCharacterTempConnection,
         dispatchCreatedCharacters,
@@ -10,10 +12,20 @@ const MiniProfile = (props) => {
 
     const { t } = useTranslation();
     const [showAttributes, setShowAttributes] = useState({});
-    const [addedCharacters, setAddedCharacters] = useState({});
+    const [addedCharacters, setAddedCharacters] = useState({}); // Track added characters by uuid
+
+    function throttle(func, limit) {
+        let inThrottle;
+        return function (...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => (inThrottle = false), limit);
+            }
+        };
+    }
 
     const createCharacters = async (character) => {
-
         const payload = {
             name: character?.name,
             personaAttributes: character.personaAttributes,
@@ -33,23 +45,22 @@ const MiniProfile = (props) => {
             console.log(error)
         }
         finally {
-            const connection = currentCharacterTempConnection.find(connection => connection.uuid === character.uuid)
+            const connection = currentCharacterTempConnection.find(connection => connection.uuid === character.uuid);
             setConnectedCharacters((prevCharacters) => [...prevCharacters, connection]);
         }
     }
 
-    const toggleAttributes = (index) => {
+    const toggleAttributes = (uuid) => {
         setShowAttributes((prev) => ({
             ...prev,
-            [index]: !prev[index],
+            [uuid]: !prev[uuid],
         }));
     };
 
     return (
         <>
-            {generatedCharacters?.map((character, index) => {
+            {generatedCharacters?.map((character) => {
                 const attributeLabelMap = {
-
                     my_relationship: `${character.name} → ${currentCharacter.name}`,
                     your_relationship: `${currentCharacter.name} → ${character.name}`,
                 };
@@ -58,35 +69,37 @@ const MiniProfile = (props) => {
                 const myRelationshipDescription = character.connectedCharacters?.[0]?.description || 'N/A';
 
                 // Access the your_relationship value from currentCharacterTempConnection
-                const yourRelationshipDescription = currentCharacterTempConnection?.[index]?.description || 'N/A';
+                const yourRelationshipDescription = currentCharacterTempConnection?.find(
+                    (connection) => connection.uuid === character.uuid
+                )?.description || 'N/A';
 
                 return (
-                    <div key={index} style={styles.characterCard}>
+                    <div key={character.uuid} style={styles.characterCard}>
                         <div style={styles.sectionHeader}>
                             <CharacterButton createdCharacter={character} />
                             <button
-                                style={addedCharacters[index] ? styles.plusButtonDisabled : styles.plusButton}
+                                style={addedCharacters[character.uuid] ? styles.plusButtonDisabled : styles.plusButton}
                                 onClick={() => {
                                     createCharacters(character);
-                                    setAddedCharacters((prev) => ({ ...prev, [index]: true }));
+                                    setAddedCharacters((prev) => ({ ...prev, [character.uuid]: true }));
                                     console.log(`Character ${character.name} added`);
                                 }}
-                                disabled={addedCharacters[index]}
+                                disabled={addedCharacters[character.uuid]} // Use uuid to track if added
                             >
-                                {addedCharacters[index] ? t('added') : t('add')}
+                                {addedCharacters[character.uuid] ? t('added') : t('add')}
                             </button>
                         </div>
 
                         {/* Toggle button */}
                         <button
                             style={styles.toggleButton}
-                            onClick={() => toggleAttributes(index)}
+                            onClick={() => toggleAttributes(character.uuid)}
                         >
-                            {showAttributes[index] ? t('collapse') : t('expand')}
+                            {showAttributes[character.uuid] ? t('collapse') : t('expand')}
                         </button>
 
                         {/* 속성 리스트 */}
-                        {showAttributes[index] && (
+                        {showAttributes[character.uuid] && (
                             <div style={styles.characterInfo}>
                                 {character.personaAttributes.length > 0 ? (
                                     <ul style={styles.personaAttributesList}>
@@ -123,7 +136,7 @@ const MiniProfile = (props) => {
 
 }
 
-export default MiniProfile
+export default MiniProfile;
 
 const styles = {
     sectionHeader: {

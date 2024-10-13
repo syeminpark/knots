@@ -70,7 +70,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
     };
 
 
-    console.log('currentCharacter', currentCharacter)
+    // console.log('currentCharacter', currentCharacter)
 
     const handleDiscover = async () => {
 
@@ -80,6 +80,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
         }
         setLoading(true);
         setCurrentCharacterTempConnection([])
+
         try {
 
             const payload = {

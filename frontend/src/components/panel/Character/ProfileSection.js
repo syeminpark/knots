@@ -43,6 +43,8 @@ const ProfileSection = (props) => {
 
         if (duplicateCharacter) {
             alert(t("nameExists"));
+            setEditedName(name)
+            setIsEditing(false); // Exit edit mode after saving
             return;
         }
 
@@ -138,7 +140,7 @@ const ProfileSection = (props) => {
                         onChange={handleNameChange}     // Call handleNameChange on input change
                     />
                 ) : (
-                    <div className="name-display">{name || 'Enter Name'}</div>  // Show 'Enter Name' if name is blank
+                    <div className="name-display">{name || t('entername')}</div>  // Show 'Enter Name' if name is blank
                 )}
 
                 <button
