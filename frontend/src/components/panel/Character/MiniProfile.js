@@ -1,31 +1,24 @@
 import CharacterButton from "../../CharacterButton";
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+
 import apiRequest from "../../../utility/apiRequest";
-
-
+import { useState, useRef, useEffect } from 'react';
+import { debounce } from 'lodash';
 
 const MiniProfile = (props) => {
-    const { generatedCharacters, setGeneratedCharacters, currentCharacter, setConnectedCharacters, currentCharacterTempConnection,
-        dispatchCreatedCharacters,
-    } = props
-
+    const { generatedCharacters, currentCharacter, setConnectedCharacters, currentCharacterTempConnection, dispatchCreatedCharacters } = props;
     const { t } = useTranslation();
     const [showAttributes, setShowAttributes] = useState({});
-    const [addedCharacters, setAddedCharacters] = useState({}); // Track added characters by uuid
+    const [addedCharacters, setAddedCharacters] = useState({});
+    const connectedCharactersRef = useRef(currentCharacter.connectedCharacters || []);
 
-    function throttle(func, limit) {
-        let inThrottle;
-        return function (...args) {
-            if (!inThrottle) {
-                func.apply(this, args);
-                inThrottle = true;
-                setTimeout(() => (inThrottle = false), limit);
-            }
-        };
-    }
+    // Initialize the ref when the component mounts
+    useEffect(() => {
+        connectedCharactersRef.current = currentCharacter.connectedCharacters || [];
+    }, [currentCharacter.connectedCharacters]);
 
-    const createCharacters = async (character) => {
+    // Debounced version of the `createCharacters` function to prevent rapid state updates
+    const createCharacters = debounce(async (character) => {
         const payload = {
             name: character?.name,
             personaAttributes: character.personaAttributes,
@@ -37,18 +30,26 @@ const MiniProfile = (props) => {
         dispatchCreatedCharacters({
             type: 'CREATE_CHARACTER',
             payload: payload,
-        })
+        });
+
         try {
             await apiRequest("/createCharacter", 'POST', payload);
-        }
-        catch (error) {
-            console.log(error)
-        }
-        finally {
+        } catch (error) {
+            console.log(error);
+        } finally {
             const connection = currentCharacterTempConnection.find(connection => connection.uuid === character.uuid);
-            setConnectedCharacters((prevCharacters) => [...prevCharacters, connection]);
+
+            // Batch update using the latest state from the ref
+            setConnectedCharacters((prevCharacters) => {
+                const newCharacters = [...connectedCharactersRef.current, connection];
+                connectedCharactersRef.current = newCharacters; // Ensure ref is up to date
+                return newCharacters;
+            });
+
+            console.log('Character added:', character.name);
         }
-    }
+    }, 300); // Debounce with a 300ms delay
+
 
     const toggleAttributes = (uuid) => {
         setShowAttributes((prev) => ({
