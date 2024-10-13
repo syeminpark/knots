@@ -82,7 +82,7 @@ const llmController = {
                         console.log(response)
 
                         // Extract the generated journal entry
-                        const generation = response.choices[0].message.content;
+                        const generation = response.choices[0].message.content.trim();
 
 
                         journalEntries.push({ characterUUID: uuid, generation });

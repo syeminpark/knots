@@ -60,15 +60,16 @@ const Attribute = (props) => {
     // Handle save functionality
     const handleSave = () => {
         if (isEditing) {
+            if (editedContent !== attribute?.description) {
+                onChange(editedContent); // Pass only the new content
+            }
             if (editedTitle !== attribute?.name) {
-                if (personaAttributes.find(personaAttribute => personaAttribute.name.trim() === editedTitle.trim())) {
+                if (personaAttributes.find(personaAttribute => personaAttribute.name.trim().toLowerCase() === editedTitle.trim().toLowerCase())) {
                     alert(t('attributeExist'));
+                    setIsEditing(false); // Exit edit mode after saving
                     return;
                 }
                 onTitleChange(editedTitle); // Pass only the new title
-            }
-            if (editedContent !== attribute?.description) {
-                onChange(editedContent); // Pass only the new content
             }
             setIsEditing(false); // Exit edit mode after saving
         }

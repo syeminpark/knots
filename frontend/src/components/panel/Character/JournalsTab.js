@@ -7,11 +7,13 @@ import { useTranslation } from 'react-i18next';
 const JournalsTab = (props) => {
     const { t } = useTranslation();
     const { panels, setPanels, caller, createdJournalBooks } = props;
-    const [journalData, setJournalData] = useState([]); // Update to handle an array of journals
+    const initialJournals = getJournalsByCharacterUUID(createdJournalBooks, caller.uuid);
+    const [journalData, setJournalData] = useState(initialJournals); // Start with existing journal data
 
     useEffect(() => {
         const result = getJournalsByCharacterUUID(createdJournalBooks, caller.uuid);
         setJournalData(result);
+        console.log('hey')
     }, [createdJournalBooks, caller.uuid]);
 
     const sortByLatest = (journals) => {
@@ -25,7 +27,7 @@ const JournalsTab = (props) => {
     return (
         <>
             {t(
-                journalData.length === 1
+                journalData.length < 2
                     ? 'journalCount_singular'
                     : 'journalCount_plural',
                 { count: journalData.length }
