@@ -54,63 +54,131 @@ const CommentDisplayer = (props) => {
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
         if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
             alert(t('writeReply'));
-        } else {
+            return;
+        }
 
-            let contentToSend;
-            if (selectedReplyMode === "MANUALPOST") {
-                contentToSend = replyContent.trim();
-            }
-            else {
-                setLoading(true);
-                console.log('uuid', commentThreadUUID);
-                try {
-                    const response = await apiRequest('/createLLMComments', 'POST', {
-                        journalEntryUUID: journalEntry.uuid,
-                        characterUUIDs: [character.uuid],
-                        commentThreadUUID: commentThreadUUID
-                    });
-                    console.log(response);
-                    contentToSend = response.comments[0].generation;
-                } catch (error) {
-                    console.error('Error creating LLM comment:', error);
-                    setLoading(false);
-                    return; // Exit early on error
-                }
+        const commentUUID = uuidv4();  // Generate UUID for the comment
+        let contentToSend = replyContent.trim();
 
-            }
+        // Prepare the payload
+        const payload = {
+            journalBookUUID: bookInfo.uuid,
+            journalEntryUUID: journalEntry.uuid,
+            ownerUUID: character.uuid,
+            content: contentToSend,
+            selectedMode: selectedReplyMode,
+            commentThreadUUID: commentThreadUUID,
+            commentUUID: commentUUID,
+            createdAt: Date.now()
+        };
 
-            const commentUUID = uuidv4()
-            const payload = {
-                journalBookUUID: bookInfo.uuid,
-                journalEntryUUID: journalEntry.uuid,
-                ownerUUID: character.uuid,
-                content: contentToSend,
-                selectedMode: selectedReplyMode,
-                commentThreadUUID: commentThreadUUID,
-                commentUUID: commentUUID,
-                createdAt: Date.now()
-            };
+        // If it's a manual post, dispatch the action and update immediately
+        if (selectedReplyMode === "MANUALPOST") {
+            dispatchCreatedJournalBooks({ type: 'CREATE_COMMENT', payload });
+            setIsManualReplying(false);
+            onNewComment(commentUUID);
+
+            // Save manual reply to the server
             try {
-                const response = await apiRequest('/createComment', 'POST', payload);
-                console.log(response);
-
+                await apiRequest('/createComment', 'POST', payload);
+                console.log('Manual comment saved to server');
             } catch (error) {
-
-                console.error('Error creating comment:', error);
-                return
+                console.error('Error saving manual comment:', error);
             }
-            finally {
-                dispatchCreatedJournalBooks({
-                    type: 'CREATE_COMMENT',
-                    payload: payload
-                });
+            return; // Exit early
+        }
 
-                setIsManualReplying(false);
-                onNewComment(commentUUID)
-                setLoading(false);
+        // For LLM-generated replies, wait for the server response
+        setLoading(true);
+        try {
+            const response = await apiRequest('/createLLMComments', 'POST', {
+                journalEntryUUID: journalEntry.uuid,
+                characterUUIDs: [character.uuid],
+                commentThreadUUID: commentThreadUUID
+            });
+
+            payload.content = response.comments[0].generation;  // Update payload with the LLM-generated content
+
+            // Dispatch action after getting the response from the LLM
+
+
+            // Now save the generated reply to the server
+            try {
+                await apiRequest('/createComment', 'POST', payload);
+                console.log('Generated comment saved to server');
+            } catch (error) {
+                console.error('Error saving generated comment:', error);
             }
+
+        } catch (error) {
+            console.error('Error creating LLM comment:', error);
+        } finally {
+            dispatchCreatedJournalBooks({ type: 'CREATE_COMMENT', payload });
+            setIsManualReplying(false);
+            onNewComment(commentUUID);
+            setLoading(false);
         }
     };
+    // const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
+    //     if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
+    //         alert(t('writeReply'));
+    //     } else {
+
+    //         let contentToSend;
+    //         if (selectedReplyMode === "MANUALPOST") {
+    //             contentToSend = replyContent.trim();
+    //         }
+    //         else {
+    //             setLoading(true);
+    //             console.log('uuid', commentThreadUUID);
+    //             try {
+    //                 const response = await apiRequest('/createLLMComments', 'POST', {
+    //                     journalEntryUUID: journalEntry.uuid,
+    //                     characterUUIDs: [character.uuid],
+    //                     commentThreadUUID: commentThreadUUID
+    //                 });
+    //                 console.log(response);
+    //                 contentToSend = response.comments[0].generation;
+    //             } catch (error) {
+    //                 console.error('Error creating LLM comment:', error);
+    //                 setLoading(false);
+    //                 return; // Exit early on error
+    //             }
+
+    //         }
+
+    //         const commentUUID = uuidv4()
+    //         const payload = {
+    //             journalBookUUID: bookInfo.uuid,
+    //             journalEntryUUID: journalEntry.uuid,
+    //             ownerUUID: character.uuid,
+    //             content: contentToSend,
+    //             selectedMode: selectedReplyMode,
+    //             commentThreadUUID: commentThreadUUID,
+    //             commentUUID: commentUUID,
+    //             createdAt: Date.now()
+    //         };
+    //         try {
+    //             const response = await apiRequest('/createComment', 'POST', payload);
+    //             console.log(response);
+
+    //         } catch (error) {
+    //             console.error('Error creating comment:', error);
+    //             return
+    //         }
+    //         finally {
+    //             dispatchCreatedJournalBooks({
+    //                 type: 'CREATE_COMMENT',
+    //                 payload: payload
+    //             });
+
+    //             setIsManualReplying(false);
+    //             onNewComment(commentUUID)
+    //             setLoading(false);
+    //         }
+    //     }
+    // };
+
 
     const onEditSave = async () => {
         setIsEditing(false);
