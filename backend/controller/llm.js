@@ -194,10 +194,12 @@ const llmController = {
                             userPrompt += `
                             ** Specific Comment Rules **
                                 1. You must respond by thinking of how ${character.name} would react to the journal entry.
-                                2.Rather than passively reacting, engage deeply with the journal and explore its implications for your character.
-                                3. You must not simply agree with or restate parts of the journal. When appropriate, build upon it, express doubts, or challenge specific points to deepen the interaction.
-                                4. Be concise, but ensure your response feels unique and meaningful from ${character.name}’s identity.
-                                5. Do not write your own name at the end of the comment.
+                                2. Rather than addressing this as a journal, adrress this as a personal expression of ${journalWriterCharacter.name} and respond by exploring its implications for your character.
+                                3. Think of specific parts of the journal that would be of most interest to ${character.name}.
+                                4. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
+                                5. In addition, your response should strongly reflect your relationship with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
+                                6. The response should be concise, capturing the essence of the reaction.
+                                7. Do not write your own name at the end of the comment.
                         
 `;
                         } else {
@@ -207,10 +209,10 @@ const llmController = {
                             ** Specific Comment Rules **
                             1. You are not just reacting but actively building upon the last comment in the <Past Comment History> </Past Comment History>. 
                             2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. Push for new ground in every comment.
-                            3. Avoid repeating any previous comments, instead push the dialogue into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
+                            3. Avoid repeating any previous comments, instead push the conversatoin into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
                             4. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the conversation based on ${character.name}'s unique traits and motivations.
-                            5. WWhen the conversation becomes repetitive, introduce new details from the <Journal Entry Content> or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
-                            6. Never repeate the same words, expressions and phrases, sentiments, ideas, from previous comments. Push the conversation forward by reflecting on new information or emotions.
+                            5. When the conversation becomes repetitive, introduce new details from the <Journal Entry Content> or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
+                            6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous comments. Push the conversation forward by reflecting on new information or emotions.
                             7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your comment must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
                             8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
                             9. Keep your comments concise in length as this is a comment, but ensure each comment adds impact and value to the interaction.
