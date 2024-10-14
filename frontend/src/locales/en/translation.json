@@ -59,7 +59,7 @@
     "knots": "Knots: A Social Media For Your Story Characters",
     "selectCharacters": "Select Characters",
     "selectCharacter": "Select Character",
-    "seeComments": "See Comments",
+    "seeComments": "See {{totalComments}} Comments",
     "newCommentThread": "+ Create New Comment Thread",
     "comments": "Comments",
     "pleaseSelectMode": "Please select a mode",

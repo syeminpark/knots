@@ -8,11 +8,17 @@ import { useTranslation } from 'react-i18next';
 const JournalContent = forwardRef((props, ref) => {
     const { t } = useTranslation();
     const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks, setTrackingJournalEntry } = props;
+    const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
+    const totalComments = journalBookInfoandJournalEntry?.journalEntry?.commentThreads?.reduce((total, thread) => {
+        return total + (thread.comments?.length || 0); // Sum the length of the comments array
+    }, 0) || 0; // Default to 0 if there are no threads or comments
+
 
     const onMoreButtonClick = () => {
         const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
         setSelectedBookAndJournalEntry(journalBookInfoandJournalEntry);
         setTrackingJournalEntry(journalEntryUUID);
+        console.log(journalBookInfoandJournalEntry)
     };
 
     return (
@@ -51,7 +57,9 @@ const JournalContent = forwardRef((props, ref) => {
                     size="small"       // You can change the size to small, medium, or large
                     onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
                     icon={'💬'}
-                    text={t('seeComments')}
+                    text={t('seeComments', {
+                        totalComments
+                    })}
                 />
             </div>
         </div >

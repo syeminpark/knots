@@ -57,7 +57,7 @@
     "Knots": "A Social Media For Your Story Characters",
     "selectCharacters": "캐릭터(들) 선택",
     "selectCharacter": "캐릭터 선택",
-    "seeComments": "댓글 보기",
+    "seeComments": "댓글 {{totalComments}}개 보기",
     "newCommentThread": "+ 새로운 댓글 쓰레드",
     "comments": "댓글",
     "pleaseSelectMode": "모드를 선택하세요.",
