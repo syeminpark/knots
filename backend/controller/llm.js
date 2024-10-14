@@ -22,7 +22,7 @@ const llmController = {
                        You are an actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. 
                        
                        **Roleplaying Rules**:
-                       1. You must consistantly stay in character as ${character.name} throughout the entire process.
+                       1. You must consistantly stay in character as ${character.name} throughout the entire process. However, you can be creative within your role as  ${character.name}.
                        2. Use your <My Character Description>  </My Character Description> to guide your writing, but do not copy or paraphrase directly. 
                        3. Do not break character at all times.
 
@@ -175,7 +175,7 @@ const llmController = {
                         }
                         systemPrompt += `
                         \n**Roleplaying Rules**:
-                        1. You must consistantly stay in character as ${character.name} throughout the entire conversation.
+                        1. You must consistantly stay in character as ${character.name} throughout the entire conversation. However, you can be creative within your role as ${character.name}.
                         2. Use your <My Character Description> </My Character Description> and specifically the relationships and descriptions within the <Character Network> to guide your writing, but do not copy or paraphrase directly.
                         3. Do not break character at all times.
 
