@@ -76,6 +76,7 @@ const CommentDisplayer = (props) => {
                     setLoading(false);
                     return; // Exit early on error
                 }
+
             }
 
             const commentUUID = uuidv4()
@@ -89,22 +90,23 @@ const CommentDisplayer = (props) => {
                 commentUUID: commentUUID,
                 createdAt: Date.now()
             };
-
-            dispatchCreatedJournalBooks({
-                type: 'CREATE_COMMENT',
-                payload: payload
-            });
-
-            setIsManualReplying(false);
-            onNewComment(commentUUID)
-
             try {
                 const response = await apiRequest('/createComment', 'POST', payload);
                 console.log(response);
+
             } catch (error) {
+
                 console.error('Error creating comment:', error);
+                return
             }
             finally {
+                dispatchCreatedJournalBooks({
+                    type: 'CREATE_COMMENT',
+                    payload: payload
+                });
+
+                setIsManualReplying(false);
+                onNewComment(commentUUID)
                 setLoading(false);
             }
         }
