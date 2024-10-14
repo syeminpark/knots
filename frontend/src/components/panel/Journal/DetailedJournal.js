@@ -30,8 +30,11 @@ const DetailedJournal = (props) => {
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
     const [loading, setLoading] = useState(false);
     const [newCommentUUID, setNewCommentUUID] = useState(null);
-
+    const totalComments = journalEntry?.commentThreads?.reduce((total, thread) => {
+        return total + (thread.comments?.length || 0); // Sum the length of the comments array
+    }, 0) || 0; // Default to 0 if there are no threads or comments
     // Fetch comment threads from the updated journal entry
+    console.log(journalEntry, totalComments)
     useEffect(() => {
         const NewJournalBookInfoandEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, bookInfo.uuid, journalEntry.uuid);
         if (NewJournalBookInfoandEntry?.journalEntry) {
@@ -107,7 +110,9 @@ const DetailedJournal = (props) => {
                         />
 
                         <div style={styles.commentIcon}>
-                            <p> 💬 {t('comments')}</p>
+                            <p> 💬 {t('comments', {
+                                totalComments
+                            })}</p>
                         </div>
                     </div>
 

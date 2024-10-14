@@ -61,7 +61,7 @@
     "selectCharacter": "Select Character",
     "seeComments": "See {{totalComments}} Comments",
     "newCommentThread": "+ Create New Comment Thread",
-    "comments": "Comments",
+    "comments": "{{totalComments}} Comments",
     "pleaseSelectMode": "Please select a mode",
     "createCharacterFirst": "Create a character first",
     "pleaseSelectCharacter": "Please select a character",
