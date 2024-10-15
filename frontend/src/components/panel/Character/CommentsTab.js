@@ -102,6 +102,8 @@ const CommentsTab = (props) => {
                                     </div>
                                     <ToggleButton
                                         onClick={() => onClickCharacter(interactedCharacter)}
+                                        size="large"
+
                                     />
                                 </div >
                             );
@@ -120,6 +122,8 @@ const CommentsTab = (props) => {
                         <ToggleButton
                             direction={'left'}
                             onClick={onBack}
+                            size="large"
+
                         />
                     </div>
 

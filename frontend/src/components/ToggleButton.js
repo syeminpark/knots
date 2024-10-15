@@ -10,7 +10,7 @@ const arrowDirections = {
 const sizeStyles = {
     small: { fontSize: '12px' },
     medium: { fontSize: '14px' },
-    large: { fontSize: '24px' },
+    large: { fontSize: '20px' },
 };
 
 const ToggleButton = ({ expandable, expanded, onClick, direction = 'right', size = 'medium', text, icon, svgFilePath }) => {

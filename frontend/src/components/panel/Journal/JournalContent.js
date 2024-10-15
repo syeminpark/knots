@@ -57,7 +57,7 @@ const JournalContent = forwardRef((props, ref) => {
                 <ToggleButton
                     expandable={false}  // This makes it a static button, not toggleable
                     direction="right"   // Specify the arrow direction (e.g., right for ">")
-                    size="medium"       // You can change the size to small, medium, or large
+                    size="large" // You can change the size to small, medium, or large
                     onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
                 ></ToggleButton>
             </div>

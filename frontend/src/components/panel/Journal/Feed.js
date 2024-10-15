@@ -67,7 +67,7 @@ const Feed = (props) => {
                                         expandable={true}
                                         expanded={expandedGroup[journalBook.bookInfo.uuid]}
                                         onClick={() => toggleEntry(journalBook.bookInfo.uuid)}
-                                        size="medium"
+                                        size="large"
                                     />
                                 </div>
 
