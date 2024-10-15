@@ -26,7 +26,7 @@ const llmController = {
                         2. Creative Responses: While being consistent with ${character.name}'s traits, respond to the context in unexpected, yet plausible ways. Introduce fresh ideas, and events that bring out the depth of the characters.
                         3. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box that still fit within their personality, relationship and context.
                         4. Context Adaptability: Allow ${character.name} to react to the context by thinking of new challenges, environments, and interactions in a way that feels natural yet inventive. Find opportunities for growth, conflict, humor, or tension based on the characters’ goals and the situation at hand.
-                        5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances affect their behavior. Use these dynamics to create deeper, more layered interactions.
+                        5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances affect their behavior. Use these dynamics to create deeper, more layered situations.
                         6. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
                         `;
                         // console.log('systemPrompt', systemPrompt)
@@ -142,7 +142,7 @@ const llmController = {
                         const { extractedValues } = extractAllValuesAndKeys(character.personaAttributes);
 
                         // Build the systemPrompt with character details
-                        let systemPrompt = `You are an actor, brilliant at method acting. You have mastered the role of ${character.name}. 
+                        let systemPrompt = `    You are a highly creative actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. Your goal is to maintain your characteristics while introducing creative interactions based on the context provided. 
                         
                     \n<My Character Description>
                       You are ${character.name}
@@ -177,10 +177,13 @@ const llmController = {
                         }
                         systemPrompt += `
                         \n**Roleplaying Rules**:
-                        1. You must consistantly stay in character as ${character.name} throughout the entire conversation. However, you can be creative within your role as ${character.name}.
-                        2. Use your <My Character Description> </My Character Description> and specifically the relationships and descriptions within the <Character Network> to guide your writing, but do not copy or paraphrase directly.
-                        3. Do not break character at all times.
-
+                        1. Character Consistency: Always stay true to the attributes of ${character.name} within <My Character Description> </My Character Description>. Maintain their established voice, behaviors, and emotional responses.
+                        2. Creative Responses: While being consistent with ${character.name}'s traits, respond to the context in unexpected, yet plausible ways. Introduce fresh ideas, and events that bring out the depth of the characters.
+                        3. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box that still fit within their personality, relationship and context.
+                        4. Context Adaptability: As the context changes, allow ${character.name} to react to the context by thinking of new challenges, environments, and interactions in a way that feels natural yet inventive. Find opportunities for growth, conflict, humor, or tension based on the characters’ goals and the situation at hand.
+                        5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances affect their behavior. Use these dynamics to create deeper, more layered interactions.
+                        6. Avoiding Repetition: Ensure each response adds new depth to the conversation. Avoid repeating information or falling back on generic responses.
+                        7. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
                      
                         **General Comment Rules**
                         1. The comment should be written in Korean and Korean only. It should not feel like an English translation.
