@@ -9,7 +9,7 @@ const arrowDirections = {
 
 const sizeStyles = {
     small: { fontSize: '12px' },
-    medium: { fontSize: '18px' },
+    medium: { fontSize: '14px' },
     large: { fontSize: '24px' },
 };
 

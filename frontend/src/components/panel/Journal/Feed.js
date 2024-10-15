@@ -87,6 +87,7 @@ const Feed = (props) => {
                                             setSelectedBookAndJournalEntry={setSelectedBookAndJournalEntry}
                                             createdJournalBooks={createdJournalBooks}
                                             setTrackingJournalEntry={setTrackingJournalEntry}
+                                            createdCharacters={createdCharacters}
 
                                         />
 

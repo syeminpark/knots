@@ -1,7 +1,7 @@
 const CharacterButton = (props) => {
-    const { createdCharacter, iconStyle, textStyle, onlyProfileImage = false } = props;
+    const { createdCharacter, iconStyle, textStyle, onlyProfileImage = false, containerStyle = {} } = props;
     return (
-        <div style={styles.basic}>
+        <div style={{ ...styles.basic, ...containerStyle }}>
             <div className="character-icon" style={iconStyle} >
                 {createdCharacter?.imageSrc ? (
                     <img src={createdCharacter?.imageSrc} alt="Character" className="profile-image-preview" />

@@ -4,10 +4,11 @@ import { getJournalBookInfoAndEntryByIds } from "./journalBookReducer";
 import ToggleButton from "../../ToggleButton";
 import React, { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { m } from "framer-motion";
 
 const JournalContent = forwardRef((props, ref) => {
     const { t } = useTranslation();
-    const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks, setTrackingJournalEntry } = props;
+    const { panels, setPanels, createdCharacter, content, journalBookUUID, journalEntryUUID, setSelectedBookAndJournalEntry, createdJournalBooks, setTrackingJournalEntry, createdCharacters } = props;
     const journalBookInfoandJournalEntry = getJournalBookInfoAndEntryByIds(createdJournalBooks, journalBookUUID, journalEntryUUID);
     const totalComments = journalBookInfoandJournalEntry?.journalEntry?.commentThreads?.reduce((total, thread) => {
         return total + (thread.comments?.length || 0); // Sum the length of the comments array
@@ -20,6 +21,21 @@ const JournalContent = forwardRef((props, ref) => {
         setTrackingJournalEntry(journalEntryUUID);
         console.log(journalBookInfoandJournalEntry)
     };
+
+    const characterUUIDsWhoCommented = new Set();
+    journalBookInfoandJournalEntry?.journalEntry?.commentThreads?.forEach(thread => {
+        thread?.comments.forEach(comment => {
+            characterUUIDsWhoCommented.add(comment?.ownerUUID);
+        });
+    });
+    console.log(characterUUIDsWhoCommented)
+
+
+    // Get the character objects from createdCharacters that match the UUIDs
+    const charactersWhoCommented = Array.from(characterUUIDsWhoCommented).map(ownerUUID =>
+        createdCharacters?.characters?.find(character => character.uuid === ownerUUID)
+    ).filter(Boolean); // Filter out any undefined values
+    console.log(charactersWhoCommented)
 
     return (
         <div style={styles.expandedContent} ref={ref}>
@@ -50,11 +66,12 @@ const JournalContent = forwardRef((props, ref) => {
                 {content}
 
             </div>
+            {/* Display CharacterButtons for all characters who commented */}
             <div style={styles.toggleContainer}>
                 <ToggleButton
                     expandable={false}  // This makes it a static button, not toggleable
-                    direction="left"   // Specify the arrow direction (e.g., right for ">")
-                    size="small"       // You can change the size to small, medium, or large
+                    direction="right"   // Specify the arrow direction (e.g., right for ">")
+                    size="medium"       // You can change the size to small, medium, or large
                     onClick={onMoreButtonClick}  // This will trigger the onMoreButtonClick function
                     icon={'💬'}
                     text={t('seeComments', {
@@ -62,6 +79,22 @@ const JournalContent = forwardRef((props, ref) => {
                     })}
                 />
             </div>
+
+            <div style={styles.charactersWhoCommented}
+                onClick={onMoreButtonClick}>
+                {charactersWhoCommented.map(character => (
+                    <CharacterButton
+                        key={character.uuid}
+                        createdCharacter={character}
+                        panels={panels}
+                        setPanels={setPanels}
+                        iconStyle={styles.iconStyle}
+                        textStyle={styles.textStyle}
+                        containerStyle={styles.containerStyle}
+                    />
+                ))}
+            </div>
+
         </div >
     );
 });
@@ -93,7 +126,9 @@ const styles = {
         wordBreak: "break-word",
     },
     toggleContainer: {
-        padding: "15px",
+
+        padding: '15px 0px 10px'
+
     },
     profileButtonContainer: {
         display: "flex",
@@ -102,6 +137,32 @@ const styles = {
         padding: "5px",
         backgroundColor: "transparent",
         border: "none",
+    },
+    charactersWhoCommented: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        cursor: "pointer",
+        gap: '5px',
+    },
+    iconStyle: {
+        width: '20px',
+        height: '20px',
+        opacity: 0.5,
+        filter: 'grayscale(100%)',  // Apply black-and-white effect
+        marginLeft: '5px',
+    },
+    textStyle: {
+        fontSize: 'var(--font-xs)',
+        marginRight: '15px',
+        color: 'gray',
+
+    },
+    containerStyle: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+        flexGrow: 0
+
     }
 };
 
