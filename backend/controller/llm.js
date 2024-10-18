@@ -62,7 +62,7 @@ const llmController = {
                      **Rules For Journaling**:
 1. ${character.name} should write the content of the journal from ${character.name}'s own perspective and style.
 2. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
-3. The events that occur in the journal must be rich in diversity and explained in detail, rather than being  and superficial summarizations.The character remembers every detail. 
+3. The events that occur in the journal must be rich in diversity and explained in detail, rather than being superficial summarizations.The character remembers every detail. 
 4. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your own experience. The character remembers every detail.
 5. Regardless of what the theme of journal is, you must write about it. 
 6. When provided with a theme that is not described or defined in your <My Character Description> </My Character Description> do not avoid the theme but see this as an opportunity to improvise rich details that ${character.name} would plausbily know of.
