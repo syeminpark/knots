@@ -21,7 +21,7 @@ const ConnectionAttribute = (props) => {
         currentCharacter,
     } = props;
 
-    const attribute = list.find((attr) => attr.name === title);
+    const attribute = list.find((attr) => attr.name === title) || { name: title };
 
     const [isEditing, setIsEditing] = useState(!attribute?.description);
     const [editedContent, setEditedContent] = useState(attribute ? attribute.description : '');
@@ -44,8 +44,10 @@ const ConnectionAttribute = (props) => {
     }, [attribute?.includeInJournal]);
 
     useEffect(() => {
-        setSelectedChips(attribute && attribute?.knowledge ? attribute?.knowledge.map((item) => item?.name) : []);
-    }, [attribute?.knowledge, attribute]);
+        if (attribute?.knowledge) {
+            setSelectedChips(attribute.knowledge.map((item) => item.name));
+        }
+    }, [attribute?.knowledge]);
 
     const handleSave = () => {
         if (isEditing && editedContent !== attribute?.description) {
@@ -56,6 +58,7 @@ const ConnectionAttribute = (props) => {
 
     const handleChipClick = (name, e) => {
         e.stopPropagation();
+
         const updatedKnowledge = selectedChips.includes(name)
             ? selectedChips.filter((chip) => chip !== name)
             : [...selectedChips, name];
