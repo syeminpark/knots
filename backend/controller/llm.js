@@ -206,7 +206,7 @@ const llmController = {
                                 3. Think of specific parts of the journal that would be of most interest to ${character.name}.
                                 4. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
                                 5. In addition, your response should strongly reflect your relationship with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
-                                6. The response should be concise, capturing the essence of the reaction.
+                                6. The comment should capture the essence of the reaction, while the length can be short or long depending on the goal of the comment.
                                 7. Do not write your own name at the end of the comment.
                         
 `;
@@ -223,7 +223,7 @@ const llmController = {
                             6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous comments. Push the conversation forward by reflecting on new information or emotions.
                             7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your comment must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
                             8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
-                            9. Keep your comments concise in length as this is a comment, but ensure each comment adds impact and value to the interaction.
+                            9. Ensure comment adds impact and value to the interaction, while the length of the comment can be short or long on the goal of the comment.
                             10. Do not write your own name at the end of the comment.
                     
 `;
@@ -285,7 +285,7 @@ const llmController = {
             ** Objective **:
 1. Create three distinct characters who are directly connected to ${character.name} through realistic, strong, and tangible relationships.
 2. Each character must be connected through the following relationship: "${content}", which must come from shared past experiences, significant events in their lives, or realistic future scenarios.
-3. If the association "${content}" is a specific type of relationship(friend, mother, father, sister, etc), ensure that all the new characters follow this type of relationship(friend, parent, mother, father, sister etc)
+3. If the association "${content}" is a specific type of relationship(friend, mother, father, sister, etc), ensure that all the new characters follow this type of relationship(friend, mother, father, sister etc)
 4. This association must always be "${content}".  Showcase different interpretations of the following relationship: "${content}" 
  `
 
