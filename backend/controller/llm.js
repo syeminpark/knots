@@ -201,9 +201,9 @@ const llmController = {
                         if (!commentThreadUUID) {
                             userPrompt += `
                             ** Specific Comment Rules **
-                                1. You must respond by thinking of how ${character.name} would react to the journal entry.
+                                1. You must respond by thinking of how ${character.name} would react to the  <Journal Entry Content>.
                                 2. Rather than addressing this as a journal, adrress this as a personal expression of ${journalWriterCharacter.name} and respond by exploring its implications for your character.
-                                3. Think of specific parts of the journal that would be of most interest to ${character.name}.
+                                3. Think of specific parts of the <Journal Entry Content> that would be of most interest to ${character.name}.
                                 4. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
                                 5. In addition, your response should strongly reflect your relationship with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
                                 6. The comment should capture the essence of the reaction, while the length can be short or long depending on the goal of the comment.
