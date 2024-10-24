@@ -35,7 +35,7 @@ const CommentDisplayer = (props) => {
     const [isManualReplying, setIsManualReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const { bookInfo, journalEntry } = selectedBookAndJournalEntry;
-
+    const [isSending, setIsSending] = useState(false);
     const replyInputRef = useRef(null);
 
     useLayoutEffect(() => {
@@ -52,8 +52,12 @@ const CommentDisplayer = (props) => {
     }, [isManualReplying,]);
 
     const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
+        if (isSending) return; // Prevent multiple submissions
+        setIsSending(true); // Lock the send button
+
         if (replyContent.trim() === '' && selectedReplyMode === "MANUALPOST") {
             alert(t('writeReply'));
+            setIsSending(false); // Unlock on error
             return;
         }
 
@@ -84,6 +88,8 @@ const CommentDisplayer = (props) => {
                 console.log('Manual comment saved to server');
             } catch (error) {
                 console.error('Error saving manual comment:', error);
+            } finally {
+                setIsSending(false); // Unlock after sending
             }
             return; // Exit early
         }
@@ -117,6 +123,7 @@ const CommentDisplayer = (props) => {
             setIsManualReplying(false);
             onNewComment(commentUUID);
             setLoading(false);
+            setIsSending(false); // Unlock after LLM reply
         }
     };
     // const onReplySend = async (selectedReplyMode, character = createdCharacter) => {
