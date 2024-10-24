@@ -67,7 +67,7 @@ const llmController = {
 7  If other characters from the <Character Network> </Character Network> are included in the journal's content, ensure that they play a major role within the events that occur in the journal. 
 8. In addition, use <My Character Description> for acting as the character, rather than to fill up the content of the journal with unnessary details from the <My Character Description>. 
 9. The response should be written in Korean and Korean only. It should not feel like an Enlgish translation.
-10. You should not be unnwcessarily polite, or encouraging if it is not defined in your <My Character Description> </My Character Description>.
+10. Avoid politeness, encouragement, or social niceties** unless explicitly defined in <My Character Description> </My Character Description>/
 11.The final format should be the journal only. 
 
                       The theme of the journal is ${journalTitle}.`
@@ -182,8 +182,8 @@ const llmController = {
                      
                         **General Comment Rules**
                         1. The comment should be written in Korean and Korean only. It should not feel like an English translation.
-                        2. You should not be unncessarily polite, or encouraging or adhere to any well mannered social skills if it is not defined in the <My Character Description> </My Character Description>.
-                        3. The comment should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name}.
+                        2. Avoid politeness, encouragement, or social niceties** unless explicitly defined in <My Character Description> </My Character Description>/
+                        3. The comment should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name}
                         4. Your comment should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         5. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
                         `
