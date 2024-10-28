@@ -386,7 +386,9 @@ const journalController = {
             const userUUID = req.user.ID; // Get the user's UUID from the authentication middleware
 
             // Step 1: Fetch all JournalBooks owned by the user and not soft-deleted
-            const journalBooks = await JournalBook.find({ userUUID: userUUID, isDeleted: false }).lean();
+            const journalBooks = await JournalBook.find({ userUUID: userUUID, isDeleted: false })
+                .sort({ createdAt: 1 }) // Sort by oldest first
+                .lean();
 
             // Extract JournalBook UUIDs
             const journalBookUUIDs = journalBooks.map((book) => book.uuid);
@@ -394,13 +396,16 @@ const journalController = {
             // Step 2: Fetch JournalEntries related to these JournalBooks and not soft-deleted, excluding the history field
             const journalEntries = await JournalEntry.find({ journalBookUUID: { $in: journalBookUUIDs }, isDeleted: false })
                 .select('-history')  // Exclude the history field
+                .sort({ createdAt: 1 }) // Sort by oldest first
                 .lean();
 
             // Extract JournalEntry UUIDs
             const journalEntryUUIDs = journalEntries.map((entry) => entry.uuid);
 
             // Step 3: Fetch CommentThreads related to these JournalEntries and not soft-deleted
-            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false }).lean();
+            const commentThreads = await CommentThread.find({ journalEntryUUID: { $in: journalEntryUUIDs }, isDeleted: false })
+                .sort({ createdAt: 1 }) // Sort by oldest first
+                .lean();
 
             // Extract CommentThread UUIDs
             const commentThreadUUIDs = commentThreads.map((thread) => thread.uuid);
@@ -408,6 +413,7 @@ const journalController = {
             // Step 4: Fetch Comments related to these CommentThreads and not soft-deleted, excluding the history field
             const comments = await Comment.find({ commentThreadUUID: { $in: commentThreadUUIDs }, isDeleted: false })
                 .select('-history')  // Exclude the history field
+                .sort({ createdAt: 1 }) // Sort by oldest first
                 .lean();
 
             // Step 5: Organize Comments by their CommentThread UUID
@@ -467,6 +473,6 @@ const journalController = {
             res.status(500).json({ error: 'An error occurred while fetching data.' });
         }
     }
-};
+}
 
 export default journalController;
