@@ -227,7 +227,7 @@ const CharacterProfilePanel = (props) => {
             deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
-                {renderPromptStatus()} {/* Display the prompt status */}
+                {/* {renderPromptStatus()} Display the prompt status */}
                 <ProfileSection
                     id={id}
                     imageSrc={imageSrc}
