@@ -35,6 +35,7 @@ const DiscoverCharacterModal = ({ setShowModal, onDiscover, currentCharacter, se
                 introduction: "소개",
                 backstory: "백스토리"
             };
+            console.log(object)
 
             for (const key in character) {
                 if (character.hasOwnProperty(key) && character[key]) {

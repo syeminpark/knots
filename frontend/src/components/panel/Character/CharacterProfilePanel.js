@@ -209,6 +209,14 @@ const CharacterProfilePanel = (props) => {
             console.log('Error deleting character:', error);
         }
     };
+    const renderPromptStatus = () => (
+        <div style={styles.promptStatus}>
+            {caller?.type?.prompt !== 'null'
+                ? t('promptAvailable')  // Add translation key in your translation files
+                : t('noPromptAvailable')}
+        </div>
+    );
+
 
     return (
         <BasePanel
@@ -219,6 +227,7 @@ const CharacterProfilePanel = (props) => {
             deleteFunction={deleteFunction}
         >
             <div style={styles.stickyHeader}>
+                {renderPromptStatus()} {/* Display the prompt status */}
                 <ProfileSection
                     id={id}
                     imageSrc={imageSrc}
@@ -322,7 +331,11 @@ const styles = {
         borderRadius: '4px',
         cursor: 'pointer',
     },
-    // ... other styles
+    promptStatus: {
+        marginTop: '10px',
+        fontStyle: 'italic',
+
+    },
 };
 
 export default CharacterProfilePanel;
