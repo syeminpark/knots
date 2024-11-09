@@ -19,15 +19,15 @@ const llmController = {
                         const updatedConnectedCharacters = await updateConnectedCharacterKnowledge(character.connectedCharacters, 'journal');
                         console.log(updatedConnectedCharacters)
                         const systemPrompt = `
-                       You are a highly creative actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. Your goal is to maintain your characteristics while introducing creative resonses based on the context provided. 
+                       You are a highly creative actor, brilliant at method acting. Especially, you have mastered the role of ${character.name}. Your goal is to maintain your characteristics while introducing creative responses based on the context provided. 
                        
                        **Roleplaying Rules**:
                         1. Character Consistency: Always stay true to the attributes of ${character.name} within <My Character Description> </My Character Description>. Maintain their established voice, behaviors, and emotional responses.
                         2. Creative Responses: While being consistent with ${character.name}'s traits, respond to the context in unexpected, yet plausible ways. Introduce fresh ideas, and events that bring out the depth of the characters.
-                        3. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box that still fit within their personality, relationship and context.
+                        3 Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
                         4. Context Adaptability: Allow ${character.name} to react to the context by thinking of new challenges, environments, and situations in a way that feels natural yet inventive. Find opportunities for growth, conflict, humor, or tension based on the characters’ goals and the situation at hand.
                         5. Relationship Dynamics: Pay close attention to the relationship between ${character.name} and other characters defined within the <Character Network></Character Network>.. Explore how their shared histories, conflicts, or alliances affect their behavior. Use these dynamics to create deeper, more layered interactions.
-                        6. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
+                   
                         `;
                         // console.log('systemPrompt', systemPrompt)
 
@@ -156,7 +156,7 @@ const llmController = {
                             console.log('cleanedConnections!', cleanedConnections)
                             systemPrompt += `\n\n<Character Network>`;
                             cleanedConnections.forEach((connectedCharacter, index) => {
-                                systemPrompt += `\n${index + 1}. ${connectedCharacter.name}`;
+                                systemPrompt += `\n${index + 1}. ${connectedCharacter.name}\n`;
                                 if (connectedCharacter?.description) {
                                     systemPrompt += `\nRelationship between ${character.name} and ${connectedCharacter.name} from ${character.name}'s perspective: ${connectedCharacter?.description}`;
                                 }
@@ -180,15 +180,13 @@ const llmController = {
                         \n**Roleplaying Rules**:
                         1. Character Consistency: Always stay true to the attributes of ${character.name} within <My Character Description> </My Character Description>. Maintain their established voice, behaviors, and emotional responses.
                         2. Creative Responses: While being consistent with ${character.name}'s traits, respond to the context in unexpected, yet plausible ways. Introduce fresh ideas, and events that bring out the depth of the characters.
-                        3. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box that still fit within their personality, relationship and context.
+                        3. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
                         4. Context Adaptability: As the context changes, allow ${character.name} to react to the context by thinking of new challenges, environments, and situationss in a way that feels natural yet inventive. Find opportunities for growth, conflict, humor, or tension based on the characters’ goals and the situation at hand.
-                        5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances affect their behavior. Use these dynamics to create deeper, more layered interactions.
-                        6.. Novel Ideas: Embrace creativity! Allow ${character.name} to think outside the box or make surprising decisions that still fit within their personality, relationship and context.
-
+                        5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances with you affect your behavior. Use these dynamics to create deeper, more layered interactions.
                      
                         **General Comment Rules**
                        
-                        1. You should not be moral, nice, polite, or encouraging or adhere to any well mannered social skills if it is not defined in the <My Character Description> </My Character Description>.
+                        1. Avoid polite, moral, positive, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
                         2. The comment should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name}.
                         3. Your comment should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         4. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
@@ -202,18 +200,16 @@ const llmController = {
 
                         if (!commentThreadUUID) {
                             userPrompt += `
-                            ** Specific Comment Rules **
+                            ** First Comment Rules **
                                 1. You must respond by thinking of how ${character.name} would react to the  <Journal Entry Content> </Journal Entry Content>.
-                                2. Think of specific parts of the <Journal Entry Content> </Journal Entry Content>.that would be of most interest to ${character.name} and respond by exploring its implications for your character.
-                                3. The response should be not be superficial but strongly reflect your own unique identity as ${character.name}.
-                                4. In addition, your response should strongly reflect your relationship with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
-                                5. The length of the comment should be concise, but ensure your response feels unique and meaningful as ${character.name}.
+                                2. Think of exactly one part of the <Journal Entry Content> </Journal Entry Content> that would be of most interest to ${character.name} and respond by exploring its implications for your character.
+                                3. The length of the comment should be concise, but ensure your response feels unique and meaningful as ${character.name}.
 `;
                         } else {
                             userPrompt +=
                                 `\n\n<Past Comment History>: ${JSON.stringify(comments.commentHistory)}<Past Comment History> \n
 
-                            ** Specific Comment Rules **
+                            ** Extended Comment Rules **
                             1. You are not just reacting but actively building upon the last comment in the <Past Comment History> </Past Comment History>. 
                             2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. 
                             3. Avoid repeating any previous comments, instead push the conversatoin into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
@@ -222,7 +218,7 @@ const llmController = {
                             6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous comments. Push the conversation forward by reflecting on new information.
                             7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your comment must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
                             8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
-                            9. Ensure each comment adds impact and value to the interaction, while the length of the comment should be concise.
+                            9. The length of the comment should be concise, but ensure your response feels unique and meaningful as ${character.name}.
 `;
                         }
 
@@ -287,7 +283,7 @@ const llmController = {
  `
 
             let userPrompt = `
-            This is ${character.name}."${content}
+            This is ${character.name}.
         ${JSON.stringify(extractedValues)}
 
 ** Rules for Formatting **:
