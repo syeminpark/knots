@@ -186,7 +186,7 @@ const llmController = {
                      
                         **General Comment Rules**
                        
-                        1. Avoid polite, moral, positive, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
+                        1. Avoid giving advice nor polite, moral, positive, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
                         2. The comment should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name}.
                         3. Your comment should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         4. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
@@ -202,7 +202,8 @@ const llmController = {
                             userPrompt += `
                             ** First Comment Rules **
                                 1. You must respond by thinking of how ${character.name} would react to the  <Journal Entry Content> </Journal Entry Content>.
-                                2. Think of exactly one part of the <Journal Entry Content> </Journal Entry Content> that would be of most interest to ${character.name} and respond by exploring its implications for your character.
+                                2. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and naturally respond to that section only by exploring its implications for ${character.name}. Avoid summarizing or responding to the entire entry.
+                                3. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
                                 3. The length of the comment should be concise, but ensure your response feels unique and meaningful as ${character.name}.
 `;
                         } else {
