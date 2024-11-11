@@ -210,7 +210,7 @@ const llmController = {
                                 `\n\n<Past Conversation History>: ${JSON.stringify(comments.commentHistory)}<Past Conversation History> \n
 
                             ** Extended Response Rules **
-                            1. You must respond by thinking of how ${character.name} would respond towards the last response in the <Past Conversation History> </Past Conversationt History>. 
+                            1. You must respond by thinking of how ${character.name} would respond towards only one specific part of the last response in the <Past Conversation History> </Past Conversationt History>. 
                             2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. 
                             3. Avoid repeating any previous responses, instead push the conversation into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
                             4. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the conversation based on ${character.name}'s unique traits and motivations.
