@@ -61,16 +61,16 @@ const llmController = {
 
                      **Rules For Journaling**:
 1. ${character.name} should write the content of the journal from ${character.name}'s own perspective and style.
-2. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner thoughts to "someone".
+2. Start with '친애하는 일기장에게' to set up the following "conversation" for sharing your inner self to "someone".
 3. The events that occur in the journal must be rich in diversity and explained in detail, rather than being superficial summarizations.The character remembers every detail of the events that occured.
 4. There should be no moral lessions learnt at the end of the journal, rather it should be a raw record of your own experience. The character remembers every detail of that experience.
 5. Regardless of what the theme of journal is, you must write about it. 
 6. When provided with a theme that is not described or defined in your <My Character Description> </My Character Description> do not avoid the theme but see this as an opportunity to improvise rich details that ${character.name} would plausbily know of.
-6. Do not write about other characters from the <Character Network> </Character Network> if the theme of the journal has no relevance with the information within the <Character Network> </Character Network>.
+6. Never write about other characters from the <Character Network> </Character Network> if the theme of the journal has little or no relevance with the information within the <Character Network> </Character Network>.
 7  If other characters from the <Character Network> </Character Network> are included in the journal's content, ensure that they play a major role within the events that occur in the journal. 
 8. In addition, use <My Character Description>  </My Character Description> for acting as the character, rather than to fill up the content of the journal with unnessary details from the <My Character Description> </My Character Description>. 
 9. Avoid politeness or encouragement unless explicitly defined in <My Character Description> </My Character Description>/
-10. The response should be written in Korean and Korean only. It should not feel like an Enlgish translation.
+10. The response should be written in Korean and Korean only. It should not feel like an English translation.
 11.The final format should be the journal only. 
 
                       The theme of the journal is ${journalTitle}.`
@@ -201,25 +201,22 @@ const llmController = {
                         if (!commentThreadUUID) {
                             userPrompt += `
                             ** First Response Rules **
-                                1. You must respond by thinking of how ${character.name} would react to the  <Journal Entry Content> </Journal Entry Content>.
+                                1. You must respond by thinking of how ${character.name} would respond towards <Journal Entry Content> </Journal Entry Content>.
                                 2. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and naturally respond to that section only by exploring its implications for ${character.name}. Avoid summarizing or responding to the entire entry.
-                                3. Your response must always reflect the relationship you percieve to have with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
-                                4. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
-                         
+                                3. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
 `;
                         } else {
                             userPrompt +=
                                 `\n\n<Past Conversation History>: ${JSON.stringify(comments.commentHistory)}<Past Conversation History> \n
 
                             ** Extended Response Rules **
-                            1. You must respond by thinking of how ${character.name} would react to the last response in the <Past Conversation History> </Past Conversationt History>. 
+                            1. You must respond by thinking of how ${character.name} would respond towards the last response in the <Past Conversation History> </Past Conversationt History>. 
                             2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. 
                             3. Avoid repeating any previous responses, instead push the conversation into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
                             4. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the conversation based on ${character.name}'s unique traits and motivations.
                             5. When the conversation becomes repetitive, introduce new details from the <Journal Entry Content> </Journal Entry Content>or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
                             6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous conversations. Push the conversation forward by reflecting on new information.
-                            7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
-                            8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant.              
+                            7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must constistantly reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
 `;
                         }
 
