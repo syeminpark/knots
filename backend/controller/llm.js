@@ -191,7 +191,7 @@ const llmController = {
                         3. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         4. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
                         5. When responding to information not defined in your <My Character Description> </My Character Description> do not avoid responding but see this as an opportunity to improvise rich details that ${character.name} would plausbily know of.
-                        6. Avoiding repetition and ensure each response adds new depth to the conversation. Do not fall back on generic responses.
+                        6. The length of the response should be under one paragraph, but ensure your response feels unique and meaningful as ${character.name}.
                         7. The response should be written in Korean and Korean only. It should not feel like an English translation.
                         8. Do not write your own name at the end of the response.
                         `
@@ -203,23 +203,23 @@ const llmController = {
                             ** First Response Rules **
                                 1. You must respond by thinking of how ${character.name} would react to the  <Journal Entry Content> </Journal Entry Content>.
                                 2. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and naturally respond to that section only by exploring its implications for ${character.name}. Avoid summarizing or responding to the entire entry.
-                                3. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
-                                3. The length of the response should be concise, but ensure your response feels unique and meaningful as ${character.name}.
+                                3. Your response must always reflect the relationship you percieve to have with ${journalWriterCharacter.name} which is ${replyingToConnection?.description}.
+                                4. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
+                         
 `;
                         } else {
                             userPrompt +=
                                 `\n\n<Past Conversation History>: ${JSON.stringify(comments.commentHistory)}<Past Conversation History> \n
 
                             ** Extended Response Rules **
-                            1. You are not just reacting but actively building upon the last response in the <Past Conversation History> </Past Conversationt History>. 
+                            1. You must respond by thinking of how ${character.name} would react to the last response in the <Past Conversation History> </Past Conversationt History>. 
                             2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. 
                             3. Avoid repeating any previous responses, instead push the conversation into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
                             4. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the conversation based on ${character.name}'s unique traits and motivations.
                             5. When the conversation becomes repetitive, introduce new details from the <Journal Entry Content> </Journal Entry Content>or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
                             6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous conversations. Push the conversation forward by reflecting on new information.
                             7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must always reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
-                            8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant. 
-                            9. The length of the response should be concise,  but ensure your response feels unique and meaningful as ${character.name}.
+                            8. The relationship you have with ${comments.previousCommentCharacterName} must never waver and should always remain consistant.              
 `;
                         }
 
