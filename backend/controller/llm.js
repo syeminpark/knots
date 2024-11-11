@@ -186,8 +186,8 @@ const llmController = {
                      
                         **General Response Rules**
                        
-                        1. Avoid giving advice nor polite, moral, positive, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
-                        2. The response should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name}.
+                        1. Absoultely avoid giving advice nor polite, moral, hopeful, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
+                        2. The response should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name} in a way that feels like a natural conversation rather than scripted dialogue.”
                         3. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         4. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
                         5. When responding to information not defined in your <My Character Description> </My Character Description> do not avoid responding but see this as an opportunity to improvise rich details that ${character.name} would plausbily know of.
@@ -201,9 +201,14 @@ const llmController = {
                         if (!commentThreadUUID) {
                             userPrompt += `
                             ** First Response Rules **
-                                1. You must respond by thinking of how ${character.name} would respond towards <Journal Entry Content> </Journal Entry Content>.
-                                2. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and naturally respond to that section only by exploring its implications for ${character.name}. Avoid summarizing or responding to the entire entry.
-                                3. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
+
+                                 1. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and respond by exploring the section's implication for ${character.name}. Avoid summarizing or responding to the entire entry.
+                                 2. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
+                                 3. The response should be directed towards ${journalWriterCharacter.name}.
+                                      
+                                 4. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
+                                 5. Absoultely avoid giving advice nor polite, hopeful, moral, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>.
+                              
 `;
                         } else {
                             userPrompt +=
@@ -217,6 +222,7 @@ const llmController = {
                             5. When the conversation becomes repetitive, introduce new details from the <Journal Entry Content> </Journal Entry Content>or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
                             6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous conversations. Push the conversation forward by reflecting on new information.
                             7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must constistantly reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
+                            8. Absoultely avoid giving advice nor polite, moral, hopeful, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>.
 `;
                         }
 
