@@ -70,7 +70,7 @@ const llmController = {
 7  If other characters from the <Character Network> </Character Network> are included in the journal's content, ensure that they play a major role within the events that occur in the journal. 
 8. In addition, use <My Character Description>  </My Character Description> for acting as the character, rather than to fill up the content of the journal with unnessary details from the <My Character Description> </My Character Description>. 
 9. Avoid politeness or encouragement unless explicitly defined in <My Character Description> </My Character Description>/
-10. The response should be written in Korean and Korean only. It should not feel like an English translation.
+10. The journal should be written in Korean and Korean only. It should not feel like an English translation.
 11.The final format should be the journal only. 
 
                       The theme of the journal is ${journalTitle}.`
@@ -184,15 +184,15 @@ const llmController = {
                         4. Context Adaptability: As the context changes, allow ${character.name} to react to the context by thinking of new challenges, environments, and situationss in a way that feels natural yet inventive. Find opportunities for growth, conflict, humor, or tension based on the characters’ goals and the situation at hand.
                         5. Relationship Dynamics: Pay close attention to the relationships between ${character.name} and other characters defined in the <Character Network>. Explore how their shared histories, conflicts, or alliances with you affect your behavior. Use these dynamics to create deeper, more layered interactions.
                      
-                        **General Response Rules**
+                        **General Comment Rules**
                        
                         1. Absoultely avoid giving advice nor polite, moral, hopeful, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>. Respond as ${character.name} truly would, without needing to smooth over disagreements or maintain peace.
-                        2. The response should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name} in a way that feels like a natural conversation rather than scripted dialogue.”
+                        2. The comment should be not be superficial nor generic but strongly reflect your own unique identity as ${character.name} in a way that feels natural and not scripted.
                         3. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
                         4. To further express the relationship ${character.name} percieves to have with ${replyingToConnection?.name}, you may use the following description of ${replyingToConnection?.name} which is ${JSON.stringify(replyingToConnection?.knowledge)} when appropriate.
                         5. When responding to information not defined in your <My Character Description> </My Character Description> do not avoid responding but see this as an opportunity to improvise rich details that ${character.name} would plausbily know of.
-                        6. The length of the response should be under one paragraph, but ensure your response feels unique and meaningful as ${character.name}.
-                        7. The response should be written in Korean and Korean only. It should not feel like an English translation.
+                        6. The length of the comment should be under concise, but ensure your response feels unique and meaningful as ${character.name}.
+                        7. The comment should be written in Korean and Korean only. It should not feel like an English translation.
                         8. Do not write your own name at the end of the response.
                         `
 
@@ -212,17 +212,16 @@ const llmController = {
 `;
                         } else {
                             userPrompt +=
-                                `\n\n<Past Conversation History>: ${JSON.stringify(comments.commentHistory)}<Past Conversation History> \n
+                                `\n\n<Past Comment History>: ${JSON.stringify(comments.commentHistory)}<Past Comment History> \n
 
                             ** Extended Response Rules **
-                            1. You must respond by thinking of how ${character.name} would respond towards only one specific part of the last response in the <Past Conversation History> </Past Conversationt History>. 
-                            2. Focus on the thematic shifts in the conversation, and express your fresh perspectives from ${character.name}'s viewpoint. 
-                            3. Avoid repeating any previous responses, instead push the conversation into new territory by reflecting on ${character.name}’s new thoughts, emotions, or pieces of information.
-                            4. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the conversation based on ${character.name}'s unique traits and motivations.
-                            5. When the conversation becomes repetitive, introduce new details from the <Journal Entry Content> </Journal Entry Content>or draw on ${character.name}'s memories or future goals to steer the dialogue in a novel direction.
-                            6. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous conversations. Push the conversation forward by reflecting on new information.
-                            7. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must constistantly reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
-                            8. Absoultely avoid giving advice nor polite, moral, hopeful, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>.
+                            1. You must respond by thinking of how ${character.name} would respond towards only one specific part of the last response in the <Past Comment History> </Past Comment History>. 
+                            2. Focus on the thematic shifts in the comment thread, and express your fresh perspectives from ${character.name}'s viewpoint. 
+                            3. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the comment thread based on ${character.name}'s unique traits and motivations.
+                            4. When the comment thread becomes repetitive, introduce new details from the <Journal Entry Content> </Journal Entry Content>or draw on ${character.name}'s memories or future goals to steer the comments in a novel direction.
+                            5. Never repeat the same words, expressions, phrases, sentiments, and ideas from previous comments. Push the conversation forward by reflecting on new information.
+                            6. Regardless of what ${comments.previousCommentCharacterName} has said in the past conversation, your response must constistantly reflect the relationship you percieve to have with ${comments.previousCommentCharacterName} which is ${replyingToConnection?.description}.
+                            
 `;
                         }
 
