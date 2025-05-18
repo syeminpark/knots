@@ -200,21 +200,18 @@ const llmController = {
 
                         if (!commentThreadUUID) {
                             userPrompt += `
-                            ** First Response Rules **
+                            ** First Comment Rules **
 
                                  1. Focus on one specific section of the <Journal Entry Content> </Journal Entry Content> that would capture ${character.name}'s attention the most and respond by exploring the section's implication for ${character.name}. Avoid summarizing or responding to the entire entry.
                                  2. Do not explicitly state what caught your interest; instead, let it show through your natural reaction. 
                                  3. The response should be directed towards ${journalWriterCharacter.name}.
-                                      
                                  4. Your response should also always manifest ${character.name}'s perspective of the relationship between ${replyingToConnection?.name}, which is ${replyingToConnection?.description}.
-                                 5. Absoultely avoid giving advice nor polite, hopeful, moral, positive, comforting, encouraging, or overly agreeable responses unless defined in the <My Character Description> </My Character Description>.
-                              
 `;
                         } else {
                             userPrompt +=
                                 `\n\n<Past Comment History>: ${JSON.stringify(comments.commentHistory)}<Past Comment History> \n
 
-                            ** Extended Response Rules **
+                            ** Extended Comment Rules **
                             1. You must respond by thinking of how ${character.name} would respond towards only one specific part of the last response in the <Past Comment History> </Past Comment History>. 
                             2. Focus on the thematic shifts in the comment thread, and express your fresh perspectives from ${character.name}'s viewpoint. 
                             3. Avoid simply agreeing or repeating; instead, challenge, question, or deepen the comment thread based on ${character.name}'s unique traits and motivations.
